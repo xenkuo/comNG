@@ -1,0 +1,83 @@
+{
+  "name": "comNG",
+  "productName": "comNG",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "install": "electron-rebuild",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "Xen",
+    "email": "xenkuo@gmail.com"
+  },
+  "license": "Xen",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": false,
+        "overwrite": true,
+        "icon": "image/logo"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "authors": "Xen",
+            "setupIcon": "image/logo.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./image/logo.icns",
+            "background": "./image/dmg-background.png",
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "options": {
+              "maintainer": "Xen",
+              "icon": "./image/logo.png",
+              "mimeType": [
+                "cnl",
+                "text"
+              ],
+              "section": "utils",
+              "categories": [
+                "Utilify"
+              ],
+              "homepage": "https://xenkuo.github.io",
+              "description": "comNG is a serialport tool from next generation!"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^5.1.0",
+    "materialize-css": "^1.0.0-rc.2",
+    "serialport": "^8.0.7"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.47",
+    "@electron-forge/maker-deb": "6.0.0-beta.47",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.49",
+    "@electron-forge/maker-rpm": "6.0.0-beta.47",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.47",
+    "@electron-forge/maker-zip": "6.0.0-beta.47",
+    "electron": "7.1.11",
+    "electron-rebuild": "^1.10.0",
+    "eslint": "^6.8.0"
+  }
+}
