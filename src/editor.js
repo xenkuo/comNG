@@ -208,7 +208,6 @@ amdRequire(['vs/editor/editor.main'], function () {
     inherit: false,
     colors: {
       'editor.background': '#fafafa',
-      'scrollbar.shadow': '#fafafa',
       'scrollbarSlider.background': '#fafafa'
     },
     rules: [
@@ -245,6 +244,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     },
     scrollbar: {
       vertical: 'auto',
+      useShadows: false,
       verticalScrollbarSize: 10
     }
   })
