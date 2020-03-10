@@ -229,18 +229,22 @@ amdRequire(['vs/editor/editor.main'], function () {
     theme: 'comNGTheme',
     language: 'comNGLang',
     automaticLayout: true,
-    folding: false,
-    scrollBeyondLastLine: false,
-    wordWrap: 'on',
     readOnly: true,
+    folding: false,
+    matchBrackets: 'always', // no effect now
+    overviewRulerBorder: false,
+    scrollBeyondLastLine: false,
+    smoothScrolling: true,
+    mouseWheelZoom: true, // combined with Ctrl
+    wordWrap: 'on',
     wordWrapBreakAfterCharacters: '',
     wordWrapBreakBeforeCharacters: '',
-    lineNumbersMinChars: 4,
+    lineNumbersMinChars: 3,
     minimap: {
       enabled: false
     },
     scrollbar: {
-      vertical: 'visible',
+      vertical: 'auto',
       verticalScrollbarSize: 10
     }
   })
