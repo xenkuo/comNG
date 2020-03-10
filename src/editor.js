@@ -207,7 +207,9 @@ amdRequire(['vs/editor/editor.main'], function () {
     base: 'vs',
     inherit: false,
     colors: {
-      'editor.background': '#fafafa'
+      'editor.background': '#fafafa',
+      'scrollbar.shadow': '#fafafa',
+      'scrollbarSlider.background': '#fafafa'
     },
     rules: [
       { token: 'fatal', foreground: 'e91e63' },
