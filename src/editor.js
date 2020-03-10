@@ -208,7 +208,6 @@ amdRequire(['vs/editor/editor.main'], function () {
     inherit: false,
     colors: {
       'editor.background': '#fafafa',
-      'scrollbar.shadow': '#fafafa',
       'scrollbarSlider.background': '#fafafa'
     },
     rules: [
@@ -229,10 +228,14 @@ amdRequire(['vs/editor/editor.main'], function () {
     theme: 'comNGTheme',
     language: 'comNGLang',
     automaticLayout: true,
-    folding: false,
-    scrollBeyondLastLine: false,
-    wordWrap: 'on',
     readOnly: true,
+    folding: false,
+    matchBrackets: 'always', // no effect now
+    overviewRulerBorder: false,
+    scrollBeyondLastLine: false,
+    smoothScrolling: true,
+    mouseWheelZoom: true, // combined with Ctrl
+    wordWrap: 'on',
     wordWrapBreakAfterCharacters: '',
     wordWrapBreakBeforeCharacters: '',
     lineNumbersMinChars: 4,
@@ -240,7 +243,8 @@ amdRequire(['vs/editor/editor.main'], function () {
       enabled: false
     },
     scrollbar: {
-      vertical: 'visible',
+      vertical: 'auto',
+      useShadows: false,
       verticalScrollbarSize: 10
     }
   })
