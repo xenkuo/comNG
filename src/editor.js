@@ -160,10 +160,23 @@ amdRequire(['vs/editor/editor.main'], function () {
     id: 'comNGLang'
   })
   monaco.languages.setMonarchTokensProvider('comNGLang', {
-    // defaultToken: 'invalid',
+    defaultToken: '',
 
     tokenizer: {
       root: [
+        [/[{}]/, 'bBracket'],
+        [/[[\]]/, 'mBracket'],
+        [/[()]/, 'sBracket'],
+        [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
+        [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, 'time'],
+        [
+          /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
+          'ip'
+        ],
+        [
+          /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
+          'mac'
+        ],
         [/^\[?[f|F][a|A][t|T][a|A][l|L]\]?\s.*/, 'fatal'],
         [/\s+\[?[f|F][a|A][t|T][a|A][l|L]\]?\s+/, 'fatal'],
         [/^\[?F\]?\s.*/, 'fatal'],
@@ -187,17 +200,7 @@ amdRequire(['vs/editor/editor.main'], function () {
         [/^\[?[d|D][e|E][b|B][u|U][g|G]\]?\s.*/, 'debug'],
         [/\s+\[?[d|D][e|E][b|B][u|U][g|G]\]?\s+/, 'debug'],
         [/^\[?D\]?\s.*/, 'debug'],
-        [/\s+\[?D\]?\s+/, 'debug'],
-        [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}\s/, 'timestamp'],
-        [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, 'time'],
-        [
-          /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
-          'ip'
-        ],
-        [
-          /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
-          'mac'
-        ]
+        [/\s+\[?D\]?\s+/, 'debug']
       ]
     }
   })
@@ -211,16 +214,19 @@ amdRequire(['vs/editor/editor.main'], function () {
       'scrollbarSlider.background': '#fafafa'
     },
     rules: [
+      { token: 'bBracket', foreground: '0091ea' },
+      { token: 'mBracket', foreground: '00b8d4' },
+      { token: 'sBracket', foreground: '00bfa5' },
+      { token: 'timestamp', foreground: '009688' },
+      { token: 'time', foreground: '2196f3' },
+      { token: 'ip', foreground: '03a9f4' },
+      { token: 'mac', foreground: '00bcd4' },
       { token: 'fatal', foreground: 'e91e63' },
       { token: 'error', foreground: 'f44336' },
       { token: 'warn', foreground: 'ff9800' },
       { token: 'info', foreground: '9e9e9e' },
-      { token: 'trace', foreground: '607d8b' },
-      { token: 'debug', foreground: '795548' },
-      { token: 'timestamp', foreground: '009688' },
-      { token: 'time', foreground: '2196f3' },
-      { token: 'ip', foreground: '03a9f4' },
-      { token: 'mac', foreground: '00bcd4' }
+      { token: 'trace', foreground: '9e9d24' },
+      { token: 'debug', foreground: '2e7d32' }
     ]
   })
 
@@ -230,7 +236,6 @@ amdRequire(['vs/editor/editor.main'], function () {
     automaticLayout: true,
     readOnly: true,
     folding: false,
-    matchBrackets: 'always', // no effect now
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
     smoothScrolling: true,
@@ -248,6 +253,17 @@ amdRequire(['vs/editor/editor.main'], function () {
       verticalScrollbarSize: 10
     }
   })
+
+  let editorConfig = {
+    brackets: [
+      ['{', '}'],
+      ['[', ']'],
+      ['(', ')'],
+      ['"', '"'],
+      ["'", "'"]
+    ]
+  }
+  monaco.languages.setLanguageConfiguration('comNGLang', editorConfig)
 
   editor.addAction({
     id: 'highlight-toggle',
@@ -286,17 +302,33 @@ amdRequire(['vs/editor/editor.main'], function () {
     // Do nothing but prevent default action: close window
   })
 
-  editor
-    .getModel()
-    .setValue(
-      'Welcome to comNG, the next generation COM tool!\n2:05:23:180 2020/11/11 plain text\nfatal \nerror \nwarn \ninfo \ntrace \ndebug \n192.168.23.1\naa:bb:cc:dd:ee:ff\nerror '
-    )
+  editor.getModel().setValue(
+    `Welcome to comNG, {[(the next generation)]} COM tool!
+2:05:23:180 (2020/11/11) [plain text]
+fatal 
+error 
+warn 
+info 
+trace 
+debug 
+192.168.23.1
+aa:bb:cc:dd:ee:ff
+eRrOr This is an error line no 192.168.0.1 (special decorator)`
+  )
 })
 
 function getTimestamp () {
   const t = new Date()
 
-  return t.toLocaleTimeString().split(' ')[0] + ':' + t.getMilliseconds() + ' '
+  return (
+    t.toLocaleTimeString().split(' ')[0] +
+    ':' +
+    t
+      .getMilliseconds()
+      .toString()
+      .padStart(3, 0) +
+    ' '
+  )
 }
 
 function editorAppend (text) {
