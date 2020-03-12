@@ -25,6 +25,7 @@ var hexmodeUnitIndex = 0
 var breakpointHit = false
 var breakpointAfterLines = 0
 var breakpointBuff = []
+var half_line = false
 var decorationIndex = 0
 
 function uriFromPath (_path) {
@@ -417,13 +418,23 @@ function showBuff (buff) {
     showHex(buff)
   } else {
     let index = -1
+    // console.log(buff)
+    // console.log(buff.toString())
     while ((index = buff.indexOf('\n')) !== -1) {
       let line = buff.slice(0, index + 1)
-      let timestamp = ''
+      // console.log(line)
 
-      if (config.general.timestamp === true) timestamp = getTimestamp()
-      editorAppend(timestamp + line)
+      if (half_line === true) {
+        editorAppend(line)
+        half_line = false
+      } else {
+        let timestamp = ''
+
+        if (config.general.timestamp === true) timestamp = getTimestamp()
+        editorAppend(timestamp + line)
+      }
       buff = buff.slice(index + 1, buff.length)
+      // console.log(buff)
 
       if (config.advance.breakpoint.switch === true) {
         if (breakpointProcess(line) === true) {
@@ -432,7 +443,17 @@ function showBuff (buff) {
         }
       }
     }
-    editorAppend(buff)
+    if (buff.length !== 0) {
+      if (half_line === false) {
+        let timestamp = ''
+
+        if (config.general.timestamp === true) timestamp = getTimestamp()
+        editorAppend(timestamp + buff)
+        half_line = true
+      } else {
+        editorAppend(buff)
+      }
+    }
     if (config.advance.breakpoint.switch === true) {
       breakpointBuff = buff
     }
