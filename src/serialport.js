@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const serial = require('serialport')
-const InterByteTimeout = require('../parser-inter-byte-timeout')
 
 var port
 
@@ -99,7 +98,6 @@ document.getElementById('port-switch').onclick = e => {
     let baudSelect = document.getElementById('baud-select')
     let portBaud = baudSelect.options[baudSelect.selectedIndex].label
     port = new serial(portPath, serialGetOptions())
-    const parser = port.pipe(new InterByteTimeout({ interval: 100 }))
 
     port.on('open', () => {
       console.log('port open event')
@@ -125,7 +123,7 @@ document.getElementById('port-switch').onclick = e => {
       toast('Error: Write failed, please try again')
     })
 
-    parser.on('data', showBuff)
+    port.on('data', showBuff)
   } else {
     if (port === undefined || port.isOpen === false) {
       document.getElementById('port-switch').checked = false

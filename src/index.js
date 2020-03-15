@@ -1,5 +1,7 @@
 const { remote } = require('electron')
 const Store = require('electron-store')
+const appVersion = require('electron').remote.app.getVersion()
+
 const licenceKeyColor = new Map([
   ['free-key', '#9e9e9e'],
   ['donation-key', '#f44336'],
@@ -157,6 +159,8 @@ window.onload = () => {
     '--bar-color-tail',
     config.advance.barColor.tail
   )
+
+  document.getElementById('app-version').innerHTML = appVersion
 }
 
 window.onresize = () => {
@@ -365,6 +369,18 @@ document.getElementById('bar-color-tail').oninput = e => {
 }
 
 document.getElementById('licence-buy').onclick = e => {
+  console.log('licence click', e)
+  e.preventDefault()
+  require('electron').shell.openExternal(e.target.href)
+}
+
+document.getElementById('issue').onclick = e => {
+  console.log('licence click', e)
+  e.preventDefault()
+  require('electron').shell.openExternal(e.target.href)
+}
+
+document.getElementById('introduction').onclick = e => {
   console.log('licence click', e)
   e.preventDefault()
   require('electron').shell.openExternal(e.target.href)
