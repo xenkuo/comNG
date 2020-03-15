@@ -241,7 +241,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     theme: 'comNGTheme',
     language: 'comNGLang',
     automaticLayout: true,
-    // readOnly: true,
+    readOnly: true,
     folding: false,
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
