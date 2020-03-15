@@ -178,6 +178,8 @@ amdRequire(['vs/editor/editor.main'], function () {
           /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
           'mac'
         ],
+        [/\d+/, 'number'],
+
         [/^\[?[f|F][a|A][t|T][a|A][l|L]\]?\s.*/, 'fatal'],
         [/\s+\[?[f|F][a|A][t|T][a|A][l|L]\]?\s+/, 'fatal'],
         [/^\[?F\]?\s.*/, 'fatal'],
@@ -215,9 +217,10 @@ amdRequire(['vs/editor/editor.main'], function () {
       'scrollbarSlider.background': '#fafafa'
     },
     rules: [
-      { token: 'bBracket', foreground: '0091ea' },
-      { token: 'mBracket', foreground: '00b8d4' },
-      { token: 'sBracket', foreground: '00bfa5' },
+      { token: 'number', foreground: '009688' },
+      { token: 'bBracket', foreground: 'e91e63' },
+      { token: 'mBracket', foreground: 'ff9800' },
+      { token: 'sBracket', foreground: '2e7d32' },
       { token: 'timestamp', foreground: '009688' },
       { token: 'time', foreground: '2196f3' },
       { token: 'ip', foreground: '03a9f4' },
@@ -235,7 +238,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     theme: 'comNGTheme',
     language: 'comNGLang',
     automaticLayout: true,
-    readOnly: true,
+    // readOnly: true,
     folding: false,
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
@@ -305,7 +308,7 @@ amdRequire(['vs/editor/editor.main'], function () {
 
   editor.getModel().setValue(
     `Welcome to comNG, {[(the next generation)]} COM tool!
-2:05:23:180 (2020/11/11) [plain text]
+2:05:23:180 (2020/11/11) [plain text] 44 [55] (66) {77} [55](3)
 fatal 
 error 
 warn 
