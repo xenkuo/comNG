@@ -165,21 +165,6 @@ amdRequire(['vs/editor/editor.main'], function () {
 
     tokenizer: {
       root: [
-        [/[{}]/, 'bBracket'],
-        [/[[\]]/, 'mBracket'],
-        [/[()]/, 'sBracket'],
-        [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
-        [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, 'time'],
-        [
-          /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
-          'ip'
-        ],
-        [
-          /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
-          'mac'
-        ],
-        [/\d+/, 'number'],
-
         [/^\[?[f|F][a|A][t|T][a|A][l|L]\]?\s.*/, 'fatal'],
         [/\s+\[?[f|F][a|A][t|T][a|A][l|L]\]?\s+/, 'fatal'],
         [/^\[?F\]?\s.*/, 'fatal'],
@@ -203,7 +188,26 @@ amdRequire(['vs/editor/editor.main'], function () {
         [/^\[?[d|D][e|E][b|B][u|U][g|G]\]?\s.*/, 'debug'],
         [/\s+\[?[d|D][e|E][b|B][u|U][g|G]\]?\s+/, 'debug'],
         [/^\[?D\]?\s.*/, 'debug'],
-        [/\s+\[?D\]?\s+/, 'debug']
+        [/\s+\[?D\]?\s+/, 'debug'],
+
+        [/\[\d;\d{2}m/, 'useless'],
+        [/\[\dm/, 'useless'],
+
+        [/[{}()[\]]/, 'bracket'],
+        [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
+        [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, 'time'],
+        [
+          /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
+          'ip'
+        ],
+        [
+          /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
+          'mac'
+        ],
+        [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
+        [/0[xX][0-9a-fA-F]+/, 'number'],
+        [/[0-9a-fA-F]{4,}/, 'number'],
+        [/\d+/, 'number']
       ]
     }
   })
@@ -217,10 +221,8 @@ amdRequire(['vs/editor/editor.main'], function () {
       'scrollbarSlider.background': '#fafafa'
     },
     rules: [
-      { token: 'number', foreground: '009688' },
-      { token: 'bBracket', foreground: 'e91e63' },
-      { token: 'mBracket', foreground: 'ff9800' },
-      { token: 'sBracket', foreground: '2e7d32' },
+      { token: 'number', foreground: '2e7d32' },
+      { token: 'bracket', foreground: 'ff9800' },
       { token: 'timestamp', foreground: '009688' },
       { token: 'time', foreground: '2196f3' },
       { token: 'ip', foreground: '03a9f4' },
@@ -230,7 +232,8 @@ amdRequire(['vs/editor/editor.main'], function () {
       { token: 'warn', foreground: 'ff9800' },
       { token: 'info', foreground: '9e9e9e' },
       { token: 'trace', foreground: '9e9d24' },
-      { token: 'debug', foreground: '2e7d32' }
+      { token: 'debug', foreground: '2e7d32' },
+      { token: 'useless', foreground: 'cecece' }
     ]
   })
 
