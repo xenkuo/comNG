@@ -1,399 +1,420 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link rel="stylesheet" href="../iconfont/material-icons.css" />
+    <!--Import materialize.css-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="../node_modules/materialize-css/dist/css/materialize.css"
+      media="screen,projection"
+    />
+    <link rel="stylesheet" href="index.css" />
 
-<head>
-  <!--Import Google Icon Font-->
-  <link rel="stylesheet" href="../iconfont/material-icons.css">
-  <!--Import materialize.css-->
-  <link type="text/css" rel="stylesheet" href="../node_modules/materialize-css/dist/css/materialize.css"
-    media="screen,projection" />
-  <link rel="stylesheet" href="index.css" />
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'"
+    />
+  </head>
 
-  <meta charset="UTF-8" />
-  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-  <meta http-equiv="Content-Security-Policy"
-    content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'" />
-</head>
+  <body>
+    <nav class="z-depth-0" id="nav-area">
+      <div class="nav-wrapper" id="header">
+        <i class="material-icons left" id="logo">vpn_key</i>
 
-<body>
-  <nav class="z-depth-0" id="nav-area">
-    <div class="nav-wrapper" id="header">
-      <i class="material-icons left" id="logo">vpn_key</i>
-
-      <ul class="right">
-        <li class="head-li">
-          <a id="min-btn" class="waves-effect btn-floating tiny-btn grey"></a>
-        </li>
-        <li class="head-li">
-          <a id="max-btn" class="waves-effect btn-floating tiny-btn white"></a>
-        </li>
-        <li class="head-li">
-          <a id="close-btn" class="waves-effect btn-floating tiny-btn red"></a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <div id="editor-area">
-  </div>
-
-  <div id="menu-area" hidden>
-    <div class="row">
-      <div class="col s12" id="menu-tabs-row">
-        <ul class="tabs" id="menu-tabs">
-          <li class="tab col s3"><a class="active" href="#general-tab">general</a></li>
-          <li class="tab col s3"><a href="#transmit-tab">transmit</a></li>
-          <li class="tab col s3"><a href="#advance-tab">advance</a></li>
-          <li class="tab col s3"><a href="#about-tab">about</a></li>
+        <ul class="right">
+          <li class="head-li">
+            <a id="min-btn" class="waves-effect btn-floating tiny-btn grey"></a>
+          </li>
+          <li class="head-li">
+            <a
+              id="max-btn"
+              class="waves-effect btn-floating tiny-btn white"
+            ></a>
+          </li>
+          <li class="head-li">
+            <a
+              id="close-btn"
+              class="waves-effect btn-floating tiny-btn red"
+            ></a>
+          </li>
         </ul>
       </div>
-      <div id="general-tab" class="col s12">
-        <div class="row adv-page">
+    </nav>
 
-          <blockquote>Receive</blockquote>
+    <div id="editor-area"></div>
 
-          <div class="divider"></div>
-
-          <div class="col s8">
-            <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Hex Mode</p>
-              </div>
-              <div class="col s8 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="hexmode-switch">
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Timestamp</p>
-              </div>
-              <div class="col s8 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="timestamp-switch">
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Customized</p>
-              </div>
-              <div class="input-field col s8 config-item">
-                <input id="customized" value="9600" type="text" class="validate">
-              </div>
-            </div>
-          </div>
-
-          <div class="col s4">
-            <div class="input-field col s12">
-              <select id="databits-select">
-                <option value="1" selected>8</option>
-                <option value="2">7</option>
-                <option value="3">6</option>
-                <option value="4">5</option>
-              </select>
-            </div>
-
-            <div class="input-field col s12">
-              <select id="parity-select">
-                <option value="1" selected>none</option>
-                <option value="2">even</option>
-                <option value="3">odd</option>
-                <option value="4">mark</option>
-                <option value="5">space</option>
-              </select>
-            </div>
-
-            <div class="input-field col s12">
-              <select id="stopbits-select">
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-              </select>
-            </div>
-          </div>
-
-
-
-
-
-
+    <div id="menu-area" hidden>
+      <div class="row">
+        <div class="col s12" id="menu-tabs-row">
+          <ul class="tabs" id="menu-tabs">
+            <li class="tab col s3">
+              <a class="active" href="#general-tab">general</a>
+            </li>
+            <li class="tab col s3"><a href="#transmit-tab">transmit</a></li>
+            <li class="tab col s3"><a href="#advance-tab">advance</a></li>
+            <li class="tab col s3"><a href="#about-tab">about</a></li>
+          </ul>
         </div>
-      </div>
-      <div id="transmit-tab" class="col s12">
-        <div class="row adv-page">
-          <div class="col s7">
-            <div class="row config-row tx-row">
+        <div id="general-tab" class="col s12">
+          <div class="row adv-page">
+            <blockquote>Receive</blockquote>
 
-              <div class="input-field col s10">
-                <input value="AT" id="tx-data" type="text">
-              </div>
-
-              <div class="col s2">
-                <!-- <a class="btn-floating btn-small waves-effect red" id="tx-clear-btn"><i
-                    class="material-icons">clear</i></a> -->
-
-                <a class="btn-floating btn-small waves-effect" id="tx-send-btn"><i class="material-icons">send</i></a>
-
-              </div>
-            </div>
-
-
-            <div class="row config-row">
-
-              <div class="col s1 config-key">
-                <p>EOF</p>
-              </div>
-              <div class="input-field col s4" id="tx-eof-row">
-                <select id="tx-eof-select">
-                  <option value="1" selected>CRLF</option>
-                  <option value="2">LF</option>
-                  <option value="3">CR</option>
-                </select>
-              </div>
-
-
-            </div>
-
-
-            <div class="row config-row">
-              <div class="col s2 config-key">
-                <p>Repeat</p>
-              </div>
-              <div class="col s5 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="tx-repeat-switch">
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-              <div class="col s2 config-key">
-                <p>Interval</p>
-              </div>
-              <div class="input-field col s3 config-item">
-                <input id="tx-repeat-interval" placeholder="ms" value="1000" type="text">
-              </div>
-
-            </div>
-
-
-          </div>
-
-          <div class="col s5">
-            <!-- <p id="tx-log-p">tranmist log</p> -->
-            <div class="row" id="tx-log-row">
-              <div class="input-field col s10">
-                <textarea id="tx-log-area" class="materialize-textarea"></textarea>
-                <label for="tx-log-area">History</label>
-              </div>
-
-              <div class="col s2 right-btn">
-
-                <a class="btn-floating btn-small waves-effect red" id="tx-log-clear-btn"><i
-                    class="material-icons">clear</i></a>
-
-              </div>
-            </div>
-
-          </div>
-
-
-
-        </div>
-      </div>
-      <div id="advance-tab" class="col s12">
-        <div class="row adv-page">
-          <div class="col s4">
-            <blockquote>Sign</blockquote>
             <div class="divider"></div>
-            <div class="row config-row">
-              <div class="col s12 config-item center">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="sign-switch">
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
 
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input placeholder="Name" type="text" id="sign-name">
-              </div>
-            </div>
-
-
-
-          </div>
-
-          <div class="col s4">
-            <blockquote>Breakpoint</blockquote>
-            <div class="divider"></div>
-            <div class="row config-row">
-              <div class="col s12 config-item center">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="breakpoint-switch">
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input value="Error" id="breakpoint-on-text" type="text" maxlength="16">
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input value="5" id="breakpoint-after-lines" type="text">
-              </div>
-            </div>
-
-          </div>
-
-          <div class="col s4">
-            <blockquote>Bar Color</blockquote>
-            <div class="divider"></div>
-            <div class="center" id="color-panel">
-              <input value="#ffba3a" id="bar-color-head" type="color">
-              <input value="#ff8a80" id="bar-color-middle" type="color">
-              <input value="#80d8ff" id="bar-color-tail" type="color">
-            </div>
-
-          </div>
-        </div>
-
-
-
-      </div>
-      <div id="about-tab" class="col s12">
-        <div class="row adv-page">
-          <div class="col s5">
-            <blockquote>version : <span id="app-version"></span></blockquote>
-            <div class="divider"></div>
-            <blockquote>Issue : <a href="https://github.com/xenkuo/comNG/issues" id="issue">comNG Issue</a></blockquote>
-            <div class="divider"></div>
-            <blockquote>Introduction : <a href="https://xenkuo.github.io/2019-08-01-comNG/" id="introduction">comNG: a
-                modern and powerful COM tool</a></blockquote>
-
-          </div>
-
-          <div class="col s7">
-            <blockquote>Licence</blockquote>
-            <div class="divider"></div>
-            <p>
-              For personal and educational project, comNG is <b>Free</b>.
-              <br>For commercial project, you need to purchase a <b>Licence</b>.
-              <br><br>Please refer to <a href="https://xenkuo.github.io/2019-08-02-comNG-licence-buy/"
-                id="licence-buy">xenkuo.github.io</a> for detail.
-
-
-
-            </p>
-
-          </div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="col s12 ">
-          <div class="row" id="licence-row">
             <div class="col s8">
-              <label>
-                <input name="licence" type="radio" id="free-key" />
-                <span>Free User</span>
-              </label>
-              <label>
-                <input name="licence" type="radio" id="donation-key" />
-                <span>Donation User</span>
-              </label>
-              <label>
-                <input name="licence" type="radio" id="perpetual-key" />
-                <span>Perpetual User</span>
-              </label>
+              <div class="row config-row">
+                <div class="col s4 config-key">
+                  <p>Hex Mode</p>
+                </div>
+                <div class="col s8 config-item">
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" id="hexmode-switch" />
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="col s4 config-key">
+                  <p>Timestamp</p>
+                </div>
+                <div class="col s8 config-item">
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" id="timestamp-switch" />
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="col s4 config-key">
+                  <p>Customized</p>
+                </div>
+                <div class="input-field col s8 config-item">
+                  <input
+                    id="customized"
+                    value="9600"
+                    type="text"
+                    class="validate"
+                  />
+                </div>
+              </div>
             </div>
 
             <div class="col s4">
-              <input placeholder="Serial Number" type="text" id="licence-key">
+              <div class="input-field col s12">
+                <select id="databits-select">
+                  <option value="1" selected>8</option>
+                  <option value="2">7</option>
+                  <option value="3">6</option>
+                  <option value="4">5</option>
+                </select>
+              </div>
+
+              <div class="input-field col s12">
+                <select id="parity-select">
+                  <option value="1" selected>none</option>
+                  <option value="2">even</option>
+                  <option value="3">odd</option>
+                  <option value="4">mark</option>
+                  <option value="5">space</option>
+                </select>
+              </div>
+
+              <div class="input-field col s12">
+                <select id="stopbits-select">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="transmit-tab" class="col s12">
+          <div class="row adv-page">
+            <div class="col s7">
+              <div class="row config-row tx-row">
+                <div class="input-field col s10">
+                  <input value="AT" id="tx-data" type="text" />
+                </div>
+
+                <div class="col s2">
+                  <!-- <a class="btn-floating btn-small waves-effect red" id="tx-clear-btn"><i
+                    class="material-icons">clear</i></a> -->
+
+                  <a
+                    class="btn-floating btn-small waves-effect"
+                    id="tx-send-btn"
+                    ><i class="material-icons">send</i></a
+                  >
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="col s1 config-key">
+                  <p>EOF</p>
+                </div>
+                <div class="input-field col s4" id="tx-eof-row">
+                  <select id="tx-eof-select">
+                    <option value="1" selected>CRLF</option>
+                    <option value="2">LF</option>
+                    <option value="3">CR</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="col s2 config-key">
+                  <p>Repeat</p>
+                </div>
+                <div class="col s5 config-item">
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" id="tx-repeat-switch" />
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+                <div class="col s2 config-key">
+                  <p>Interval</p>
+                </div>
+                <div class="input-field col s3 config-item">
+                  <input
+                    id="tx-repeat-interval"
+                    placeholder="ms"
+                    value="1000"
+                    type="text"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col s5">
+              <!-- <p id="tx-log-p">tranmist log</p> -->
+              <div class="row" id="tx-log-row">
+                <div class="input-field col s10">
+                  <textarea
+                    id="tx-log-area"
+                    class="materialize-textarea"
+                  ></textarea>
+                  <label for="tx-log-area">History</label>
+                </div>
+
+                <div class="col s2 right-btn">
+                  <a
+                    class="btn-floating btn-small waves-effect red"
+                    id="tx-log-clear-btn"
+                    ><i class="material-icons">clear</i></a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="advance-tab" class="col s12">
+          <div class="row adv-page">
+            <div class="col s4">
+              <blockquote>Sign</blockquote>
+              <div class="divider"></div>
+              <div class="row config-row">
+                <div class="col s12 config-item center">
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" id="sign-switch" />
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="input-field col s12">
+                  <input placeholder="Name" type="text" id="sign-name" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col s4">
+              <blockquote>Breakpoint</blockquote>
+              <div class="divider"></div>
+              <div class="row config-row">
+                <div class="col s12 config-item center">
+                  <div class="switch">
+                    <label>
+                      Off
+                      <input type="checkbox" id="breakpoint-switch" />
+                      <span class="lever"></span>
+                      On
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="input-field col s12">
+                  <input
+                    value="Error"
+                    id="breakpoint-on-text"
+                    type="text"
+                    maxlength="16"
+                  />
+                </div>
+              </div>
+
+              <div class="row config-row">
+                <div class="input-field col s12">
+                  <input value="5" id="breakpoint-after-lines" type="text" />
+                </div>
+              </div>
+            </div>
+
+            <div class="col s4">
+              <blockquote>Bar Color</blockquote>
+              <div class="divider"></div>
+              <div class="center" id="color-panel">
+                <input value="#ffba3a" id="bar-color-head" type="color" />
+                <input value="#ff8a80" id="bar-color-middle" type="color" />
+                <input value="#80d8ff" id="bar-color-tail" type="color" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="about-tab" class="col s12">
+          <div class="row adv-page">
+            <div class="col s5">
+              <blockquote>version : <span id="app-version"></span></blockquote>
+              <div class="divider"></div>
+              <blockquote>
+                Issue :
+                <a href="https://github.com/xenkuo/comNG/issues" id="issue"
+                  >comNG Issue</a
+                >
+              </blockquote>
+              <div class="divider"></div>
+              <blockquote>
+                Introduction :
+                <a
+                  href="https://xenkuo.github.io/2019-08-01-comNG/"
+                  id="introduction"
+                  >comNG: a modern and powerful COM tool</a
+                >
+              </blockquote>
+            </div>
+
+            <div class="col s7">
+              <blockquote>Licence</blockquote>
+              <div class="divider"></div>
+              <p>
+                For personal and educational project, comNG is <b>Free</b>.
+                <br />For commercial project, you need to purchase a
+                <b>Licence</b>. <br /><br />Please refer to
+                <a
+                  href="https://xenkuo.github.io/2019-08-02-comNG-licence-buy/"
+                  id="licence-buy"
+                  >xenkuo.github.io</a
+                >
+                for detail.
+              </p>
             </div>
           </div>
 
+          <div class="divider"></div>
+          <div class="col s12 ">
+            <div class="row" id="licence-row">
+              <div class="col s8">
+                <label>
+                  <input name="licence" type="radio" id="free-key" />
+                  <span>Free User</span>
+                </label>
+                <label>
+                  <input name="licence" type="radio" id="donation-key" />
+                  <span>Donation User</span>
+                </label>
+                <label>
+                  <input name="licence" type="radio" id="perpetual-key" />
+                  <span>Perpetual User</span>
+                </label>
+              </div>
+
+              <div class="col s4">
+                <input
+                  placeholder="Serial Number"
+                  type="text"
+                  id="licence-key"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-  </div>
+    <div class="row" id="bar-area">
+      <div class="col s2">
+        <a id="menu-btn" class="waves-effect btn-floating btn-small"
+          ><i class="material-icons">menu</i></a
+        >
+      </div>
 
-  <div class="row" id="bar-area">
-    <div class="col s2">
-      <a id="menu-btn" class="waves-effect btn-floating btn-small"><i class="material-icons">menu</i></a>
-    </div>
+      <div class="col s10">
+        <div class="input-field col s3" id="baud-input">
+          <div class="container">
+            <select id="baud-select">
+              <option value="1">9600</option>
+              <option value="2">19200</option>
+              <option value="3" selected>115200</option>
+              <option value="4">921600</option>
+            </select>
+          </div>
+        </div>
 
-    <div class="col s10">
-      <div class="input-field col s3" id="baud-input">
-        <div class="container">
-          <select id="baud-select">
-            <option value="1">9600</option>
-            <option value="2">19200</option>
-            <option value="3" selected>115200</option>
-            <option value="4">921600</option>
+        <div class="input-field col s5" id="path-input">
+          <select id="path-select">
+            <option value="0">Select port ...</option>
           </select>
         </div>
-      </div>
 
-      <div class="input-field col s5" id="path-input">
-        <select id="path-select">
-          <option value="0">Select port ...</option>
-        </select>
-      </div>
+        <div class="col s1">
+          <a class="waves-effect btn-floating" id="refresh-btn"
+            ><i class="material-icons">refresh</i></a
+          >
+        </div>
 
-      <div class="col s1">
-        <a class="waves-effect btn-floating" id="refresh-btn"><i class="material-icons">refresh</i></a>
-      </div>
+        <div class="col s1">
+          <a class="waves-effect btn-floating btn-small red" id="clear-btn"
+            ><i class="material-icons">delete</i></a
+          >
+        </div>
 
-      <div class="col s1">
-        <a class="waves-effect btn-floating btn-small red" id="clear-btn"><i class="material-icons">delete</i></a>
-      </div>
-
-
-      <div class="switch col s2">
-        <label>
-          <input type="checkbox" id='port-switch'>
-          <span class="lever"></span>
-        </label>
+        <div class="switch col s2">
+          <label>
+            <input type="checkbox" id="port-switch" />
+            <span class="lever"></span>
+          </label>
+        </div>
       </div>
     </div>
-  </div>
 
+    <!-- You can also require other files to run in this process -->
+    <script src="editor.js"></script>
+    <script src="serialport.js"></script>
 
-  <!-- You can also require other files to run in this process -->
-  <script src="editor.js"></script>
-  <script src="serialport.js"></script>
-
-  <script src="index.js"></script>
-
-</body>
-
+    <script src="index.js"></script>
+  </body>
 </html>
