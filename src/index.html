@@ -60,7 +60,7 @@
           </ul>
         </div>
         <div id="general-tab" class="col s12">
-          <div class="row adv-page">
+          <div class="row menu-page">
             <blockquote>Receive</blockquote>
 
             <div class="divider"></div>
@@ -143,7 +143,7 @@
           </div>
         </div>
         <div id="transmit-tab" class="col s12">
-          <div class="row adv-page">
+          <div class="row menu-page">
             <div class="col s7">
               <div class="row config-row tx-row">
                 <div class="input-field col s10">
@@ -226,7 +226,7 @@
           </div>
         </div>
         <div id="advance-tab" class="col s12">
-          <div class="row adv-page">
+          <div class="row menu-page">
             <div class="col s4">
               <blockquote>Sign</blockquote>
               <div class="divider"></div>
@@ -296,68 +296,52 @@
           </div>
         </div>
         <div id="about-tab" class="col s12">
-          <div class="row adv-page">
-            <div class="col s5">
-              <blockquote>version : <span id="app-version"></span></blockquote>
-              <div class="divider"></div>
-              <blockquote>
-                Issue :
-                <a href="https://github.com/xenkuo/comNG/issues" id="issue"
-                  >comNG Issue</a
-                >
-              </blockquote>
-              <div class="divider"></div>
-              <blockquote>
-                Introduction :
-                <a
-                  href="https://xenkuo.github.io/2019-08-01-comNG/"
-                  id="introduction"
-                  >comNG: a modern and powerful COM tool</a
-                >
-              </blockquote>
-            </div>
-
-            <div class="col s7">
-              <blockquote>Licence</blockquote>
-              <div class="divider"></div>
-              <p>
-                For personal and educational project, comNG is <b>Free</b>.
-                <br />For commercial project, you need to purchase a
-                <b>Licence</b>. <br /><br />Please refer to
-                <a
-                  href="https://xenkuo.github.io/2019-08-02-comNG-licence-buy/"
-                  id="licence-buy"
-                  >xenkuo.github.io</a
-                >
-                for detail.
-              </p>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-          <div class="col s12 ">
-            <div class="row" id="licence-row">
-              <div class="col s8">
-                <label>
-                  <input name="licence" type="radio" id="free-key" />
-                  <span>Free User</span>
-                </label>
-                <label>
-                  <input name="licence" type="radio" id="donation-key" />
-                  <span>Donation User</span>
-                </label>
-                <label>
-                  <input name="licence" type="radio" id="perpetual-key" />
-                  <span>Perpetual User</span>
-                </label>
+          <div class="row menu-page">
+            <div class="col s8">
+              <div class="row label-row">
+                <div class="col s3 label-key">
+                  <p>Version</p>
+                </div>
+                <div class="col s9">
+                  <p id="app-version"></p>
+                </div>
               </div>
+              <div class="row label-row">
+                <div class="col s3 label-key">
+                  <p>Issue</p>
+                </div>
+                <div class="col s9">
+                  <p>
+                    <a href="https://github.com/xenkuo/comNG/issues" id="issue"
+                      >https://github.com/xenkuo/comNG/issues</a
+                    >
+                  </p>
+                </div>
+              </div>
+              <div class="row label-row">
+                <div class="col s3 label-key">
+                  <p>Introduction</p>
+                </div>
+                <div class="col s9">
+                  <p>
+                    <a
+                      href="https://xenkuo.github.io/2019-08-01-comNG"
+                      id="introduction"
+                      >comNG: a modern and powerful COM tool</a
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
 
-              <div class="col s4">
-                <input
-                  placeholder="Serial Number"
-                  type="text"
-                  id="licence-key"
-                />
+            <div class="col s4">
+              <div class="row label-row">
+                <div class="col s4 label-key">
+                  <p>Licence</p>
+                </div>
+                <div class="col s8">
+                  <p>MIT</p>
+                </div>
               </div>
             </div>
           </div>

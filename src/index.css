@@ -119,7 +119,7 @@ input {
   margin-bottom: 5px;
 }
 
-.col .adv-page {
+.col .menu-page {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 0px;
@@ -137,6 +137,14 @@ input {
 .config-row {
   margin-top: 0px;
   margin-bottom: 0px;
+}
+
+.label-row {
+  height: 24px;
+}
+
+.label-key {
+  font-weight: bolder;
 }
 
 .tx-row {

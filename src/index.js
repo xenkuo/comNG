@@ -137,12 +137,6 @@ window.onload = () => {
   document.getElementById("sign-switch").checked = config.advance.sign.switch;
   document.getElementById("sign-name").value = config.advance.sign.name;
 
-  document.getElementById(config.about.licence.type).checked = true;
-  document.getElementById("logo").style.color = licenceKeyColor.get(
-    config.about.licence.type
-  );
-  document.getElementById("licence-key").value = config.about.licence.key;
-
   document.getElementById("bar-color-head").value =
     config.advance.barColor.head;
   document.getElementById("bar-color-middle").value =
@@ -371,12 +365,6 @@ document.getElementById("bar-color-tail").oninput = e => {
   configUpdate("advance.barColor.tail", color);
 };
 
-document.getElementById("licence-buy").onclick = e => {
-  console.log("licence click", e);
-  e.preventDefault();
-  require("electron").shell.openExternal(e.target.href);
-};
-
 document.getElementById("issue").onclick = e => {
   console.log("licence click", e);
   e.preventDefault();
@@ -387,19 +375,6 @@ document.getElementById("introduction").onclick = e => {
   console.log("licence click", e);
   e.preventDefault();
   require("electron").shell.openExternal(e.target.href);
-};
-
-document.getElementById("licence-row").onclick = () => {
-  let type = document.querySelector("[name=licence]:checked").id;
-
-  configUpdate("about.licence.type", type);
-  document.getElementById("logo").style.color = licenceKeyColor.get(
-    config.about.licence.type
-  );
-};
-
-document.getElementById("licence-key").onblur = e => {
-  configUpdate("about.licence.key", e.target.value);
 };
 
 document.getElementById("baud-select").onchange = e => {
