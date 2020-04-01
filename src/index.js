@@ -2,65 +2,49 @@ const { remote } = require("electron");
 const Store = require("electron-store");
 const appVersion = require("electron").remote.app.getVersion();
 
-const licenceKeyColor = new Map([
-  ["free-key", "#9e9e9e"],
-  ["donation-key", "#f44336"],
-  ["perpetual-key", "#000000"]
-]);
-
 var M = require("materialize-css");
 M.AutoInit();
 
-const store = new Store();
+var config;
+const store = new Store({
+  migrations: {
+    "1.0.3": store => {
+      store.delete("desert");
+      store.delete("about");
+      store.set("window.width", 600);
+      store.set("window.height", 640);
+      store.set("window.widthBefore", 600);
+      store.set("window.heightBefore", 640);
+      store.set("window.xBefore", 0);
+      store.set("window.yBefore", 0);
 
-var config = {
-  desert: "No, I am from Mars!!!",
-  window: {
-    width: 600,
-    height: 640,
-    widthBefore: 600,
-    heightBefore: 640,
-    xBefore: 0,
-    yBefore: 0
-  },
-  menu: { hidden: true, tab: "general" },
-  baudIndex: 2,
-  pathIndex: 0,
-  general: {
-    hexmode: false,
-    timestamp: false,
-    customized: 9600,
-    databitsIndex: 0,
-    parityIndex: 0,
-    stopbitsIndex: 0,
-    flowControlIndex: 0
-  },
-  transmit: {
-    eof: "\r\n"
-  },
-  advance: {
-    sign: {
-      switch: false,
-      name: ""
-    },
-    breakpoint: {
-      switch: false,
-      onText: "Error",
-      afterLines: 5
-    },
-    barColor: {
-      head: "#fafafa",
-      middle: "#fafafa",
-      tail: "#26a69a"
-    }
-  },
-  about: {
-    licence: {
-      type: "free-key",
-      key: ""
+      store.set("menu.hidden", true);
+      store.set("menu.tab", "general");
+
+      store.set("baudIndex", 2);
+      store.set("pathIndex", 0);
+
+      store.set("general.hexmode", false);
+      store.set("general.timestamp", false);
+      store.set("general.customized", 9600);
+      store.set("general.databitsIndex", 0);
+      store.set("general.parityIndex", 0);
+      store.set("general.stopbitsIndex", 0);
+      store.set("general.flowcontrolIndex", 0);
+
+      store.set("transmit.eof", "\r\n");
+
+      store.set("advance.sign.switch", false);
+      store.set("advance.sign.name", "");
+      store.set("advance.breakpoint.switch", false);
+      store.set("advance.breakpoint.onText", "Error");
+      store.set("advance.breakpoint.afterLines", 5);
+      store.set("advance.barColor.head", "#fafafa");
+      store.set("advance.barColor.middle", "#fafafa");
+      store.set("advance.barColor.tail", "#26a69a");
     }
   }
-};
+});
 
 function configUpdate(key, value) {
   let keyArray = key.split(".");
@@ -81,13 +65,7 @@ function configUpdate(key, value) {
 window.onload = () => {
   console.log("window onload");
 
-  if (store.has("desert") === false) {
-    store.store = config;
-  } else {
-    console.log("got config");
-    config = store.store;
-  }
-
+  config = store.store;
   document.getElementById("menu-area").hidden = config.menu.hidden;
 
   let nav = document.getElementById("nav-area");
@@ -127,6 +105,9 @@ window.onload = () => {
   let stopbits = document.getElementById("stopbits-select");
   stopbits.selectedIndex = config.general.stopbitsIndex;
   M.FormSelect.init(stopbits);
+  let flowcontrol = document.getElementById("flowcontrol-select");
+  flowcontrol.selectedIndex = config.general.flowcontrolIndex;
+  M.FormSelect.init(flowcontrol);
 
   document.getElementById("breakpoint-switch").checked =
     config.advance.breakpoint.switch;
@@ -274,6 +255,10 @@ document.getElementById("parity-select").onchange = e => {
 
 document.getElementById("stopbits-select").onchange = e => {
   configUpdate("general.stopbitsIndex", e.target.selectedIndex);
+};
+
+document.getElementById("flowcontrol-select").onchange = e => {
+  configUpdate("general.flowcontrolIndex", e.target.selectedIndex);
 };
 
 document.getElementById("sign-switch").onclick = e => {

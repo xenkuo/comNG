@@ -24,13 +24,13 @@ function portUpdate() {
 }
 
 function serialGetOptions() {
-  let options = {};
+  let openOptions = {};
 
   let baudRate = parseInt(
     document.getElementById("baud-select").options[config.baudIndex].text
   );
   if (isNaN(baudRate) === true) baudRate = 115200;
-  options.baudRate = baudRate;
+  openOptions.baudRate = baudRate;
 
   let dataBits = parseInt(
     document.getElementById("databits-select").options[
@@ -38,12 +38,12 @@ function serialGetOptions() {
     ].text
   );
   if (isNaN(dataBits) === true) dataBits = 8;
-  options.dataBits = dataBits;
+  openOptions.dataBits = dataBits;
 
   let parity = document
     .getElementById("parity-select")
     .options[config.general.parityIndex].text.toLowerCase();
-  options.parity = parity;
+  openOptions.parity = parity;
 
   let stopBits = parseInt(
     document.getElementById("stopbits-select").options[
@@ -51,11 +51,16 @@ function serialGetOptions() {
     ].text
   );
   if (isNaN(stopBits) === true) stopBits = 1;
-  options.stopBits = stopBits;
+  openOptions.stopBits = stopBits;
 
-  options.autoOpen = true;
+  let flowcontrol = document
+    .getElementById("flowcontrol-select")
+    .options[config.general.flowcontrolIndex].text.toLowerCase();
+  openOptions[flowcontrol] = true;
 
-  return options;
+  openOptions.autoOpen = true;
+
+  return openOptions;
 }
 
 function serialGetSetOptions() {
