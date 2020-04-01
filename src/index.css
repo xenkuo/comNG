@@ -125,6 +125,11 @@ input {
   margin-bottom: 0px;
 }
 
+.config-row {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
 .config-key {
   font-weight: 500;
 }
@@ -134,13 +139,8 @@ input {
   margin-top: 0px;
 }
 
-.config-row {
-  margin-top: 0px;
-  margin-bottom: 0px;
-}
-
 .label-row {
-  height: 24px;
+  margin-bottom: 0px;
 }
 
 .label-key {

@@ -377,6 +377,12 @@ document.getElementById("introduction").onclick = e => {
   require("electron").shell.openExternal(e.target.href);
 };
 
+document.getElementById("comnglang").onclick = e => {
+  console.log("licence click", e);
+  e.preventDefault();
+  require("electron").shell.openExternal(e.target.href);
+};
+
 document.getElementById("baud-select").onchange = e => {
   configUpdate("baudIndex", e.target.selectedIndex);
 };
