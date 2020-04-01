@@ -373,6 +373,27 @@ document.getElementById("baud-select").onchange = e => {
   configUpdate("baudIndex", e.target.selectedIndex);
 };
 
+// document.getElementById("path-input").addEventListener(
+//   "click",
+//   e => {
+//     console.log("path select add event");
+//     if (e.isTrusted === false) return;
+//     console.log("path x");
+//     e.stopPropagation();
+//     // portUpdate();
+//     setTimeout(() => {
+//       try {
+//         let evt = document.createEvent("Event");
+//         evt.initEvent("click", true, true);
+//         document.getElementById("path-select").dispatchEvent(evt);
+//       } catch (e) {
+//         console.error(e);
+//       }
+//     }, 5000);
+//   },
+//   true
+// );
+
 document.getElementById("path-select").onchange = e => {
   configUpdate("pathIndex", e.target.selectedIndex);
 };

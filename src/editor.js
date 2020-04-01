@@ -250,14 +250,14 @@ amdRequire(["vs/editor/editor.main"], function() {
     wordWrap: "on",
     wordWrapBreakAfterCharacters: "",
     wordWrapBreakBeforeCharacters: "",
-    lineNumbersMinChars: 4,
+    lineNumbersMinChars: 3,
     minimap: {
       enabled: false
     },
     scrollbar: {
       vertical: "auto",
       useShadows: false,
-      verticalScrollbarSize: 10
+      verticalScrollbarSize: 7
     }
   });
 
@@ -309,19 +309,7 @@ amdRequire(["vs/editor/editor.main"], function() {
     // Do nothing but prevent default action: close window
   });
 
-  editor.getModel().setValue(
-    `Welcome to comNG, {[(the next generation)]} COM tool!
-2:05:23:180 (2020/11/11) [plain text] 44 [55] (66) {77} [55](3)
-fatal 
-error 
-warn 
-info 
-trace 
-debug 
-192.168.23.1
-aa:bb:cc:dd:ee:ff
-eRrOr This is an error line no 192.168.0.1 (special decorator)`
-  );
+  editor.getModel().setValue();
 });
 
 function getTimestamp() {
