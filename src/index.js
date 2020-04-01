@@ -32,7 +32,8 @@ var config = {
     customized: 9600,
     databitsIndex: 0,
     parityIndex: 0,
-    stopbitsIndex: 0
+    stopbitsIndex: 0,
+    flowControlIndex: 0
   },
   transmit: {
     eof: "\r\n"

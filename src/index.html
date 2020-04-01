@@ -61,16 +61,16 @@
         </div>
         <div id="general-tab" class="col s12">
           <div class="row menu-page">
-            <blockquote>Receive</blockquote>
+            <div class="col s6 m4">
+              <blockquote>Receive</blockquote>
 
-            <div class="divider"></div>
+              <div class="divider"></div>
 
-            <div class="col s8">
               <div class="row config-row">
-                <div class="col s4 config-key">
+                <div class="col s4 m3 config-key">
                   <p>Hex Mode</p>
                 </div>
-                <div class="col s8 config-item">
+                <div class="col s8 m9 config-item">
                   <div class="switch">
                     <label>
                       Off
@@ -83,10 +83,10 @@
               </div>
 
               <div class="row config-row">
-                <div class="col s4 config-key">
+                <div class="col s4 m3 config-key">
                   <p>Timestamp</p>
                 </div>
-                <div class="col s8 config-item">
+                <div class="col s8 m9 config-item">
                   <div class="switch">
                     <label>
                       Off
@@ -99,10 +99,10 @@
               </div>
 
               <div class="row config-row">
-                <div class="col s4 config-key">
+                <div class="col s4 m3 config-key">
                   <p>Customized</p>
                 </div>
-                <div class="input-field col s8 config-item">
+                <div class="input-field col s8 m9 config-item">
                   <input
                     id="customized"
                     value="9600"
@@ -113,7 +113,7 @@
               </div>
             </div>
 
-            <div class="col s4">
+            <div class="col s3 m2 selectors">
               <div class="input-field col s12">
                 <select id="databits-select">
                   <option value="1" selected>8</option>
@@ -125,11 +125,11 @@
 
               <div class="input-field col s12">
                 <select id="parity-select">
-                  <option value="1" selected>none</option>
-                  <option value="2">even</option>
-                  <option value="3">odd</option>
-                  <option value="4">mark</option>
-                  <option value="5">space</option>
+                  <option value="1" selected>None</option>
+                  <option value="2">Even</option>
+                  <option value="3">Odd</option>
+                  <option value="4">Mark</option>
+                  <option value="5">Space</option>
                 </select>
               </div>
 
@@ -137,6 +137,15 @@
                 <select id="stopbits-select">
                   <option value="1" selected>1</option>
                   <option value="2">2</option>
+                </select>
+              </div>
+
+              <div class="input-field col s12">
+                <select id="flowcontrol-select">
+                  <option value="1" selected>None</option>
+                  <option value="2">RTSCTS</option>
+                  <option value="3">XON</option>
+                  <option value="4">XOFF</option>
                 </select>
               </div>
             </div>

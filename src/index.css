@@ -52,6 +52,10 @@ blockquote {
   height: 12px;
 }
 
+.selectors {
+  margin-top: 14px;
+}
+
 .select-wrapper input.select-dropdown {
   padding-left: 14px;
   padding-right: 20px;
@@ -67,9 +71,16 @@ blockquote {
   border-radius: 12px;
 }
 
+.dropdown-content li {
+  min-height: 24px;
+}
+
 .dropdown-content li > a,
 .dropdown-content li > span {
   font-size: 12px;
+  line-height: 24px;
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .tabs {
@@ -98,16 +109,6 @@ blockquote {
 .tabs .tab a:focus.active {
   color: #26a69a;
   background-color: #fafafa;
-}
-
-.dropdown-content li {
-  min-height: 36px;
-}
-
-.dropdown-content li > a,
-.dropdown-content li > span {
-  padding-top: 4px;
-  padding-bottom: 4px;
 }
 
 input {
@@ -149,18 +150,6 @@ input {
 
 .tx-row {
   margin-top: 14px;
-}
-
-.file-field .btn,
-.file-field .btn-large,
-.file-field .btn-small {
-  font-size: 12px;
-  height: 24px;
-  line-height: 24px;
-  border-radius: 12px;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 9px;
 }
 
 .toast {

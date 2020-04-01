@@ -40,9 +40,9 @@ function serialGetOptions() {
   if (isNaN(dataBits) === true) dataBits = 8;
   options.dataBits = dataBits;
 
-  let parity = document.getElementById("parity-select").options[
-    config.general.parityIndex
-  ].text;
+  let parity = document
+    .getElementById("parity-select")
+    .options[config.general.parityIndex].text.toLowerCase();
   options.parity = parity;
 
   let stopBits = parseInt(
@@ -95,8 +95,6 @@ document.getElementById("port-switch").onclick = e => {
     let pathSelect = document.getElementById("path-select");
     let portPath = pathSelect.options[pathSelect.selectedIndex].label;
 
-    let baudSelect = document.getElementById("baud-select");
-    let portBaud = baudSelect.options[baudSelect.selectedIndex].label;
     port = new serial(portPath, serialGetOptions());
 
     port.on("open", () => {
