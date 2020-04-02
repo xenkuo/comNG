@@ -308,8 +308,6 @@ amdRequire(["vs/editor/editor.main"], function() {
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window
   });
-
-  editor.getModel().setValue();
 });
 
 function getTimestamp() {
