@@ -1,6 +1,8 @@
-const { remote } = require("electron");
+const { remote, shell } = require("electron");
 const Store = require("electron-store");
-const appVersion = require("electron").remote.app.getVersion();
+const appVersion = remote.app.getVersion();
+const appUpdaterUrl =
+  "https://api.github.com/repos/xenkuo/comNG/releases/latest";
 
 var M = require("materialize-css");
 M.AutoInit();
@@ -140,6 +142,27 @@ window.onload = () => {
   );
 
   document.getElementById("app-version").innerHTML = appVersion;
+  console.log("Current Version: ", appVersion);
+
+  fetch(appUpdaterUrl)
+    .then(data => {
+      return data.json();
+    })
+    .then(res => {
+      let latest = res.tag_name.split("v")[1];
+      if (latest !== appVersion) {
+        const dialogOpts = {
+          type: "info",
+          buttons: ["Download Now", "Later"],
+          message: "Version: " + latest + " released!",
+          detail: res.body
+        };
+
+        dialog.showMessageBox(dialogOpts).then(returnValue => {
+          if (returnValue.response === 0) shell.openExternal(res.html_url);
+        });
+      }
+    });
 };
 
 window.onresize = () => {
@@ -165,8 +188,6 @@ document.getElementById("nav-area").onmousedown = () => {
 };
 
 document.getElementById("nav-area").ondblclick = () => {
-  console.log("hello");
-
   if (
     window.innerWidth === screen.width ||
     window.innerHeight === screen.height
@@ -185,7 +206,7 @@ document.getElementById("nav-area").ondblclick = () => {
 };
 
 document.getElementById("logo").onclick = () => {
-  require("electron").shell.openExternal("https://github.com/xenkuo/comNG");
+  shell.openExternal("https://github.com/xenkuo/comNG");
 };
 
 document.getElementById("min-btn").onclick = () => {
@@ -358,19 +379,19 @@ document.getElementById("bar-color-tail").oninput = e => {
 document.getElementById("issue").onclick = e => {
   console.log("licence click", e);
   e.preventDefault();
-  require("electron").shell.openExternal(e.target.href);
+  shell.openExternal(e.target.href);
 };
 
 document.getElementById("introduction").onclick = e => {
   console.log("licence click", e);
   e.preventDefault();
-  require("electron").shell.openExternal(e.target.href);
+  shell.openExternal(e.target.href);
 };
 
 document.getElementById("comnglang").onclick = e => {
   console.log("licence click", e);
   e.preventDefault();
-  require("electron").shell.openExternal(e.target.href);
+  shell.openExternal(e.target.href);
 };
 
 document.getElementById("baud-select").onchange = e => {
