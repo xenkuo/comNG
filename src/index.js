@@ -9,6 +9,7 @@ M.AutoInit();
 
 var config;
 const store = new Store({
+  projectVersion: appVersion,
   migrations: {
     "1.0.3": store => {
       store.delete("desert");
