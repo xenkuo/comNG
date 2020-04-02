@@ -184,6 +184,10 @@ document.getElementById("nav-area").ondblclick = () => {
   }
 };
 
+document.getElementById("logo").onclick = () => {
+  require("electron").shell.openExternal("https://github.com/xenkuo/comNG");
+};
+
 document.getElementById("min-btn").onclick = () => {
   remote.getCurrentWindow().minimize();
 };

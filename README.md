@@ -59,7 +59,7 @@ cd comNG
 npm install
 ```
 
-You may need install node native compile tools, if there's problem, `Google` or create issue.
+You may need to install node native compile tools, if there's problem, `Google` or create issue.
 
 ### Develop and Build
 
