@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "1.0.3",
+  "version": "1.0.2",
   "description": "My Electron application description",
   "main": "src/main.js",
   "scripts": {
@@ -21,8 +21,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": false,
-        "overwrite": true,
+        "asar": true,
         "icon": "image/logo"
       },
       "makers": [
