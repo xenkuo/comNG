@@ -3,6 +3,7 @@
   "productName": "comNG",
   "version": "1.0.2",
   "description": "My Electron application description",
+  "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
@@ -22,6 +23,11 @@
     "forge": {
       "packagerConfig": {
         "asar": true,
+        "ignore": [
+          "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
+          "node_modules/materialize-css/(extras|js|sass)",
+          "node_modules/material-design-icons/(?!iconfont)"
+        ],
         "icon": "image/logo"
       },
       "makers": [
@@ -65,7 +71,9 @@
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
+    "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-rc.2",
+    "monaco-editor": "^0.20.0",
     "serialport": "^8.0.7"
   },
   "devDependencies": {

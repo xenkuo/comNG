@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 const fs = require("fs");
 const path = require("path");
-const amdLoader = require("../vs/loader.js");
+const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 
 const amdRequire = amdLoader.require;
@@ -150,7 +150,9 @@ function saveToFile() {
 
 amdRequire.config({
   // eslint-disable-next-line no-undef
-  baseUrl: uriFromPath(path.join(__dirname, ".."))
+  baseUrl: uriFromPath(
+    path.join(__dirname, "../node_modules/monaco-editor/min")
+  )
 });
 
 // workaround monaco-css not understanding the environment
