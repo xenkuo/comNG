@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "My Electron application description",
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
