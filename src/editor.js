@@ -9,7 +9,7 @@ const amdRequire = amdLoader.require;
 const hexmodeUnitWidth = 8;
 
 const decoMod = 7;
-const decorationTable = [
+const decoTable = [
   { style: "hl-red", color: "#ff8a80" },
   { style: "hl-orange", color: "#ffd180" },
   { style: "hl-yellow", color: "#ffff8d" },
@@ -26,7 +26,7 @@ var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
 var half_line = false;
-var decorationIndex = 0;
+var decoIndex = 0;
 
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
@@ -36,11 +36,11 @@ function uriFromPath(_path) {
   return encodeURI("file://" + pathName);
 }
 
-function decorationGet() {
-  return decorationTable[decorationIndex++ % decoMod];
+function decoGet() {
+  return decoTable[decoIndex++ % decoMod];
 }
 
-function applyDecoration(m, text) {
+function decoApply(m, text) {
   let matches = m.findMatches(
     text,
     false,
@@ -49,7 +49,7 @@ function applyDecoration(m, text) {
     "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
     false
   );
-  let decoration = decorationGet();
+  let decoration = decoGet();
 
   console.log(decoration.style, decoration.color);
 
@@ -74,7 +74,7 @@ function applyDecoration(m, text) {
   }
 }
 
-function removeDecoration(m, text) {
+function decoRemove(m, text) {
   let matches = m.findMatches(
     text,
     false,
@@ -103,9 +103,9 @@ function highlightToggle() {
 
   let decorations = m.getDecorationsInRange(range);
   if (decorations.length === 1) {
-    applyDecoration(m, text);
+    decoApply(m, text);
   } else {
-    removeDecoration(m, text);
+    decoRemove(m, text);
   }
 
   return null;
