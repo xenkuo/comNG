@@ -8,7 +8,7 @@ const { dialog } = require("electron").remote;
 const amdRequire = amdLoader.require;
 const hexmodeUnitWidth = 8;
 
-const decorationMod = 7;
+const decoMod = 7;
 const decorationTable = [
   { style: "hl-red", color: "#ff8a80" },
   { style: "hl-orange", color: "#ffd180" },
@@ -37,7 +37,7 @@ function uriFromPath(_path) {
 }
 
 function decorationGet() {
-  return decorationTable[decorationIndex++ % decorationMod];
+  return decorationTable[decorationIndex++ % decoMod];
 }
 
 function applyDecoration(m, text) {
@@ -146,6 +146,148 @@ function saveToFile() {
         fs.writeFileSync(file, text);
       }
     });
+}
+
+function getTimestamp() {
+  const t = new Date();
+
+  return (
+    t.toLocaleTimeString().split(" ")[0] +
+    ":" +
+    t
+      .getMilliseconds()
+      .toString()
+      .padStart(3, 0) +
+    " "
+  );
+}
+
+function editorAppend(text) {
+  const lineCount = editor.getModel().getLineCount();
+  const lastLineLength = editor.getModel().getLineMaxColumn(lineCount);
+
+  const range = new monaco.Range(
+    lineCount,
+    lastLineLength,
+    lineCount,
+    lastLineLength
+  );
+
+  editor.getModel().applyEdits([
+    {
+      forceMoveMarkers: true,
+      range: range,
+      text: text.toString()
+    }
+  ]);
+
+  editor.revealLine(editor.getModel().getLineCount());
+}
+
+function buff2hex(buff) {
+  return Array.prototype.map
+    .call(new Uint8Array(buff), x => ("00" + x.toString(16)).slice(-2))
+    .join("");
+}
+
+function showHex(buff) {
+  let hexBuff = buff2hex(buff);
+
+  while (hexBuff.length !== 0) {
+    let len = hexmodeUnitWidth - hexmodeIndex;
+    if (hexBuff.length < len) len = hexBuff.length;
+    let line = hexBuff.slice(0, len);
+
+    hexmodeIndex = (hexmodeIndex + len) % hexmodeUnitWidth;
+    if (hexmodeIndex === 0) {
+      hexmodeUnitIndex++;
+      if (hexmodeUnitIndex === 4) {
+        hexmodeUnitIndex = 0;
+        line += "\n";
+      } else {
+        line += " ";
+      }
+    }
+    editorAppend(line);
+
+    hexBuff = hexBuff.slice(len, hexBuff.length);
+  }
+}
+
+function breakpointProcess(line) {
+  if (breakpointHit === false) {
+    let bpLine = line;
+
+    if (breakpointBuff.length !== 0) {
+      bpLine = Buffer.concat(
+        [breakpointBuff, line],
+        line.length + breakpointBuff.length
+      );
+      breakpointBuff = [];
+    }
+
+    if (bpLine.includes(config.advance.breakpoint.onText) === true) {
+      breakpointHit = true;
+      breakpointAfterLines = 0;
+    }
+  } else {
+    breakpointAfterLines++;
+    if (breakpointAfterLines >= config.advance.breakpoint.afterLines) {
+      breakpointHit = false;
+      breakpointAfterLines = 0;
+
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function showBuff(buff) {
+  if (config.general.hexmode === true) {
+    showHex(buff);
+  } else {
+    let index = -1;
+    // console.log(buff)
+    // console.log(buff.toString())
+    while ((index = buff.indexOf("\n")) !== -1) {
+      let line = buff.slice(0, index + 1);
+      // console.log(line)
+
+      if (half_line === true) {
+        editorAppend(line);
+        half_line = false;
+      } else {
+        let timestamp = "";
+
+        if (config.general.timestamp === true) timestamp = getTimestamp();
+        editorAppend(timestamp + line);
+      }
+      buff = buff.slice(index + 1, buff.length);
+      // console.log(buff)
+
+      if (config.advance.breakpoint.switch === true) {
+        if (breakpointProcess(line) === true) {
+          buff = [];
+          serialClose();
+        }
+      }
+    }
+    if (buff.length !== 0) {
+      if (half_line === false) {
+        let timestamp = "";
+
+        if (config.general.timestamp === true) timestamp = getTimestamp();
+        editorAppend(timestamp + buff);
+        half_line = true;
+      } else {
+        editorAppend(buff);
+      }
+    }
+    if (config.advance.breakpoint.switch === true) {
+      breakpointBuff = buff;
+    }
+  }
 }
 
 amdRequire.config({
@@ -311,148 +453,6 @@ amdRequire(["vs/editor/editor.main"], function() {
     // Do nothing but prevent default action: close window
   });
 });
-
-function getTimestamp() {
-  const t = new Date();
-
-  return (
-    t.toLocaleTimeString().split(" ")[0] +
-    ":" +
-    t
-      .getMilliseconds()
-      .toString()
-      .padStart(3, 0) +
-    " "
-  );
-}
-
-function editorAppend(text) {
-  const lineCount = editor.getModel().getLineCount();
-  const lastLineLength = editor.getModel().getLineMaxColumn(lineCount);
-
-  const range = new monaco.Range(
-    lineCount,
-    lastLineLength,
-    lineCount,
-    lastLineLength
-  );
-
-  editor.getModel().applyEdits([
-    {
-      forceMoveMarkers: true,
-      range: range,
-      text: text.toString()
-    }
-  ]);
-
-  editor.revealLine(editor.getModel().getLineCount());
-}
-
-function buff2hex(buff) {
-  return Array.prototype.map
-    .call(new Uint8Array(buff), x => ("00" + x.toString(16)).slice(-2))
-    .join("");
-}
-
-function showHex(buff) {
-  let hexBuff = buff2hex(buff);
-
-  while (hexBuff.length !== 0) {
-    let len = hexmodeUnitWidth - hexmodeIndex;
-    if (hexBuff.length < len) len = hexBuff.length;
-    let line = hexBuff.slice(0, len);
-
-    hexmodeIndex = (hexmodeIndex + len) % hexmodeUnitWidth;
-    if (hexmodeIndex === 0) {
-      hexmodeUnitIndex++;
-      if (hexmodeUnitIndex === 4) {
-        hexmodeUnitIndex = 0;
-        line += "\n";
-      } else {
-        line += " ";
-      }
-    }
-    editorAppend(line);
-
-    hexBuff = hexBuff.slice(len, hexBuff.length);
-  }
-}
-
-function breakpointProcess(line) {
-  if (breakpointHit === false) {
-    let bpLine = line;
-
-    if (breakpointBuff.length !== 0) {
-      bpLine = Buffer.concat(
-        [breakpointBuff, line],
-        line.length + breakpointBuff.length
-      );
-      breakpointBuff = [];
-    }
-
-    if (bpLine.includes(config.advance.breakpoint.onText) === true) {
-      breakpointHit = true;
-      breakpointAfterLines = 0;
-    }
-  } else {
-    breakpointAfterLines++;
-    if (breakpointAfterLines >= config.advance.breakpoint.afterLines) {
-      breakpointHit = false;
-      breakpointAfterLines = 0;
-
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function showBuff(buff) {
-  if (config.general.hexmode === true) {
-    showHex(buff);
-  } else {
-    let index = -1;
-    // console.log(buff)
-    // console.log(buff.toString())
-    while ((index = buff.indexOf("\n")) !== -1) {
-      let line = buff.slice(0, index + 1);
-      // console.log(line)
-
-      if (half_line === true) {
-        editorAppend(line);
-        half_line = false;
-      } else {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + line);
-      }
-      buff = buff.slice(index + 1, buff.length);
-      // console.log(buff)
-
-      if (config.advance.breakpoint.switch === true) {
-        if (breakpointProcess(line) === true) {
-          buff = [];
-          serialClose();
-        }
-      }
-    }
-    if (buff.length !== 0) {
-      if (half_line === false) {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + buff);
-        half_line = true;
-      } else {
-        editorAppend(buff);
-      }
-    }
-    if (config.advance.breakpoint.switch === true) {
-      breakpointBuff = buff;
-    }
-  }
-}
 
 document.getElementById("clear-btn").onclick = () => {
   let value = "";
