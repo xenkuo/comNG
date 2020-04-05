@@ -11,7 +11,7 @@ var config;
 const store = new Store({
   projectVersion: appVersion,
   migrations: {
-    "1.0.3": store => {
+    "1.0.3": (store) => {
       store.delete("desert");
       store.delete("about");
       store.set("window.width", 600);
@@ -45,8 +45,8 @@ const store = new Store({
       store.set("advance.barColor.head", "#fafafa");
       store.set("advance.barColor.middle", "#fafafa");
       store.set("advance.barColor.tail", "#26a69a");
-    }
-  }
+    },
+  },
 });
 
 function configUpdate(key, value) {
@@ -146,20 +146,20 @@ window.onload = () => {
   console.log("Current Version: ", appVersion);
 
   fetch(appUpdaterUrl)
-    .then(data => {
+    .then((data) => {
       return data.json();
     })
-    .then(res => {
+    .then((res) => {
       let latest = res.tag_name.split("v")[1];
       if (latest !== appVersion) {
         const dialogOpts = {
           type: "info",
           buttons: ["Download Now", "Later"],
           message: "Version: " + latest + " released!",
-          detail: res.body
+          detail: res.body,
         };
 
-        dialog.showMessageBox(dialogOpts).then(returnValue => {
+        dialog.showMessageBox(dialogOpts).then((returnValue) => {
           if (returnValue.response === 0) shell.openExternal(res.html_url);
         });
       }
@@ -251,15 +251,15 @@ document.getElementById("menu-tabs").onclick = () => {
   configUpdate("menu.tab", tabs.$content[0].id);
 };
 
-document.getElementById("hexmode-switch").onclick = e => {
+document.getElementById("hexmode-switch").onclick = (e) => {
   configUpdate("general.hexmode", e.target.checked);
 };
 
-document.getElementById("timestamp-switch").onclick = e => {
+document.getElementById("timestamp-switch").onclick = (e) => {
   configUpdate("general.timestamp", e.target.checked);
 };
 
-document.getElementById("customized").onblur = e => {
+document.getElementById("customized").onblur = (e) => {
   let customized = parseInt(e.target.value);
 
   if (isNaN(customized) === true) customized = 9600;
@@ -271,32 +271,32 @@ document.getElementById("customized").onblur = e => {
   M.FormSelect.init(baudSelect);
 };
 
-document.getElementById("databits-select").onchange = e => {
+document.getElementById("databits-select").onchange = (e) => {
   configUpdate("general.databitsIndex", e.target.selectedIndex);
 };
 
-document.getElementById("parity-select").onchange = e => {
+document.getElementById("parity-select").onchange = (e) => {
   configUpdate("general.parityIndex", e.target.selectedIndex);
 };
 
-document.getElementById("stopbits-select").onchange = e => {
+document.getElementById("stopbits-select").onchange = (e) => {
   configUpdate("general.stopbitsIndex", e.target.selectedIndex);
 };
 
-document.getElementById("flowcontrol-select").onchange = e => {
+document.getElementById("flowcontrol-select").onchange = (e) => {
   configUpdate("general.flowcontrolIndex", e.target.selectedIndex);
 };
 
-document.getElementById("sign-switch").onclick = e => {
+document.getElementById("sign-switch").onclick = (e) => {
   configUpdate("advance.sign.switch", e.target.checked);
 };
 
-document.getElementById("sign-name").onblur = e => {
+document.getElementById("sign-name").onblur = (e) => {
   configUpdate("advance.sign.name", e.target.value);
 };
 
 let txRepeatTimer = undefined;
-document.getElementById("tx-eof-select").onchange = e => {
+document.getElementById("tx-eof-select").onchange = (e) => {
   let index = e.target.selectedIndex;
   let eof = "\r\n";
   switch (index) {
@@ -341,7 +341,7 @@ document.getElementById("tx-send-btn").onclick = () => {
   }
 };
 
-document.getElementById("tx-repeat-switch").onchange = e => {
+document.getElementById("tx-repeat-switch").onchange = (e) => {
   let checked = e.target.checked;
 
   if (checked === false && txRepeatTimer !== undefined)
@@ -356,46 +356,46 @@ document.getElementById("tx-log-clear-btn").onclick = () => {
   M.textareaAutoResize(p);
 };
 
-document.getElementById("bar-color-head").oninput = e => {
+document.getElementById("bar-color-head").oninput = (e) => {
   let color = e.target.value;
 
   document.documentElement.style.setProperty("--bar-color-head", color);
   configUpdate("advance.barColor.head", color);
 };
 
-document.getElementById("bar-color-middle").oninput = e => {
+document.getElementById("bar-color-middle").oninput = (e) => {
   let color = e.target.value;
 
   document.documentElement.style.setProperty("--bar-color-middle", color);
   configUpdate("advance.barColor.middle", color);
 };
 
-document.getElementById("bar-color-tail").oninput = e => {
+document.getElementById("bar-color-tail").oninput = (e) => {
   let color = e.target.value;
 
   document.documentElement.style.setProperty("--bar-color-tail", color);
   configUpdate("advance.barColor.tail", color);
 };
 
-document.getElementById("issue").onclick = e => {
+document.getElementById("issue").onclick = (e) => {
   console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
-document.getElementById("introduction").onclick = e => {
+document.getElementById("introduction").onclick = (e) => {
   console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
-document.getElementById("comnglang").onclick = e => {
+document.getElementById("comnglang").onclick = (e) => {
   console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
-document.getElementById("baud-select").onchange = e => {
+document.getElementById("baud-select").onchange = (e) => {
   configUpdate("baudIndex", e.target.selectedIndex);
 };
 
@@ -420,7 +420,7 @@ document.getElementById("baud-select").onchange = e => {
 //   true
 // );
 
-document.getElementById("path-select").onchange = e => {
+document.getElementById("path-select").onchange = (e) => {
   configUpdate("pathIndex", e.target.selectedIndex);
 };
 

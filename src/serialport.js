@@ -10,7 +10,7 @@ function portUpdate() {
 
   serial
     .list()
-    .then(ports => {
+    .then((ports) => {
       ports.forEach((item, index) => {
         console.log(item, index);
         pSelect.options.add(new Option(item.path, index));
@@ -18,7 +18,7 @@ function portUpdate() {
       });
       M.FormSelect.init(pSelect);
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
     });
 }
@@ -95,7 +95,7 @@ function serialWrite(data) {
   return true;
 }
 
-document.getElementById("port-switch").onclick = e => {
+document.getElementById("port-switch").onclick = (e) => {
   if (e.target.checked === true) {
     let pathSelect = document.getElementById("path-select");
     let portPath = pathSelect.options[pathSelect.selectedIndex].label;
@@ -104,18 +104,18 @@ document.getElementById("port-switch").onclick = e => {
 
     port.on("open", () => {
       console.log("port open event");
-      port.set(serialGetSetOptions(), err => {
+      port.set(serialGetSetOptions(), (err) => {
         if (err !== null) console.error(err);
       });
     });
 
-    port.on("error", err => {
+    port.on("error", (err) => {
       toast(err.message);
       document.getElementById("port-switch").checked = false;
       if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
     });
 
-    port.on("close", err => {
+    port.on("close", (err) => {
       console.log("port close event");
       if (err !== null) console.error(err);
       document.getElementById("port-switch").checked = false;

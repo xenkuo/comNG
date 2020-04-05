@@ -16,7 +16,7 @@ const decoTable = [
   { style: "hl-green", color: "#b9f6ca" },
   { style: "hl-blue", color: "8dd8ff" },
   { style: "hl-indigo", color: "8c9eff" },
-  { style: "hl-purple", color: "ea80fc" }
+  { style: "hl-purple", color: "ea80fc" },
 ];
 
 var editor;
@@ -65,10 +65,10 @@ function decoApply(m, text) {
             className: decoration.style,
             overviewRuler: {
               color: decoration.color,
-              position: 4 // position right
-            }
-          }
-        }
+              position: 4, // position right
+            },
+          },
+        },
       ]
     );
   }
@@ -115,9 +115,9 @@ function openFile() {
   dialog
     .showOpenDialog({
       properties: ["openFile"],
-      filters: [{ name: "comNG log", extensions: ["cnl", "txt"] }]
+      filters: [{ name: "comNG log", extensions: ["cnl", "txt"] }],
     })
-    .then(result => {
+    .then((result) => {
       if (result.canceled === false) {
         const file = result.filePaths[0];
         const text = fs.readFileSync(file).toString();
@@ -137,9 +137,9 @@ function saveToFile() {
     .showSaveDialog({
       properties: ["createDirectory"],
       defaultPath: fileName,
-      filters: [{ name: "comNG Log", extensions: ["cnl"] }]
+      filters: [{ name: "comNG Log", extensions: ["cnl"] }],
     })
-    .then(result => {
+    .then((result) => {
       if (result.canceled === false) {
         const file = result.filePath;
         const text = editor.getModel().getValue();
@@ -154,10 +154,7 @@ function getTimestamp() {
   return (
     t.toLocaleTimeString().split(" ")[0] +
     ":" +
-    t
-      .getMilliseconds()
-      .toString()
-      .padStart(3, 0) +
+    t.getMilliseconds().toString().padStart(3, 0) +
     " "
   );
 }
@@ -177,8 +174,8 @@ function editorAppend(text) {
     {
       forceMoveMarkers: true,
       range: range,
-      text: text.toString()
-    }
+      text: text.toString(),
+    },
   ]);
 
   editor.revealLine(editor.getModel().getLineCount());
@@ -186,7 +183,7 @@ function editorAppend(text) {
 
 function buff2hex(buff) {
   return Array.prototype.map
-    .call(new Uint8Array(buff), x => ("00" + x.toString(16)).slice(-2))
+    .call(new Uint8Array(buff), (x) => ("00" + x.toString(16)).slice(-2))
     .join("");
 }
 
@@ -294,15 +291,15 @@ amdRequire.config({
   // eslint-disable-next-line no-undef
   baseUrl: uriFromPath(
     path.join(__dirname, "../node_modules/monaco-editor/min")
-  )
+  ),
 });
 
 // workaround monaco-css not understanding the environment
 self.module = undefined;
 
-amdRequire(["vs/editor/editor.main"], function() {
+amdRequire(["vs/editor/editor.main"], function () {
   monaco.languages.register({
-    id: "comNGLang"
+    id: "comNGLang",
   });
   monaco.languages.setMonarchTokensProvider("comNGLang", {
     defaultToken: "",
@@ -342,18 +339,18 @@ amdRequire(["vs/editor/editor.main"], function() {
         [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, "time"],
         [
           /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
-          "ip"
+          "ip",
         ],
         [
           /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
-          "mac"
+          "mac",
         ],
         [/\d*\.\d+([eE][-+]?\d+)?/, "number"],
         [/0[xX][0-9a-fA-F]+/, "number"],
         [/[0-9a-fA-F]{4,}/, "number"],
-        [/\d+/, "number"]
-      ]
-    }
+        [/\d+/, "number"],
+      ],
+    },
   });
 
   // Define a new theme that contains only rules that match this language
@@ -362,7 +359,7 @@ amdRequire(["vs/editor/editor.main"], function() {
     inherit: false,
     colors: {
       "editor.background": "#fafafa",
-      "scrollbarSlider.background": "#fafafa"
+      "scrollbarSlider.background": "#fafafa",
     },
     rules: [
       { token: "number", foreground: "2e7d32" },
@@ -377,8 +374,8 @@ amdRequire(["vs/editor/editor.main"], function() {
       { token: "info", foreground: "9e9e9e" },
       { token: "trace", foreground: "9e9d24" },
       { token: "debug", foreground: "2e7d32" },
-      { token: "useless", foreground: "cecece" }
-    ]
+      { token: "useless", foreground: "cecece" },
+    ],
   });
 
   editor = monaco.editor.create(document.getElementById("editor-area"), {
@@ -396,13 +393,13 @@ amdRequire(["vs/editor/editor.main"], function() {
     wordWrapBreakBeforeCharacters: "",
     lineNumbersMinChars: 3,
     minimap: {
-      enabled: false
+      enabled: false,
     },
     scrollbar: {
       vertical: "auto",
       useShadows: false,
-      verticalScrollbarSize: 7
-    }
+      verticalScrollbarSize: 10,
+    },
   });
 
   let editorConfig = {
@@ -411,8 +408,8 @@ amdRequire(["vs/editor/editor.main"], function() {
       ["[", "]"],
       ["(", ")"],
       ['"', '"'],
-      ["'", "'"]
-    ]
+      ["'", "'"],
+    ],
   };
   monaco.languages.setLanguageConfiguration("comNGLang", editorConfig);
 
@@ -424,7 +421,7 @@ amdRequire(["vs/editor/editor.main"], function() {
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
     contextMenuOrder: 1.5,
-    run: highlightToggle
+    run: highlightToggle,
   });
 
   editor.addAction({
@@ -435,7 +432,7 @@ amdRequire(["vs/editor/editor.main"], function() {
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
     contextMenuOrder: 1.5,
-    run: openFile
+    run: openFile,
   });
 
   editor.addAction({
@@ -446,7 +443,7 @@ amdRequire(["vs/editor/editor.main"], function() {
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
     contextMenuOrder: 1.5,
-    run: saveToFile
+    run: saveToFile,
   });
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
@@ -467,7 +464,7 @@ document.getElementById("clear-btn").onclick = () => {
   editor.getModel().setValue(value);
 };
 
-document.getElementById("breakpoint-switch").onclick = e => {
+document.getElementById("breakpoint-switch").onclick = (e) => {
   if (e.target.checked === true) {
     if (config.advance.breakpoint.onText.length === 0) {
       toast("Error: Breakpoint on-text cant be empty");
@@ -481,11 +478,11 @@ document.getElementById("breakpoint-switch").onclick = e => {
   breakpointAfterLines = 0;
 };
 
-document.getElementById("breakpoint-on-text").onblur = e => {
+document.getElementById("breakpoint-on-text").onblur = (e) => {
   configUpdate("advance.breakpoint.onText", e.target.value);
 };
 
-document.getElementById("breakpoint-after-lines").onblur = e => {
+document.getElementById("breakpoint-after-lines").onblur = (e) => {
   let lines = parseInt(e.target.value);
 
   if (isNaN(lines) === true) lines = 5;
@@ -504,13 +501,13 @@ document.getElementById("editor-area").ondragend = () => {
   return false;
 };
 
-document.getElementById("editor-area").ondrop = e => {
+document.getElementById("editor-area").ondrop = (e) => {
   console.log("ondrop");
   e.preventDefault();
 
   let f = e.dataTransfer.files[0];
 
-  f.text().then(text => {
+  f.text().then((text) => {
     editor.getModel().setValue(text);
   });
 
