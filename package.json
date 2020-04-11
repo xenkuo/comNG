@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "My Electron application description",
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
@@ -65,6 +65,18 @@
             }
           }
         }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "xenkuo",
+              "name": "comNG"
+            },
+            "draft": true
+          }
+        }
       ]
     }
   },
@@ -81,6 +93,7 @@
     "@electron-forge/maker-deb": "6.0.0-beta.47",
     "@electron-forge/maker-dmg": "^6.0.0-beta.49",
     "@electron-forge/maker-squirrel": "6.0.0-beta.47",
+    "@electron-forge/publisher-github": "^6.0.0-beta.50",
     "electron": "7.1.11",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0"
