@@ -55,23 +55,19 @@ git clone git@github.com:xenkuo/comNG.git
 
 ```
 cd comNG
-npm install
+yarn
 ```
 
-You may need to install node native compile tools, if there's problem, `Google` or create issue.
+You may need to install node native compile tools, if there are problems, `Google` or create issue.
 
-### Develop and Build
+### Develop
 
 ```
 code .
-npm run start
-npm run build
+yarn start
+yarn make
 ```
 
 ## Licence
 
 comNG is [MIT](https://opensource.org/licenses/MIT) licensed and all it's dependencies are MIT licensed.
-
-## The End
-
-Wish you enjoy it.
