@@ -26,7 +26,6 @@ Of course it supports common features that other COM tools have:
 Features not supported:
 
 - hex transmit
-- flow control
 - file transmit
 - capture to file
 
