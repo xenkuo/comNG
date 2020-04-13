@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "1.0.4",
+  "version": "1.0.3",
   "description": "My Electron application description",
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
@@ -81,6 +81,7 @@
     }
   },
   "dependencies": {
+    "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
     "material-design-icons": "^3.0.1",

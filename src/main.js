@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const path = require("path");
+const Shortcut = require("electron-localshortcut");
+
 const Store = require("electron-store");
 
 const store = new Store();
@@ -55,6 +57,16 @@ const createWindow = () => {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null;
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
+    console.log("You pressed cmd/ctrl x");
+    mainWindow.webContents.send("clear-text", "Clear");
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+D", () => {
+    console.log("You pressed cmd/ctrl d");
+    mainWindow.webContents.send("clear-text", "Switch");
   });
 };
 

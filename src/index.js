@@ -1,4 +1,6 @@
-const { remote, shell } = require("electron");
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+const { remote, shell, ipcRenderer, clipboard } = require("electron");
 const Store = require("electron-store");
 const appVersion = remote.app.getVersion();
 const appUpdaterUrl =
@@ -64,6 +66,16 @@ function configUpdate(key, value) {
 
   store.set(key, value);
 }
+
+ipcRenderer.on("clear-text", (event, arg) => {
+  console.log(arg);
+  if (arg === "Clear") {
+    let text = editor.getModel().getValue();
+    clipboard.writeText(text);
+    editor.getModel().setValue("");
+  } else if (arg === "Switch")
+    document.getElementById("port-switch").click();
+});
 
 window.onload = () => {
   console.log("window onload");

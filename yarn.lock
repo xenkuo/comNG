@@ -1291,6 +1291,21 @@ electron-installer-dmg@^3.0.0:
   optionalDependencies:
     appdmg "^0.6.0"
 
+electron-is-accelerator@^0.1.0:
+  version "0.1.2"
+  resolved "https://registry.npm.taobao.org/electron-is-accelerator/download/electron-is-accelerator-0.1.2.tgz#509e510c26a56b55e17f863a4b04e111846ab27b"
+  integrity sha1-UJ5RDCala1Xhf4Y6SwThEYRqsns=
+
+electron-localshortcut@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.npm.taobao.org/electron-localshortcut/download/electron-localshortcut-3.2.1.tgz#cfc83a3eff5e28faf98ddcc87f80a2ce4f623cd3"
+  integrity sha1-z8g6Pv9eKPr5jdzIf4Cizk9iPNM=
+  dependencies:
+    debug "^4.0.1"
+    electron-is-accelerator "^0.1.0"
+    keyboardevent-from-electron-accelerator "^2.0.0"
+    keyboardevents-areequal "^0.2.1"
+
 electron-notarize@^0.1.1:
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/electron-notarize/download/electron-notarize-0.1.1.tgz#c3563d70c5e7b3315f44e8495b30050a8c408b91"
@@ -2338,6 +2353,16 @@ junk@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npm.taobao.org/junk/download/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha1-MUmQmNkCt+mMXZucgPQ0V6iKv6E=
+
+keyboardevent-from-electron-accelerator@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/keyboardevent-from-electron-accelerator/download/keyboardevent-from-electron-accelerator-2.0.0.tgz#ace21b1aa4e47148815d160057f9edb66567c50c"
+  integrity sha1-rOIbGqTkcUiBXRYAV/nttmVnxQw=
+
+keyboardevents-areequal@^0.2.1:
+  version "0.2.2"
+  resolved "https://registry.npm.taobao.org/keyboardevents-areequal/download/keyboardevents-areequal-0.2.2.tgz#88191ec738ce9f7591c25e9056de928b40277194"
+  integrity sha1-iBkexzjOn3WRwl6QVt6Si0AncZQ=
 
 keyv@^3.0.0:
   version "3.1.0"
