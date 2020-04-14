@@ -10,6 +10,8 @@ body {
 }
 
 :root {
+  --menu-height: 200px;
+  --bar-height: 53px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
@@ -173,7 +175,7 @@ input {
 }
 
 #menu-area {
-  height: 200px;
+  height: var(--menu-height);
   width: calc(100%);
   background-color: #fafafa;
 }
@@ -190,7 +192,7 @@ input {
 
 #bar-area {
   width: calc(100% - 2px);
-  height: 53px;
+  height: var(--bar-height);
   position: fixed;
   bottom: 1px;
   margin-bottom: 0px;

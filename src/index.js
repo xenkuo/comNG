@@ -10,6 +10,8 @@ var M = require("materialize-css");
 M.AutoInit();
 
 var config;
+var barHeight;
+var menuHeight;
 const store = new Store({
   projectVersion: appVersion,
   migrations: {
@@ -73,15 +75,23 @@ ipcRenderer.on("clear-text", (event, arg) => {
     let text = editor.getModel().getValue();
     clipboard.writeText(text);
     editor.getModel().setValue("");
-  } else if (arg === "Switch")
-    document.getElementById("port-switch").click();
+  } else if (arg === "Switch") document.getElementById("port-switch").click();
 });
 
 window.onload = () => {
-  console.log("window onload");
-
   config = store.store;
   document.getElementById("menu-area").hidden = config.menu.hidden;
+
+  barHeight = getComputedStyle(document.documentElement)
+    .getPropertyValue("--bar-height")
+    .trim()
+    .split("px")[0];
+  barHeight = parseInt(barHeight);
+  menuHeight = getComputedStyle(document.documentElement)
+    .getPropertyValue("--menu-height")
+    .trim()
+    .split("px")[0];
+  menuHeight = parseInt(menuHeight);
 
   let nav = document.getElementById("nav-area");
   let bar = document.getElementById("bar-area");
@@ -245,15 +255,39 @@ document.getElementById("menu-btn").onclick = () => {
   let editor = document.getElementById("editor-area");
 
   if (menu.hidden === true) {
-    editor.style.height = editor.offsetHeight - 200 + "px";
+    editor.style.height = editor.offsetHeight - menuHeight + "px";
     menu.hidden = false;
 
     configUpdate("menu.hidden", false);
   } else {
-    editor.style.height = editor.offsetHeight + 200 + "px";
+    editor.style.height = editor.offsetHeight + menuHeight + "px";
     menu.hidden = true;
 
     configUpdate("menu.hidden", true);
+  }
+};
+
+document.body.onclick = (e) => {
+  // don't process fake click
+  if (e.isTrusted === false) return;
+  // don't process when click on menu-btn
+  if (e.target.parentNode.id === "menu-btn") return;
+  // don't process when we are in Transmit tab
+  if (document.getElementById("menu-tabs").M_Tabs.index === 1) return;
+
+  let pos = e.clientY;
+  let range = document.body.offsetHeight;
+
+  if (pos > range - barHeight || pos < range - barHeight - menuHeight) {
+    let menu = document.getElementById("menu-area");
+    let editor = document.getElementById("editor-area");
+
+    if (menu.hidden === false) {
+      editor.style.height = editor.offsetHeight + menuHeight + "px";
+      menu.hidden = true;
+
+      configUpdate("menu.hidden", true);
+    }
   }
 };
 
