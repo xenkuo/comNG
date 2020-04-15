@@ -61,12 +61,22 @@ const createWindow = () => {
 
   Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
     console.log("You pressed cmd/ctrl x");
-    mainWindow.webContents.send("clear-text", "Clear");
+    mainWindow.webContents.send("main-cmd", "Clear");
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+D", () => {
     console.log("You pressed cmd/ctrl d");
-    mainWindow.webContents.send("clear-text", "Switch");
+    mainWindow.webContents.send("main-cmd", "Switch");
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+O", () => {
+    console.log("You pressed cmd/ctrl o");
+    mainWindow.webContents.send("main-cmd", "Open");
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+S", () => {
+    console.log("You pressed cmd/ctrl s");
+    mainWindow.webContents.send("main-cmd", "Save");
   });
 };
 

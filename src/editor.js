@@ -425,27 +425,27 @@ amdRequire(["vs/editor/editor.main"], function () {
     run: highlightToggle,
   });
 
-  editor.addAction({
-    id: "open-file",
-    label: "Open File...",
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_O],
-    precondition: null,
-    keybindingContext: null,
-    contextMenuGroupId: "9_cutcopypaste",
-    contextMenuOrder: 1.5,
-    run: openFile,
-  });
+  // editor.addAction({
+  //   id: "open-file",
+  //   label: "Open File...",
+  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_O],
+  //   precondition: null,
+  //   keybindingContext: null,
+  //   contextMenuGroupId: "9_cutcopypaste",
+  //   contextMenuOrder: 1.5,
+  //   run: dummy,
+  // });
 
-  editor.addAction({
-    id: "save-to-file",
-    label: "Save To File...",
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
-    precondition: null,
-    keybindingContext: null,
-    contextMenuGroupId: "9_cutcopypaste",
-    contextMenuOrder: 1.5,
-    run: saveToFile,
-  });
+  // editor.addAction({
+  //   id: "save-to-file",
+  //   label: "Save To File...",
+  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
+  //   precondition: null,
+  //   keybindingContext: null,
+  //   contextMenuGroupId: "9_cutcopypaste",
+  //   contextMenuOrder: 1.5,
+  //   run: dummy,
+  // });
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window

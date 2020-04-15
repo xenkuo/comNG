@@ -69,13 +69,39 @@ function configUpdate(key, value) {
   store.set(key, value);
 }
 
-ipcRenderer.on("clear-text", (event, arg) => {
+ipcRenderer.on("main-cmd", (event, arg) => {
   console.log(arg);
-  if (arg === "Clear") {
-    let text = editor.getModel().getValue();
-    clipboard.writeText(text);
-    editor.getModel().setValue("");
-  } else if (arg === "Switch") document.getElementById("port-switch").click();
+  switch (arg) {
+    case "Clear": {
+      let text = editor.getModel().getValue();
+      clipboard.writeText(text);
+      editor.getModel().setValue("");
+      break;
+    }
+    case "Switch":
+      document.getElementById("port-switch").click();
+      break;
+    case "Open":
+      openFile();
+      break;
+    case "Save":
+      saveToFile();
+      break;
+    default:
+      console.log("Unknown cmds");
+      break;
+  }
+  // if (arg === "Clear") {
+  //   let text = editor.getModel().getValue();
+  //   clipboard.writeText(text);
+  //   editor.getModel().setValue("");
+  // } else if (arg === "Switch") {
+  //   document.getElementById("port-switch").click();
+  // } else if (arg === "Open") {
+  //   console.log("open");
+  // } else if (arg === "Save") {
+  //   console.log("Save");
+  // }
 });
 
 window.onload = () => {
