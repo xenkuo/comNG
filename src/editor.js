@@ -85,10 +85,10 @@ function decoRemove(m, text) {
   );
 
   for (let match of matches) {
-    let decorations = m.getDecorationsInRange(match.range);
+    let decos = m.getDecorationsInRange(match.range);
 
     // super word remove decoration will cause sub word decoration to 1
-    for (let deco of decorations) {
+    for (let deco of decos) {
       m.deltaDecorations([deco.id], []);
     }
   }
@@ -96,13 +96,22 @@ function decoRemove(m, text) {
 
 function highlightToggle() {
   console.log("highligh toggle");
+  let decoExpectedLength = 1;
   let m = editor.getModel();
   let range = editor.getSelection();
   let text = m.getValueInRange(range);
+  if (text === "") {
+    let word = m.getWordAtPosition(editor.getPosition());
+    text = word.word;
+    range.startColumn = word.startColumn;
+    range.endColumn = word.endColumn;
+    decoExpectedLength = 2;
+  }
+
   if (text === "") return;
 
-  let decorations = m.getDecorationsInRange(range);
-  if (decorations.length === 1) {
+  let decos = m.getDecorationsInRange(range);
+  if (decos.length === decoExpectedLength) {
     decoApply(m, text);
   } else {
     decoRemove(m, text);
