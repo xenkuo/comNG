@@ -403,6 +403,8 @@ document.getElementById("tx-send-btn").onclick = () => {
   M.textareaAutoResize(p);
 
   if (document.getElementById("tx-repeat-switch").checked === true) {
+    if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
+
     let interval = document.getElementById("tx-repeat-interval").value;
     interval = parseInt(interval);
     if (isNaN(interval) === true) interval = 1000;
