@@ -231,6 +231,21 @@ window.onresize = () => {
     "px";
 };
 
+document.onkeydown = function (e) {
+  e = e || window.event;
+  switch (e.which || e.keyCode) {
+    case 13:
+      console.log("hello world 13");
+      if (document.activeElement.id === "tx-data") {
+        document.getElementById("tx-send-btn").click();
+      }
+      break;
+    default:
+      console.log("unknown event");
+      break;
+  }
+};
+
 // prevent text select for double click action
 document.getElementById("nav-area").onmousedown = () => {
   return false;
@@ -401,6 +416,7 @@ document.getElementById("tx-send-btn").onclick = () => {
   p.value += "\n" + document.getElementById("tx-data").value;
   M.updateTextFields(p);
   M.textareaAutoResize(p);
+  p.scrollTop = p.scrollHeight;
 
   if (document.getElementById("tx-repeat-switch").checked === true) {
     if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);

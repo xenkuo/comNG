@@ -76,7 +76,7 @@ function serialGetSetOptions() {
 }
 
 function toast(text) {
-  M.toast({ html: text });
+  M.toast({ html: text, displayLength: 1000 });
   // alert(text)
 }
 
