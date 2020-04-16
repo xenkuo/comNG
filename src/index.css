@@ -226,6 +226,14 @@ input {
   margin-left: 10px;
 }
 
+#tx-send-btn,
+#tx-log-clear-btn {
+  height: 24px !important;
+  line-height: 24px !important;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
 #color-panel {
   height: 43px;
   line-height: 43px;
