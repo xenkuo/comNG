@@ -2,8 +2,14 @@
 /* eslint-disable no-undef */
 const serial = require("serialport");
 
-var port;
-var port_option;
+var port, extraSignalTimer;
+var extraSignal = {
+  cts: false,
+  dsr: false,
+  dcd: false,
+  rts: true,
+  dtr: true,
+};
 
 function portUpdate() {
   let pSelect = document.getElementById("path-select");
@@ -22,6 +28,53 @@ function portUpdate() {
     .catch((err) => {
       console.error(err);
     });
+}
+
+function extraSignalTimerHandle() {
+  if (port === undefined || port.isOpen === false)
+    return clearInterval(extraSignalTimer);
+
+  port.get((e, signal) => {
+    if (e) return console.error(e);
+
+    signal.cts = true;
+    if (signal.cts !== extraSignal.cts) {
+      extraSignal.cts = signal.cts;
+      if (signal.cts === false) {
+        document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
+      } else {
+        document.getElementById("cts-btn").style.cssText =
+          "color: red !important";
+      }
+    }
+    if (signal.dsr !== extraSignal.dsr) {
+      extraSignal.dsr = signal.dsr;
+      if (signal.dsr === false) {
+        document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
+      } else {
+        document.getElementById("dsr-btn").style.cssText =
+          "color: red !important";
+      }
+    }
+    if (signal.dcd !== extraSignal.dcd) {
+      extraSignal.dcd = signal.dcd;
+      if (signal.dcd === false) {
+        document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
+      } else {
+        document.getElementById("dcd-btn").style.cssText =
+          "color: red !important";
+      }
+    }
+  });
+}
+
+function extraSignalReset() {
+  extraSignal.cts = false;
+  extraSignal.dsr = false;
+  extraSignal.dcd = false;
+  document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
+  document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
+  document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
 }
 
 function serialGetOptions() {
@@ -105,6 +158,10 @@ document.getElementById("port-switch").onclick = (e) => {
 
     port.on("open", () => {
       console.log("port open event");
+      if (extraSignalTimer !== undefined) clearInterval(extraSignalTimer);
+      if (config.general.extraSignal === true) {
+        extraSignalTimer = setInterval(extraSignalTimerHandle, 100);
+      }
       // port.set(serialGetSetOptions(), (err) => {
       //   if (err !== null) console.error(err);
       // });
@@ -114,6 +171,7 @@ document.getElementById("port-switch").onclick = (e) => {
       toast(err.message);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
+      if (extraSignalTimer !== undefined) clearInterval(extraSignalTimer);
     });
 
     port.on("close", (err) => {
@@ -121,6 +179,10 @@ document.getElementById("port-switch").onclick = (e) => {
       if (err !== null) console.error(err);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
+      if (extraSignalTimer !== undefined) {
+        clearInterval(extraSignalTimer);
+        extraSignalReset();
+      }
     });
 
     port.on("drain", () => {
