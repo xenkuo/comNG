@@ -249,7 +249,7 @@ function breakpointProcess(line) {
   return false;
 }
 
-function showBuff(buff) {
+function processSerialData(buff) {
   if (config.general.hexmode === true) {
     showHex(buff);
   } else {

@@ -25,8 +25,8 @@ function portUpdate() {
       });
       M.FormSelect.init(pSelect);
     })
-    .catch((err) => {
-      console.error(err);
+    .catch((e) => {
+      console.error(e);
     });
 }
 
@@ -41,28 +41,31 @@ function modemSignalTimerHandle() {
     if (signal.cts !== modemSignal.cts) {
       modemSignal.cts = signal.cts;
       if (signal.cts === false) {
-        document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
+        document.getElementById("cts-btn").style.cssText =
+          "background-color: #dfdfdf !important";
       } else {
         document.getElementById("cts-btn").style.cssText =
-          "color: red !important";
+          "background-color: #26a69a !important";
       }
     }
     if (signal.dsr !== modemSignal.dsr) {
       modemSignal.dsr = signal.dsr;
       if (signal.dsr === false) {
-        document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
+        document.getElementById("dsr-btn").style.cssText =
+          "background-color: #dfdfdf !important";
       } else {
         document.getElementById("dsr-btn").style.cssText =
-          "color: red !important";
+          "background-color: #26a69a !important";
       }
     }
     if (signal.dcd !== modemSignal.dcd) {
       modemSignal.dcd = signal.dcd;
       if (signal.dcd === false) {
-        document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
+        document.getElementById("dcd-btn").style.cssText =
+          "background-color: #dfdfdf !important";
       } else {
         document.getElementById("dcd-btn").style.cssText =
-          "color: red !important";
+          "background-color: #26a69a !important";
       }
     }
   });
@@ -72,9 +75,16 @@ function modemSignalReset() {
   modemSignal.cts = false;
   modemSignal.dsr = false;
   modemSignal.dcd = false;
-  document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
-  document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
-  document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
+  modemSignal.rts = true;
+  modemSignal.dtr = true;
+  document.getElementById("cts-btn").style.cssText =
+    "background-color: #dfdfdf !important";
+  document.getElementById("dsr-btn").style.cssText =
+    "background-color: #dfdfdf !important";
+  document.getElementById("dcd-btn").style.cssText =
+    "background-color: #dfdfdf !important";
+  document.getElementById("rts-btn").style.backgroundColor = "";
+  document.getElementById("dtr-btn").style.backgroundColor = "";
 }
 
 function serialGetOptions() {
@@ -117,18 +127,6 @@ function serialGetOptions() {
   return openOptions;
 }
 
-function serialGetSetOptions() {
-  let setOptions = {
-    // brk: false,    // use system default
-    // cts: false,    // use system default
-    // dsr: false,    // use system default
-    // dtr: true,     // use system default
-    // rts: true // required for certain board
-  };
-
-  return setOptions;
-}
-
 function toast(text) {
   M.toast({ html: text, displayLength: 1000 });
   // alert(text)
@@ -162,34 +160,36 @@ document.getElementById("port-switch").onclick = (e) => {
       if (config.general.modemSignal === true) {
         modemSignalTimer = setInterval(modemSignalTimerHandle, 100);
       }
-      // port.set(serialGetSetOptions(), (err) => {
-      //   if (err !== null) console.error(err);
+      // port.set({}, (e) => {
+      //   if (e !== null) console.error(e);
       // });
     });
 
-    port.on("error", (err) => {
-      toast(err.message);
+    port.on("error", (e) => {
+      toast(e.message);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer);
     });
 
-    port.on("close", (err) => {
+    port.on("close", (e) => {
       console.log("port close event");
-      if (err !== null) console.error(err);
+
+      if (e !== null) console.error(e);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
       if (modemSignalTimer !== undefined) {
         clearInterval(modemSignalTimer);
-        modemSignalReset();
       }
+
+      modemSignalReset();
     });
 
     port.on("drain", () => {
       toast("Error: Write failed, please try again");
     });
 
-    port.on("data", showBuff);
+    port.on("data", processSerialData);
   } else {
     if (port === undefined || port.isOpen === false) {
       document.getElementById("port-switch").checked = false;
@@ -199,13 +199,40 @@ document.getElementById("port-switch").onclick = (e) => {
   }
 };
 
-document.getElementById("rts-btn").onclick = () => {
+document.getElementById("rts-btn").onclick = (e) => {
   console.log("rts click");
-};
-
-document.getElementById("dtr-btn").onclick = () => {
   if (port === undefined || port.isOpen === false) return;
 
-  let option = serialGetSetOptions();
-  option.dtr = true;
+  if (modemSignal.rts === true) {
+    modemSignal.rts = false;
+    e.target.style.backgroundColor = "#dfdfdf";
+    port.set({ rts: false }, (e) => {
+      if (e !== null) console.error(e);
+    });
+  } else {
+    modemSignal.rts = true;
+    e.target.style.backgroundColor = "";
+    port.set({ rts: true }, (e) => {
+      if (e !== null) console.error(e);
+    });
+  }
+};
+
+document.getElementById("dtr-btn").onclick = (e) => {
+  console.log("dtr click");
+  if (port === undefined || port.isOpen === false) return;
+
+  if (modemSignal.dtr === true) {
+    modemSignal.dtr = false;
+    e.target.style.backgroundColor = "#dfdfdf";
+    port.set({ dtr: false }, (e) => {
+      if (e !== null) console.error(e);
+    });
+  } else {
+    modemSignal.dtr = true;
+    e.target.style.backgroundColor = "";
+    port.set({ dtr: true }, (e) => {
+      if (e !== null) console.error(e);
+    });
+  }
 };
