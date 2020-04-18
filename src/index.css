@@ -12,7 +12,8 @@ body {
 :root {
   --menu-height: 200px;
   --bar-height: 53px;
-  --extra-btn-height: 10px;
+  --trans-btn-height: 20px;
+  --modem-btn-height: 10px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
@@ -199,20 +200,20 @@ input {
   );
 }
 
-#extra-signal-bar {
-  height: var(--extra-btn-height);
+#modem-signal-bar {
+  height: var(--modem-btn-height);
   /* background-color: aqua; */
   position: fixed;
-  bottom: var(--bar-height) - var(--extra-btn-height);
+  bottom: var(--bar-height) - var(--modem-btn-height);
 }
 
-.extra-btn {
+.modem-btn {
   position: sticky;
-  bottom: var(--bar-height) - var(--extra-btn-height);
-  font-size: var(--extra-btn-height);
-  height: var(--extra-btn-height) !important;
-  line-height: var(--extra-btn-height) !important;
-  border-radius: 0px 0px var(--extra-btn-height) var(--extra-btn-height);
+  bottom: var(--bar-height) - var(--modem-btn-height);
+  font-size: var(--modem-btn-height);
+  height: var(--modem-btn-height) !important;
+  line-height: var(--modem-btn-height) !important;
+  border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
 }
 /* #trans-log-div {
 
@@ -222,7 +223,7 @@ input {
 
 #trans-log-area {
   font-size: 12px;
-  max-height: 130px;
+  max-height: 136px;
   overflow-y: scroll;
 }
 
@@ -232,13 +233,12 @@ input {
 }
 
 #trans-send-btn,
-#trans-log-clear-btn {
-  font-size: 10px;
-  height: 24px !important;
-  line-height: 24px !important;
-  border-radius: 12px;
-  margin-top: 12px;
-  margin-bottom: 12px;
+#trans-log-btn {
+  margin-top: 16px;
+
+  height: var(--trans-btn-height) !important;
+  line-height: var(--trans-btn-height) !important;
+  border-radius: calc(var(--trans-btn-height) / 2);
 }
 
 #color-panel {

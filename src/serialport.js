@@ -2,8 +2,8 @@
 /* eslint-disable no-undef */
 const serial = require("serialport");
 
-var port, extraSignalTimer;
-var extraSignal = {
+var port, modemSignalTimer;
+var modemSignal = {
   cts: false,
   dsr: false,
   dcd: false,
@@ -30,16 +30,16 @@ function portUpdate() {
     });
 }
 
-function extraSignalTimerHandle() {
+function modemSignalTimerHandle() {
   if (port === undefined || port.isOpen === false)
-    return clearInterval(extraSignalTimer);
+    return clearInterval(modemSignalTimer);
 
   port.get((e, signal) => {
     if (e) return console.error(e);
 
     signal.cts = true;
-    if (signal.cts !== extraSignal.cts) {
-      extraSignal.cts = signal.cts;
+    if (signal.cts !== modemSignal.cts) {
+      modemSignal.cts = signal.cts;
       if (signal.cts === false) {
         document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
       } else {
@@ -47,8 +47,8 @@ function extraSignalTimerHandle() {
           "color: red !important";
       }
     }
-    if (signal.dsr !== extraSignal.dsr) {
-      extraSignal.dsr = signal.dsr;
+    if (signal.dsr !== modemSignal.dsr) {
+      modemSignal.dsr = signal.dsr;
       if (signal.dsr === false) {
         document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
       } else {
@@ -56,8 +56,8 @@ function extraSignalTimerHandle() {
           "color: red !important";
       }
     }
-    if (signal.dcd !== extraSignal.dcd) {
-      extraSignal.dcd = signal.dcd;
+    if (signal.dcd !== modemSignal.dcd) {
+      modemSignal.dcd = signal.dcd;
       if (signal.dcd === false) {
         document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
       } else {
@@ -68,10 +68,10 @@ function extraSignalTimerHandle() {
   });
 }
 
-function extraSignalReset() {
-  extraSignal.cts = false;
-  extraSignal.dsr = false;
-  extraSignal.dcd = false;
+function modemSignalReset() {
+  modemSignal.cts = false;
+  modemSignal.dsr = false;
+  modemSignal.dcd = false;
   document.getElementById("cts-btn").style.cssText = "color: #9f9f9f";
   document.getElementById("dsr-btn").style.cssText = "color: #9f9f9f";
   document.getElementById("dcd-btn").style.cssText = "color: #9f9f9f";
@@ -158,9 +158,9 @@ document.getElementById("port-switch").onclick = (e) => {
 
     port.on("open", () => {
       console.log("port open event");
-      if (extraSignalTimer !== undefined) clearInterval(extraSignalTimer);
-      if (config.general.extraSignal === true) {
-        extraSignalTimer = setInterval(extraSignalTimerHandle, 100);
+      if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer);
+      if (config.general.modemSignal === true) {
+        modemSignalTimer = setInterval(modemSignalTimerHandle, 100);
       }
       // port.set(serialGetSetOptions(), (err) => {
       //   if (err !== null) console.error(err);
@@ -171,7 +171,7 @@ document.getElementById("port-switch").onclick = (e) => {
       toast(err.message);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
-      if (extraSignalTimer !== undefined) clearInterval(extraSignalTimer);
+      if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer);
     });
 
     port.on("close", (err) => {
@@ -179,9 +179,9 @@ document.getElementById("port-switch").onclick = (e) => {
       if (err !== null) console.error(err);
       document.getElementById("port-switch").checked = false;
       if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
-      if (extraSignalTimer !== undefined) {
-        clearInterval(extraSignalTimer);
-        extraSignalReset();
+      if (modemSignalTimer !== undefined) {
+        clearInterval(modemSignalTimer);
+        modemSignalReset();
       }
     });
 

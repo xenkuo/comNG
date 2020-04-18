@@ -98,13 +98,13 @@
 
             <div class="row config-row">
               <div class="col s4 config-key">
-                <p>Extra Signal</p>
+                <p>Modem Signal</p>
               </div>
               <div class="col s8 config-item">
                 <div class="switch">
                   <label>
                     Off
-                    <input type="checkbox" id="extra-signal-switch" />
+                    <input type="checkbox" id="modem-signal-switch" />
                     <span class="lever"></span>
                     On
                   </label>
@@ -222,16 +222,17 @@
           <div class="col s5">
             <!-- <p id="trans-log-p">transmit log</p> -->
             <div class="row" id="trans-log-row">
-              <div class="input-field col s10">
+              <div class="input-field col s9">
                 <textarea
                   id="trans-log-area"
                   class="materialize-textarea"
+                  placeholder="History"
+                  readonly
                 ></textarea>
-                <label for="trans-log-area">History</label>
               </div>
 
-              <div class="col s2 right-btn">
-                <a class="btn-small waves-effect red" id="trans-log-clear-btn"
+              <div class="col s3 right-btn">
+                <a class="btn-small waves-effect red" id="trans-log-btn"
                   ><i class="material-icons">clear</i></a
                 >
               </div>
@@ -366,19 +367,27 @@
     </div>
 
     <div class="row" id="bar-area">
-      <div class="col s12" id="extra-signal-bar" hidden>
+      <div class="col s12" id="modem-signal-bar" hidden>
         <div class="col s1"></div>
-        <a class="btn-small extra-btn col s1 disabled" id="cts-btn">CTS</a>
+        <a class="btn-small modem-btn col s1 disabled" id="cts-btn">CTS</a>
         <div class="col s1"></div>
-        <a class="btn-small extra-btn col s1 disabled" id="dsr-btn">DSR</a>
+        <a class="btn-small modem-btn col s1 disabled" id="dsr-btn">DSR</a>
         <div class="col s1"></div>
-        <a class="btn-small extra-btn col s1 disabled" id="dcd-btn">DCD</a>
+        <a class="btn-small modem-btn col s1 disabled" id="dcd-btn">DCD</a>
         <div class="col s1"></div>
         <div class="col s1"></div>
 
-        <a class="btn-small extra-btn col s1" id="rts-btn">RTS</a>
+        <a
+          class="btn-small waves-effect z-depth-0 modem-btn col s1"
+          id="rts-btn"
+          >RTS</a
+        >
         <div class="col s1"></div>
-        <a class="btn-small extra-btn col s1" id="dtr-btn">DTR</a>
+        <a
+          class="btn-small waves-effect z-depth-0 modem-btn col s1"
+          id="dtr-btn"
+          >DTR</a
+        >
       </div>
       <div class="col s2">
         <a id="menu-btn" class="waves-effect btn-floating btn-small"

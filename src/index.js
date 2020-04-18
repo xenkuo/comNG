@@ -51,7 +51,7 @@ const store = new Store({
       store.set("advance.barColor.tail", "#26a69a");
     },
     "1.0.4": (store) => {
-      store.set("general.extraSignal", false);
+      store.set("general.modemSignal", false);
     },
   },
 });
@@ -148,12 +148,12 @@ window.onload = () => {
   document.getElementById("hexmode-switch").checked = config.general.hexmode;
   document.getElementById("timestamp-switch").checked =
     config.general.timestamp;
-  document.getElementById("extra-signal-switch").checked =
-    config.general.extraSignal;
-  if (config.general.extraSignal === true) {
-    document.getElementById("extra-signal-bar").hidden = false;
+  document.getElementById("modem-signal-switch").checked =
+    config.general.modemSignal;
+  if (config.general.modemSignal === true) {
+    document.getElementById("modem-signal-bar").hidden = false;
   } else {
-    document.getElementById("extra-signal-bar").hidden = true;
+    document.getElementById("modem-signal-bar").hidden = true;
   }
   document.getElementById("customized").value = config.general.customized;
 
@@ -356,14 +356,14 @@ document.getElementById("timestamp-switch").onclick = (e) => {
   configUpdate("general.timestamp", e.target.checked);
 };
 
-document.getElementById("extra-signal-switch").onclick = (e) => {
+document.getElementById("modem-signal-switch").onclick = (e) => {
   let state = e.target.checked;
 
-  configUpdate("general.extraSignal", state);
+  configUpdate("general.modemSignal", state);
   if (state === true) {
-    document.getElementById("extra-signal-bar").hidden = false;
+    document.getElementById("modem-signal-bar").hidden = false;
   } else {
-    document.getElementById("extra-signal-bar").hidden = true;
+    document.getElementById("modem-signal-bar").hidden = true;
   }
 };
 
@@ -459,7 +459,7 @@ document.getElementById("trans-repeat-switch").onchange = (e) => {
     clearInterval(transRepeatTimer);
 };
 
-document.getElementById("trans-log-clear-btn").onclick = () => {
+document.getElementById("trans-log-btn").onclick = () => {
   let p = document.getElementById("trans-log-area");
 
   p.value = "";
