@@ -37,7 +37,6 @@ function modemSignalTimerHandle() {
   port.get((e, signal) => {
     if (e) return console.error(e);
 
-    signal.cts = true;
     if (signal.cts !== modemSignal.cts) {
       modemSignal.cts = signal.cts;
       if (signal.cts === false) {
