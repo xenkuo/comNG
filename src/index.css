@@ -12,6 +12,7 @@ body {
 :root {
   --menu-height: 200px;
   --bar-height: 53px;
+  --modem-btn-height: 10px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
@@ -54,8 +55,9 @@ blockquote {
   height: 12px;
 }
 
-.selectors {
-  margin-top: 14px;
+.no-head {
+  margin-top: 12px;
+  padding: 0px !important;
 }
 
 .select-wrapper input.select-dropdown {
@@ -206,6 +208,21 @@ input {
   );
 }
 
+#modem-signal {
+  height: var(--modem-btn-height);
+  /* background-color: aqua; */
+  position: fixed;
+  bottom: var(--bar-height) - var(--modem-btn-height);
+}
+
+.modem-btn {
+  position: sticky;
+  bottom: var(--bar-height) - var(--modem-btn-height);
+  font-size: var(--modem-btn-height);
+  height: var(--modem-btn-height) !important;
+  line-height: var(--modem-btn-height) !important;
+  border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
+}
 /* #tx-log-div {
 
   border-radius: 6px;
@@ -228,10 +245,12 @@ input {
 
 #tx-send-btn,
 #tx-log-clear-btn {
+  font-size: 10px;
   height: 24px !important;
   line-height: 24px !important;
   border-radius: 12px;
   margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 #color-panel {

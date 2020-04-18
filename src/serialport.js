@@ -3,6 +3,7 @@
 const serial = require("serialport");
 
 var port;
+var port_option;
 
 function portUpdate() {
   let pSelect = document.getElementById("path-select");
@@ -104,9 +105,9 @@ document.getElementById("port-switch").onclick = (e) => {
 
     port.on("open", () => {
       console.log("port open event");
-      port.set(serialGetSetOptions(), (err) => {
-        if (err !== null) console.error(err);
-      });
+      // port.set(serialGetSetOptions(), (err) => {
+      //   if (err !== null) console.error(err);
+      // });
     });
 
     port.on("error", (err) => {
@@ -134,4 +135,15 @@ document.getElementById("port-switch").onclick = (e) => {
       port.close();
     }
   }
+};
+
+document.getElementById("rts-btn").onclick = () => {
+  console.log("rts click");
+};
+
+document.getElementById("dtr-btn").onclick = () => {
+  if (port === undefined || port.isOpen === false) return;
+
+  let option = serialGetSetOptions();
+  option.dtr = true;
 };
