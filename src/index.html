@@ -63,92 +63,106 @@
           </ul>
         </div>
         <div id="general-tab" class="col s12">
-          <div class="row menu-page">
-            <div class="col s6 no-head">
-              <div class="row config-row">
-                <div class="col s4 m3 config-key">
-                  <p>Hex Mode</p>
-                </div>
-                <div class="col s8 m9 config-item">
-                  <div class="switch">
-                    <label>
-                      Off
-                      <input type="checkbox" id="hexmode-switch" />
-                      <span class="lever"></span>
-                      On
-                    </label>
-                  </div>
-                </div>
+          <div class="col s6">
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Hex Mode</p>
               </div>
-
-              <div class="row config-row">
-                <div class="col s4 m3 config-key">
-                  <p>Timestamp</p>
-                </div>
-                <div class="col s8 m9 config-item">
-                  <div class="switch">
-                    <label>
-                      Off
-                      <input type="checkbox" id="timestamp-switch" />
-                      <span class="lever"></span>
-                      On
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row config-row">
-                <div class="col s4 m3 config-key">
-                  <p>Customized</p>
-                </div>
-                <div class="input-field col s8 m9 config-item">
-                  <input
-                    id="customized"
-                    value="9600"
-                    type="text"
-                    class="validate"
-                  />
+              <div class="col s8 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="hexmode-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
                 </div>
               </div>
             </div>
-            <div class="col s2 no-head">
-              <div class="input-field col s12">
-                <select id="databits-select">
-                  <option value="1" selected>8</option>
-                  <option value="2">7</option>
-                  <option value="3">6</option>
-                  <option value="4">5</option>
-                </select>
-              </div>
 
-              <div class="input-field col s12">
-                <select id="parity-select">
-                  <option value="1" selected>None</option>
-                  <option value="2">Even</option>
-                  <option value="3">Odd</option>
-                  <option value="4">Mark</option>
-                  <option value="5">Space</option>
-                </select>
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Timestamp</p>
               </div>
-
-              <div class="input-field col s12">
-                <select id="stopbits-select">
-                  <option value="1" selected>1</option>
-                  <option value="2">2</option>
-                </select>
-              </div>
-
-              <div class="input-field col s12">
-                <select id="flowcontrol-select">
-                  <option value="1" selected>None</option>
-                  <option value="2">RTSCTS</option>
-                  <option value="3">XON</option>
-                  <option value="4">XOFF</option>
-                </select>
+              <div class="col s8 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="timestamp-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
               </div>
             </div>
-            <div class="col s4 no-head"></div>
+
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Modem Signal</p>
+              </div>
+              <div class="col s8 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="timestamp-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Customized</p>
+              </div>
+              <div class="input-field col s8 config-item">
+                <input
+                  id="customized"
+                  value="9600"
+                  type="text"
+                  class="validate"
+                />
+              </div>
+            </div>
           </div>
+          <div class="col s2 no-head">
+            <div class="input-field col s12">
+              <select id="databits-select">
+                <option value="1" selected>8</option>
+                <option value="2">7</option>
+                <option value="3">6</option>
+                <option value="4">5</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="parity-select">
+                <option value="1" selected>None</option>
+                <option value="2">Even</option>
+                <option value="3">Odd</option>
+                <option value="4">Mark</option>
+                <option value="5">Space</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="stopbits-select">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="flowcontrol-select">
+                <option value="1" selected>None</option>
+                <option value="2">RTSCTS</option>
+                <option value="3">XON</option>
+                <option value="4">XOFF</option>
+              </select>
+            </div>
+          </div>
+          <div class="col s4 no-head"></div>
         </div>
         <div id="transmit-tab" class="col s12">
           <div class="row menu-page">
@@ -218,9 +232,7 @@
                 </div>
 
                 <div class="col s2 right-btn">
-                  <a
-                    class="btn-small waves-effect red"
-                    id="tx-log-clear-btn"
+                  <a class="btn-small waves-effect red" id="tx-log-clear-btn"
                     ><i class="material-icons">clear</i></a
                   >
                 </div>
@@ -301,24 +313,24 @@
         <div id="about-tab" class="col s12">
           <div class="row menu-page">
             <div class="row label-row">
-              <div class="col s3 m2 label-key">
+              <div class="col s3 label-key">
                 <p>Version</p>
               </div>
-              <div class="col s3 m2">
+              <div class="col s3">
                 <p id="app-version"></p>
               </div>
-              <div class="col s3 m2 label-key">
+              <div class="col s3 label-key">
                 <p>Licence</p>
               </div>
-              <div class="col s3 m2">
+              <div class="col s3">
                 <p>MIT</p>
               </div>
             </div>
             <div class="row label-row">
-              <div class="col s3 m2 label-key">
+              <div class="col s3 label-key">
                 <p>Issue</p>
               </div>
-              <div class="col s9 m10">
+              <div class="col s9">
                 <p>
                   <a href="https://github.com/xenkuo/comNG/issues" id="issue"
                     >https://github.com/xenkuo/comNG/issues</a
@@ -327,10 +339,10 @@
               </div>
             </div>
             <div class="row label-row">
-              <div class="col s3 m2 label-key">
+              <div class="col s3 label-key">
                 <p>Introduction</p>
               </div>
-              <div class="col s9 m10">
+              <div class="col s9">
                 <p>
                   <a
                     href="https://xenkuo.github.io/2019-08-01-comNG"
@@ -341,10 +353,10 @@
               </div>
             </div>
             <div class="row label-row">
-              <div class="col s3 m2 label-key">
+              <div class="col s3 label-key">
                 <p>Highlight Syntax</p>
               </div>
-              <div class="col s9 m10">
+              <div class="col s9">
                 <p>
                   <a
                     href="https://xenkuo.github.io/2019-08-03-comNGLang"
