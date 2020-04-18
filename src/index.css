@@ -124,19 +124,13 @@ input {
   margin-bottom: 5px;
 }
 
-.col .menu-page {
-  margin-left: 10px;
-  margin-right: 10px;
-  margin-bottom: 0px;
-}
-
 .config-row {
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
 .config-key {
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .config-item {
@@ -146,14 +140,11 @@ input {
 
 .label-row {
   margin-bottom: 0px;
+  padding-left: 10px;
 }
 
 .label-key {
-  font-weight: bolder;
-}
-
-.trans-row {
-  margin-top: 14px;
+  font-weight: bold;
 }
 
 .toast {
@@ -162,7 +153,7 @@ input {
   margin-bottom: 254px;
   margin-left: 150px;
   max-width: 300px;
-  font-weight: 500;
+  font-weight: bold;
   text-align: center;
 }
 
@@ -228,9 +219,6 @@ input {
   border-radius: 6px;
   background-color: teal;
 } */
-#trans-log-row {
-  margin-top: 14px;
-}
 
 #trans-log-area {
   font-size: 12px;
