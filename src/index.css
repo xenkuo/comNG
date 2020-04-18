@@ -12,7 +12,7 @@ body {
 :root {
   --menu-height: 200px;
   --bar-height: 53px;
-  --modem-btn-height: 10px;
+  --extra-btn-height: 10px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
@@ -152,7 +152,7 @@ input {
   font-weight: bolder;
 }
 
-.tx-row {
+.trans-row {
   margin-top: 14px;
 }
 
@@ -208,43 +208,43 @@ input {
   );
 }
 
-#modem-signal {
-  height: var(--modem-btn-height);
+#extra-signal {
+  height: var(--extra-btn-height);
   /* background-color: aqua; */
   position: fixed;
-  bottom: var(--bar-height) - var(--modem-btn-height);
+  bottom: var(--bar-height) - var(--extra-btn-height);
 }
 
-.modem-btn {
+.extra-btn {
   position: sticky;
-  bottom: var(--bar-height) - var(--modem-btn-height);
-  font-size: var(--modem-btn-height);
-  height: var(--modem-btn-height) !important;
-  line-height: var(--modem-btn-height) !important;
-  border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
+  bottom: var(--bar-height) - var(--extra-btn-height);
+  font-size: var(--extra-btn-height);
+  height: var(--extra-btn-height) !important;
+  line-height: var(--extra-btn-height) !important;
+  border-radius: 0px 0px var(--extra-btn-height) var(--extra-btn-height);
 }
-/* #tx-log-div {
+/* #trans-log-div {
 
   border-radius: 6px;
   background-color: teal;
 } */
-#tx-log-row {
+#trans-log-row {
   margin-top: 14px;
 }
 
-#tx-log-area {
+#trans-log-area {
   font-size: 12px;
   max-height: 130px;
   overflow-y: scroll;
 }
 
-#tx-eof-row {
+#trans-eof-row {
   margin-top: 10px;
   margin-left: 10px;
 }
 
-#tx-send-btn,
-#tx-log-clear-btn {
+#trans-send-btn,
+#trans-log-clear-btn {
   font-size: 10px;
   height: 24px !important;
   line-height: 24px !important;

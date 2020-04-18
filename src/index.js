@@ -236,8 +236,8 @@ document.onkeydown = function (e) {
   switch (e.which || e.keyCode) {
     case 13:
       console.log("hello world 13");
-      if (document.activeElement.id === "tx-data") {
-        document.getElementById("tx-send-btn").click();
+      if (document.activeElement.id === "trans-data") {
+        document.getElementById("trans-send-btn").click();
       }
       break;
     default:
@@ -382,8 +382,8 @@ document.getElementById("sign-name").onblur = (e) => {
   configUpdate("advance.sign.name", e.target.value);
 };
 
-let txRepeatTimer = undefined;
-document.getElementById("tx-eof-select").onchange = (e) => {
+let transRepeatTimer = undefined;
+document.getElementById("trans-eof-select").onchange = (e) => {
   let index = e.target.selectedIndex;
   let eof = "\r\n";
   switch (index) {
@@ -400,46 +400,46 @@ document.getElementById("tx-eof-select").onchange = (e) => {
   configUpdate("transmit.eof", eof);
 };
 
-// document.getElementById('tx-clear-btn').onclick = () => {
-//   document.getElementById('tx-data').value = ''
+// document.getElementById('trans-clear-btn').onclick = () => {
+//   document.getElementById('trans-data').value = ''
 // }
 
-document.getElementById("tx-send-btn").onclick = () => {
-  const p = document.getElementById("tx-log-area");
-  let data = document.getElementById("tx-data").value;
+document.getElementById("trans-send-btn").onclick = () => {
+  const p = document.getElementById("trans-log-area");
+  let data = document.getElementById("trans-data").value;
 
   if (data.trim() === "") return;
 
   data += config.transmit.eof;
   if (serialWrite(data) === false) return;
 
-  p.value += "\n" + document.getElementById("tx-data").value;
+  p.value += "\n" + document.getElementById("trans-data").value;
   M.updateTextFields(p);
   M.textareaAutoResize(p);
   p.scrollTop = p.scrollHeight;
 
-  if (document.getElementById("tx-repeat-switch").checked === true) {
-    if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
+  if (document.getElementById("trans-repeat-switch").checked === true) {
+    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
 
-    let interval = document.getElementById("tx-repeat-interval").value;
+    let interval = document.getElementById("trans-repeat-interval").value;
     interval = parseInt(interval);
     if (isNaN(interval) === true) interval = 1000;
 
-    txRepeatTimer = setInterval(() => {
+    transRepeatTimer = setInterval(() => {
       serialWrite(data);
     }, interval);
   }
 };
 
-document.getElementById("tx-repeat-switch").onchange = (e) => {
+document.getElementById("trans-repeat-switch").onchange = (e) => {
   let checked = e.target.checked;
 
-  if (checked === false && txRepeatTimer !== undefined)
-    clearInterval(txRepeatTimer);
+  if (checked === false && transRepeatTimer !== undefined)
+    clearInterval(transRepeatTimer);
 };
 
-document.getElementById("tx-log-clear-btn").onclick = () => {
-  let p = document.getElementById("tx-log-area");
+document.getElementById("trans-log-clear-btn").onclick = () => {
+  let p = document.getElementById("trans-log-area");
 
   p.value = "";
   M.updateTextFields(p);

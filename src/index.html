@@ -98,13 +98,13 @@
 
             <div class="row config-row">
               <div class="col s4 config-key">
-                <p>Modem Signal</p>
+                <p>Extra Signal</p>
               </div>
               <div class="col s8 config-item">
                 <div class="switch">
                   <label>
                     Off
-                    <input type="checkbox" id="timestamp-switch" />
+                    <input type="checkbox" id="extra-signal-switch" />
                     <span class="lever"></span>
                     On
                   </label>
@@ -113,10 +113,10 @@
             </div>
 
             <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Customized</p>
+              <div class="col s6 config-key">
+                <p>Customized Baud Rate</p>
               </div>
-              <div class="input-field col s8 config-item">
+              <div class="input-field col s3 config-item">
                 <input
                   id="customized"
                   value="9600"
@@ -167,13 +167,13 @@
         <div id="transmit-tab" class="col s12">
           <div class="row menu-page">
             <div class="col s7">
-              <div class="row config-row tx-row">
+              <div class="row config-row trans-row">
                 <div class="input-field col s8">
-                  <input value="AT" id="tx-data" type="text" />
+                  <input value="AT" id="trans-data" type="text" />
                 </div>
 
                 <div class="col s4">
-                  <a class="btn-small waves-effect" id="tx-send-btn"
+                  <a class="btn-small waves-effect" id="trans-send-btn"
                     ><i class="material-icons">send</i></a
                   >
                 </div>
@@ -183,8 +183,8 @@
                 <div class="col s1 config-key">
                   <p>EOF</p>
                 </div>
-                <div class="input-field col s4" id="tx-eof-row">
-                  <select id="tx-eof-select">
+                <div class="input-field col s4" id="trans-eof-row">
+                  <select id="trans-eof-select">
                     <option value="1" selected>CRLF</option>
                     <option value="2">LF</option>
                     <option value="3">CR</option>
@@ -200,7 +200,7 @@
                   <div class="switch">
                     <label>
                       Off
-                      <input type="checkbox" id="tx-repeat-switch" />
+                      <input type="checkbox" id="trans-repeat-switch" />
                       <span class="lever"></span>
                       On
                     </label>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="input-field col s3 config-item">
                   <input
-                    id="tx-repeat-interval"
+                    id="trans-repeat-interval"
                     placeholder="ms"
                     value="1000"
                     type="text"
@@ -221,18 +221,18 @@
             </div>
 
             <div class="col s5">
-              <!-- <p id="tx-log-p">transmit log</p> -->
-              <div class="row" id="tx-log-row">
+              <!-- <p id="trans-log-p">transmit log</p> -->
+              <div class="row" id="trans-log-row">
                 <div class="input-field col s10">
                   <textarea
-                    id="tx-log-area"
+                    id="trans-log-area"
                     class="materialize-textarea"
                   ></textarea>
-                  <label for="tx-log-area">History</label>
+                  <label for="trans-log-area">History</label>
                 </div>
 
                 <div class="col s2 right-btn">
-                  <a class="btn-small waves-effect red" id="tx-log-clear-btn"
+                  <a class="btn-small waves-effect red" id="trans-log-clear-btn"
                     ><i class="material-icons">clear</i></a
                   >
                 </div>
@@ -372,19 +372,19 @@
     </div>
 
     <div class="row" id="bar-area">
-      <div class="col s12" id="modem-signal">
+      <div class="col s12" id="extra-signal">
         <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled">CTS</a>
+        <a class="btn-small extra-btn col s1 disabled">CTS</a>
         <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled">DSR</a>
+        <a class="btn-small extra-btn col s1 disabled">DSR</a>
         <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled">DCD</a>
+        <a class="btn-small extra-btn col s1 disabled">DCD</a>
         <div class="col s1"></div>
         <div class="col s1"></div>
 
-        <a class="btn-small modem-btn col s1" id="rts-btn">RTS</a>
+        <a class="btn-small extra-btn col s1" id="rts-btn">RTS</a>
         <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1" id="dtr-btn">DTR</a>
+        <a class="btn-small extra-btn col s1" id="dtr-btn">DTR</a>
       </div>
       <div class="col s2">
         <a id="menu-btn" class="waves-effect btn-floating btn-small"
