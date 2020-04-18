@@ -199,7 +199,7 @@ input {
   );
 }
 
-#extra-signal {
+#extra-signal-bar {
   height: var(--extra-btn-height);
   /* background-color: aqua; */
   position: fixed;

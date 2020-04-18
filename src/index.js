@@ -50,6 +50,9 @@ const store = new Store({
       store.set("advance.barColor.middle", "#fafafa");
       store.set("advance.barColor.tail", "#26a69a");
     },
+    "1.0.4": (store) => {
+      store.set("general.extraSignal", false);
+    },
   },
 });
 
@@ -145,6 +148,13 @@ window.onload = () => {
   document.getElementById("hexmode-switch").checked = config.general.hexmode;
   document.getElementById("timestamp-switch").checked =
     config.general.timestamp;
+  document.getElementById("extra-signal-switch").checked =
+    config.general.extraSignal;
+  if (config.general.extraSignal === true) {
+    document.getElementById("extra-signal-bar").hidden = false;
+  } else {
+    document.getElementById("extra-signal-bar").hidden = true;
+  }
   document.getElementById("customized").value = config.general.customized;
 
   let databits = document.getElementById("databits-select");
@@ -344,6 +354,17 @@ document.getElementById("hexmode-switch").onclick = (e) => {
 
 document.getElementById("timestamp-switch").onclick = (e) => {
   configUpdate("general.timestamp", e.target.checked);
+};
+
+document.getElementById("extra-signal-switch").onclick = (e) => {
+  let state = e.target.checked;
+
+  configUpdate("general.extraSignal", state);
+  if (state === true) {
+    document.getElementById("extra-signal-bar").hidden = false;
+  } else {
+    document.getElementById("extra-signal-bar").hidden = true;
+  }
 };
 
 document.getElementById("customized").onblur = (e) => {

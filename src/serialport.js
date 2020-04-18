@@ -88,7 +88,7 @@ function serialClose() {
 function serialWrite(data) {
   if (port === undefined || port.isOpen === false) {
     toast("Error: No port opened, cannot write");
-    if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
+    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
     return false;
   }
 
@@ -113,14 +113,14 @@ document.getElementById("port-switch").onclick = (e) => {
     port.on("error", (err) => {
       toast(err.message);
       document.getElementById("port-switch").checked = false;
-      if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
+      if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
     });
 
     port.on("close", (err) => {
       console.log("port close event");
       if (err !== null) console.error(err);
       document.getElementById("port-switch").checked = false;
-      if (txRepeatTimer !== undefined) clearInterval(txRepeatTimer);
+      if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
     });
 
     port.on("drain", () => {
