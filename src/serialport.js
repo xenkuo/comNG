@@ -159,9 +159,9 @@ document.getElementById("port-switch").onclick = (e) => {
       if (config.general.modemSignal === true) {
         modemSignalTimer = setInterval(modemSignalTimerHandle, 100);
       }
-      // port.set({}, (e) => {
-      //   if (e !== null) console.error(e);
-      // });
+      port.set({rts: true, dtr: true}, (e) => {
+        if (e !== null) console.error(e);
+      });
     });
 
     port.on("error", (e) => {
@@ -211,7 +211,7 @@ document.getElementById("rts-btn").onclick = (e) => {
   } else {
     modemSignal.rts = true;
     e.target.style.backgroundColor = "";
-    port.set({ rts: true }, (e) => {
+    port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
       if (e !== null) console.error(e);
     });
   }
@@ -230,7 +230,7 @@ document.getElementById("dtr-btn").onclick = (e) => {
   } else {
     modemSignal.dtr = true;
     e.target.style.backgroundColor = "";
-    port.set({ dtr: true }, (e) => {
+    port.set({ rts: modemSignal.rts, dtr: true }, (e) => {
       if (e !== null) console.error(e);
     });
   }
