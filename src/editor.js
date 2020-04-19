@@ -393,7 +393,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     automaticLayout: true,
     readOnly: true,
     folding: false,
-    fontFamily: "Consolas, Menlo, Monaco, 'Courier New', monospace",
+    fontFamily: "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace",
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
     smoothScrolling: true,
