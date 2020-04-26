@@ -429,8 +429,8 @@ document.getElementById("trans-send-btn").onclick = () => {
   const p = document.getElementById("trans-log-area");
   let data = document.getElementById("trans-data").value;
 
-  if (data.trim() === "") return;
-
+  // if (data.trim() === "") return;
+  data.trim();
   data += config.transmit.eof;
   if (serialWrite(data) === false) return;
 
