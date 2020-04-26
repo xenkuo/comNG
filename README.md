@@ -60,6 +60,12 @@ yarn
 
 You may need to install node native compile tools, if there are problems, `Google` or create issue.
 
+> For Chinese developer, I'd like to advice you use below `.npmrc` file:
+```
+registry=https://registry.npm.taobao.org
+electron_mirror=https://cdn.npm.taobao.org/dist/electron/
+electron_custom_dir=7.1.11
+```
 ### Develop
 
 ```
