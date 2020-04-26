@@ -393,7 +393,8 @@ amdRequire(["vs/editor/editor.main"], function () {
     automaticLayout: true,
     readOnly: true,
     folding: false,
-    fontFamily: "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace",
+    fontFamily: config.general.fontFamily,
+    fontSize: config.general.fontSize,
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
     smoothScrolling: true,
@@ -476,6 +477,24 @@ document.getElementById("clear-btn").onclick = () => {
   }
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
+};
+
+document.getElementById("editor-font-family").onblur = (e) => {
+  let font = e.target.value.trim();
+
+  if (font === "")
+    font =
+      "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace";
+  editor.updateOptions({ fontFamily: font });
+  configUpdate("general.fontFamily", font);
+};
+
+document.getElementById("editor-font-size").onblur = (e) => {
+  let size = e.target.value.trim();
+  if (size === "") size = 12;
+
+  editor.updateOptions({ fontSize: size });
+  configUpdate("general.fontSize", size);
 };
 
 document.getElementById("breakpoint-switch").onclick = (e) => {

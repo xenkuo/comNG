@@ -52,6 +52,11 @@ const store = new Store({
     },
     "1.0.4": (store) => {
       store.set("general.modemSignal", false);
+      store.set(
+        "general.fontFamily",
+        "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
+      );
+      store.set("general.fontSize", 12);
     },
   },
 });
@@ -94,17 +99,6 @@ ipcRenderer.on("main-cmd", (event, arg) => {
       console.log("Unknown cmds");
       break;
   }
-  // if (arg === "Clear") {
-  //   let text = editor.getModel().getValue();
-  //   clipboard.writeText(text);
-  //   editor.getModel().setValue("");
-  // } else if (arg === "Switch") {
-  //   document.getElementById("port-switch").click();
-  // } else if (arg === "Open") {
-  //   console.log("open");
-  // } else if (arg === "Save") {
-  //   console.log("Save");
-  // }
 });
 
 window.onload = () => {
@@ -169,6 +163,10 @@ window.onload = () => {
   let flowcontrol = document.getElementById("flowcontrol-select");
   flowcontrol.selectedIndex = config.general.flowcontrolIndex;
   M.FormSelect.init(flowcontrol);
+
+  document.getElementById("editor-font-family").value =
+    config.general.fontFamily;
+  document.getElementById("editor-font-size").value = config.general.fontSize;
 
   document.getElementById("breakpoint-switch").checked =
     config.advance.breakpoint.switch;
