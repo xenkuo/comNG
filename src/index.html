@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!--Import Google Icon Font-->
+    <link
+      rel="stylesheet"
+      href="../node_modules/material-design-icons/iconfont/material-icons.css"
+    />
+    <!--Import materialize.css-->
+    <link
+      type="text/css"
+      rel="stylesheet"
+      href="../node_modules/materialize-css/dist/css/materialize.css"
+      media="screen,projection"
+    />
+    <link rel="stylesheet" href="index.css" />
+
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com/repos/xenkuo/comNG/releases/latest"
+    />
+  </head>
+
+  <body>
+    <nav class="z-depth-0" id="nav-area">
+      <div class="nav-wrapper" id="header">
+        <i class="material-icons left" id="logo">vpn_key</i>
+
+        <ul class="right">
+          <li class="head-li">
+            <a id="min-btn" class="waves-effect btn-floating tiny-btn grey"></a>
+          </li>
+          <li class="head-li">
+            <a
+              id="max-btn"
+              class="waves-effect btn-floating tiny-btn white"
+            ></a>
+          </li>
+          <li class="head-li">
+            <a
+              id="close-btn"
+              class="waves-effect btn-floating tiny-btn red"
+            ></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div id="editor-area"></div>
+
+    <div id="menu-area" hidden>
+      <div class="row">
+        <div class="col s12" id="menu-tabs-row">
+          <ul class="tabs" id="menu-tabs">
+            <li class="tab col s3">
+              <a class="active" href="#general-tab">general</a>
+            </li>
+            <li class="tab col s3"><a href="#transmit-tab">transmit</a></li>
+            <li class="tab col s3"><a href="#advance-tab">advance</a></li>
+            <li class="tab col s3"><a href="#about-tab">about</a></li>
+          </ul>
+        </div>
+        <div id="general-tab" class="col s12">
+          <div class="col s6">
+            <div class="row config-row">
+              <div class="col s5 config-key">
+                <p>Hex Mode</p>
+              </div>
+              <div class="col s7 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="hexmode-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s5 config-key">
+                <p>Timestamp</p>
+              </div>
+              <div class="col s7 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="timestamp-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s5 config-key">
+                <p>Modem Signal</p>
+              </div>
+              <div class="col s7 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="modem-signal-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s7 config-key">
+                <p>Customized Baud Rate</p>
+              </div>
+              <div class="input-field col s3 config-item">
+                <input
+                  id="customized"
+                  value="9600"
+                  type="text"
+                  class="validate"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="col s2 no-head">
+            <div class="input-field col s12">
+              <select id="databits-select">
+                <option value="1" selected>8</option>
+                <option value="2">7</option>
+                <option value="3">6</option>
+                <option value="4">5</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="parity-select">
+                <option value="1" selected>None</option>
+                <option value="2">Even</option>
+                <option value="3">Odd</option>
+                <option value="4">Mark</option>
+                <option value="5">Space</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="stopbits-select">
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+              </select>
+            </div>
+
+            <div class="input-field col s12">
+              <select id="flowcontrol-select">
+                <option value="1" selected>None</option>
+                <option value="2">RTSCTS</option>
+                <option value="3">XON</option>
+                <option value="4">XOFF</option>
+              </select>
+            </div>
+          </div>
+          <div class="col s1 no-head"></div>
+          <div class="col s3 no-head">
+            <div class="input-field col s12 config-item">
+              <input
+                id="editor-font-family"
+                placeholder="Font Family"
+                type="text"
+              />
+            </div>
+            <div class="input-field col s12 config-item">
+              <input
+                id="editor-font-size"
+                placeholder="Font Size"
+                type="text"
+              />
+            </div>
+          </div>
+        </div>
+        <div id="transmit-tab" class="col s12">
+          <div class="col s7">
+            <div class="row config-row">
+              <div class="input-field col s8">
+                <input value="AT" id="trans-data" type="text" />
+              </div>
+
+              <div class="col s4">
+                <a class="btn-small waves-effect" id="trans-send-btn"
+                  ><i class="material-icons">send</i></a
+                >
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s1 config-key">
+                <p>EOF</p>
+              </div>
+              <div class="input-field col s4" id="trans-eof-row">
+                <select id="trans-eof-select">
+                  <option value="1" selected>CRLF</option>
+                  <option value="2">LF</option>
+                  <option value="3">CR</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="col s2 config-key">
+                <p>Repeat</p>
+              </div>
+              <div class="col s5 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="trans-repeat-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+              <div class="col s2 config-key">
+                <p>Interval</p>
+              </div>
+              <div class="input-field col s3 config-item">
+                <input
+                  id="trans-repeat-interval"
+                  placeholder="ms"
+                  value="1000"
+                  type="text"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="col s5">
+            <!-- <p id="trans-log-p">transmit log</p> -->
+            <div class="row" id="trans-log-row">
+              <div class="input-field col s9">
+                <textarea
+                  id="trans-log-area"
+                  class="materialize-textarea"
+                  placeholder="History"
+                  readonly
+                ></textarea>
+              </div>
+
+              <div class="col s3 right-btn">
+                <a class="btn-small waves-effect red" id="trans-log-btn"
+                  ><i class="material-icons">clear</i></a
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="advance-tab" class="col s12">
+          <div class="col s4">
+            <blockquote>Sign</blockquote>
+            <div class="divider"></div>
+            <div class="row config-row">
+              <div class="col s12 config-item center">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="sign-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="input-field col s12">
+                <input placeholder="Name" type="text" id="sign-name" />
+              </div>
+            </div>
+          </div>
+
+          <div class="col s4">
+            <blockquote>Breakpoint</blockquote>
+            <div class="divider"></div>
+            <div class="row config-row">
+              <div class="col s12 config-item center">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="breakpoint-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="input-field col s12">
+                <input
+                  value="Error"
+                  id="breakpoint-on-text"
+                  type="text"
+                  maxlength="16"
+                />
+              </div>
+            </div>
+
+            <div class="row config-row">
+              <div class="input-field col s12">
+                <input value="5" id="breakpoint-after-lines" type="text" />
+              </div>
+            </div>
+          </div>
+
+          <div class="col s4">
+            <blockquote>Bar Color</blockquote>
+            <div class="divider"></div>
+            <div class="center" id="color-panel">
+              <input value="#ffba3a" id="bar-color-head" type="color" />
+              <input value="#ff8a80" id="bar-color-middle" type="color" />
+              <input value="#80d8ff" id="bar-color-tail" type="color" />
+            </div>
+          </div>
+        </div>
+        <div id="about-tab" class="col s12">
+          <div class="row label-row">
+            <div class="col s3 label-key">
+              <p>Version</p>
+            </div>
+            <div class="col s3">
+              <p id="app-version"></p>
+            </div>
+            <div class="col s3 label-key">
+              <p>Licence</p>
+            </div>
+            <div class="col s3">
+              <p>MIT</p>
+            </div>
+          </div>
+          <div class="row label-row">
+            <div class="col s3 label-key">
+              <p>Issue</p>
+            </div>
+            <div class="col s9">
+              <p>
+                <a href="https://github.com/xenkuo/comNG/issues" id="issue"
+                  >https://github.com/xenkuo/comNG/issues</a
+                >
+              </p>
+            </div>
+          </div>
+          <div class="row label-row">
+            <div class="col s3 label-key">
+              <p>Introduction</p>
+            </div>
+            <div class="col s9">
+              <p>
+                <a
+                  href="https://xenkuo.github.io/2019-08-01-comNG"
+                  id="introduction"
+                  >comNG: a modern and powerful COM tool</a
+                >
+              </p>
+            </div>
+          </div>
+          <div class="row label-row">
+            <div class="col s3 label-key">
+              <p>Highlight Syntax</p>
+            </div>
+            <div class="col s9">
+              <p>
+                <a
+                  href="https://xenkuo.github.io/2019-08-03-comNGLang"
+                  id="comnglang"
+                  >https://xenkuo.github.io/2019-08-03-comNGLang</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="bar-area">
+      <div class="col s12" id="modem-signal-bar" hidden>
+        <div class="col s1"></div>
+        <a class="btn-small modem-btn col s1 disabled" id="cts-btn">CTS</a>
+        <div class="col s1"></div>
+        <a class="btn-small modem-btn col s1 disabled" id="dsr-btn">DSR</a>
+        <div class="col s1"></div>
+        <a class="btn-small modem-btn col s1 disabled" id="dcd-btn">DCD</a>
+        <div class="col s1"></div>
+        <div class="col s1"></div>
+
+        <a
+          class="btn-small waves-effect z-depth-0 modem-btn col s1"
+          id="rts-btn"
+          >RTS</a
+        >
+        <div class="col s1"></div>
+        <a
+          class="btn-small waves-effect z-depth-0 modem-btn col s1"
+          id="dtr-btn"
+          >DTR</a
+        >
+      </div>
+      <div class="col s2">
+        <a id="menu-btn" class="waves-effect btn-floating btn-small"
+          ><i class="material-icons">menu</i></a
+        >
+      </div>
+
+      <div class="col s10">
+        <div class="input-field col s3" id="baud-input">
+          <div class="container">
+            <select id="baud-select">
+              <option value="1">9600</option>
+              <option value="2">19200</option>
+              <option value="3" selected>115200</option>
+              <option value="4">921600</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="input-field col s5" id="path-input">
+          <select id="path-select">
+            <option value="0">Select port ...</option>
+          </select>
+        </div>
+
+        <div class="col s1">
+          <a class="waves-effect btn-floating" id="refresh-btn"
+            ><i class="material-icons">refresh</i></a
+          >
+        </div>
+
+        <div class="col s1">
+          <a class="waves-effect btn-floating btn-small red" id="clear-btn"
+            ><i class="material-icons">delete</i></a
+          >
+        </div>
+
+        <div class="switch col s2">
+          <label>
+            <input type="checkbox" id="port-switch" />
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- You can also require other files to run in this process -->
+    <script src="editor.js"></script>
+    <script src="serialport.js"></script>
+
+    <script src="index.js"></script>
+  </body>
+</html>

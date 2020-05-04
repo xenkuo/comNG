@@ -1,0 +1,102 @@
+{
+  "name": "comNG",
+  "productName": "comNG",
+  "version": "1.0.4",
+  "description": "My Electron application description",
+  "repository": "https://github.com/xenkuo/comNG",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "rebuild": "electron-rebuild -f -w serialport",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "Xen",
+    "email": "xenkuo@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "packagerConfig": {
+        "asar": true,
+        "ignore": [
+          "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
+          "node_modules/materialize-css/(extras|js|sass)",
+          "node_modules/material-design-icons/(?!iconfont)"
+        ],
+        "icon": "image/logo"
+      },
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "authors": "Xen",
+            "setupIcon": "image/logo.ico"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "./image/logo.icns",
+            "background": "./image/dmg-background.png",
+            "format": "ULFO"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+            "options": {
+              "maintainer": "Xen",
+              "icon": "./image/logo.png",
+              "mimeType": [
+                "cnl",
+                "text"
+              ],
+              "section": "utils",
+              "categories": [
+                "Utilify"
+              ],
+              "homepage": "https://xenkuo.github.io",
+              "description": "comNG is a serialport tool from next generation!"
+            }
+          }
+        }
+      ],
+      "publishers": [
+        {
+          "name": "@electron-forge/publisher-github",
+          "config": {
+            "repository": {
+              "owner": "xenkuo",
+              "name": "comNG"
+            },
+            "draft": true
+          }
+        }
+      ]
+    }
+  },
+  "dependencies": {
+    "electron-localshortcut": "^3.2.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^5.1.0",
+    "material-design-icons": "^3.0.1",
+    "materialize-css": "^1.0.0-rc.2",
+    "monaco-editor": "^0.20.0",
+    "serialport": "^8.0.7"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "6.0.0-beta.47",
+    "@electron-forge/maker-deb": "6.0.0-beta.47",
+    "@electron-forge/maker-dmg": "^6.0.0-beta.49",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.47",
+    "@electron-forge/publisher-github": "^6.0.0-beta.50",
+    "electron": "7.1.11",
+    "electron-rebuild": "^1.10.0",
+    "eslint": "^6.8.0"
+  }
+}
