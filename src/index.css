@@ -4,7 +4,7 @@ html {
 }
 
 body {
-  border: 1px solid #26a69a;
+  border: thin solid #26a69a;
   height: 100%;
   background-color: #fafafa;
 }
