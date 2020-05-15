@@ -89,6 +89,17 @@ ipcRenderer.on("main-cmd", (event, arg) => {
     case "Switch":
       document.getElementById("port-switch").click();
       break;
+    case "ClearSwitch":
+      {
+        let switcher = document.getElementById("port-switch");
+        switcher.click();
+        if (true == switcher.checked) {
+          let text = editor.getModel().getValue();
+          clipboard.writeText(text);
+          editor.getModel().setValue("");
+        }
+      }
+      break;
     case "Open":
       openFile();
       break;
