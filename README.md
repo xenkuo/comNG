@@ -2,17 +2,26 @@
 
 `comNG` 是一款具有现代化 UI 设计并且功能强大的串口助手软件。
 
+`Github` 上也有 `comNG` 的 repo，但是 github 的访问和上传速度太慢（comNG 的编译软件比较大，60M 左右），所以后期的更新、维护和发布会以 gitee 为主。
+
+由于软件比较大，且没有自动化编译环境，所以只有在发布大版本时才会提供 Mac 和 Debian 的安装文件，小版本只会提供 Win10 的安装文件。
+
+目前 Mac 和 Debian 安装文件的最新版本是 1.0.4， 可以在 Sourceforge 和 Github 上搜索 comNG 进行下载；或者拉去源码自行编译，编译步骤在后面章节中有描述。
+
 ## 介绍
 
 comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
 
+- 精致的 UI 和交互方式
 - 内建的 comNGLang 高亮语法
-- 内建的手动文本高亮功能（类似于 notepad++的 Style Token）
+- 内建的手动文本高亮功能（类似于 notepad++ 的 Style Token）
 - 搜索文本高亮 （类似于 vscode 的搜索文本高亮）
 - 选择文本高亮 （类似于 vscode 的选择文本高亮）
-- 基于文本内容的中断功能，全新的功能
+- 基于文本内容的中断功能，这是一个全新设计的功能
 - 日志文档的签名（时间和姓名）
-- 跨平台：Windows， Mac OS 以及 Ubuntu 等 Linux 系统
+- 常用命令支持快捷键操作，比如打开/关闭串口、打开/保存文件、清除文本、高亮文本等
+- 跨平台：Windows， Mac OS 以及 基于 Debian 的 Linux 系统，比如 Ubuntu 和 Deepin
+- 自定义主题（只支持软件下方 Bar 的背景色。。。）
 
 另外还包含一些串口助手通用的功能：
 
@@ -36,11 +45,20 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 
 ## 使用方法
 
-下载对应系统的安装文件，安装，然后就应该可以正常使用了。对于 Linux 系统，可能对串口设备文件执行以下命令：
+下载对应系统的安装文件，安装，然后就可以正常使用了。对于 Linux 系统，可能需要对串口设备文件执行以下命令：
 
 `sudo chmod 666 /dev/ttyS1`
 
 记得把 `ttyS1` 替换为你的串口设备文件。
+
+### 快捷键列表
+
+- 打开文件： `CmdOrCtrl + O`
+- 保存文件： `CmdOrCtrl + S`
+- 打开关闭串口：`CmdOrCtrl + D`
+- 打开关闭串口，并且清空 Log：`CmdOrCtrl + Shift + D`
+- 情况 Log：`CmdOrCtrl + X`
+- 高亮鼠标下方单词：`CmdOrCtrl + E`
 
 ## 开发
 
@@ -67,14 +85,19 @@ electron_custom_dir=7.1.11
 
 Windows 下安装 native 编译工具更麻烦，建议多试试，因为我现在在其他 Windows 上也安装不成功了。。。
 
-### 编译
+### 运行
 
 ```
 code .
-yarn start
+yarn run start
+```
+
+### 编译
+
+```
 yarn make
 ```
 
 ## Licence
 
-comNG is [MIT](https://opensource.org/licenses/MIT) licensed and all it's dependencies are MIT licensed.
+comNG is [MIT](./LICENSE) licensed and all it's dependencies are MIT licensed.
