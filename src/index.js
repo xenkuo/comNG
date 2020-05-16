@@ -4,7 +4,7 @@ const { remote, shell, ipcRenderer, clipboard } = require("electron");
 const Store = require("electron-store");
 const appVersion = remote.app.getVersion();
 const appUpdaterUrl =
-  "https://api.github.com/repos/xenkuo/comNG/releases/latest";
+  "https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest";
 
 var M = require("materialize-css");
 M.AutoInit();
@@ -227,7 +227,8 @@ window.onload = () => {
         };
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
-          if (returnValue.response === 0) shell.openExternal(res.html_url);
+          if (returnValue.response === 0)
+            shell.openExternal(res.assets[0].browser_download_url);
         });
       }
     });
