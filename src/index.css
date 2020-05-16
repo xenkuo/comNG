@@ -70,6 +70,7 @@ blockquote {
   border-radius: 12px;
   height: 24px;
   font-size: 12px;
+  font-weight: bold;
   z-index: inherit;
 }
 
@@ -123,7 +124,7 @@ input {
 
 .input-field {
   margin-top: 0px;
-  margin-bottom: 5px;
+  margin-bottom: -5px;
 }
 
 .config-row {
