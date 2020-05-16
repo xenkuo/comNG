@@ -1,22 +1,23 @@
+:root {
+  --menu-height: 200px;
+  --bar-height: 53px;
+  --trans-btn-height: 20px;
+  --modem-btn-height: 10px;
+  --body-border-widht: 1px;
+  --bar-color-head: #fafafa;
+  --bar-color-middle: #fafafa;
+  --bar-color-tail: #fafafa;
+}
+
 html {
   height: 100%;
   font-size: 12px;
 }
 
 body {
-  border: 1px solid #26a69a;
+  border: var(--body-border-widht) solid #26a69a;
   height: 100%;
   background-color: #fafafa;
-}
-
-:root {
-  --menu-height: 200px;
-  --bar-height: 53px;
-  --trans-btn-height: 20px;
-  --modem-btn-height: 10px;
-  --bar-color-head: #fafafa;
-  --bar-color-middle: #fafafa;
-  --bar-color-tail: #fafafa;
 }
 
 ::-webkit-scrollbar {
@@ -170,6 +171,7 @@ input {
 #menu-area {
   height: var(--menu-height);
   width: calc(100%);
+  /* width: 100%; */
   background-color: #fafafa;
 }
 
@@ -183,12 +185,13 @@ input {
 }
 
 #bar-area {
-  width: calc(100% - 2px);
+  /* width: calc(100% - 1px); */
+  width: 100%;
   height: var(--bar-height);
-  position: fixed;
-  bottom: 1px;
-  margin-bottom: 0px;
-  line-height: 54px;
+  /* position: fixed; */
+  position: sticky;
+  bottom: var(--body-border-widht);
+  line-height: var(--bar-height);
   background: -webkit-linear-gradient(
     60deg,
     var(--bar-color-head),

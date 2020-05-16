@@ -69,6 +69,11 @@ const createWindow = () => {
     mainWindow.webContents.send("main-cmd", "Switch");
   });
 
+  Shortcut.register(mainWindow, "CmdOrCtrl+Shift+D", () => {
+    console.log("You pressed cmd/ctrl shift d");
+    mainWindow.webContents.send("main-cmd", "ClearSwitch");
+  });
+
   Shortcut.register(mainWindow, "CmdOrCtrl+O", () => {
     console.log("You pressed cmd/ctrl o");
     mainWindow.webContents.send("main-cmd", "Open");
