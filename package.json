@@ -6,6 +6,7 @@
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
   "scripts": {
+    "prestart": "terser src/base.js src/editor.js src/serialport.js --source-map -o src/index.js -c -m toplevel",
     "start": "electron-forge start",
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
@@ -22,11 +23,12 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": true,
+        "asar": false,
         "ignore": [
           "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
           "node_modules/materialize-css/(extras|js|sass)",
-          "node_modules/material-design-icons/(?!iconfont)"
+          "node_modules/material-design-icons/(?!iconfont)",
+          "src/(base|editor|serialport).js"
         ],
         "icon": "image/logo"
       },
@@ -97,6 +99,7 @@
     "@electron-forge/publisher-github": "^6.0.0-beta.50",
     "electron": "7.1.11",
     "electron-rebuild": "^1.10.0",
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "terser": "^4.6.13"
   }
 }
