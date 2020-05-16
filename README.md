@@ -57,7 +57,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 保存文件： `CmdOrCtrl + S`
 - 打开关闭串口：`CmdOrCtrl + D`
 - 打开关闭串口，并且清空 Log：`CmdOrCtrl + Shift + D`
-- 情况 Log：`CmdOrCtrl + X`
+- 清空 Log：`CmdOrCtrl + X`
 - 高亮鼠标下方单词：`CmdOrCtrl + E`
 
 ## 开发
