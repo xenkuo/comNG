@@ -228,7 +228,7 @@ window.onload = () => {
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
           if (returnValue.response === 0)
-            shell.openExternal(res.assets[0].browser_download_url);
+            shell.openExternal(res.author.html_url + "/comNG/releases");
         });
       }
     });

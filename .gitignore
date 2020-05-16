@@ -90,3 +90,4 @@ out/
 
 # terser map
 *.map
+src/index.js
