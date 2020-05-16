@@ -203,8 +203,9 @@ input {
 #modem-signal-bar {
   height: var(--modem-btn-height);
   /* background-color: aqua; */
-  position: fixed;
+  position: sticky;
   bottom: var(--bar-height) - var(--modem-btn-height);
+  margin-bottom: calc(-1 * var(--modem-btn-height));
 }
 
 .modem-btn {

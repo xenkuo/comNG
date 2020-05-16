@@ -54,7 +54,7 @@ const store = new Store({
       store.set("general.modemSignal", false);
       store.set(
         "general.fontFamily",
-        "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
+        "'Cascadia Mono', Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
       );
       store.set("general.fontSize", 12);
     },
