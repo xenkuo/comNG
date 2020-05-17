@@ -266,8 +266,8 @@ document.onkeydown = function (e) {
   }
 };
 
-// For drag region which nav-area is, the behavior is different between Mac and Windows:
-// On Windows a drag region is take a system title bar, and all event is captured by
+// For drag region which nav-area is, the behavior is different between Mac and Windows/Debian:
+// On Windows/Debian a drag region is take a system title bar, and all event is captured by
 // system, app can't get any click or mouse event. At the same time, double click event
 // will resize app window by system, no need for app to implement such function.
 // On Mac, a drag region has no much different except supporting drag action. App can
