@@ -160,6 +160,7 @@ input {
 }
 
 #logo {
+  -webkit-app-region: no-drag;
   zoom: 80%;
   height: 20px !important;
   line-height: 24px !important;

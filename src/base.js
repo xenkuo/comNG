@@ -267,11 +267,16 @@ document.onkeydown = function (e) {
 };
 
 // prevent text select for double click action
+// Note: all click event is eaten by system for drag element on Windows,
+// so, nav-area mousedown and dbclick event can't be captured by below code
 document.getElementById("nav-area").onmousedown = () => {
+  console.log("nav-area mounse down");
   return false;
 };
 
 document.getElementById("nav-area").ondblclick = () => {
+  console.log("dbclick");
+
   if (
     window.innerWidth === screen.width ||
     window.innerHeight === screen.height
@@ -290,7 +295,7 @@ document.getElementById("nav-area").ondblclick = () => {
 };
 
 document.getElementById("logo").onclick = () => {
-  shell.openExternal("https://github.com/xenkuo/comNG");
+  shell.openExternal("https://gitee.com/xenkuo/comNG");
 };
 
 document.getElementById("min-btn").onclick = () => {
@@ -298,13 +303,21 @@ document.getElementById("min-btn").onclick = () => {
 };
 
 document.getElementById("max-btn").onclick = () => {
-  configUpdate("window.widthBefore", window.innerWidth);
-  configUpdate("window.heightBefore", window.innerHeight);
-  configUpdate("window.xBefore", window.screenX);
-  configUpdate("window.yBefore", window.screenY);
+  if (
+    window.innerWidth === screen.width ||
+    window.innerHeight === screen.height
+  ) {
+    window.resizeTo(config.window.widthBefore, config.window.heightBefore);
+    window.moveTo(config.window.xBefore, config.window.yBefore);
+  } else {
+    configUpdate("window.widthBefore", window.innerWidth);
+    configUpdate("window.heightBefore", window.innerHeight);
+    configUpdate("window.xBefore", window.screenX);
+    configUpdate("window.yBefore", window.screenY);
 
-  window.resizeTo(screen.width, screen.height);
-  window.moveTo(0, 0);
+    window.resizeTo(screen.width, screen.height);
+    window.moveTo(0, 0);
+  }
 };
 
 document.getElementById("close-btn").onclick = () => {
