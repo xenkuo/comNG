@@ -36,7 +36,6 @@ const createWindow = () => {
     minWidth: widthMin,
     height: height,
     minHeight: heightMin,
-    alwaysOnTop: false,
     frame: false,
     icon: path.join(__dirname, "../image/logo.png"),
     webPreferences: {
