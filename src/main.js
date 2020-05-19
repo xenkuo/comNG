@@ -59,6 +59,13 @@ const createWindow = () => {
     mainWindow = null;
   });
 
+  mainWindow.on("restore", () => {
+    mainWindow.setSize(
+      store.get("window.width", widthDefault),
+      store.get("window.height", heightDefault)
+    );
+  });
+
   Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
     console.log("You pressed cmd/ctrl x");
     mainWindow.webContents.send("main-cmd", "Clear");
