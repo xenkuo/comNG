@@ -59,7 +59,7 @@ const createWindow = () => {
   });
 
   mainWindow.on("restore", () => {
-    mainWindow.setSize(
+    mainWindow.setContentSize(
       store.get("window.width", widthDefault),
       store.get("window.height", heightDefault)
     );
