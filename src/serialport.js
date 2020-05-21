@@ -23,7 +23,7 @@ function portUpdate() {
         pSelect.options.add(new Option(item.path, index));
         if (index === config.pathIndex) pSelect.selectedIndex = index;
       });
-      M.FormSelect.init(pSelect);
+      mcss.FormSelect.init(pSelect);
     })
     .catch((e) => {
       console.error(e);
@@ -127,7 +127,7 @@ function serialGetOptions() {
 }
 
 function toast(text) {
-  M.toast({ html: text, displayLength: 1000 });
+  mcss.toast({ html: text, displayLength: 1000 });
   // alert(text)
 }
 
@@ -159,7 +159,7 @@ document.getElementById("port-switch").onclick = (e) => {
       if (config.general.modemSignal === true) {
         modemSignalTimer = setInterval(modemSignalTimerHandle, 100);
       }
-      port.set({rts: true, dtr: true}, (e) => {
+      port.set({ rts: true, dtr: true }, (e) => {
         if (e !== null) console.error(e);
       });
     });

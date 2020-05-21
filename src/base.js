@@ -6,8 +6,8 @@ const appVersion = remote.app.getVersion();
 const appUpdaterUrl =
   "https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest";
 
-var M = require("materialize-css");
-M.AutoInit();
+var mcss = require("materialize-css");
+mcss.AutoInit();
 
 var config;
 var barHeight;
@@ -139,14 +139,14 @@ window.onload = () => {
     menu.offsetHeight +
     "px";
 
-  M.Tabs.getInstance(document.getElementById("menu-tabs")).select(
+  mcss.Tabs.getInstance(document.getElementById("menu-tabs")).select(
     config.menu.tab
   );
 
   let baudSelect = document.getElementById("baud-select");
   baudSelect.options[0].text = config.general.customized;
   baudSelect.selectedIndex = config.baudIndex;
-  M.FormSelect.init(baudSelect);
+  mcss.FormSelect.init(baudSelect);
 
   portUpdate();
 
@@ -164,16 +164,16 @@ window.onload = () => {
 
   let databits = document.getElementById("databits-select");
   databits.selectedIndex = config.general.databitsIndex;
-  M.FormSelect.init(databits);
+  mcss.FormSelect.init(databits);
   let parity = document.getElementById("parity-select");
   parity.selectedIndex = config.general.parityIndex;
-  M.FormSelect.init(parity);
+  mcss.FormSelect.init(parity);
   let stopbits = document.getElementById("stopbits-select");
   stopbits.selectedIndex = config.general.stopbitsIndex;
-  M.FormSelect.init(stopbits);
+  mcss.FormSelect.init(stopbits);
   let flowcontrol = document.getElementById("flowcontrol-select");
   flowcontrol.selectedIndex = config.general.flowcontrolIndex;
-  M.FormSelect.init(flowcontrol);
+  mcss.FormSelect.init(flowcontrol);
 
   document.getElementById("editor-font-family").value =
     config.general.fontFamily;
@@ -371,7 +371,7 @@ document.body.onclick = (e) => {
 };
 
 document.getElementById("menu-tabs").onclick = () => {
-  let tabs = M.Tabs.getInstance(document.getElementById("menu-tabs"));
+  let tabs = mcss.Tabs.getInstance(document.getElementById("menu-tabs"));
 
   configUpdate("menu.tab", tabs.$content[0].id);
 };
@@ -404,7 +404,7 @@ document.getElementById("customized").onblur = (e) => {
   let baudSelect = document.getElementById("baud-select");
 
   baudSelect.options[0].text = customized;
-  M.FormSelect.init(baudSelect);
+  mcss.FormSelect.init(baudSelect);
 };
 
 document.getElementById("databits-select").onchange = (e) => {
@@ -463,8 +463,8 @@ document.getElementById("trans-send-btn").onclick = () => {
   if (serialWrite(data) === false) return;
 
   p.value += "\n" + document.getElementById("trans-data").value;
-  M.updateTextFields(p);
-  M.textareaAutoResize(p);
+  mcss.updateTextFields(p);
+  mcss.textareaAutoResize(p);
   p.scrollTop = p.scrollHeight;
 
   if (document.getElementById("trans-repeat-switch").checked === true) {
@@ -491,8 +491,8 @@ document.getElementById("trans-log-btn").onclick = () => {
   let p = document.getElementById("trans-log-area");
 
   p.value = "";
-  M.updateTextFields(p);
-  M.textareaAutoResize(p);
+  mcss.updateTextFields(p);
+  mcss.textareaAutoResize(p);
 };
 
 document.getElementById("bar-color-head").oninput = (e) => {

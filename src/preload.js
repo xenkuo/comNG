@@ -1,5 +1,6 @@
 // All of the Node.js APIs are available in the preload process.
 // It has the same sandbox as a Chrome extension.
+
 let pjson = require("../package.json");
 if ("dev" == pjson.mode) {
   console.log("dev mode");
@@ -7,8 +8,10 @@ if ("dev" == pjson.mode) {
   const fs = require("fs");
   let terser = require("terser");
   let options = {
-    toplevel: true,
-    sourceMap: true,
+    sourceMap: {
+      filename: "index.js",
+      url: "index.js.map",
+    },
   };
   let result = terser.minify(
     {

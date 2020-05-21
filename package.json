@@ -7,11 +7,10 @@
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
   "scripts": {
-    "prestart": "terser src/base.js src/editor.js src/serialport.js --source-map -o src/index.js -c -m toplevel",
     "start": "electron-forge start",
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
-    "premake": "terser src/base.js src/editor.js src/serialport.js --source-map -o src/index.js -c -m toplevel",
+    "premake": "rm src/index.js.map && terser src/base.js src/editor.js src/serialport.js -o src/index.js -c -m",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""

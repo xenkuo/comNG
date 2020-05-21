@@ -40,8 +40,8 @@ function decoGet() {
   return decoTable[decoIndex++ % decoMod];
 }
 
-function decoApply(m, text) {
-  let matches = m.findMatches(
+function decoApply(model, text) {
+  let matches = model.findMatches(
     text,
     false,
     false,
@@ -56,7 +56,7 @@ function decoApply(m, text) {
   for (let i of matches) {
     let range = i.range;
 
-    m.deltaDecorations(
+    model.deltaDecorations(
       [],
       [
         {
@@ -74,8 +74,8 @@ function decoApply(m, text) {
   }
 }
 
-function decoRemove(m, text) {
-  let matches = m.findMatches(
+function decoRemove(model, text) {
+  let matches = model.findMatches(
     text,
     false,
     false,
@@ -85,11 +85,11 @@ function decoRemove(m, text) {
   );
 
   for (let match of matches) {
-    let decos = m.getDecorationsInRange(match.range);
+    let decos = model.getDecorationsInRange(match.range);
 
     // super word remove decoration will cause sub word decoration to 1
     for (let deco of decos) {
-      m.deltaDecorations([deco.id], []);
+      model.deltaDecorations([deco.id], []);
     }
   }
 }
@@ -97,11 +97,11 @@ function decoRemove(m, text) {
 function highlightToggle() {
   console.log("highligh toggle");
   let decoExpectedLength = 1;
-  let m = editor.getModel();
+  let model = editor.getModel();
   let range = editor.getSelection();
-  let text = m.getValueInRange(range);
+  let text = model.getValueInRange(range);
   if (text === "") {
-    let word = m.getWordAtPosition(editor.getPosition());
+    let word = model.getWordAtPosition(editor.getPosition());
     text = word.word;
     range.startColumn = word.startColumn;
     range.endColumn = word.endColumn;
@@ -110,11 +110,11 @@ function highlightToggle() {
 
   if (text === "") return;
 
-  let decos = m.getDecorationsInRange(range);
+  let decos = model.getDecorationsInRange(range);
   if (decos.length === decoExpectedLength) {
-    decoApply(m, text);
+    decoApply(model, text);
   } else {
-    decoRemove(m, text);
+    decoRemove(model, text);
   }
 
   return null;
