@@ -1,9 +1,9 @@
 {
-  "name": "comNG",
+  "name": "comng",
   "productName": "comNG",
   "version": "1.0.5",
   "mode": "dev",
-  "description": "My Electron application description",
+  "description": "A powerful serialport tool with modernx UI",
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
   "scripts": {
