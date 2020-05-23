@@ -190,14 +190,14 @@ function editorAppend(text) {
   editor.revealLine(editor.getModel().getLineCount());
 }
 
-function buff2hex(buff) {
+function buff2hex(buffer) {
   return Array.prototype.map
-    .call(new Uint8Array(buff), (x) => ("00" + x.toString(16)).slice(-2))
+    .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
     .join("");
 }
 
-function showHex(buff) {
-  let hexBuff = buff2hex(buff);
+function showHex(buffer) {
+  let hexBuff = buff2hex(buffer);
 
   while (hexBuff.length !== 0) {
     let len = hexmodeUnitWidth - hexmodeIndex;
@@ -249,50 +249,54 @@ function breakpointProcess(line) {
   return false;
 }
 
-function processSerialData(buff) {
-  if (config.general.hexmode === true) {
-    showHex(buff);
-  } else {
-    let index = -1;
+function showString(buffer) {
+  let index = -1;
+  // console.log(buff)
+  // console.log(buff.toString())
+  while ((index = buffer.indexOf("\n")) !== -1) {
+    let line = buffer.slice(0, index + 1);
+    // console.log(line)
+
+    if (half_line === true) {
+      editorAppend(line);
+      half_line = false;
+    } else {
+      let timestamp = "";
+
+      if (config.general.timestamp === true) timestamp = getTimestamp();
+      editorAppend(timestamp + line);
+    }
+    buffer = buffer.slice(index + 1, buffer.length);
     // console.log(buff)
-    // console.log(buff.toString())
-    while ((index = buff.indexOf("\n")) !== -1) {
-      let line = buff.slice(0, index + 1);
-      // console.log(line)
 
-      if (half_line === true) {
-        editorAppend(line);
-        half_line = false;
-      } else {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + line);
-      }
-      buff = buff.slice(index + 1, buff.length);
-      // console.log(buff)
-
-      if (config.advance.breakpoint.switch === true) {
-        if (breakpointProcess(line) === true) {
-          buff = [];
-          serialClose();
-        }
-      }
-    }
-    if (buff.length !== 0) {
-      if (half_line === false) {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + buff);
-        half_line = true;
-      } else {
-        editorAppend(buff);
-      }
-    }
     if (config.advance.breakpoint.switch === true) {
-      breakpointBuff = buff;
+      if (breakpointProcess(line) === true) {
+        buffer = [];
+        serialClose();
+      }
     }
+  }
+  if (buffer.length !== 0) {
+    if (half_line === false) {
+      let timestamp = "";
+
+      if (config.general.timestamp === true) timestamp = getTimestamp();
+      editorAppend(timestamp + buffer);
+      half_line = true;
+    } else {
+      editorAppend(buffer);
+    }
+  }
+  if (config.advance.breakpoint.switch === true) {
+    breakpointBuff = buffer;
+  }
+}
+
+function processSerialData(buffer) {
+  if (config.general.hexmode === true) {
+    showHex(buffer);
+  } else {
+    showString(buffer);
   }
 }
 
