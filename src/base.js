@@ -229,13 +229,30 @@ window.onload = () => {
   document.getElementById("app-version").innerHTML = appVersion;
   console.log("Current Version: ", appVersion);
 
+  function platformUpdateCheck(assets) {
+    const os = require("os");
+    let platform = os.platform();
+    let suffix = "exe";
+
+    if ("darwin" === platform) suffix = "dmg";
+    else if ("linux" === platform) suffix = "deb";
+
+    for (const asset of assets) {
+      if (asset.name !== undefined && -1 !== asset.name.indexOf(suffix)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   fetch(appUpdaterUrl)
     .then((data) => {
       return data.json();
     })
     .then((res) => {
       let latest = res.tag_name.split("v")[1];
-      if (latest !== appVersion) {
+      if (latest !== appVersion && true === platformUpdateCheck(res.assets)) {
         const dialogOpts = {
           type: "info",
           buttons: ["Download Now", "Later"],
