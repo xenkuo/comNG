@@ -301,15 +301,15 @@ document.onkeydown = function (e) {
 };
 
 // For drag region which nav-area is, the behavior is different between Mac and Windows/Debian:
-// On Windows/Debian a drag region is take a system title bar, and all event is captured by
+// On Windows/Debian a drag region is taken as system title bar, and all event is captured by
 // system, app can't get any click or mouse event. At the same time, double click event
-// will resize app window by system, no need for app to implement such function.
-// On Mac, a drag region has no much different except supporting drag action. App can
-// capture most event and window resize(maximum and restore) should be implemented
+// will resize app window by system, no need for app to implement manually.
+// On Mac, however, a drag region has no much different with common html element except supporting drag action. App can
+// capture most of events and window resize(maximum and restore) should be implemented
 // by app.
-// In short, below two listener, onmousedown and ondbclick is only needed on Mac, Windows
-// system has implement similar function. There's a drawback on Windows that maximum
-// button info is not sync with system maximum and restore.
+// In short, below two listener, onmousedown and ondbclick is only needed on Mac.
+// And there's a drawback as Windows/Debian has implemented such function internally that maximum
+// button info is not synced with system maximum and restore.
 document.getElementById("nav-area").onmousedown = () => {
   // prevent text select for double click action
   return false;
