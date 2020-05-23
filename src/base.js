@@ -179,6 +179,18 @@ window.onload = () => {
     config.general.fontFamily;
   document.getElementById("editor-font-size").value = config.general.fontSize;
 
+  let transEof = document.getElementById("trans-eof-select");
+  let transEofIndex = 0;
+  if ("\n" === config.transmit.eof) {
+    transEofIndex = 1;
+  } else if ("\r" === config.transmit.eof) {
+    transEofIndex = 2;
+  } else if ("term" === config.transmit.eof) {
+    transEofIndex = 3;
+  }
+  transEof.selectedIndex = transEofIndex;
+  mcss.FormSelect.init(transEof);
+
   document.getElementById("breakpoint-switch").checked =
     config.advance.breakpoint.switch;
   document.getElementById("breakpoint-on-text").value =
@@ -437,10 +449,13 @@ document.getElementById("trans-eof-select").onchange = (e) => {
   let eof = "\r\n";
   switch (index) {
     case 1:
-      eof = "\r";
+      eof = "\n";
       break;
     case 2:
-      eof = "\n";
+      eof = "\r";
+      break;
+    case 3:
+      eof = "term";
       break;
     default:
       break;
@@ -454,18 +469,22 @@ document.getElementById("trans-eof-select").onchange = (e) => {
 // }
 
 document.getElementById("trans-send-btn").onclick = () => {
-  const p = document.getElementById("trans-log-area");
-  let data = document.getElementById("trans-data").value;
+  const logObj = document.getElementById("trans-log-area");
+  const dataObj = document.getElementById("trans-data");
 
-  // if (data.trim() === "") return;
-  data.trim();
-  data += config.transmit.eof;
+  let data = dataObj.value;
+  let eof = config.transmit.eof;
+  if (eof === "term") {
+    eof = "\n";
+    dataObj.value = "";
+  }
+  data += eof;
   if (serialWrite(data) === false) return;
 
-  p.value += "\n" + document.getElementById("trans-data").value;
-  mcss.updateTextFields(p);
-  mcss.textareaAutoResize(p);
-  p.scrollTop = p.scrollHeight;
+  logObj.value += "\n" + data.substring(0, data.length - eof.length);
+  mcss.updateTextFields(logObj);
+  mcss.textareaAutoResize(logObj);
+  logObj.scrollTop = logObj.scrollHeight;
 
   if (document.getElementById("trans-repeat-switch").checked === true) {
     if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer);
@@ -488,11 +507,11 @@ document.getElementById("trans-repeat-switch").onchange = (e) => {
 };
 
 document.getElementById("trans-log-btn").onclick = () => {
-  let p = document.getElementById("trans-log-area");
+  let logObj = document.getElementById("trans-log-area");
 
-  p.value = "";
-  mcss.updateTextFields(p);
-  mcss.textareaAutoResize(p);
+  logObj.value = "";
+  mcss.updateTextFields(logObj);
+  mcss.textareaAutoResize(logObj);
 };
 
 document.getElementById("bar-color-head").oninput = (e) => {

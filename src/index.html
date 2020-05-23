@@ -189,12 +189,28 @@
                   <option value="1" selected>CRLF</option>
                   <option value="2">LF</option>
                   <option value="3">CR</option>
+                  <option value="4">TERM</option>
                 </select>
               </div>
             </div>
 
             <div class="row config-row">
-              <div class="col s2 config-key">
+              <div class="col s3 config-key">
+                <p>Hex Mode</p>
+              </div>
+              <div class="col s5 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="trans-repeat-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row config-row">
+              <div class="col s3 config-key">
                 <p>Repeat</p>
               </div>
               <div class="col s5 config-item">
@@ -210,7 +226,7 @@
               <div class="col s2 config-key">
                 <p>Interval</p>
               </div>
-              <div class="input-field col s3 config-item">
+              <div class="input-field col s2 config-item">
                 <input
                   id="trans-repeat-interval"
                   placeholder="ms"
