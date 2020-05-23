@@ -58,6 +58,9 @@ const store = new Store({
       );
       store.set("general.fontSize", 12);
     },
+    "1.0.6": (store) => {
+      store.set("transmit.hexmode", false);
+    },
   },
 });
 
@@ -179,6 +182,7 @@ window.onload = () => {
     config.general.fontFamily;
   document.getElementById("editor-font-size").value = config.general.fontSize;
 
+  document.getElementById("trans-hexmode-switch").checked = config.transmit.hexmode;
   let transEof = document.getElementById("trans-eof-select");
   let transEofIndex = 0;
   if ("\n" === config.transmit.eof) {
@@ -444,30 +448,6 @@ document.getElementById("sign-name").onblur = (e) => {
 };
 
 let transRepeatTimer = undefined;
-document.getElementById("trans-eof-select").onchange = (e) => {
-  let index = e.target.selectedIndex;
-  let eof = "\r\n";
-  switch (index) {
-    case 1:
-      eof = "\n";
-      break;
-    case 2:
-      eof = "\r";
-      break;
-    case 3:
-      eof = "term";
-      break;
-    default:
-      break;
-  }
-
-  configUpdate("transmit.eof", eof);
-};
-
-// document.getElementById('trans-clear-btn').onclick = () => {
-//   document.getElementById('trans-data').value = ''
-// }
-
 document.getElementById("trans-send-btn").onclick = () => {
   const logObj = document.getElementById("trans-log-area");
   const dataObj = document.getElementById("trans-data");
@@ -497,6 +477,32 @@ document.getElementById("trans-send-btn").onclick = () => {
       serialWrite(data);
     }, interval);
   }
+};
+
+document.getElementById("trans-eof-select").onchange = (e) => {
+  let index = e.target.selectedIndex;
+  let eof = "\r\n";
+  switch (index) {
+    case 1:
+      eof = "\n";
+      break;
+    case 2:
+      eof = "\r";
+      break;
+    case 3:
+      eof = "term";
+      break;
+    default:
+      break;
+  }
+
+  configUpdate("transmit.eof", eof);
+};
+
+document.getElementById("trans-hexmode-switch").onchange = () => {
+  let checked = e.target.checked;
+
+  configUpdate("transmit.hexmode", checked);
 };
 
 document.getElementById("trans-repeat-switch").onchange = (e) => {
