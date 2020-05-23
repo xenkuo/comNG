@@ -1,7 +1,7 @@
 {
   "name": "comng",
   "productName": "comNG",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "mode": "dev",
   "description": "A powerful serialport tool with modernx UI",
   "repository": "https://github.com/xenkuo/comNG",

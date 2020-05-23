@@ -8,6 +8,8 @@ if ("dev" == pjson.mode) {
   const fs = require("fs");
   let terser = require("terser");
   let options = {
+    // mangle: false,
+    // compress: false,
     sourceMap: {
       filename: "index.js",
       url: "index.js.map",

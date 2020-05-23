@@ -182,7 +182,8 @@ window.onload = () => {
     config.general.fontFamily;
   document.getElementById("editor-font-size").value = config.general.fontSize;
 
-  document.getElementById("trans-hexmode-switch").checked = config.transmit.hexmode;
+  document.getElementById("trans-hexmode-switch").checked =
+    config.transmit.hexmode;
   let transEof = document.getElementById("trans-eof-select");
   let transEofIndex = 0;
   if ("\n" === config.transmit.eof) {
@@ -452,16 +453,21 @@ document.getElementById("trans-send-btn").onclick = () => {
   const logObj = document.getElementById("trans-log-area");
   const dataObj = document.getElementById("trans-data");
 
-  let data = dataObj.value;
+  let dataIn = dataObj.value;
+  let dataOut = dataIn;
   let eof = config.transmit.eof;
-  if (eof === "term") {
-    eof = "\n";
-    dataObj.value = "";
+  if (true === config.transmit.hexmode) {
+    dataOut = Buffer.from(dataIn, "hex");
+  } else {
+    if (eof === "term") {
+      eof = "\n";
+      dataObj.value = "";
+    }
+    dataOut += eof;
   }
-  data += eof;
-  if (serialWrite(data) === false) return;
+  if (serialWrite(dataOut) === false) return;
 
-  logObj.value += "\n" + data.substring(0, data.length - eof.length);
+  logObj.value += "\n" + dataIn;
   mcss.updateTextFields(logObj);
   mcss.textareaAutoResize(logObj);
   logObj.scrollTop = logObj.scrollHeight;
@@ -474,7 +480,7 @@ document.getElementById("trans-send-btn").onclick = () => {
     if (isNaN(interval) === true) interval = 1000;
 
     transRepeatTimer = setInterval(() => {
-      serialWrite(data);
+      serialWrite(dataOut);
     }, interval);
   }
 };
@@ -499,7 +505,7 @@ document.getElementById("trans-eof-select").onchange = (e) => {
   configUpdate("transmit.eof", eof);
 };
 
-document.getElementById("trans-hexmode-switch").onchange = () => {
+document.getElementById("trans-hexmode-switch").onchange = (e) => {
   let checked = e.target.checked;
 
   configUpdate("transmit.hexmode", checked);
