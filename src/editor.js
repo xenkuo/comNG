@@ -193,30 +193,44 @@ function editorAppend(text) {
 function buffer2Hex(buffer) {
   return Array.prototype.map
     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
-    .join("");
+    .join(" ");
 }
 
 function showHex(buffer) {
+  let lenA = 0; // start point, not zero if timestamp enabled
+  let lenB = 16 * (2 + 1); // hex string length
+  let lenC = 8; // space between hex and original string
+  let lenD = 16; // 16 char (need to convert non-printable chars to .)
+  let timestamp = "";
+
+  if (config.general.timestamp === true) {
+    timestamp = getTimestamp() + "  ";
+    lenA = timestamp.length;
+  }
+
+  let lines = buffer.length / 16;
+  if (buffer.length % 16 !== 0) lines++;
   let hexBuffer = buffer2Hex(buffer);
 
-  while (hexBuffer.length !== 0) {
-    let len = hexmodeUnitWidth - hexmodeIndex;
-    if (hexBuffer.length < len) len = hexBuffer.length;
-    let line = hexBuffer.slice(0, len);
-
-    hexmodeIndex = (hexmodeIndex + len) % hexmodeUnitWidth;
-    if (hexmodeIndex === 0) {
-      hexmodeUnitIndex++;
-      if (hexmodeUnitIndex === 4) {
-        hexmodeUnitIndex = 0;
-        line += "\n";
-      } else {
-        line += " ";
-      }
+  for (let i = 0; i < lines; i++) {
+    let line = "";
+    if (0 === i) {
+      line = line.concat(timestamp);
+    } else {
+      line = line.concat(" ".repeat(timestamp.length));
     }
-    editorAppend(line);
 
-    hexBuffer = hexBuffer.slice(len, hexBuffer.length);
+    if (lenD * (i + 1) > buffer.length) {
+      lenD = buffer.length - lenD * i;
+    }
+    let originalHex = hexBuffer.slice(lenB * i, lenB * (i + 1));
+    line = line.concat(originalHex);
+    line = line.concat(" ".repeat(lenC + lenB - originalHex.length));
+    let originalStr = buffer.slice(lenD * i, lenD * (i + 1));
+    line = line.concat(originalStr.toString().replace(/[^\x20-\x7E]/g, "."));
+
+    line = line.concat("\n");
+    editorAppend(line);
   }
 }
 
@@ -478,6 +492,16 @@ document.getElementById("clear-btn").onclick = () => {
     if (config.advance.sign.name !== "")
       value += " by " + config.advance.sign.name + ".";
     value += "\n";
+  }
+
+  if (config.general.hexmode === true) {
+    let timestamp = "\n";
+    if (config.general.timestamp === true) {
+      timestamp += getTimestamp() + "  ";
+    }
+    value +=
+      timestamp +
+      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F         0123456789ABCDEF\n";
   }
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
