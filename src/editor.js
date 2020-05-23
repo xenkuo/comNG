@@ -190,19 +190,19 @@ function editorAppend(text) {
   editor.revealLine(editor.getModel().getLineCount());
 }
 
-function buff2hex(buffer) {
+function buffer2Hex(buffer) {
   return Array.prototype.map
     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
     .join("");
 }
 
 function showHex(buffer) {
-  let hexBuff = buff2hex(buffer);
+  let hexBuffer = buffer2Hex(buffer);
 
-  while (hexBuff.length !== 0) {
+  while (hexBuffer.length !== 0) {
     let len = hexmodeUnitWidth - hexmodeIndex;
-    if (hexBuff.length < len) len = hexBuff.length;
-    let line = hexBuff.slice(0, len);
+    if (hexBuffer.length < len) len = hexBuffer.length;
+    let line = hexBuffer.slice(0, len);
 
     hexmodeIndex = (hexmodeIndex + len) % hexmodeUnitWidth;
     if (hexmodeIndex === 0) {
@@ -216,7 +216,7 @@ function showHex(buffer) {
     }
     editorAppend(line);
 
-    hexBuff = hexBuff.slice(len, hexBuff.length);
+    hexBuffer = hexBuffer.slice(len, hexBuffer.length);
   }
 }
 
