@@ -305,3 +305,7 @@ input {
   background-color: #ea80fc !important;
   border-radius: 4px;
 }
+
+.hex-select {
+  border: 1px solid #ff0000;
+}

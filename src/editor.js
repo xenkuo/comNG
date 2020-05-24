@@ -6,7 +6,15 @@ const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 
 const amdRequire = amdLoader.require;
-const hexmodeUnitWidth = 8;
+const hmUnitCount = 16;
+const hmUnitBytes = 2;
+const hmUnitSpanLength = 1;
+const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
+const hmSpanLength = 8;
+const hmHexAreaLenght = hmUnitCount * hmUnitLength;
+const hmStrAreaLenght = hmUnitCount;
+const hmStrAreaOffset = hmHexAreaLenght + hmSpanLength;
+const hmLineLength = hmHexAreaLenght + hmSpanLength + hmStrAreaLenght;
 
 const decoMod = 7;
 const decoTable = [
@@ -20,8 +28,6 @@ const decoTable = [
 ];
 
 var editor;
-var hexmodeIndex = 0;
-var hexmodeUnitIndex = 0;
 var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
@@ -481,6 +487,86 @@ amdRequire(["vs/editor/editor.main"], function () {
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_X, () => {
     // Do nothing but prevent default action: close window
+  });
+
+  function getCordinateRangeOneLine(range) {
+    let startColumn = range.startColumn;
+    let endColumn = range.endColumn;
+
+    if (
+      startColumn > hmHexAreaLenght &&
+      startColumn <= hmHexAreaLenght + hmSpanLength
+    ) {
+      return undefined; // in span area
+    } else if (startColumn <= hmHexAreaLenght) {
+      // in hex area
+      startColumn = parseInt(startColumn / hmUnitLength) + 1 + hmStrAreaOffset;
+      if (endColumn > hmHexAreaLenght) endColumn = hmHexAreaLenght;
+      endColumn = parseInt(endColumn / hmUnitLength) + 1 + hmStrAreaOffset;
+    } else {
+      // in str area
+      startColumn = (startColumn - hmStrAreaOffset - 1) * hmUnitLength;
+      if (endColumn > hmLineLength) endColumn = hmLineLength;
+      endColumn = (endColumn - hmStrAreaOffset - 1) * hmUnitLength;
+    }
+
+    let newRange = new monaco.Range(
+      range.startLineNumber,
+      startColumn,
+      range.startLineNumber,
+      endColumn
+    );
+    return newRange;
+  }
+
+  editor.onMouseUp((e) => {
+    let model = editor.getModel();
+    let range = editor.getSelection();
+    let cordRange = getCordinateRangeOneLine(range);
+
+    if (undefined === cordRange) return;
+
+    console.log("In: " + range);
+    console.log("Out: " + cordRange);
+
+    // if (range.isEmpty() === true) {
+    //   // no selection
+    // } else {
+    //   // select content
+    // }
+    // first remove old decos
+    let decos = model.getLineDecorations(range.startLineNumber);
+    for (let deco of decos) {
+      if (deco.options.className === "hex-select") {
+        model.deltaDecorations([deco.id], []);
+      }
+    }
+
+    model.deltaDecorations(
+      [],
+      [
+        {
+          range: range,
+          id: "hm",
+          options: {
+            className: "hex-select",
+          },
+        },
+      ]
+    );
+
+    model.deltaDecorations(
+      [],
+      [
+        {
+          range: cordRange,
+          id: "hm",
+          options: {
+            className: "hex-select",
+          },
+        },
+      ]
+    );
   });
 });
 
