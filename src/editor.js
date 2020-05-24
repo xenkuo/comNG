@@ -462,7 +462,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     // Do nothing but prevent default action: close window
   });
 
-  function getCordinateRangeOneLine(range) {
+  function getCordinateRange(model, range) {
     if (range.startLineNumber !== range.endLineNumber) return undefined;
 
     let startColumn = range.startColumn;
@@ -475,8 +475,22 @@ amdRequire(["vs/editor/editor.main"], function () {
       range.startColumn =
         parseInt(startColumn / hmUnitLength) * hmUnitLength + 1;
       startColumn = parseInt(startColumn / hmUnitLength) + hmStrPartOffset;
-      if (endColumn > hmHexPartLength) endColumn = hmHexPartLength;
+
+      if (endColumn >= hmHexPartLength) {
+        let hexPart = model
+          .getLineContent(range.startLineNumber)
+          .slice(0, hmHexPartLength);
+        endColumn = hexPart.trim().length + 1;
+      } else {
+        let hexPart = model
+          .getLineContent(range.startLineNumber)
+          .slice(0, endColumn);
+        endColumn = hexPart.trim().length + 1;
+      }
       range.endColumn = parseInt(endColumn / hmUnitLength) * hmUnitLength + 1;
+      if (range.endColumn < range.startColumn)
+        range.endColumn = range.startColumn;
+
       endColumn = parseInt(endColumn / hmUnitLength) + hmStrPartOffset;
     } else {
       // in str part
@@ -494,12 +508,8 @@ amdRequire(["vs/editor/editor.main"], function () {
     return newRange;
   }
 
-  editor.onMouseUp((e) => {
-    let model = editor.getModel();
-    let range = editor.getSelection();
-    console.log("In: " + range);
-
-    let cordRange = getCordinateRangeOneLine(range);
+  function selectLineRange(model, range) {
+    let cordRange = getCordinateRange(model, range);
     if (undefined === cordRange) return;
 
     // first remove old decos
@@ -523,10 +533,73 @@ amdRequire(["vs/editor/editor.main"], function () {
           range: cordRange,
           options: {
             className: "hex-select",
+            overviewRuler: {
+              color: "#f06292",
+              position: 4, // 2: center, 4: right, 1: left, 7: full
+            },
           },
         },
       ]
     );
+  }
+
+  function extracLineRange(range, line) {
+    let lineRange = new monaco.Range(line, 1, line, 1);
+
+    if (line === range.startLineNumber) {
+      lineRange.startColumn = range.startColumn;
+
+      if (range.startColumn < hmSpanPartOffset) {
+        if (range.startLineNumber !== range.endLineNumber) {
+          lineRange.endColumn = hmHexPartLength;
+        } else {
+          lineRange.endColumn = range.endColumn;
+        }
+      } else {
+        if (range.startLineNumber !== range.endLineNumber) {
+          lineRange.endColumn = hmLineLength;
+        } else {
+          lineRange.endColumn = range.endColumn;
+        }
+      }
+    } else if (line === range.endLineNumber) {
+      lineRange.endColumn = range.endColumn;
+
+      if (range.endColumn < hmStrPartOffset) {
+        if (range.startLineNumber !== range.endLineNumber) {
+          lineRange.startColumn = hmHexPartOffset;
+        } else {
+          lineRange.startColumn = range.startColumn;
+        }
+      } else {
+        if (range.startLineNumber !== range.endLineNumber) {
+          lineRange.startColumn = hmStrPartOffset;
+        } else {
+          lineRange.startColumn = range.startColumn;
+        }
+      }
+    } else {
+      lineRange.startColumn = hmHexPartOffset;
+      lineRange.endColumn = hmHexPartLength;
+    }
+
+    return lineRange;
+  }
+
+  editor.onMouseUp(() => {
+    let model = editor.getModel();
+    let range = editor.getSelection();
+    console.log("In: " + range);
+
+    // processHexLine(model, range);
+    for (
+      let line = range.startLineNumber;
+      line <= range.endLineNumber;
+      line++
+    ) {
+      let lineRange = extracLineRange(range, line);
+      selectLineRange(model, lineRange);
+    }
   });
 });
 
