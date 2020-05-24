@@ -469,10 +469,11 @@ amdRequire(["vs/editor/editor.main"], function () {
     let endColumn = range.endColumn;
 
     if (startColumn >= hmSpanPartOffset && startColumn < hmStrPartOffset) {
-        return undefined; // in span part
+      return undefined; // in span part
     } else if (startColumn < hmSpanPartOffset) {
       // in hex part
-      range.startColumn = parseInt(startColumn / hmUnitLength) * hmUnitLength + 1;
+      range.startColumn =
+        parseInt(startColumn / hmUnitLength) * hmUnitLength + 1;
       startColumn = parseInt(startColumn / hmUnitLength) + hmStrPartOffset;
       if (endColumn > hmHexPartLength) endColumn = hmHexPartLength;
       range.endColumn = parseInt(endColumn / hmUnitLength) * hmUnitLength + 1;
@@ -496,12 +497,10 @@ amdRequire(["vs/editor/editor.main"], function () {
   editor.onMouseUp((e) => {
     let model = editor.getModel();
     let range = editor.getSelection();
-    let cordRange = getCordinateRangeOneLine(range);
-
-    if (undefined === cordRange) return;
-
     console.log("In: " + range);
-    console.log("Out: " + cordRange);
+
+    let cordRange = getCordinateRangeOneLine(range);
+    if (undefined === cordRange) return;
 
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
@@ -516,20 +515,12 @@ amdRequire(["vs/editor/editor.main"], function () {
       [
         {
           range: range,
-          id: "hm",
           options: {
             className: "hex-select",
           },
         },
-      ]
-    );
-
-    model.deltaDecorations(
-      [],
-      [
         {
           range: cordRange,
-          id: "hm",
           options: {
             className: "hex-select",
           },
