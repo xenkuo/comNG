@@ -208,7 +208,7 @@ function showHex(buffer) {
     lenA = timestamp.length;
   }
 
-  let lines = buffer.length / 16;
+  let lines = parseInt(buffer.length / 16);
   if (buffer.length % 16 !== 0) lines++;
   let hexBuffer = buffer2Hex(buffer);
 
@@ -220,9 +220,9 @@ function showHex(buffer) {
       line = line.concat(" ".repeat(timestamp.length));
     }
 
-    if (lenD * (i + 1) > buffer.length) {
-      lenD = buffer.length - lenD * i;
-    }
+    // if (lenD * (i + 1) > buffer.length) {
+    //   lenD = buffer.length - lenD * i;
+    // }
     let originalHex = hexBuffer.slice(lenB * i, lenB * (i + 1));
     line = line.concat(originalHex);
     line = line.concat(" ".repeat(lenC + lenB - originalHex.length));
@@ -491,17 +491,17 @@ document.getElementById("clear-btn").onclick = () => {
     value = "Captured at " + new Date().toLocaleString() + " with comNG";
     if (config.advance.sign.name !== "")
       value += " by " + config.advance.sign.name + ".";
-    value += "\n";
+    value += "\n\n";
   }
 
   if (config.general.hexmode === true) {
-    let timestamp = "\n";
+    let timestamp = "";
     if (config.general.timestamp === true) {
       timestamp += getTimestamp() + "  ";
     }
     value +=
       timestamp +
-      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F         0123456789ABCDEF\n";
+      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F         0123456789ABCDEF\n\n";
   }
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
