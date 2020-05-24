@@ -6,12 +6,15 @@ const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 
 const amdRequire = amdLoader.require;
+
 const hmUnitCount = 16;
 const hmUnitBytes = 2;
 const hmUnitSpanLength = 1;
 const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
-const hmSpanPartLength = 8;
 const hmHexPartLength = hmUnitCount * hmUnitLength;
+const hmHexPartOffset = 0 + 1;
+const hmSpanPartLength = 8;
+const hmSpanPartOffset = hmHexPartLength + 1;
 const hmStrPartLength = hmUnitCount;
 const hmStrPartOffset = hmHexPartLength + hmSpanPartLength + 1;
 const hmLineLength = hmHexPartLength + hmSpanPartLength + hmStrPartLength;
@@ -460,24 +463,25 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   function getCordinateRangeOneLine(range) {
+    if (range.startLineNumber !== range.endLineNumber) return undefined;
+
     let startColumn = range.startColumn;
     let endColumn = range.endColumn;
 
-    if (
-      startColumn > hmHexPartLength &&
-      startColumn <= hmHexPartLength + hmSpanPartLength
-    ) {
-      return undefined; // in span area
-    } else if (startColumn <= hmHexPartLength) {
-      // in hex area
+    if (startColumn >= hmSpanPartOffset && startColumn < hmStrPartOffset) {
+        return undefined; // in span part
+    } else if (startColumn < hmSpanPartOffset) {
+      // in hex part
+      range.startColumn = parseInt(startColumn / hmUnitLength) * hmUnitLength + 1;
       startColumn = parseInt(startColumn / hmUnitLength) + hmStrPartOffset;
       if (endColumn > hmHexPartLength) endColumn = hmHexPartLength;
+      range.endColumn = parseInt(endColumn / hmUnitLength) * hmUnitLength + 1;
       endColumn = parseInt(endColumn / hmUnitLength) + hmStrPartOffset;
     } else {
-      // in str area
-      startColumn = (startColumn - hmStrPartOffset) * hmUnitLength;
+      // in str part
+      startColumn = (startColumn - hmStrPartOffset) * hmUnitLength + 1;
       if (endColumn > hmLineLength) endColumn = hmLineLength;
-      endColumn = (endColumn - hmStrPartOffset) * hmUnitLength;
+      endColumn = (endColumn - hmStrPartOffset) * hmUnitLength + 1;
     }
 
     let newRange = new monaco.Range(
