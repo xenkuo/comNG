@@ -10,11 +10,11 @@ const hmUnitCount = 16;
 const hmUnitBytes = 2;
 const hmUnitSpanLength = 1;
 const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
-const hmSpanLength = 8;
-const hmHexAreaLenght = hmUnitCount * hmUnitLength;
-const hmStrAreaLenght = hmUnitCount;
-const hmStrAreaOffset = hmHexAreaLenght + hmSpanLength;
-const hmLineLength = hmHexAreaLenght + hmSpanLength + hmStrAreaLenght;
+const hmSpanPartLength = 8;
+const hmHexPartLength = hmUnitCount * hmUnitLength;
+const hmStrPartLength = hmUnitCount;
+const hmStrPartOffset = hmHexPartLength + hmSpanPartLength;
+const hmLineLength = hmHexPartLength + hmSpanPartLength + hmStrPartLength;
 
 const decoMod = 7;
 const decoTable = [
@@ -203,36 +203,28 @@ function buffer2Hex(buffer) {
 }
 
 function showHex(buffer) {
-  let lenA = 0; // start point, not zero if timestamp enabled
-  let lenB = 16 * (2 + 1); // hex string length
-  let lenC = 8; // space between hex and original string
-  let lenD = 16; // 16 char (need to convert non-printable chars to .)
-  let timestamp = "";
-
-  if (config.general.timestamp === true) {
-    timestamp = getTimestamp() + "  ";
-    lenA = timestamp.length;
-  }
-
-  let lines = parseInt(buffer.length / 16);
-  if (buffer.length % 16 !== 0) lines++;
+  let lines = parseInt(buffer.length / hmUnitCount);
+  if (buffer.length % hmUnitCount !== 0) lines++;
   let hexBuffer = buffer2Hex(buffer);
 
   for (let i = 0; i < lines; i++) {
     let line = "";
-    if (0 === i) {
-      line = line.concat(timestamp);
-    } else {
-      line = line.concat(" ".repeat(timestamp.length));
-    }
 
-    // if (lenD * (i + 1) > buffer.length) {
-    //   lenD = buffer.length - lenD * i;
-    // }
-    let originalHex = hexBuffer.slice(lenB * i, lenB * (i + 1));
+    let originalHex = hexBuffer.slice(
+      hmHexPartLength * i,
+      hmHexPartLength * (i + 1)
+    );
     line = line.concat(originalHex);
-    line = line.concat(" ".repeat(lenC + lenB - originalHex.length));
-    let originalStr = buffer.slice(lenD * i, lenD * (i + 1));
+
+    let span = " ".repeat(
+      hmSpanPartLength + hmHexPartLength - originalHex.length
+    );
+    line = line.concat(span);
+
+    let originalStr = buffer.slice(
+      hmStrPartLength * i,
+      hmStrPartLength * (i + 1)
+    );
     line = line.concat(originalStr.toString().replace(/[^\x20-\x7E]/g, "."));
 
     line = line.concat("\n");
@@ -494,20 +486,20 @@ amdRequire(["vs/editor/editor.main"], function () {
     let endColumn = range.endColumn;
 
     if (
-      startColumn > hmHexAreaLenght &&
-      startColumn <= hmHexAreaLenght + hmSpanLength
+      startColumn > hmHexPartLength &&
+      startColumn <= hmHexPartLength + hmSpanPartLength
     ) {
       return undefined; // in span area
-    } else if (startColumn <= hmHexAreaLenght) {
+    } else if (startColumn <= hmHexPartLength) {
       // in hex area
-      startColumn = parseInt(startColumn / hmUnitLength) + 1 + hmStrAreaOffset;
-      if (endColumn > hmHexAreaLenght) endColumn = hmHexAreaLenght;
-      endColumn = parseInt(endColumn / hmUnitLength) + 1 + hmStrAreaOffset;
+      startColumn = parseInt(startColumn / hmUnitLength) + 1 + hmStrPartOffset;
+      if (endColumn > hmHexPartLength) endColumn = hmHexPartLength;
+      endColumn = parseInt(endColumn / hmUnitLength) + 1 + hmStrPartOffset;
     } else {
       // in str area
-      startColumn = (startColumn - hmStrAreaOffset - 1) * hmUnitLength;
+      startColumn = (startColumn - hmStrPartOffset - 1) * hmUnitLength;
       if (endColumn > hmLineLength) endColumn = hmLineLength;
-      endColumn = (endColumn - hmStrAreaOffset - 1) * hmUnitLength;
+      endColumn = (endColumn - hmStrPartOffset - 1) * hmUnitLength;
     }
 
     let newRange = new monaco.Range(
@@ -581,13 +573,10 @@ document.getElementById("clear-btn").onclick = () => {
   }
 
   if (config.general.hexmode === true) {
-    let timestamp = "";
-    if (config.general.timestamp === true) {
-      timestamp += getTimestamp() + "  ";
-    }
     value +=
-      timestamp +
-      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F         0123456789ABCDEF\n\n";
+      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F " +
+      " ".repeat(hmSpanPartLength) +
+      "0123456789ABCDEF\n\n";
   }
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
