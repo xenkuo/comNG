@@ -13,7 +13,7 @@ const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
 const hmSpanPartLength = 8;
 const hmHexPartLength = hmUnitCount * hmUnitLength;
 const hmStrPartLength = hmUnitCount;
-const hmStrPartOffset = hmHexPartLength + hmSpanPartLength;
+const hmStrPartOffset = hmHexPartLength + hmSpanPartLength + 1;
 const hmLineLength = hmHexPartLength + hmSpanPartLength + hmStrPartLength;
 
 const decoMod = 7;
@@ -451,28 +451,6 @@ amdRequire(["vs/editor/editor.main"], function () {
     run: highlightToggle,
   });
 
-  // editor.addAction({
-  //   id: "open-file",
-  //   label: "Open File...",
-  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_O],
-  //   precondition: null,
-  //   keybindingContext: null,
-  //   contextMenuGroupId: "9_cutcopypaste",
-  //   contextMenuOrder: 1.5,
-  //   run: dummy,
-  // });
-
-  // editor.addAction({
-  //   id: "save-to-file",
-  //   label: "Save To File...",
-  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
-  //   precondition: null,
-  //   keybindingContext: null,
-  //   contextMenuGroupId: "9_cutcopypaste",
-  //   contextMenuOrder: 1.5,
-  //   run: dummy,
-  // });
-
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window
   });
@@ -492,14 +470,14 @@ amdRequire(["vs/editor/editor.main"], function () {
       return undefined; // in span area
     } else if (startColumn <= hmHexPartLength) {
       // in hex area
-      startColumn = parseInt(startColumn / hmUnitLength) + 1 + hmStrPartOffset;
+      startColumn = parseInt(startColumn / hmUnitLength) + hmStrPartOffset;
       if (endColumn > hmHexPartLength) endColumn = hmHexPartLength;
-      endColumn = parseInt(endColumn / hmUnitLength) + 1 + hmStrPartOffset;
+      endColumn = parseInt(endColumn / hmUnitLength) + hmStrPartOffset;
     } else {
       // in str area
-      startColumn = (startColumn - hmStrPartOffset - 1) * hmUnitLength;
+      startColumn = (startColumn - hmStrPartOffset) * hmUnitLength;
       if (endColumn > hmLineLength) endColumn = hmLineLength;
-      endColumn = (endColumn - hmStrPartOffset - 1) * hmUnitLength;
+      endColumn = (endColumn - hmStrPartOffset) * hmUnitLength;
     }
 
     let newRange = new monaco.Range(
@@ -521,11 +499,6 @@ amdRequire(["vs/editor/editor.main"], function () {
     console.log("In: " + range);
     console.log("Out: " + cordRange);
 
-    // if (range.isEmpty() === true) {
-    //   // no selection
-    // } else {
-    //   // select content
-    // }
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
     for (let deco of decos) {
