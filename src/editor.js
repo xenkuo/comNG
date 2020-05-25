@@ -55,7 +55,8 @@ function decoApply(model, text) {
     false,
     false,
     true,
-    "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    null,
     false
   );
   let decoration = decoGet();
@@ -89,7 +90,8 @@ function decoRemove(model, text) {
     false,
     false,
     true,
-    "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    null,
     false
   );
 
@@ -105,7 +107,6 @@ function decoRemove(model, text) {
 
 function highlightToggle() {
   console.log("highligh toggle");
-  let decoExpectedLength = 1;
   let model = editor.getModel();
   let range = editor.getSelection();
   let text = model.getValueInRange(range);
@@ -114,13 +115,22 @@ function highlightToggle() {
     text = word.word;
     range.startColumn = word.startColumn;
     range.endColumn = word.endColumn;
-    decoExpectedLength = 2;
   }
 
   if (text === "") return;
 
+  let applyDeco = 1;
   let decos = model.getDecorationsInRange(range);
-  if (decos.length === decoExpectedLength) {
+  for (let deco of decos) {
+    if (
+      deco.options.className !== null &&
+      deco.options.className.indexOf("hl-") !== -1
+    ) {
+      applyDeco = 0;
+      break;
+    }
+  }
+  if (1 === applyDeco) {
     decoApply(model, text);
   } else {
     decoRemove(model, text);
@@ -587,6 +597,8 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   editor.onMouseUp(() => {
+    return;
+
     let model = editor.getModel();
     let range = editor.getSelection();
     console.log("In: " + range);

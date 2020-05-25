@@ -273,37 +273,37 @@ input {
 
 .hl-red {
   background-color: #ff8a80 !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-orange {
   background-color: #ffd180 !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-yellow {
   background-color: #ffff8d !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-green {
   background-color: #b9f6ca !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-blue {
   background-color: #80d8ff !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-indigo {
   background-color: #8c9eff !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hl-purple {
   background-color: #ea80fc !important;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
 .hex-select {
