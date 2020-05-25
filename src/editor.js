@@ -112,9 +112,12 @@ function highlightToggle() {
   let text = model.getValueInRange(range);
   if (text === "") {
     let word = model.getWordAtPosition(editor.getPosition());
-    text = word.word;
-    range.startColumn = word.startColumn;
-    range.endColumn = word.endColumn;
+    if (null === word) text = "";
+    else {
+      text = word.word;
+      range.startColumn = word.startColumn;
+      range.endColumn = word.endColumn;
+    }
   }
 
   if (text === "") return;
@@ -591,12 +594,14 @@ amdRequire(["vs/editor/editor.main"], function () {
 
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
+    let zIndex = 1;
     for (let deco of decos) {
       if (
         deco.options.className !== null &&
         deco.options.className.indexOf("hl-") !== -1
       ) {
-        model.deltaDecorations([deco.id], []);
+        // model.deltaDecorations([deco.id], []);
+        if (deco.options.zIndex >= zIndex) zIndex = deco.options.zIndex + 1;
       }
     }
 
@@ -607,12 +612,14 @@ amdRequire(["vs/editor/editor.main"], function () {
           range: range,
           options: {
             className: decoration.style,
+            zIndex: zIndex,
           },
         },
         {
           range: cordRange,
           options: {
             className: decoration.style,
+            zIndex: zIndex,
             overviewRuler: {
               color: decoration.color,
               position: 4, // 2: center, 4: right, 1: left, 7: full
