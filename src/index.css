@@ -306,6 +306,6 @@ input {
   border-radius: 2px;
 }
 
-.hex-select {
-  border-left: 2px solid #e91e63;;
+.hex-cursor {
+  border-left: 2px solid #e91e63;
 }

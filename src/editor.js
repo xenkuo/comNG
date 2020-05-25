@@ -149,7 +149,7 @@ function hightlightClearAll() {
     if (deco.options.className === null) continue;
     if (
       deco.options.className.indexOf("hl-") !== -1 ||
-      deco.options.className === "hex-select"
+      deco.options.className === "hex-cursor"
     ) {
       model.deltaDecorations([deco.id], []);
     }
@@ -555,7 +555,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
     for (let deco of decos) {
-      if (deco.options.className === "hex-select") {
+      if (deco.options.className === "hex-cursor") {
         model.deltaDecorations([deco.id], []);
       }
     }
@@ -566,14 +566,14 @@ amdRequire(["vs/editor/editor.main"], function () {
         {
           range: range,
           options: {
-            className: "hex-select",
+            className: "hex-cursor",
             zIndex: 999,
           },
         },
         {
           range: cordRange,
           options: {
-            className: "hex-select",
+            className: "hex-cursor",
             zIndex: 999,
             overviewRuler: {
               color: "#f06292",
