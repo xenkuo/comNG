@@ -456,7 +456,7 @@ amdRequire(["vs/editor/editor.main"], function () {
   editor.addAction({
     id: "highlight-toggle",
     label: "Highlight Toggle",
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_E],
+    keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_E],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
@@ -518,7 +518,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     return newRange;
   }
 
-  function selectLineRange(model, range) {
+  function showCursors(model, range) {
     let cordRange = getCordinateRange(model, range);
     if (undefined === cordRange) return;
 
@@ -537,14 +537,54 @@ amdRequire(["vs/editor/editor.main"], function () {
           range: range,
           options: {
             className: "hex-select",
+            zIndex: 999,
           },
         },
         {
           range: cordRange,
           options: {
             className: "hex-select",
+            zIndex: 999,
             overviewRuler: {
               color: "#f06292",
+              position: 4, // 2: center, 4: right, 1: left, 7: full
+            },
+          },
+        },
+      ]
+    );
+  }
+
+  function selectLineRange(model, range, decoration) {
+    let cordRange = getCordinateRange(model, range);
+    if (undefined === cordRange) return;
+
+    // first remove old decos
+    let decos = model.getLineDecorations(range.startLineNumber);
+    for (let deco of decos) {
+      if (
+        deco.options.className !== null &&
+        deco.options.className.indexOf("hl-") !== -1
+      ) {
+        model.deltaDecorations([deco.id], []);
+      }
+    }
+
+    model.deltaDecorations(
+      [],
+      [
+        {
+          range: range,
+          options: {
+            className: decoration.style,
+          },
+        },
+        {
+          range: cordRange,
+          options: {
+            className: decoration.style,
+            overviewRuler: {
+              color: decoration.color,
               position: 4, // 2: center, 4: right, 1: left, 7: full
             },
           },
@@ -597,20 +637,22 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   editor.onMouseUp(() => {
-    return;
-
     let model = editor.getModel();
     let range = editor.getSelection();
     console.log("In: " + range);
 
-    // processHexLine(model, range);
-    for (
-      let line = range.startLineNumber;
-      line <= range.endLineNumber;
-      line++
-    ) {
-      let lineRange = extracLineRange(range, line);
-      selectLineRange(model, lineRange);
+    if (range.isEmpty() === true) {
+      showCursors(model, range);
+    } else {
+      let deco = decoGet();
+      for (
+        let line = range.startLineNumber;
+        line <= range.endLineNumber;
+        line++
+      ) {
+        let lineRange = extracLineRange(range, line);
+        selectLineRange(model, lineRange, deco);
+      }
     }
   });
 });
