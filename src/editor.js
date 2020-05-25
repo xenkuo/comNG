@@ -139,6 +139,23 @@ function highlightToggle() {
   return null;
 }
 
+function hightlightClearAll() {
+  console.log("highlight clear all");
+
+  let model = editor.getModel();
+  let decos = model.getAllDecorations();
+
+  for (let deco of decos) {
+    if (deco.options.className === null) continue;
+    if (
+      deco.options.className.indexOf("hl-") !== -1 ||
+      deco.options.className === "hex-select"
+    ) {
+      model.deltaDecorations([deco.id], []);
+    }
+  }
+}
+
 function openFile() {
   dialog
     .showOpenDialog({
@@ -462,6 +479,19 @@ amdRequire(["vs/editor/editor.main"], function () {
     contextMenuGroupId: "9_cutcopypaste",
     contextMenuOrder: 1.5,
     run: highlightToggle,
+  });
+
+  editor.addAction({
+    id: "highlight-clear-all",
+    label: "Highlight Clear All",
+    keybindings: [
+      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E,
+    ],
+    precondition: null,
+    keybindingContext: null,
+    contextMenuGroupId: "9_cutcopypaste",
+    contextMenuOrder: 1.5,
+    run: hightlightClearAll,
   });
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
