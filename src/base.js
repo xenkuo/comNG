@@ -289,13 +289,12 @@ document.onkeydown = function (e) {
   e = e || window.event;
   switch (e.which || e.keyCode) {
     case 13:
-      console.log("hello world 13");
+      console.log("Enter key pressed.");
       if (document.activeElement.id === "trans-data") {
         document.getElementById("trans-send-btn").click();
       }
       break;
     default:
-      console.log("unknown event");
       break;
   }
 };

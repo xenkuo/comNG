@@ -694,6 +694,8 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   editor.onMouseUp(() => {
+    if (false === config.general.hexmode) return;
+
     let model = editor.getModel();
     let range = editor.getSelection();
     console.log("In: " + range);
