@@ -84,7 +84,7 @@ function decoApply(model, text) {
   }
 }
 
-function decoRemove(model, text) {
+function decoRemoveOld(model, text) {
   let matches = model.findMatches(
     text,
     false,
@@ -100,6 +100,16 @@ function decoRemove(model, text) {
 
     // super word remove decoration will cause sub word decoration to 1
     for (let deco of decos) {
+      model.deltaDecorations([deco.id], []);
+    }
+  }
+}
+
+function decoRemove(model, targetClassName) {
+  let decos = model.getAllDecorations();
+
+  for (let deco of decos) {
+    if (targetClassName === deco.options.className) {
       model.deltaDecorations([deco.id], []);
     }
   }
@@ -123,6 +133,8 @@ function highlightToggle() {
   if (text === "") return;
 
   let applyDeco = 1;
+  let targetClassName = "";
+  let targetzIndex = 0;
   let decos = model.getDecorationsInRange(range);
   for (let deco of decos) {
     if (
@@ -130,13 +142,21 @@ function highlightToggle() {
       deco.options.className.indexOf("hl-") !== -1
     ) {
       applyDeco = 0;
-      break;
+      if (targetzIndex === 0) {
+        targetzIndex = deco.options.zIndex;
+        targetClassName = deco.options.className;
+      } else {
+        if (deco.options.zIndex > targetzIndex) {
+          targetzIndex = deco.options.zIndex;
+          targetClassName = deco.options.className;
+        }
+      }
     }
   }
   if (1 === applyDeco) {
     decoApply(model, text);
   } else {
-    decoRemove(model, text);
+    decoRemove(model, targetClassName);
   }
 
   return null;
@@ -488,7 +508,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     id: "highlight-clear-all",
     label: "Highlight Clear All",
     keybindings: [
-      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E,
+      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_X,
     ],
     precondition: null,
     keybindingContext: null,
