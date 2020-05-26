@@ -83,34 +83,30 @@ function configUpdate(key, value) {
 ipcRenderer.on("main-cmd", (event, arg) => {
   console.log(arg);
   switch (arg) {
-    case "Clear": {
-      let text = editor.getModel().getValue();
-      clipboard.writeText(text);
-      editor.getModel().setValue("");
+    case "ClearLog":
+      clipboard.writeText(editor.getModel().getValue());
+      document.getElementById("clear-btn").click();
       break;
-    }
-    case "Switch":
+    case "SwitchPort":
       document.getElementById("port-switch").click();
       break;
-    case "ClearSwitch":
-      {
-        let switcher = document.getElementById("port-switch");
-        switcher.click();
-        if (true == switcher.checked) {
-          let text = editor.getModel().getValue();
-          clipboard.writeText(text);
-          editor.getModel().setValue("");
-        }
+    case "ClearLog&SwitchPort": {
+      let switcher = document.getElementById("port-switch");
+      switcher.click();
+      if (true == switcher.checked) {
+        clipboard.writeText(editor.getModel().getValue());
+        document.getElementById("clear-btn").click();
       }
       break;
-    case "Open":
+    }
+    case "OpenFile":
       openFile();
       break;
-    case "Save":
+    case "SaveFile":
       saveToFile();
       break;
     default:
-      console.log("Unknown cmds");
+      console.log("Unknown commands");
       break;
   }
 });
