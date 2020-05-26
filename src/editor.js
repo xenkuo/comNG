@@ -194,6 +194,23 @@ function openFile() {
     });
 }
 
+function openBinFile() {
+  dialog
+    .showOpenDialog({
+      properties: ["openFile"],
+    })
+    .then((result) => {
+      if (result.canceled === false) {
+        editor.getModel().setValue("");
+
+        fs.readFile(result.filePaths[0], (e, buffer) => {
+          if (e) throw e;
+          showHex(buffer);
+        })
+      }
+    });
+}
+
 function saveToFile() {
   let fileName = new Date(+new Date() + 8 * 3600 * 1000);
   fileName = "Log-" + fileName.toISOString();

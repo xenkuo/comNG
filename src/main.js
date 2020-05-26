@@ -85,6 +85,11 @@ const createWindow = () => {
     mainWindow.webContents.send("main-cmd", "OpenFile");
   });
 
+  Shortcut.register(mainWindow, "CmdOrCtrl+Shift+O", () => {
+    console.log("Pressed cmd/ctrl shift o");
+    mainWindow.webContents.send("main-cmd", "OpenBinFile");
+  });
+
   Shortcut.register(mainWindow, "CmdOrCtrl+S", () => {
     console.log("Pressed cmd/ctrl s");
     mainWindow.webContents.send("main-cmd", "SaveFile");

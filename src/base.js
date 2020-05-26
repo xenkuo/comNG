@@ -102,6 +102,9 @@ ipcRenderer.on("main-cmd", (event, arg) => {
     case "OpenFile":
       openFile();
       break;
+    case "OpenBinFile":
+      openBinFile();
+      break;
     case "SaveFile":
       saveToFile();
       break;
