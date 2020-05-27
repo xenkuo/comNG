@@ -88,6 +88,7 @@
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
+    "hexy": "^0.3.0",
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-rc.2",
     "monaco-editor": "^0.20.0",

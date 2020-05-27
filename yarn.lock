@@ -2025,6 +2025,11 @@ has-unicode@^2.0.0:
   resolved "https://registry.npm.taobao.org/has-unicode/download/has-unicode-2.0.1.tgz#e0e6fe6a28cf51138855e086d1691e771de2a8b9"
   integrity sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=
 
+hexy@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.npm.taobao.org/hexy/download/hexy-0.3.0.tgz#53c00a95a0baf1d813040d59490eaeab45bad091"
+  integrity sha1-U8AKlaC68dgTBA1ZSQ6uq0W60JE=
+
 homedir-polyfill@^1.0.1:
   version "1.0.3"
   resolved "https://registry.npm.taobao.org/homedir-polyfill/download/homedir-polyfill-1.0.3.tgz#743298cef4e5af3e194161fbadcc2151d3a058e8"

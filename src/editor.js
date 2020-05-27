@@ -4,6 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
+const hexy = require("hexy");
 
 const amdRequire = amdLoader.require;
 
@@ -13,7 +14,7 @@ const hmUnitSpanLength = 1;
 const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
 const hmHexPartLength = hmUnitCount * hmUnitLength;
 const hmHexPartOffset = 0 + 1;
-const hmSpanPartLength = 8;
+const hmSpanPartLength = 3;
 const hmSpanPartOffset = hmHexPartLength + 1;
 const hmStrPartLength = hmUnitCount;
 const hmStrPartOffset = hmHexPartLength + hmSpanPartLength + 1;
@@ -194,44 +195,6 @@ function openFile() {
     });
 }
 
-function hexDump(buffer) {
-  let lines = parseInt(buffer.length / hmUnitCount);
-  if (buffer.length % hmUnitCount !== 0) lines++;
-  let hexBuffer = buffer2Hex(buffer);
-  const model = editor.getModel();
-
-  for (let i = 0, lineNumber = model.getLineCount(); i < lines; i++, lineNumber++) {
-    let line = "";
-
-    let originalHex = hexBuffer.slice(
-      hmHexPartLength * i,
-      hmHexPartLength * (i + 1)
-    );
-    line = line.concat(originalHex);
-
-    let span = " ".repeat(
-      hmSpanPartLength + hmHexPartLength - originalHex.length
-    );
-    line = line.concat(span);
-
-    let originalStr = buffer.slice(
-      hmStrPartLength * i,
-      hmStrPartLength * (i + 1)
-    );
-    line = line.concat(originalStr.toString().replace(/[^\x20-\x7E]/g, "."));
-
-    line = line.concat("\n");
-    
-    // append to last line
-    model.applyEdits([
-      {
-        range: new monaco.Range(),
-        text: line,
-      },
-    ]);
-  }
-}
-
 function openBinFile() {
   dialog
     .showOpenDialog({
@@ -246,7 +209,7 @@ function openBinFile() {
         let t1 = new Date();
         rs.on("data", (data) => {
           console.log("rs data");
-          showHex(data);
+          showHex(data, false);
         });
         rs.on("end", (data) => {
           let t2 = new Date();
@@ -311,40 +274,25 @@ function editorAppend(text) {
   editor.revealLine(editor.getModel().getLineCount());
 }
 
-function buffer2Hex(buffer) {
-  return Array.prototype.map
-    .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
-    .join(" ");
-}
+// function buffer2Hex(buffer) {
+//   return Array.prototype.map
+//     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
+//     .join(" ");
+// }
+function showHex(buffer, revealLine) {
+  const text = hexy.hexy(buffer, { format: "twos", numbering: "none"});
+  const model = editor.getModel();
+  const lineCount = model.getLineCount();
 
-function showHex(buffer) {
-  let lines = parseInt(buffer.length / hmUnitCount);
-  if (buffer.length % hmUnitCount !== 0) lines++;
-  let hexBuffer = buffer2Hex(buffer);
+  model.applyEdits([
+    {
+      forceMoveMarkers: true,
+      range: new monaco.Range(lineCount, 1, lineCount, 1),
+      text: text,
+    },
+  ]);
 
-  for (let i = 0; i < lines; i++) {
-    let line = "";
-
-    let originalHex = hexBuffer.slice(
-      hmHexPartLength * i,
-      hmHexPartLength * (i + 1)
-    );
-    line = line.concat(originalHex);
-
-    let span = " ".repeat(
-      hmSpanPartLength + hmHexPartLength - originalHex.length
-    );
-    line = line.concat(span);
-
-    let originalStr = buffer.slice(
-      hmStrPartLength * i,
-      hmStrPartLength * (i + 1)
-    );
-    line = line.concat(originalStr.toString().replace(/[^\x20-\x7E]/g, "."));
-
-    line = line.concat("\n");
-    editorAppend(line);
-  }
+  if (true === revealLine) editor.revealLine(model.getLineCount());
 }
 
 function breakpointProcess(line) {
@@ -421,7 +369,7 @@ function showString(buffer) {
 
 function processSerialData(buffer) {
   if (config.general.hexmode === true) {
-    showHex(buffer);
+    showHex(buffer, true);
   } else {
     showString(buffer);
   }
