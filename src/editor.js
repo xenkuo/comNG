@@ -194,6 +194,44 @@ function openFile() {
     });
 }
 
+function hexDump(buffer) {
+  let lines = parseInt(buffer.length / hmUnitCount);
+  if (buffer.length % hmUnitCount !== 0) lines++;
+  let hexBuffer = buffer2Hex(buffer);
+  const model = editor.getModel();
+
+  for (let i = 0, lineNumber = model.getLineCount(); i < lines; i++, lineNumber++) {
+    let line = "";
+
+    let originalHex = hexBuffer.slice(
+      hmHexPartLength * i,
+      hmHexPartLength * (i + 1)
+    );
+    line = line.concat(originalHex);
+
+    let span = " ".repeat(
+      hmSpanPartLength + hmHexPartLength - originalHex.length
+    );
+    line = line.concat(span);
+
+    let originalStr = buffer.slice(
+      hmStrPartLength * i,
+      hmStrPartLength * (i + 1)
+    );
+    line = line.concat(originalStr.toString().replace(/[^\x20-\x7E]/g, "."));
+
+    line = line.concat("\n");
+    
+    // append to last line
+    model.applyEdits([
+      {
+        range: new monaco.Range(),
+        text: line,
+      },
+    ]);
+  }
+}
+
 function openBinFile() {
   dialog
     .showOpenDialog({
@@ -203,10 +241,17 @@ function openBinFile() {
       if (result.canceled === false) {
         editor.getModel().setValue("");
 
-        fs.readFile(result.filePaths[0], (e, buffer) => {
-          if (e) throw e;
-          showHex(buffer);
-        })
+        const path = result.filePaths[0];
+        const rs = fs.createReadStream(path, { highWaterMark: 4 * 1024 });
+        let t1 = new Date();
+        rs.on("data", (data) => {
+          console.log("rs data");
+          showHex(data);
+        });
+        rs.on("end", (data) => {
+          let t2 = new Date();
+          console.log("rs end", (t2 - t1) / 1000);
+        });
       }
     });
 }
