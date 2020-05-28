@@ -540,11 +540,9 @@ amdRequire(["vs/editor/editor.main"], function () {
     // Do nothing but prevent default action: close window
   });
 
-  function getCordinateRange(model, range) {
-    if (range.startLineNumber !== range.endLineNumber) return undefined;
-
+  function getLinePairRange(model, range) {
     let s = range.startColumn;
-    if (s <= hmSpanOffset) {
+    if (s < hmSpanOffset) {
       if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
       s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
@@ -553,7 +551,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     }
 
     let e = range.endColumn;
-    if (e <= hmSpanOffset) {
+    if (e < hmSpanOffset) {
       if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
       e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
@@ -561,17 +559,16 @@ amdRequire(["vs/editor/editor.main"], function () {
       e = (e - hmStrOffset) * hmUnitLength + hmHexOffset;
     }
 
-    let newRange = new monaco.Range(
+    return new monaco.Range(
       range.startLineNumber,
       s,
       range.startLineNumber,
       e
     );
-    return newRange;
   }
 
   function showCursors(model, range) {
-    let cordRange = getCordinateRange(model, range);
+    let cordRange = getLinePairRange(model, range);
     if (undefined === cordRange) return;
 
     // first remove old decos
@@ -607,10 +604,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     );
   }
 
-  function selectLineRange(model, range, decoration) {
-    let cordRange = getCordinateRange(model, range);
-    if (undefined === cordRange) return;
-
+  function selectLineRange(model, range, pairRange, decoration) {
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
     let zIndex = 1;
@@ -635,7 +629,7 @@ amdRequire(["vs/editor/editor.main"], function () {
           },
         },
         {
-          range: cordRange,
+          range: pairRange,
           options: {
             className: decoration.style,
             zIndex: zIndex,
@@ -654,7 +648,7 @@ amdRequire(["vs/editor/editor.main"], function () {
 
     if (line === range.startLineNumber) {
       s = range.startColumn;
-      if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset;
+      if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset - 1;
       else e = range.endColumn;
     } else if (line === range.endLineNumber) {
       if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
@@ -662,7 +656,7 @@ amdRequire(["vs/editor/editor.main"], function () {
       e = range.endColumn;
     } else {
       s = hmHexOffset;
-      e = hmSpanOffset;
+      e = hmSpanOffset -  1;
     }
 
     return new monaco.Range(line, s, line, e);
@@ -685,7 +679,8 @@ amdRequire(["vs/editor/editor.main"], function () {
         line++
       ) {
         let lineRange = extracLineRange(range, line);
-        selectLineRange(model, lineRange, deco);
+        let linePairRange = getLinePairRange(model, lineRange);
+        selectLineRange(model, lineRange, linePairRange, deco);
       }
     }
   });
