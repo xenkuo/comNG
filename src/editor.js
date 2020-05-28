@@ -21,7 +21,7 @@ const hmSpanOffset = hmHexOffset + hmHexLength; // 59
 const hmSpanLength = 3;
 const hmStrOffset = hmSpanOffset + hmSpanLength; // 62
 const hmStrLength = 16;
-const hmLineLength = hmStrOffset + hmStrLength; // 78
+const hmEofOffset = hmStrOffset + hmStrLength; // 78
 
 const decoMod = 7;
 const decoTable = [
@@ -559,12 +559,7 @@ amdRequire(["vs/editor/editor.main"], function () {
       e = (e - hmStrOffset) * hmUnitLength + hmHexOffset;
     }
 
-    return new monaco.Range(
-      range.startLineNumber,
-      s,
-      range.startLineNumber,
-      e
-    );
+    return new monaco.Range(range.startLineNumber, s, range.startLineNumber, e);
   }
 
   function showCursors(model, range) {
@@ -604,7 +599,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     );
   }
 
-  function selectLineRange(model, range, pairRange, decoration) {
+  function selectRanges(model, range, pairRange, decoration) {
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber);
     let zIndex = 1;
@@ -613,11 +608,11 @@ amdRequire(["vs/editor/editor.main"], function () {
         deco.options.className !== null &&
         deco.options.className.indexOf("hl-") !== -1
       ) {
-        // model.deltaDecorations([deco.id], []);
         if (deco.options.zIndex >= zIndex) zIndex = deco.options.zIndex + 1;
       }
     }
 
+    // then apply new decos
     model.deltaDecorations(
       [],
       [
@@ -644,19 +639,35 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   function extracLineRange(range, line) {
-    let s = e = 1;
+    let s = (e = 1);
 
     if (line === range.startLineNumber) {
       s = range.startColumn;
-      if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset - 1;
-      else e = range.endColumn;
+      if (s < hmSpanOffset) {
+        // hex area
+        if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset - 1;
+        else e = range.endColumn;
+      } else {
+        // str area
+        if (range.startLineNumber !== range.endLineNumber) e = hmEofOffset - 1;
+        else e = range.endColumn;
+      }
     } else if (line === range.endLineNumber) {
-      if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
-      else s = range.startColumn;
       e = range.endColumn;
+      if (e < hmStrOffset) {
+        // hex area
+        if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
+        else s = range.startColumn;
+      } else {
+        // str area
+        if (range.startLineNumber !== range.endLineNumber) s = hmStrOffset;
+        else
+          s = range.startColumn > hmStrOffset ? range.startColumn : hmStrOffset;
+      }
     } else {
+      // default hex area
       s = hmHexOffset;
-      e = hmSpanOffset -  1;
+      e = hmSpanOffset - 1;
     }
 
     return new monaco.Range(line, s, line, e);
@@ -680,7 +691,7 @@ amdRequire(["vs/editor/editor.main"], function () {
       ) {
         let lineRange = extracLineRange(range, line);
         let linePairRange = getLinePairRange(model, lineRange);
-        selectLineRange(model, lineRange, linePairRange, deco);
+        selectRanges(model, lineRange, linePairRange, deco);
       }
     }
   });
