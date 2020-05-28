@@ -208,16 +208,10 @@ function openBinFile() {
         editor.getModel().setValue("");
 
         const path = result.filePaths[0];
-        const rs = fs.createReadStream(path, { highWaterMark: 4 * 1024 });
-        let t1 = new Date();
-        rs.on("data", (data) => {
-          console.log("rs data");
+        fs.readFile(path, (e, data) => {
+          if (e) throw err;
           showHex(data, false);
-        });
-        rs.on("end", (data) => {
-          let t2 = new Date();
-          console.log("rs end", (t2 - t1) / 1000);
-        });
+        })
       }
     });
 }
@@ -540,7 +534,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     // Do nothing but prevent default action: close window
   });
 
-  function getLinePairRange(model, range) {
+  function getLinePairRange(range) {
     let s = range.startColumn;
     if (s <= hmSpanOffset) {
       if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
@@ -563,7 +557,7 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   function showCursors(model, range) {
-    let cordRange = getLinePairRange(model, range);
+    let cordRange = getLinePairRange(range);
     if (undefined === cordRange) return;
 
     // first remove old decos
@@ -690,7 +684,7 @@ amdRequire(["vs/editor/editor.main"], function () {
         line++
       ) {
         let lineRange = extracLineRange(range, line);
-        let linePairRange = getLinePairRange(model, lineRange);
+        let linePairRange = getLinePairRange(lineRange);
         selectRanges(model, lineRange, linePairRange, deco);
       }
     }
