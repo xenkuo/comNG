@@ -12,13 +12,16 @@ const hmUnitCount = 16;
 const hmUnitBytes = 2;
 const hmUnitSpanLength = 1;
 const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
-const hmHexPartLength = hmUnitCount * hmUnitLength;
-const hmHexPartOffset = 0 + 1;
-const hmSpanPartLength = 3;
-const hmSpanPartOffset = hmHexPartLength + 1;
-const hmStrPartLength = hmUnitCount;
-const hmStrPartOffset = hmHexPartLength + hmSpanPartLength + 1;
-const hmLineLength = hmHexPartLength + hmSpanPartLength + hmStrPartLength;
+
+const hmAddrOffset = 1;
+const hmAddrLength = 10;
+const hmHexOffset = hmAddrOffset + hmAddrLength; // 11
+const hmHexLength = hmUnitLength * hmUnitCount; // 16 * 3 = 48
+const hmSpanOffset = hmHexOffset + hmHexLength; // 59
+const hmSpanLength = 3;
+const hmStrOffset = hmSpanOffset + hmSpanLength; // 62
+const hmStrLength = 16;
+const hmLineLength = hmStrOffset + hmStrLength; // 78
 
 const decoMod = 7;
 const decoTable = [
@@ -253,8 +256,9 @@ function getTimestamp() {
 }
 
 function editorAppend(text) {
-  const lineCount = editor.getModel().getLineCount();
-  const lastLineLength = editor.getModel().getLineMaxColumn(lineCount);
+  const model = editor.getModel();
+  const lineCount = model.getLineCount();
+  const lastLineLength = model.getLineMaxColumn(lineCount);
 
   const range = new monaco.Range(
     lineCount,
@@ -271,7 +275,7 @@ function editorAppend(text) {
     },
   ]);
 
-  editor.revealLine(editor.getModel().getLineCount());
+  editor.revealLine(model.getLineCount());
 }
 
 // function buffer2Hex(buffer) {
@@ -279,8 +283,9 @@ function editorAppend(text) {
 //     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
 //     .join(" ");
 // }
+
 function showHex(buffer, revealLine) {
-  const text = hexy.hexy(buffer, { format: "twos", numbering: "none"});
+  const text = hexy.hexy(buffer, { format: "twos" });
   const model = editor.getModel();
   const lineCount = model.getLineCount();
 
@@ -538,45 +543,29 @@ amdRequire(["vs/editor/editor.main"], function () {
   function getCordinateRange(model, range) {
     if (range.startLineNumber !== range.endLineNumber) return undefined;
 
-    let startColumn = range.startColumn;
-    let endColumn = range.endColumn;
-
-    if (startColumn >= hmSpanPartOffset && startColumn < hmStrPartOffset) {
-      return undefined; // in span part
-    } else if (startColumn < hmSpanPartOffset) {
-      // in hex part
-      range.startColumn =
-        parseInt(startColumn / hmUnitLength) * hmUnitLength + 1;
-      startColumn = parseInt(startColumn / hmUnitLength) + hmStrPartOffset;
-
-      if (endColumn >= hmHexPartLength) {
-        let hexPart = model
-          .getLineContent(range.startLineNumber)
-          .slice(0, hmHexPartLength);
-        endColumn = hexPart.trim().length + 1;
-      } else {
-        let hexPart = model
-          .getLineContent(range.startLineNumber)
-          .slice(0, endColumn);
-        endColumn = hexPart.trim().length + 1;
-      }
-      range.endColumn = parseInt(endColumn / hmUnitLength) * hmUnitLength + 1;
-      if (range.endColumn < range.startColumn)
-        range.endColumn = range.startColumn;
-
-      endColumn = parseInt(endColumn / hmUnitLength) + hmStrPartOffset;
+    let s = range.startColumn;
+    if (s <= hmSpanOffset) {
+      if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
+      s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
-      // in str part
-      startColumn = (startColumn - hmStrPartOffset) * hmUnitLength + 1;
-      if (endColumn > hmLineLength) endColumn = hmLineLength;
-      endColumn = (endColumn - hmStrPartOffset) * hmUnitLength + 1;
+      if (s < hmStrOffset) s = range.startColumn = hmStrOffset;
+      s = (s - hmStrOffset) * hmUnitLength + hmHexOffset;
+    }
+
+    let e = range.endColumn;
+    if (e <= hmSpanOffset) {
+      if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
+      e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
+    } else {
+      if (e < hmStrOffset) e = range.endColumn = hmStrOffset;
+      e = (e - hmStrOffset) * hmUnitLength + hmHexOffset;
     }
 
     let newRange = new monaco.Range(
       range.startLineNumber,
-      startColumn,
+      s,
       range.startLineNumber,
-      endColumn
+      e
     );
     return newRange;
   }
@@ -661,46 +650,22 @@ amdRequire(["vs/editor/editor.main"], function () {
   }
 
   function extracLineRange(range, line) {
-    let lineRange = new monaco.Range(line, 1, line, 1);
+    let s = e = 1;
 
     if (line === range.startLineNumber) {
-      lineRange.startColumn = range.startColumn;
-
-      if (range.startColumn < hmSpanPartOffset) {
-        if (range.startLineNumber !== range.endLineNumber) {
-          lineRange.endColumn = hmHexPartLength;
-        } else {
-          lineRange.endColumn = range.endColumn;
-        }
-      } else {
-        if (range.startLineNumber !== range.endLineNumber) {
-          lineRange.endColumn = hmLineLength;
-        } else {
-          lineRange.endColumn = range.endColumn;
-        }
-      }
+      s = range.startColumn;
+      if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset;
+      else e = range.endColumn;
     } else if (line === range.endLineNumber) {
-      lineRange.endColumn = range.endColumn;
-
-      if (range.endColumn < hmStrPartOffset) {
-        if (range.startLineNumber !== range.endLineNumber) {
-          lineRange.startColumn = hmHexPartOffset;
-        } else {
-          lineRange.startColumn = range.startColumn;
-        }
-      } else {
-        if (range.startLineNumber !== range.endLineNumber) {
-          lineRange.startColumn = hmStrPartOffset;
-        } else {
-          lineRange.startColumn = range.startColumn;
-        }
-      }
+      if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
+      else s = range.startColumn;
+      e = range.endColumn;
     } else {
-      lineRange.startColumn = hmHexPartOffset;
-      lineRange.endColumn = hmHexPartLength;
+      s = hmHexOffset;
+      e = hmSpanOffset;
     }
 
-    return lineRange;
+    return new monaco.Range(line, s, line, e);
   }
 
   editor.onMouseUp(() => {
