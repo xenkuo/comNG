@@ -542,7 +542,7 @@ amdRequire(["vs/editor/editor.main"], function () {
 
   function getLinePairRange(model, range) {
     let s = range.startColumn;
-    if (s < hmSpanOffset) {
+    if (s <= hmSpanOffset) {
       if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
       s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
@@ -551,7 +551,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     }
 
     let e = range.endColumn;
-    if (e < hmSpanOffset) {
+    if (e <= hmSpanOffset) {
       if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
       e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
@@ -645,11 +645,11 @@ amdRequire(["vs/editor/editor.main"], function () {
       s = range.startColumn;
       if (s < hmSpanOffset) {
         // hex area
-        if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset - 1;
+        if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset;
         else e = range.endColumn;
       } else {
         // str area
-        if (range.startLineNumber !== range.endLineNumber) e = hmEofOffset - 1;
+        if (range.startLineNumber !== range.endLineNumber) e = hmEofOffset;
         else e = range.endColumn;
       }
     } else if (line === range.endLineNumber) {
@@ -667,7 +667,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     } else {
       // default hex area
       s = hmHexOffset;
-      e = hmSpanOffset - 1;
+      e = hmSpanOffset;
     }
 
     return new monaco.Range(line, s, line, e);
