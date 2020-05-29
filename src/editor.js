@@ -203,7 +203,7 @@ function openBinFile() {
     toast("Please first enable 'Hex Mode' in General tab.");
     return;
   }
-  
+
   dialog
     .showOpenDialog({
       properties: ["openFile"],
@@ -542,18 +542,23 @@ amdRequire(["vs/editor/editor.main"], function () {
   function getLinePairRange(range) {
     let s = range.startColumn;
     if (s <= hmSpanOffset) {
+      // hex area
       if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
-      s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
+      s = Math.ceil((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
+      // str area
       if (s < hmStrOffset) s = range.startColumn = hmStrOffset;
       s = (s - hmStrOffset) * hmUnitLength + hmHexOffset;
     }
 
     let e = range.endColumn;
-    if (e <= hmSpanOffset) {
+    if (e <= hmStrOffset) {
+      // hex area
       if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
-      e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
+      if (e > hmSpanOffset) e = range.endColumn = hmSpanOffset;
+      e = Math.ceil((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
+      // str area
       if (e < hmStrOffset) e = range.endColumn = hmStrOffset;
       e = (e - hmStrOffset) * hmUnitLength + hmHexOffset;
     }
@@ -642,7 +647,7 @@ amdRequire(["vs/editor/editor.main"], function () {
 
     if (line === range.startLineNumber) {
       s = range.startColumn;
-      if (s < hmSpanOffset) {
+      if (s <= hmSpanOffset) {
         // hex area
         if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset;
         else e = range.endColumn;
@@ -653,7 +658,7 @@ amdRequire(["vs/editor/editor.main"], function () {
       }
     } else if (line === range.endLineNumber) {
       e = range.endColumn;
-      if (e < hmStrOffset) {
+      if (e <= hmStrOffset) {
         // hex area
         if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
         else s = range.startColumn;
