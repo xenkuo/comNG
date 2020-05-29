@@ -705,18 +705,14 @@ document.getElementById("clear-btn").onclick = () => {
   let value = "";
 
   if (config.advance.sign.switch === true) {
-    value = "Captured at " + new Date().toLocaleString() + " with comNG";
+    value = "------This file captured at " + new Date().toLocaleString() + " with comNG";
     if (config.advance.sign.name !== "")
-      value += " by " + config.advance.sign.name + ".";
-    value += "\n\n";
+      value += " by " + config.advance.sign.name + ".------";
+    else
+      value += ".------"
+    value += "\n";
   }
 
-  if (config.general.hexmode === true) {
-    value +=
-      "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F " +
-      " ".repeat(hmSpanPartLength) +
-      "0123456789ABCDEF\n\n";
-  }
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
 };
