@@ -199,6 +199,11 @@ function openFile() {
 }
 
 function openBinFile() {
+  if (true !== config.general.hexmode) {
+    toast("Please first enable 'Hex Mode' in General tab.");
+    return;
+  }
+  
   dialog
     .showOpenDialog({
       properties: ["openFile"],
