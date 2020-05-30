@@ -544,7 +544,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     if (s <= hmSpanOffset) {
       // hex area
       if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
-      s = Math.ceil((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
+      s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
       // str area
       if (s < hmStrOffset) s = range.startColumn = hmStrOffset;
@@ -556,7 +556,7 @@ amdRequire(["vs/editor/editor.main"], function () {
       // hex area
       if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
       if (e > hmSpanOffset) e = range.endColumn = hmSpanOffset;
-      e = Math.ceil((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
+      e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
     } else {
       // str area
       if (e < hmStrOffset) e = range.endColumn = hmStrOffset;
