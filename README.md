@@ -8,6 +8,10 @@
 
 目前 github 和 sourceforge 上的本版比 gitee 上的版本都低，建议在 gitee 上下载最新版本。
 
+## 文档
+
+请参考 [comNG 完整文档](doc/Introduction.md)
+
 ## 介绍
 
 comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
