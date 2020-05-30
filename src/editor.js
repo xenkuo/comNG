@@ -216,7 +216,7 @@ function openBinFile() {
         fs.readFile(path, (e, data) => {
           if (e) throw err;
           showHex(data, false);
-        })
+        });
       }
     });
 }
@@ -474,7 +474,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
-    readOnly: true,
+    readOnly: false,
     folding: false,
     fontFamily: config.general.fontFamily,
     fontSize: config.general.fontSize,
@@ -705,11 +705,13 @@ document.getElementById("clear-btn").onclick = () => {
   let value = "";
 
   if (config.advance.sign.switch === true) {
-    value = "------This file captured at " + new Date().toLocaleString() + " with comNG";
+    value =
+      "------This file captured at " +
+      new Date().toLocaleString() +
+      " with comNG";
     if (config.advance.sign.name !== "")
       value += " by " + config.advance.sign.name + ".------";
-    else
-      value += ".------"
+    else value += ".------";
     value += "\n";
   }
 
