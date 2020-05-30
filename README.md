@@ -61,7 +61,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 打开关闭串口：`CmdOrCtrl + D`
 - 打开关闭串口，并且清空 Log：`CmdOrCtrl + Shift + D`
 - 清空 Log：`CmdOrCtrl + X`
-- 情况所有高亮：`CmdOrCtrl + Shift + X`
+- 清空所有高亮：`CmdOrCtrl + Shift + X`
 - 高亮/去高亮鼠标下方或选择的文本：`CmdOrCtrl + E`
 
 ## 开发
