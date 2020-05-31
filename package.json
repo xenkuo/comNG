@@ -1,14 +1,17 @@
 {
-  "name": "comNG",
+  "name": "comng",
   "productName": "comNG",
   "version": "1.0.5",
-  "description": "My Electron application description",
+  "mode": "dev",
+  "description": "A powerful serialport tool with modernx UI",
   "repository": "https://github.com/xenkuo/comNG",
   "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
+    "premake": "rm src/index.js.map",
+    "terser": "terser src/base.js src/editor.js src/serialport.js -o src/index.js -c -m",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
@@ -22,11 +25,12 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": true,
+        "asar": false,
         "ignore": [
           "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
           "node_modules/materialize-css/(extras|js|sass)",
-          "node_modules/material-design-icons/(?!iconfont)"
+          "node_modules/material-design-icons/(?!iconfont)",
+          "src/(base|editor|serialport).js"
         ],
         "icon": "image/logo"
       },
@@ -84,6 +88,7 @@
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",
+    "hexy": "^0.3.0",
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-rc.2",
     "monaco-editor": "^0.20.0",
@@ -97,6 +102,7 @@
     "@electron-forge/publisher-github": "^6.0.0-beta.50",
     "electron": "7.1.11",
     "electron-rebuild": "^1.10.0",
-    "eslint": "^6.8.0"
+    "eslint": "^6.8.0",
+    "terser": "^4.6.13"
   }
 }

@@ -1,79 +1,107 @@
-# comNG
+# comNG -- 串口助手
 
-A modern and powerful COM tool.
+`comNG` 是一款具有现代化 UI 设计并且功能强大的串口助手软件。
 
-## Introduction
+`comNG` is a powerful serial port tool with modern UI design. For English users, please refer to [comNG Introduction](doc/Introduction-en.md)
 
-Focus on stable serialport communication and best **on-site data explore**, **comNG** is the Next Generation of COM tool. comNG gives you best experience of on-site log exploring. comNG implemented several features to hit the mark:
+## 文档
 
-- built-in comNGLang syntax
-- built-in word highlighter
-- globally highlight word you selected (monaco built-in)
-- globally highlight word you searched (monaco built-in)
-- breakpoint on certain text
-- timestamp append and name sign
-- cross platform: Windows, Linux and Mac
+请参考 [comNG 完整文档](doc/Introduction.md)
 
-Of course it supports common features that other COM tools have:
+## 介绍
 
-- baud rate customize
-- hex receive
-- configuration of 8N1
-- receive timestamp
-- text transmit
-- file save and open, drag-drop is supported
+comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
 
-Features not supported:
+- 精致的 UI 和交互方式
+- 内建的 comNGLang 高亮语法
+- 内建的手动文本高亮功能：类似于 notepad++ 的 Style Token
+- 搜索文本高亮：类似于 vscode 的搜索文本高亮
+- 选择文本高亮：类似于 vscode 的选择文本高亮
+- 基于文本内容的中断功能，这是一个全新设计的功能
+- 专业的 Hex 模式
+- 日志文档的签名：时间和姓名
+- 常用命令支持快捷键操作，比如打开/关闭串口、打开/保存文件、清除文本、高亮文本等
+- 跨平台：Windows， Mac OS 以及 基于 Debian 的 Linux 系统，比如 Ubuntu 和 Deepin
+- 自定义主题（只支持软件下方 Bar 的背景色。。。）
+- 一个简单的模拟 Terminal 模式
 
-- hex transmit
-- file transmit
-- capture to file
+另外还包含一些串口助手通用的功能：
 
-## User Interface
+- Modem 信号指示和控制
+- 自定义波特率
+- 十六进制接收/发送
+- 接收时间戳
+- 发送文本
+- 流控
+- 文件保存和打开，支持拖动
+
+一些不支持的功能，比如：
+
+- 文件发送
+- 抓取至文件
+
+## 用户界面
 
 ![image](/image/preview.jpg)
+![image](/image/demo.gif)
 
-## Usage
+## 使用方法
 
-Download the release package according with you system, install, comNG should work well then.
-
-For Linux user, you may need to add right to COM port before monitor it:
+下载对应系统的安装文件，安装，然后就可以正常使用了。对于 Linux 系统，可能需要对串口设备文件执行以下命令：
 
 `sudo chmod 666 /dev/ttyS1`
 
-Replace `ttyS1` with your real COM port.
+记得把 `ttyS1` 替换为你的串口设备文件。
 
-## Development
+### 快捷键列表
 
-### Clone Code
+- 打开文件： `CmdOrCtrl + O`
+- 用 Hex 模式打开文件： `CmdOrCtrl + Shift + O`
+- 保存文件： `CmdOrCtrl + S`
+- 打开关闭串口：`CmdOrCtrl + D`
+- 打开关闭串口，并且清空 Log：`CmdOrCtrl + Shift + D`
+- 清空 Log：`CmdOrCtrl + X`
+- 清空所有高亮：`CmdOrCtrl + Shift + X`
+- 高亮/去高亮鼠标下方或选择的文本：`CmdOrCtrl + E`
+
+## 开发
+
+### 克隆代码
 
 ```
-git clone git@github.com:xenkuo/comNG.git
+git clone git@gitee.com:xenkuo/comNG.git
 ```
 
-### Install Dependencies
+### 安装依赖文件
 
 ```
 cd comNG
 yarn
 ```
 
-You may need to install node native compile tools, if there are problems, `Google` or create issue.
+Windows 下安装 node 和 electron 比较麻烦，建议使用以下 `.npmrc` 文件配置：
 
-> For Chinese developer, I'd like to advice you use below `.npmrc` file:
 ```
 registry=https://registry.npm.taobao.org
 electron_mirror=https://cdn.npm.taobao.org/dist/electron/
 electron_custom_dir=7.1.11
 ```
-### Develop
+
+Windows 下安装 native 编译工具更麻烦，建议多试试，因为我现在在其他 Windows 上也安装不成功了。。。
+
+### 运行
 
 ```
 code .
-yarn start
+yarn run start
+```
+
+### 编译
+
+```
 yarn make
 ```
 
 ## Licence
 
-comNG is [MIT](https://opensource.org/licenses/MIT) licensed and all it's dependencies are MIT licensed.
+comNG is [MIT](./LICENSE) licensed and all it's dependencies are MIT licensed.

@@ -1,25 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <!--Import Google Icon Font-->
-    <link
-      rel="stylesheet"
-      href="../node_modules/material-design-icons/iconfont/material-icons.css"
-    />
-    <!--Import materialize.css-->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="../node_modules/materialize-css/dist/css/materialize.css"
-      media="screen,projection"
-    />
     <link rel="stylesheet" href="index.css" />
-
     <meta charset="UTF-8" />
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com/repos/xenkuo/comNG/releases/latest"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest"
     />
   </head>
 
@@ -203,12 +189,28 @@
                   <option value="1" selected>CRLF</option>
                   <option value="2">LF</option>
                   <option value="3">CR</option>
+                  <option value="4">TERM</option>
                 </select>
               </div>
             </div>
 
             <div class="row config-row">
-              <div class="col s2 config-key">
+              <div class="col s3 config-key">
+                <p>Hex Mode</p>
+              </div>
+              <div class="col s5 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="trans-hexmode-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="row config-row">
+              <div class="col s3 config-key">
                 <p>Repeat</p>
               </div>
               <div class="col s5 config-item">
@@ -224,7 +226,7 @@
               <div class="col s2 config-key">
                 <p>Interval</p>
               </div>
-              <div class="input-field col s3 config-item">
+              <div class="input-field col s2 config-item">
                 <input
                   id="trans-repeat-interval"
                   placeholder="ms"
@@ -344,8 +346,8 @@
             </div>
             <div class="col s9">
               <p>
-                <a href="https://github.com/xenkuo/comNG/issues" id="issue"
-                  >https://github.com/xenkuo/comNG/issues</a
+                <a href="https://gitee.com/xenkuo/comNG/issues" id="issue"
+                  >https://gitee.com/xenkuo/comNG/issues</a
                 >
               </p>
             </div>
@@ -356,9 +358,7 @@
             </div>
             <div class="col s9">
               <p>
-                <a
-                  href="https://xenkuo.github.io/2019-08-01-comNG"
-                  id="introduction"
+                <a href="https://gitee.com/xenkuo/comNG" id="introduction"
                   >comNG: a modern and powerful COM tool</a
                 >
               </p>
@@ -451,9 +451,6 @@
     </div>
 
     <!-- You can also require other files to run in this process -->
-    <script src="editor.js"></script>
-    <script src="serialport.js"></script>
-
     <script src="index.js"></script>
   </body>
 </html>

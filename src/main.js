@@ -36,7 +36,6 @@ const createWindow = () => {
     minWidth: widthMin,
     height: height,
     minHeight: heightMin,
-    alwaysOnTop: false,
     frame: false,
     icon: path.join(__dirname, "../image/logo.png"),
     webPreferences: {
@@ -59,29 +58,41 @@ const createWindow = () => {
     mainWindow = null;
   });
 
+  mainWindow.on("restore", () => {
+    mainWindow.setContentSize(
+      store.get("window.width", widthDefault),
+      store.get("window.height", heightDefault)
+    );
+  });
+
   Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
-    console.log("You pressed cmd/ctrl x");
-    mainWindow.webContents.send("main-cmd", "Clear");
+    console.log("Pressed cmd/ctrl x");
+    mainWindow.webContents.send("main-cmd", "ClearLog");
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+D", () => {
-    console.log("You pressed cmd/ctrl d");
-    mainWindow.webContents.send("main-cmd", "Switch");
+    console.log("Pressed cmd/ctrl d");
+    mainWindow.webContents.send("main-cmd", "SwitchPort");
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+Shift+D", () => {
-    console.log("You pressed cmd/ctrl shift d");
-    mainWindow.webContents.send("main-cmd", "ClearSwitch");
+    console.log("Pressed cmd/ctrl shift d");
+    mainWindow.webContents.send("main-cmd", "ClearLog&SwitchPort");
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+O", () => {
-    console.log("You pressed cmd/ctrl o");
-    mainWindow.webContents.send("main-cmd", "Open");
+    console.log("Pressed cmd/ctrl o");
+    mainWindow.webContents.send("main-cmd", "OpenFile");
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+Shift+O", () => {
+    console.log("Pressed cmd/ctrl shift o");
+    mainWindow.webContents.send("main-cmd", "OpenBinFile");
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+S", () => {
-    console.log("You pressed cmd/ctrl s");
-    mainWindow.webContents.send("main-cmd", "Save");
+    console.log("Pressed cmd/ctrl s");
+    mainWindow.webContents.send("main-cmd", "SaveFile");
   });
 };
 

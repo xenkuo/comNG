@@ -4,9 +4,24 @@ const fs = require("fs");
 const path = require("path");
 const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
+const hexy = require("hexy");
 
 const amdRequire = amdLoader.require;
-const hexmodeUnitWidth = 8;
+
+const hmUnitCount = 16;
+const hmUnitBytes = 2;
+const hmUnitSpanLength = 1;
+const hmUnitLength = hmUnitBytes + hmUnitSpanLength; // 3
+
+const hmAddrOffset = 1;
+const hmAddrLength = 10;
+const hmHexOffset = hmAddrOffset + hmAddrLength; // 11
+const hmHexLength = hmUnitLength * hmUnitCount; // 16 * 3 = 48
+const hmSpanOffset = hmHexOffset + hmHexLength; // 59
+const hmSpanLength = 3;
+const hmStrOffset = hmSpanOffset + hmSpanLength; // 62
+const hmStrLength = 16;
+const hmEofOffset = hmStrOffset + hmStrLength; // 78
 
 const decoMod = 7;
 const decoTable = [
@@ -20,8 +35,6 @@ const decoTable = [
 ];
 
 var editor;
-var hexmodeIndex = 0;
-var hexmodeUnitIndex = 0;
 var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
@@ -40,13 +53,14 @@ function decoGet() {
   return decoTable[decoIndex++ % decoMod];
 }
 
-function decoApply(m, text) {
-  let matches = m.findMatches(
+function decoApply(model, text) {
+  let matches = model.findMatches(
     text,
     false,
     false,
     true,
-    "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    null,
     false
   );
   let decoration = decoGet();
@@ -56,7 +70,7 @@ function decoApply(m, text) {
   for (let i of matches) {
     let range = i.range;
 
-    m.deltaDecorations(
+    model.deltaDecorations(
       [],
       [
         {
@@ -74,50 +88,99 @@ function decoApply(m, text) {
   }
 }
 
-function decoRemove(m, text) {
-  let matches = m.findMatches(
+function decoRemoveOld(model, text) {
+  let matches = model.findMatches(
     text,
     false,
     false,
     true,
-    "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
+    null,
     false
   );
 
   for (let match of matches) {
-    let decos = m.getDecorationsInRange(match.range);
+    let decos = model.getDecorationsInRange(match.range);
 
     // super word remove decoration will cause sub word decoration to 1
     for (let deco of decos) {
-      m.deltaDecorations([deco.id], []);
+      model.deltaDecorations([deco.id], []);
+    }
+  }
+}
+
+function decoRemove(model, targetClassName) {
+  let decos = model.getAllDecorations();
+
+  for (let deco of decos) {
+    if (targetClassName === deco.options.className) {
+      model.deltaDecorations([deco.id], []);
     }
   }
 }
 
 function highlightToggle() {
   console.log("highligh toggle");
-  let decoExpectedLength = 1;
-  let m = editor.getModel();
+  let model = editor.getModel();
   let range = editor.getSelection();
-  let text = m.getValueInRange(range);
+  let text = model.getValueInRange(range);
   if (text === "") {
-    let word = m.getWordAtPosition(editor.getPosition());
-    text = word.word;
-    range.startColumn = word.startColumn;
-    range.endColumn = word.endColumn;
-    decoExpectedLength = 2;
+    let word = model.getWordAtPosition(editor.getPosition());
+    if (null === word) text = "";
+    else {
+      text = word.word;
+      range.startColumn = word.startColumn;
+      range.endColumn = word.endColumn;
+    }
   }
 
   if (text === "") return;
 
-  let decos = m.getDecorationsInRange(range);
-  if (decos.length === decoExpectedLength) {
-    decoApply(m, text);
+  let applyDeco = 1;
+  let targetClassName = "";
+  let targetzIndex = 0;
+  let decos = model.getDecorationsInRange(range);
+  for (let deco of decos) {
+    if (
+      deco.options.className !== null &&
+      deco.options.className.indexOf("hl-") !== -1
+    ) {
+      applyDeco = 0;
+      if (targetzIndex === 0) {
+        targetzIndex = deco.options.zIndex;
+        targetClassName = deco.options.className;
+      } else {
+        if (deco.options.zIndex > targetzIndex) {
+          targetzIndex = deco.options.zIndex;
+          targetClassName = deco.options.className;
+        }
+      }
+    }
+  }
+  if (1 === applyDeco) {
+    decoApply(model, text);
   } else {
-    decoRemove(m, text);
+    decoRemove(model, targetClassName);
   }
 
   return null;
+}
+
+function hightlightClearAll() {
+  console.log("highlight clear all");
+
+  let model = editor.getModel();
+  let decos = model.getAllDecorations();
+
+  for (let deco of decos) {
+    if (deco.options.className === null) continue;
+    if (
+      deco.options.className.indexOf("hl-") !== -1 ||
+      deco.options.className === "hex-cursor"
+    ) {
+      model.deltaDecorations([deco.id], []);
+    }
+  }
 }
 
 function openFile() {
@@ -131,6 +194,29 @@ function openFile() {
         const file = result.filePaths[0];
         const text = fs.readFileSync(file).toString();
         editor.getModel().setValue(text);
+      }
+    });
+}
+
+function openBinFile() {
+  if (true !== config.general.hexmode) {
+    toast("Please first enable 'Hex Mode' in General tab.");
+    return;
+  }
+
+  dialog
+    .showOpenDialog({
+      properties: ["openFile"],
+    })
+    .then((result) => {
+      if (result.canceled === false) {
+        editor.getModel().setValue("");
+
+        const path = result.filePaths[0];
+        fs.readFile(path, (e, data) => {
+          if (e) throw err;
+          showHex(data, false);
+        });
       }
     });
 }
@@ -169,8 +255,9 @@ function getTimestamp() {
 }
 
 function editorAppend(text) {
-  const lineCount = editor.getModel().getLineCount();
-  const lastLineLength = editor.getModel().getLineMaxColumn(lineCount);
+  const model = editor.getModel();
+  const lineCount = model.getLineCount();
+  const lastLineLength = model.getLineMaxColumn(lineCount);
 
   const range = new monaco.Range(
     lineCount,
@@ -187,37 +274,29 @@ function editorAppend(text) {
     },
   ]);
 
-  editor.revealLine(editor.getModel().getLineCount());
+  editor.revealLine(model.getLineCount());
 }
 
-function buff2hex(buff) {
-  return Array.prototype.map
-    .call(new Uint8Array(buff), (x) => ("00" + x.toString(16)).slice(-2))
-    .join("");
-}
+// function buffer2Hex(buffer) {
+//   return Array.prototype.map
+//     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
+//     .join(" ");
+// }
 
-function showHex(buff) {
-  let hexBuff = buff2hex(buff);
+function showHex(buffer, revealLine) {
+  const text = hexy.hexy(buffer, { format: "twos" });
+  const model = editor.getModel();
+  const lineCount = model.getLineCount();
 
-  while (hexBuff.length !== 0) {
-    let len = hexmodeUnitWidth - hexmodeIndex;
-    if (hexBuff.length < len) len = hexBuff.length;
-    let line = hexBuff.slice(0, len);
+  model.applyEdits([
+    {
+      forceMoveMarkers: true,
+      range: new monaco.Range(lineCount, 1, lineCount, 1),
+      text: text,
+    },
+  ]);
 
-    hexmodeIndex = (hexmodeIndex + len) % hexmodeUnitWidth;
-    if (hexmodeIndex === 0) {
-      hexmodeUnitIndex++;
-      if (hexmodeUnitIndex === 4) {
-        hexmodeUnitIndex = 0;
-        line += "\n";
-      } else {
-        line += " ";
-      }
-    }
-    editorAppend(line);
-
-    hexBuff = hexBuff.slice(len, hexBuff.length);
-  }
+  if (true === revealLine) editor.revealLine(model.getLineCount());
 }
 
 function breakpointProcess(line) {
@@ -249,50 +328,54 @@ function breakpointProcess(line) {
   return false;
 }
 
-function processSerialData(buff) {
-  if (config.general.hexmode === true) {
-    showHex(buff);
-  } else {
-    let index = -1;
+function showString(buffer) {
+  let index = -1;
+  // console.log(buff)
+  // console.log(buff.toString())
+  while ((index = buffer.indexOf("\n")) !== -1) {
+    let line = buffer.slice(0, index + 1);
+    // console.log(line)
+
+    if (half_line === true) {
+      editorAppend(line);
+      half_line = false;
+    } else {
+      let timestamp = "";
+
+      if (config.general.timestamp === true) timestamp = getTimestamp();
+      editorAppend(timestamp + line);
+    }
+    buffer = buffer.slice(index + 1, buffer.length);
     // console.log(buff)
-    // console.log(buff.toString())
-    while ((index = buff.indexOf("\n")) !== -1) {
-      let line = buff.slice(0, index + 1);
-      // console.log(line)
 
-      if (half_line === true) {
-        editorAppend(line);
-        half_line = false;
-      } else {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + line);
-      }
-      buff = buff.slice(index + 1, buff.length);
-      // console.log(buff)
-
-      if (config.advance.breakpoint.switch === true) {
-        if (breakpointProcess(line) === true) {
-          buff = [];
-          serialClose();
-        }
-      }
-    }
-    if (buff.length !== 0) {
-      if (half_line === false) {
-        let timestamp = "";
-
-        if (config.general.timestamp === true) timestamp = getTimestamp();
-        editorAppend(timestamp + buff);
-        half_line = true;
-      } else {
-        editorAppend(buff);
-      }
-    }
     if (config.advance.breakpoint.switch === true) {
-      breakpointBuff = buff;
+      if (breakpointProcess(line) === true) {
+        buffer = [];
+        serialClose();
+      }
     }
+  }
+  if (buffer.length !== 0) {
+    if (half_line === false) {
+      let timestamp = "";
+
+      if (config.general.timestamp === true) timestamp = getTimestamp();
+      editorAppend(timestamp + buffer);
+      half_line = true;
+    } else {
+      editorAppend(buffer);
+    }
+  }
+  if (config.advance.breakpoint.switch === true) {
+    breakpointBuff = buffer;
+  }
+}
+
+function processSerialData(buffer) {
+  if (config.general.hexmode === true) {
+    showHex(buffer, true);
+  } else {
+    showString(buffer);
   }
 }
 
@@ -356,7 +439,7 @@ amdRequire(["vs/editor/editor.main"], function () {
         ],
         [/\d*\.\d+([eE][-+]?\d+)?/, "number"],
         [/0[xX][0-9a-fA-F]+/, "number"],
-        [/[0-9a-fA-F]{4,}/, "number"],
+        [/[0-9a-fA-F]{2,}/, "number"],
         [/\d+/, "number"],
       ],
     },
@@ -391,7 +474,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
-    readOnly: true,
+    readOnly: false,
     folding: false,
     fontFamily: config.general.fontFamily,
     fontSize: config.general.fontSize,
@@ -427,7 +510,7 @@ amdRequire(["vs/editor/editor.main"], function () {
   editor.addAction({
     id: "highlight-toggle",
     label: "Highlight Toggle",
-    keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_E],
+    keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_E],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
@@ -435,27 +518,18 @@ amdRequire(["vs/editor/editor.main"], function () {
     run: highlightToggle,
   });
 
-  // editor.addAction({
-  //   id: "open-file",
-  //   label: "Open File...",
-  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_O],
-  //   precondition: null,
-  //   keybindingContext: null,
-  //   contextMenuGroupId: "9_cutcopypaste",
-  //   contextMenuOrder: 1.5,
-  //   run: dummy,
-  // });
-
-  // editor.addAction({
-  //   id: "save-to-file",
-  //   label: "Save To File...",
-  //   keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S],
-  //   precondition: null,
-  //   keybindingContext: null,
-  //   contextMenuGroupId: "9_cutcopypaste",
-  //   contextMenuOrder: 1.5,
-  //   run: dummy,
-  // });
+  editor.addAction({
+    id: "highlight-clear-all",
+    label: "Highlight Clear All",
+    keybindings: [
+      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_X,
+    ],
+    precondition: null,
+    keybindingContext: null,
+    contextMenuGroupId: "9_cutcopypaste",
+    contextMenuOrder: 1.5,
+    run: hightlightClearAll,
+  });
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window
@@ -464,17 +538,183 @@ amdRequire(["vs/editor/editor.main"], function () {
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_X, () => {
     // Do nothing but prevent default action: close window
   });
+
+  function getLinePairRange(range) {
+    let s = range.startColumn;
+    if (s <= hmSpanOffset) {
+      // hex area
+      if (s < hmHexOffset) s = range.startColumn = hmHexOffset;
+      s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset;
+    } else {
+      // str area
+      if (s < hmStrOffset) s = range.startColumn = hmStrOffset;
+      s = (s - hmStrOffset) * hmUnitLength + hmHexOffset;
+    }
+
+    let e = range.endColumn;
+    if (e <= hmStrOffset) {
+      // hex area
+      if (e < hmHexOffset) e = range.endColumn = hmHexOffset;
+      if (e > hmSpanOffset) e = range.endColumn = hmSpanOffset;
+      e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset;
+    } else {
+      // str area
+      if (e < hmStrOffset) e = range.endColumn = hmStrOffset;
+      e = (e - hmStrOffset) * hmUnitLength + hmHexOffset;
+    }
+
+    return new monaco.Range(range.startLineNumber, s, range.startLineNumber, e);
+  }
+
+  function showCursors(model, range) {
+    let cordRange = getLinePairRange(range);
+    if (undefined === cordRange) return;
+
+    // first remove old decos
+    let decos = model.getLineDecorations(range.startLineNumber);
+    for (let deco of decos) {
+      if (deco.options.className === "hex-cursor") {
+        model.deltaDecorations([deco.id], []);
+      }
+    }
+
+    model.deltaDecorations(
+      [],
+      [
+        {
+          range: range,
+          options: {
+            className: "hex-cursor",
+            zIndex: 999,
+          },
+        },
+        {
+          range: cordRange,
+          options: {
+            className: "hex-cursor",
+            zIndex: 999,
+            overviewRuler: {
+              color: "#f06292",
+              position: 4, // 2: center, 4: right, 1: left, 7: full
+            },
+          },
+        },
+      ]
+    );
+  }
+
+  function selectRanges(model, range, pairRange, decoration) {
+    // first remove old decos
+    let decos = model.getLineDecorations(range.startLineNumber);
+    let zIndex = 1;
+    for (let deco of decos) {
+      if (
+        deco.options.className !== null &&
+        deco.options.className.indexOf("hl-") !== -1
+      ) {
+        if (deco.options.zIndex >= zIndex) zIndex = deco.options.zIndex + 1;
+      }
+    }
+
+    // then apply new decos
+    model.deltaDecorations(
+      [],
+      [
+        {
+          range: range,
+          options: {
+            className: decoration.style,
+            zIndex: zIndex,
+          },
+        },
+        {
+          range: pairRange,
+          options: {
+            className: decoration.style,
+            zIndex: zIndex,
+            overviewRuler: {
+              color: decoration.color,
+              position: 4, // 2: center, 4: right, 1: left, 7: full
+            },
+          },
+        },
+      ]
+    );
+  }
+
+  function extracLineRange(range, line) {
+    let s = (e = 1);
+
+    if (line === range.startLineNumber) {
+      s = range.startColumn;
+      if (s <= hmSpanOffset) {
+        // hex area
+        if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset;
+        else e = range.endColumn;
+      } else {
+        // str area
+        if (range.startLineNumber !== range.endLineNumber) e = hmEofOffset;
+        else e = range.endColumn;
+      }
+    } else if (line === range.endLineNumber) {
+      e = range.endColumn;
+      if (e <= hmStrOffset) {
+        // hex area
+        if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset;
+        else s = range.startColumn;
+      } else {
+        // str area
+        if (range.startLineNumber !== range.endLineNumber) s = hmStrOffset;
+        else
+          s = range.startColumn > hmStrOffset ? range.startColumn : hmStrOffset;
+      }
+    } else {
+      // default hex area
+      s = hmHexOffset;
+      e = hmSpanOffset;
+    }
+
+    return new monaco.Range(line, s, line, e);
+  }
+
+  editor.onMouseUp(() => {
+    if (false === config.general.hexmode) return;
+
+    let model = editor.getModel();
+    let range = editor.getSelection();
+    console.log("In: " + range);
+
+    if (range.isEmpty() === true) {
+      showCursors(model, range);
+    } else {
+      let deco = decoGet();
+      for (
+        let line = range.startLineNumber;
+        line <= range.endLineNumber;
+        line++
+      ) {
+        let lineRange = extracLineRange(range, line);
+        let linePairRange = getLinePairRange(lineRange);
+        selectRanges(model, lineRange, linePairRange, deco);
+      }
+    }
+  });
 });
 
 document.getElementById("clear-btn").onclick = () => {
   let value = "";
 
   if (config.advance.sign.switch === true) {
-    value = "Captured at " + new Date().toLocaleString() + " with comNG";
+    value =
+      "------This file captured at " +
+      new Date().toLocaleString() +
+      " with comNG";
     if (config.advance.sign.name !== "")
-      value += " by " + config.advance.sign.name + ".";
+      value += " by " + config.advance.sign.name + ".------";
+    else value += ".------";
     value += "\n";
   }
+
   hexmodeIndex = 0;
   editor.getModel().setValue(value);
 };
