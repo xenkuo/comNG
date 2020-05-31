@@ -474,7 +474,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
-    readOnly: false,
+    readOnly: true,
     folding: false,
     fontFamily: config.general.fontFamily,
     fontSize: config.general.fontSize,

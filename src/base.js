@@ -60,6 +60,7 @@ const store = new Store({
     },
     "1.0.6": (store) => {
       store.set("transmit.hexmode", false);
+      store.set("about.insiderPreview", false);
     },
   },
 });
@@ -205,6 +206,9 @@ window.onload = () => {
   document.getElementById("sign-switch").checked = config.advance.sign.switch;
   document.getElementById("sign-name").value = config.advance.sign.name;
 
+  document.getElementById("insider-preview").checked =
+    config.about.insiderPreview;
+
   document.getElementById("bar-color-head").value =
     config.advance.barColor.head;
   document.getElementById("bar-color-middle").value =
@@ -250,6 +254,9 @@ window.onload = () => {
       return data.json();
     })
     .then((res) => {
+      if (res.prerelease === true && config.about.insiderPreview === false)
+        return;
+
       let latest = res.tag_name.split("v")[1];
       if (latest !== appVersion && true === platformUpdateCheck(res.assets)) {
         const dialogOpts = {
@@ -539,6 +546,10 @@ document.getElementById("trans-log-btn").onclick = () => {
   logObj.value = "";
   mcss.updateTextFields(logObj);
   mcss.textareaAutoResize(logObj);
+};
+
+document.getElementById("insider-preview").onclick = (e) => {
+  configUpdate("about.insiderPreview", e.target.checked);
 };
 
 document.getElementById("bar-color-head").oninput = (e) => {
