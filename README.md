@@ -2,11 +2,7 @@
 
 `comNG` 是一款具有现代化 UI 设计并且功能强大的串口助手软件。
 
-`Github` 上也有 `comNG` 的 repo，但是 github 的访问和上传速度太慢（comNG 的编译软件比较大，60M 左右），所以后期的更新、维护和发布会以 gitee 为主。
-
-由于软件比较大，且没有自动化编译环境，所以只有在发布大版本时才会提供 Mac 和 Debian 的安装文件，小版本只会提供 Win10 的安装文件。
-
-目前 github 和 sourceforge 上的本版比 gitee 上的版本都低，建议在 gitee 上下载最新版本。
+`comNG` is a powerful serial port tool with modern UI design. For English users, please refer to [comNG Introduction](doc/Introduction-en.md)
 
 ## 文档
 
