@@ -58,12 +58,20 @@ const createWindow = () => {
     mainWindow = null;
   });
 
-  mainWindow.on("restore", () => {
-    mainWindow.setContentSize(
-      store.get("window.width", widthDefault),
-      store.get("window.height", heightDefault)
-    );
-  });
+  // Prevent window size change after min-restore but introduce  extra latch
+  // mainWindow.on("restore", () => {
+  //   mainWindow.setContentSize(
+  //     store.get("window.width", widthDefault),
+  //     store.get("window.height", heightDefault)
+  //   );
+  // });
+
+  // Can fix right 1px border disappear issue which is caused by screen scale.
+  // With price of much extra latch when resizing or moving window
+  // mainWindow.on("resize", () => {
+  //   let rect = mainWindow.getBounds();
+  //   mainWindow.setBounds(rect);
+  // });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
     console.log("Pressed cmd/ctrl x");
