@@ -75,7 +75,7 @@ blockquote {
   border-radius: 12px;
   height: 24px;
   font-size: 12px;
-  z-index: inherit;
+  /* z-index: inherit; */
 }
 
 .dropdown-content {
