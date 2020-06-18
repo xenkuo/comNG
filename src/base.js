@@ -28,12 +28,12 @@ const store = new Store({
       store.set("menu.hidden", true);
       store.set("menu.tab", "general");
 
-      store.set("baudIndex", 2);
+      store.set("baudIndex", 3);
       store.set("pathIndex", 0);
 
       store.set("general.hexmode", false);
       store.set("general.timestamp", false);
-      store.set("general.customized", 9600);
+      store.set("general.customized", 4800);
       store.set("general.databitsIndex", 0);
       store.set("general.parityIndex", 0);
       store.set("general.stopbitsIndex", 0);
@@ -437,7 +437,7 @@ document.getElementById("modem-signal-switch").onclick = (e) => {
 document.getElementById("customized").onblur = (e) => {
   let customized = parseInt(e.target.value);
 
-  if (isNaN(customized) === true) customized = 9600;
+  if (isNaN(customized) === true) customized = 4800;
   configUpdate("general.customized", customized);
 
   let baudSelect = document.getElementById("baud-select");
