@@ -40,6 +40,7 @@ var breakpointAfterLines = 0;
 var breakpointBuff = [];
 var half_line = false;
 var decoIndex = 0;
+var ansiWait = false;
 
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
@@ -328,10 +329,30 @@ function breakpointProcess(line) {
   return false;
 }
 
-function showString(buffer) {
+function showString(inBuffer) {
+  // 1. trim anis escape codes
+  let inArray = [...inBuffer];
+  let outArray = [];
+  let arrayLen = inArray.length;
+  for (let i = 0; i < arrayLen; i++) {
+    if (ansiWait === false) {
+      if (0x1b !== inArray[i]) {
+        // \u001b
+        outArray.push(inArray[i]);
+      } else {
+        ansiWait = true;
+      }
+    } else {
+      if (0x6d === inArray[i]) {
+        // m
+        ansiWait = false;
+      }
+    }
+  }
+  let buffer = Buffer.from(outArray);
+
+  // 2. output full line
   let index = -1;
-  // console.log(buff)
-  // console.log(buff.toString())
   while ((index = buffer.indexOf("\n")) !== -1) {
     let line = buffer.slice(0, index + 1);
     // console.log(line)
@@ -350,11 +371,13 @@ function showString(buffer) {
 
     if (config.advance.breakpoint.switch === true) {
       if (breakpointProcess(line) === true) {
-        buffer = [];
+        buffer = Buffer.from("");
         serialClose();
       }
     }
   }
+
+  // 3. output partial line
   if (buffer.length !== 0) {
     if (half_line === false) {
       let timestamp = "";
@@ -368,14 +391,6 @@ function showString(buffer) {
   }
   if (config.advance.breakpoint.switch === true) {
     breakpointBuff = buffer;
-  }
-}
-
-function processSerialData(buffer) {
-  if (config.general.hexmode === true) {
-    showHex(buffer, true);
-  } else {
-    showString(buffer);
   }
 }
 
@@ -786,3 +801,20 @@ document.getElementById("editor-area").ondrop = (e) => {
 
   return false;
 };
+
+function editorShowSerialData(buffer) {
+  if (config.general.hexmode === true) {
+    showHex(buffer, true);
+  } else {
+    showString(buffer);
+  }
+}
+
+function editorStateReset() {
+  breakpointHit = false;
+  breakpointAfterLines = 0;
+  breakpointBuff = [];
+  half_line = false;
+  decoIndex = 0;
+  ansiWait = false;
+}

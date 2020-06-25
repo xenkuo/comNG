@@ -182,13 +182,14 @@ document.getElementById("port-switch").onclick = (e) => {
       }
 
       modemSignalReset();
+      editorStateReset();
     });
 
     port.on("drain", () => {
       toast("Error: Write failed, please try again");
     });
 
-    port.on("data", processSerialData);
+    port.on("data", editorShowSerialData);
   } else {
     if (port === undefined || port.isOpen === false) {
       document.getElementById("port-switch").checked = false;
