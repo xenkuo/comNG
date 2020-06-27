@@ -43,14 +43,13 @@ nav {
 }
 
 /* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
-.titlebar-drag-region {
-  /*added*/
+.nav-drag-region {
   top: 6px;
   left: 6px;
   display: block;
   position: absolute;
   width: calc(100% - 12px);
-  height: calc(100% - 6px);
+  height: 24px;
   z-index: -1;
   -webkit-app-region: drag;
 }
