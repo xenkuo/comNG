@@ -6,10 +6,16 @@
   --bar-height: 53px;
   --trans-btn-height: 20px;
   --modem-btn-height: 10px;
-  --body-border-widht: 1pt;
+  --body-border-widht: 0px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
+}
+
+@media (-webkit-device-pixel-ratio: 1) {
+  :root {
+    --body-border-widht: 1px;
+  }
 }
 
 html {
