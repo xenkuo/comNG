@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "mode": "dev",
   "description": "A powerful serialport tool with modernx UI",
   "repository": "https://github.com/xenkuo/comNG",
@@ -39,7 +39,8 @@
           "name": "@electron-forge/maker-squirrel",
           "config": {
             "authors": "Xen",
-            "setupIcon": "image/logo.ico"
+            "setupIcon": "image/logo.ico",
+            "iconUrl": "https://raw.githubusercontent.com/xenkuo/image-host/master/logo.ico"
           }
         },
         {
