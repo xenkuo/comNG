@@ -6,7 +6,7 @@
   --bar-height: 53px;
   --trans-btn-height: 20px;
   --modem-btn-height: 10px;
-  --body-border-widht: 0px;
+  --body-border-widht: 0pt;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
@@ -26,6 +26,7 @@ html {
 body {
   position: fixed;
   border: var(--body-border-widht) solid #26a69a;
+  margin-top: calc(1px - var(--body-border-widht));
   height: 100%;
   width: 100%;
   background-color: #fafafa;
