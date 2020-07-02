@@ -36,10 +36,22 @@ body {
 }
 
 nav {
-  -webkit-app-region: drag;
+  /* -webkit-app-region: drag; */
   background-color: #fafafa;
   height: 24px;
   line-height: 24px;
+}
+
+/* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
+.nav-drag-region {
+  top: 6px;
+  left: 6px;
+  display: block;
+  position: absolute;
+  width: calc(100% - 12px);
+  height: 24px;
+  z-index: -1;
+  -webkit-app-region: drag;
 }
 
 blockquote {
