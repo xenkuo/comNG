@@ -46,9 +46,9 @@ const store = new Store({
       store.set("advance.breakpoint.switch", false);
       store.set("advance.breakpoint.onText", "Error");
       store.set("advance.breakpoint.afterLines", 5);
-      store.set("advance.barColor.head", "#fafafa");
-      store.set("advance.barColor.middle", "#fafafa");
-      store.set("advance.barColor.tail", "#26a69a");
+      store.set("advance.barColor.head", "#ffba3a");
+      store.set("advance.barColor.middle", "#ffba3a");
+      store.set("advance.barColor.tail", "#ffba3a");
     },
     "1.0.4": (store) => {
       store.set("general.modemSignal", false);

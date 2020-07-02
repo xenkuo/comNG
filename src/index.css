@@ -12,11 +12,11 @@
   --bar-color-tail: #fafafa;
 }
 
-@media (-webkit-device-pixel-ratio: 1) {
+/* @media (-webkit-device-pixel-ratio: 1) {
   :root {
     --body-border-widht: 1px;
   }
-}
+} */
 
 html {
   height: 100%;
@@ -178,6 +178,7 @@ input {
   margin-left: 6px;
   margin-top: 2px;
   color: #26a69a;
+  visibility: hidden;
 }
 
 #menu-area {
