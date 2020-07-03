@@ -500,7 +500,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     wordWrap: "on",
     wordWrapBreakAfterCharacters: "",
     wordWrapBreakBeforeCharacters: "",
-    lineNumbersMinChars: 3,
+    lineNumbersMinChars: 4,
     minimap: {
       enabled: false,
     },
