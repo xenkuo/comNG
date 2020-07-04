@@ -37,6 +37,8 @@ const createWindow = () => {
     height: height,
     minHeight: heightMin,
     frame: false,
+    /* setting bar area as transparent */
+    // transparent: true,
     icon: path.join(__dirname, "../image/logo.png"),
     webPreferences: {
       nodeIntegration: true,
