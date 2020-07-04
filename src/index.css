@@ -108,7 +108,6 @@ blockquote {
 
 .dropdown-content li {
   min-height: 28px;
-  max-height: 28px !important;
   line-height: 28px !important;
 }
 
