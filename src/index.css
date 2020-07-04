@@ -2,6 +2,7 @@
 @import url("../node_modules/materialize-css/dist/css/materialize.css");
 
 :root {
+  --nav-height: 24px;
   --menu-height: 200px;
   --bar-height: 53px;
   --trans-btn-height: 20px;
@@ -38,7 +39,7 @@ body {
 nav {
   /* -webkit-app-region: drag; */
   background-color: #fafafa;
-  height: 24px;
+  height: var(--nav-height);
   line-height: 24px;
 }
 
@@ -195,6 +196,10 @@ input {
   margin-top: 2px;
   color: #26a69a;
   visibility: hidden;
+}
+
+#editor-area {
+  height: calc(100% - var(--nav-height) - var(--bar-height));
 }
 
 #menu-area {
