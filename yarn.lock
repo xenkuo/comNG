@@ -309,7 +309,23 @@
     "@electron-forge/template-base" "6.0.0-beta.47"
     fs-extra "^8.1.0"
 
-"@electron/get@^1.0.1", "@electron/get@^1.3.1", "@electron/get@^1.6.0":
+"@electron/get@^1.0.1":
+  version "1.12.2"
+  resolved "https://registry.npm.taobao.org/@electron/get/download/@electron/get-1.12.2.tgz#6442066afb99be08cefb9a281e4b4692b33764f3"
+  integrity sha1-ZEIGavuZvgjO+5ooHktGkrM3ZPM=
+  dependencies:
+    debug "^4.1.1"
+    env-paths "^2.2.0"
+    fs-extra "^8.1.0"
+    got "^9.6.0"
+    progress "^2.0.3"
+    sanitize-filename "^1.6.2"
+    sumchecker "^3.0.1"
+  optionalDependencies:
+    global-agent "^2.0.2"
+    global-tunnel-ng "^2.7.1"
+
+"@electron/get@^1.3.1", "@electron/get@^1.6.0":
   version "1.9.0"
   resolved "https://registry.npm.taobao.org/@electron/get/download/@electron/get-1.9.0.tgz#7fa6e61d7ff50fb82a8a41f437af7de3b97aa9a5"
   integrity sha1-f6bmHX/1D7gqikH0N69947l6qaU=
@@ -540,9 +556,9 @@
   integrity sha1-SaKoPfnSbarOrTDQzMh2KxKNU8c=
 
 "@types/node@^12.0.12":
-  version "12.12.35"
-  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.12.35.tgz#1e61b226c14380f4384f70cfe49a65c2c553ad2b"
-  integrity sha1-HmGyJsFDgPQ4T3DP5JplwsVTrSs=
+  version "12.12.50"
+  resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-12.12.50.tgz?cache=0&sync_timestamp=1594397594455&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-12.12.50.tgz#e9b2e85fafc15f2a8aa8fdd41091b983da5fd6ee"
+  integrity sha1-6bLoX6/BXyqKqP3UEJG5g9pf1u4=
 
 abbrev@1:
   version "1.1.1"
@@ -1090,9 +1106,9 @@ cross-spawn@^6.0.0, cross-spawn@^6.0.5:
     which "^1.2.9"
 
 cross-zip@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/cross-zip/download/cross-zip-3.0.0.tgz#478136c7ba2df7e5888f7fb57211a4bbd5afafb4"
-  integrity sha1-R4E2x7ot9+WIj3+1chGku9Wvr7Q=
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/cross-zip/download/cross-zip-3.1.0.tgz#2b7d33f2a893bf83e232ccbabf4c6c706f6b313c"
+  integrity sha1-K30z8qiTv4PiMsy6v0xscG9rMTw=
   dependencies:
     rimraf "^3.0.0"
 
@@ -1398,10 +1414,10 @@ electron-winstaller@^4.0.0:
     lodash.template "^4.2.2"
     temp "^0.9.0"
 
-electron@7.1.11:
-  version "7.1.11"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-7.1.11.tgz#3a95e35804af083d58b590513afea5e2290c4b66"
-  integrity sha1-OpXjWASvCD1YtZBROv6l4ikMS2Y=
+electron@7.2.4:
+  version "7.2.4"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-7.2.4.tgz#9fc0446dae23ead897af8742470cb18da55c6ce9"
+  integrity sha1-n8BEba4j6tiXr4dCRwyxjaVcbOk=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -2445,7 +2461,7 @@ lodash.get@^4.0.0, lodash.get@^4.4.2:
 
 lodash.merge@^4.6.2:
   version "4.6.2"
-  resolved "https://registry.npm.taobao.org/lodash.merge/download/lodash.merge-4.6.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Flodash.merge%2Fdownload%2Flodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  resolved "https://registry.npm.taobao.org/lodash.merge/download/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha1-VYqlO0O2YeGSWgr9+japoQhf5Xo=
 
 lodash.set@^4.3.2:
@@ -2858,9 +2874,9 @@ onetime@^5.1.0:
     mimic-fn "^2.1.0"
 
 open@^7.0.0:
-  version "7.0.3"
-  resolved "https://registry.npm.taobao.org/open/download/open-7.0.3.tgz?cache=0&sync_timestamp=1583734954683&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fopen%2Fdownload%2Fopen-7.0.3.tgz#db551a1af9c7ab4c7af664139930826138531c48"
-  integrity sha1-21UaGvnHq0x69mQTmTCCYThTHEg=
+  version "7.0.4"
+  resolved "https://registry.npm.taobao.org/open/download/open-7.0.4.tgz#c28a9d315e5c98340bf979fdcb2e58664aa10d83"
+  integrity sha1-woqdMV5cmDQL+Xn9yy5YZkqhDYM=
   dependencies:
     is-docker "^2.0.0"
     is-wsl "^2.1.1"
@@ -4252,7 +4268,7 @@ yargs-parser@^15.0.1:
 
 yargs-parser@^16.0.0:
   version "16.1.0"
-  resolved "https://registry.npm.taobao.org/yargs-parser/download/yargs-parser-16.1.0.tgz?cache=0&sync_timestamp=1585243543699&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fyargs-parser%2Fdownload%2Fyargs-parser-16.1.0.tgz#73747d53ae187e7b8dbe333f95714c76ea00ecf1"
+  resolved "https://registry.npm.taobao.org/yargs-parser/download/yargs-parser-16.1.0.tgz#73747d53ae187e7b8dbe333f95714c76ea00ecf1"
   integrity sha1-c3R9U64YfnuNvjM/lXFMduoA7PE=
   dependencies:
     camelcase "^5.0.0"
