@@ -303,6 +303,12 @@ input {
   line-height: 24px;
 }
 
+#downward-btn {
+  transform: scale(0.4);
+  transform-origin: left;
+  line-height: 24px;
+}
+
 #clear-btn {
   line-height: 24px;
 }

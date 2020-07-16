@@ -275,7 +275,9 @@ function editorAppend(text) {
     },
   ]);
 
-  editor.revealLine(model.getLineCount());
+  if (textDownward === true) {
+    editor.revealLine(model.getLineCount());
+  }
 }
 
 // function buffer2Hex(buffer) {

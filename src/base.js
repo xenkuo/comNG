@@ -12,6 +12,8 @@ mcss.AutoInit();
 var config;
 var barHeight;
 var menuHeight;
+var textDownward = true;
+
 const store = new Store({
   projectVersion: appVersion,
   migrations: {
@@ -62,6 +64,9 @@ const store = new Store({
       store.set("transmit.hexmode", false);
       store.set("about.insiderPreview", false);
     },
+    "1.0.9": (store) => {
+      store.set("window.width", 700);
+    }
   },
 });
 
@@ -621,3 +626,13 @@ document.getElementById("path-select").onchange = (e) => {
 };
 
 document.getElementById("refresh-btn").onclick = portUpdate;
+
+document.getElementById("downward-btn").onclick = (e) => {
+  if (textDownward === true) {
+    textDownward = false;
+    e.target.classList.add("grey");
+  } else {
+    textDownward = true;
+    e.target.classList.remove("grey");
+  }
+}
