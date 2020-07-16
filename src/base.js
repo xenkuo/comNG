@@ -64,9 +64,6 @@ const store = new Store({
       store.set("transmit.hexmode", false);
       store.set("about.insiderPreview", false);
     },
-    "1.0.9": (store) => {
-      store.set("window.width", 700);
-    }
   },
 });
 
@@ -635,4 +632,4 @@ document.getElementById("downward-btn").onclick = (e) => {
     textDownward = true;
     e.target.classList.remove("grey");
   }
-}
+};

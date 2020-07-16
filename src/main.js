@@ -6,8 +6,8 @@ const Store = require("electron-store");
 
 const store = new Store();
 
-const widthDefault = 700;
-const widthMin = 700;
+const widthDefault = 600;
+const widthMin = 600;
 const widthMax = 1024;
 const heightDefault = 640;
 const heightMin = 400;
