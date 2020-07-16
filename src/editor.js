@@ -456,7 +456,7 @@ amdRequire(["vs/editor/editor.main"], function () {
         ],
         [/\d*\.\d+([eE][-+]?\d+)?/, "number"],
         [/0[xX][0-9a-fA-F]+/, "number"],
-        [/[0-9a-fA-F]{2,}/, "number"],
+        [/[0-9a-fA-F]{4,}/, "number"],
         [/\d+/, "number"],
       ],
     },
