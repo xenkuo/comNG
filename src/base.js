@@ -94,9 +94,9 @@ ipcRenderer.on("main-cmd", (event, arg) => {
       document.getElementById("port-switch").click();
       break;
     case "ClearLog&SwitchPort": {
-      let switcher = document.getElementById("port-switch");
-      switcher.click();
-      if (true == switcher.checked) {
+      let portSwitch = document.getElementById("port-switch");
+      portSwitch.click();
+      if (true == portSwitch.checked) {
         clipboard.writeText(editor.getModel().getValue());
         document.getElementById("clear-btn").click();
       }
@@ -576,50 +576,41 @@ document.getElementById("bar-color-tail").oninput = (e) => {
 };
 
 document.getElementById("issue").onclick = (e) => {
-  console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
 document.getElementById("introduction").onclick = (e) => {
-  console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
 document.getElementById("comnglang").onclick = (e) => {
-  console.log("licence click", e);
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
 
 document.getElementById("baud-select").onchange = (e) => {
-  configUpdate("baudIndex", e.target.selectedIndex);
-};
+  let ele = e.target;
 
-// document.getElementById("path-input").addEventListener(
-//   "click",
-//   e => {
-//     console.log("path select add event");
-//     if (e.isTrusted === false) return;
-//     console.log("path x");
-//     e.stopPropagation();
-//     // portUpdate();
-//     setTimeout(() => {
-//       try {
-//         let evt = document.createEvent("Event");
-//         evt.initEvent("click", true, true);
-//         document.getElementById("path-select").dispatchEvent(evt);
-//       } catch (e) {
-//         console.error(e);
-//       }
-//     }, 5000);
-//   },
-//   true
-// );
+  configUpdate("baudIndex", ele.selectedIndex);
+  if (port === undefined || port.isOpen === false) return;
+
+  let baudRate = parseInt(ele.options[ele.selectedIndex].text);
+  if (isNaN(baudRate) === true) baudRate = 115200;
+  port.update({ baudRate: baudRate }, (e) => {
+    if (e !== null) console.error(e);
+  });
+};
 
 document.getElementById("path-select").onchange = (e) => {
   configUpdate("pathIndex", e.target.selectedIndex);
+  if (port === undefined || port.isOpen === false) return;
+
+  port.close();
+  setTimeout(() => {
+    document.getElementById("port-switch").click();
+  }, 400);
 };
 
 document.getElementById("refresh-btn").onclick = portUpdate;

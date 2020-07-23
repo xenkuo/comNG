@@ -298,19 +298,13 @@ input {
 }
 
 #refresh-btn {
-  transform: scale(0.6);
+  transform: scale(0.62);
   transform-origin: left;
-  line-height: 24px;
 }
 
 #downward-btn {
-  transform: scale(0.4);
+  transform: scale(0.62);
   transform-origin: left;
-  line-height: 24px;
-}
-
-#clear-btn {
-  line-height: 24px;
 }
 
 #baud-input,

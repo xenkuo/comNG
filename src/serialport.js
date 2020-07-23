@@ -127,7 +127,7 @@ function serialGetOptions() {
 }
 
 function toast(text) {
-  mcss.toast({ html: text, displayLength: 2000 });
+  mcss.toast({ html: text, displayLength: 1000 });
   // alert(text)
 }
 
