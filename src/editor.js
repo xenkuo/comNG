@@ -41,6 +41,7 @@ var breakpointBuff = [];
 var half_line = false;
 var decoIndex = 0;
 var ansiWait = false;
+var captureFile;
 
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
@@ -255,10 +256,13 @@ function getTimestamp() {
   );
 }
 
-function editorAppend(text) {
+function editorApplyEdit(textString, appendLine, revealLine) {
   const model = editor.getModel();
   const lineCount = model.getLineCount();
-  const lastLineLength = model.getLineMaxColumn(lineCount);
+  let lastLineLength = 1;
+  if (true === appendLine) {
+    lastLineLength = model.getLineMaxColumn(lineCount);
+  }
 
   const range = new monaco.Range(
     lineCount,
@@ -271,35 +275,20 @@ function editorAppend(text) {
     {
       forceMoveMarkers: true,
       range: range,
-      text: text.toString(),
+      text: textString,
     },
   ]);
 
-  if (textDownward === true) {
+  if (true === revealLine && textDownward === true)
     editor.revealLine(model.getLineCount());
-  }
 }
-
-// function buffer2Hex(buffer) {
-//   return Array.prototype.map
-//     .call(new Uint8Array(buffer), (x) => ("00" + x.toString(16)).slice(-2))
-//     .join(" ");
-// }
 
 function showHex(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: "twos" });
   const model = editor.getModel();
   const lineCount = model.getLineCount();
 
-  model.applyEdits([
-    {
-      forceMoveMarkers: true,
-      range: new monaco.Range(lineCount, 1, lineCount, 1),
-      text: text,
-    },
-  ]);
-
-  if (true === revealLine) editor.revealLine(model.getLineCount());
+  editorApplyEdit(text, false, revealLine);
 }
 
 function breakpointProcess(line) {
@@ -360,13 +349,13 @@ function showString(inBuffer) {
     // console.log(line)
 
     if (half_line === true) {
-      editorAppend(line);
+      editorApplyEdit(line.toString(), true, true);
       half_line = false;
     } else {
       let timestamp = "";
 
       if (config.general.timestamp === true) timestamp = getTimestamp();
-      editorAppend(timestamp + line);
+      editorApplyEdit((timestamp + line).toString(), true, true);
     }
     buffer = buffer.slice(index + 1, buffer.length);
     // console.log(buff)
@@ -385,10 +374,10 @@ function showString(inBuffer) {
       let timestamp = "";
 
       if (config.general.timestamp === true) timestamp = getTimestamp();
-      editorAppend(timestamp + buffer);
+      editorApplyEdit((timestamp + buffer).toString(), true, true);
       half_line = true;
     } else {
-      editorAppend(buffer);
+      editorApplyEdit(buffer.toString(), true, true);
     }
   }
   if (config.advance.breakpoint.switch === true) {
@@ -779,6 +768,35 @@ document.getElementById("breakpoint-after-lines").onblur = (e) => {
   configUpdate("advance.breakpoint.afterLines", lines);
 };
 
+document.getElementById("capture-file-switch").onclick = (e) => {
+  if (e.target.checked === true) {
+    let fileName = new Date(+new Date() + 8 * 3600 * 1000);
+    fileName = "Capture-" + fileName.toISOString();
+    fileName = fileName.replace(/[.|:]/g, "-");
+    if (config.advance.sign.switch === true && config.advance.sign.name !== "")
+      fileName += "-" + config.advance.sign.name;
+
+    dialog
+      .showSaveDialog({
+        properties: ["createDirectory"],
+        defaultPath: fileName,
+        filters: [{ name: "comNG Log", extensions: ["cnl"] }],
+      })
+      .then((result) => {
+        let e = document.getElementById("capture-file-path");
+        if (result.canceled === false) {
+          captureFile = result.filePath;
+          e.value = captureFile;
+        } else {
+          captureFile = undefined;
+          e.value = "";
+        }
+      });
+  } else {
+    captureFile = undefined;
+    document.getElementById("capture-file-path").value = "";
+  }
+};
 document.getElementById("editor-area").ondragover = () => {
   return false;
 };

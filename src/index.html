@@ -259,7 +259,7 @@
           </div>
         </div>
         <div id="advance-tab" class="col s12">
-          <div class="col s4">
+          <div class="col s3">
             <blockquote>Sign</blockquote>
             <div class="divider"></div>
             <div class="row config-row">
@@ -282,7 +282,7 @@
             </div>
           </div>
 
-          <div class="col s4">
+          <div class="col s3">
             <blockquote>Breakpoint</blockquote>
             <div class="divider"></div>
             <div class="row config-row">
@@ -316,13 +316,31 @@
             </div>
           </div>
 
-          <div class="col s4">
+          <div class="col s6">
             <blockquote>Bar Color</blockquote>
             <div class="divider"></div>
             <div class="center" id="color-panel">
               <input value="#ffba3a" id="bar-color-head" type="color" />
               <input value="#ff8a80" id="bar-color-middle" type="color" />
               <input value="#80d8ff" id="bar-color-tail" type="color" />
+            </div>
+
+            <blockquote>Capture to File</blockquote>
+            <div class="divider"></div>
+            <div class="row config-row">
+              <div class="col s5 config-item">
+                <div class="switch">
+                  <label>
+                    Off
+                    <input type="checkbox" id="capture-file-switch" />
+                    <span class="lever"></span>
+                    On
+                  </label>
+                </div>
+              </div>
+              <div class="input-field col s7">
+                <input value="" placeholder="Capture File Path" id="capture-file-path" type="text" />
+              </div>
             </div>
           </div>
         </div>
