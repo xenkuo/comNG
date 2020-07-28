@@ -162,7 +162,7 @@ document.getElementById("port-switch").onclick = (e) => {
       // Set below signal will cause some device reboot.
       // port.set({ rts: true, dtr: true }, (e) => {
       //   if (e !== null) console.error(e);
-      // });git
+      // });
     });
 
     port.on("error", (e) => {

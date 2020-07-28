@@ -787,10 +787,10 @@ document.getElementById("capture-file-switch").onclick = (e) => {
         filters: [{ name: "comNG Log", extensions: ["cnl"] }],
       })
       .then((result) => {
-        let e = document.getElementById("capture-file-path");
+        let pathEle = document.getElementById("capture-file-path");
         if (result.canceled === false) {
           let path = result.filePath;
-          e.value = path;
+          pathEle.value = path;
           captureFileStream = fs.createWriteStream(path, { flags: "a" });
 
           configUpdate("advance.capture.switch", true);
@@ -798,10 +798,13 @@ document.getElementById("capture-file-switch").onclick = (e) => {
         } else {
           if (undefined !== captureFileStream) captureFileStream.end();
           captureFileStream = undefined;
-          e.value = "";
+          pathEle.value = "";
 
           configUpdate("advance.capture.switch", false);
           configUpdate("advance.capture.filePath", "");
+
+          // restore check status
+          e.target.checked = false;
         }
       });
   } else {
