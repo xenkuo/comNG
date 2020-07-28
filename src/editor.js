@@ -774,11 +774,13 @@ document.getElementById("breakpoint-after-lines").onblur = (e) => {
 
 document.getElementById("capture-file-switch").onclick = (e) => {
   if (e.target.checked === true) {
-    let fileName = new Date(+new Date() + 8 * 3600 * 1000);
-    fileName = "Capture-" + fileName.toISOString();
-    fileName = fileName.replace(/[.|:]/g, "-");
+    let fileName = new Date();
+    fileName = "Capture-" + fileName.toLocaleString();
+    fileName = fileName.replace(/[:/, ]/g, "-");
+    fileName = fileName.replace(/--/g, "-");
+
     if (config.advance.sign.switch === true && config.advance.sign.name !== "")
-      fileName += "-" + config.advance.sign.name;
+      fileName += "-by-" + config.advance.sign.name;
 
     dialog
       .showSaveDialog({
