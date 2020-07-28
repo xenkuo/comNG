@@ -791,17 +791,17 @@ document.getElementById("capture-file-switch").onclick = (e) => {
         if (result.canceled === false) {
           let path = result.filePath;
           pathEle.value = path;
-          captureFileStream = fs.createWriteStream(path, { flags: "a" });
+          captureFileStream = fs.createWriteStream(path, { flags: "w" });
 
-          configUpdate("advance.capture.switch", true);
-          configUpdate("advance.capture.filePath", path);
+          configUpdate("fileops.capture.switch", true);
+          configUpdate("fileops.capture.filePath", path);
         } else {
           if (undefined !== captureFileStream) captureFileStream.end();
           captureFileStream = undefined;
           pathEle.value = "";
 
-          configUpdate("advance.capture.switch", false);
-          configUpdate("advance.capture.filePath", "");
+          configUpdate("fileops.capture.switch", false);
+          configUpdate("fileops.capture.filePath", "");
 
           // restore check status
           e.target.checked = false;
@@ -811,12 +811,14 @@ document.getElementById("capture-file-switch").onclick = (e) => {
     if (undefined !== captureFileStream) captureFileStream.end();
     captureFileStream = undefined;
 
-    configUpdate("advance.capture.switch", false);
+    configUpdate("fileops.capture.switch", false);
   }
 };
 
 document.getElementById("capture-file-path").ondblclick = (e) => {
-  console.log(e.target.value);
+  const file = e.target.value;
+  const text = fs.readFileSync(file).toString();
+  editor.getModel().setValue(text);
 };
 
 document.getElementById("editor-area").ondragover = () => {

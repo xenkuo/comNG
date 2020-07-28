@@ -65,8 +65,8 @@ const store = new Store({
       store.set("about.insiderPreview", false);
     },
     "1.0.10": (store) => {
-      store.set("advance.capture.switch", false);
-      store.set("advance.capture.filePath", "");
+      store.set("fileops.capture.switch", false);
+      store.set("fileops.capture.filePath", "");
     },
   },
 });
@@ -213,11 +213,11 @@ window.onload = () => {
   document.getElementById("sign-name").value = config.advance.sign.name;
 
   document.getElementById("capture-file-switch").checked =
-    config.advance.capture.switch;
+    config.fileops.capture.switch;
   document.getElementById("capture-file-path").value =
-    config.advance.capture.filePath;
-  if (true === config.advance.capture.switch) {
-    captureFileStream = fs.createWriteStream(config.advance.capture.filePath, {
+    config.fileops.capture.filePath;
+  if (true === config.fileops.capture.switch) {
+    captureFileStream = fs.createWriteStream(config.fileops.capture.filePath, {
       flags: "a",
     });
   }

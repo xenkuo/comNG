@@ -46,6 +46,7 @@
             </li>
             <li class="tab col s3"><a href="#transmit-tab">transmit</a></li>
             <li class="tab col s3"><a href="#advance-tab">advance</a></li>
+            <li class="tab col s3"><a href="#fileops-tab">file ops</a></li>
             <li class="tab col s3"><a href="#about-tab">about</a></li>
           </ul>
         </div>
@@ -259,7 +260,7 @@
           </div>
         </div>
         <div id="advance-tab" class="col s12">
-          <div class="col s3">
+          <div class="col s4">
             <blockquote>Sign</blockquote>
             <div class="divider"></div>
             <div class="row config-row">
@@ -282,7 +283,7 @@
             </div>
           </div>
 
-          <div class="col s3">
+          <div class="col s4">
             <blockquote>Breakpoint</blockquote>
             <div class="divider"></div>
             <div class="row config-row">
@@ -316,7 +317,7 @@
             </div>
           </div>
 
-          <div class="col s6">
+          <div class="col s4">
             <blockquote>Bar Color</blockquote>
             <div class="divider"></div>
             <div class="center" id="color-panel">
@@ -324,11 +325,14 @@
               <input value="#ff8a80" id="bar-color-middle" type="color" />
               <input value="#80d8ff" id="bar-color-tail" type="color" />
             </div>
-
+          </div>
+        </div>
+        <div id="fileops-tab" class="col s12">
+          <div class="col s12">
             <blockquote>Capture to File</blockquote>
             <div class="divider"></div>
             <div class="row config-row">
-              <div class="col s5 config-item">
+              <div class="col s3 config-item">
                 <div class="switch">
                   <label>
                     Off
@@ -338,10 +342,22 @@
                   </label>
                 </div>
               </div>
-              <div class="input-field col s7">
-                <input readonly value="" placeholder="Capture File Path" id="capture-file-path" type="text" />
+              <div class="input-field col s9">
+                <input
+                  readonly
+                  value=""
+                  placeholder="Capture File Path"
+                  id="capture-file-path"
+                  type="text"
+                />
               </div>
             </div>
+          </div>
+          <div class="col s12">
+            <blockquote>File Operations</blockquote>
+            <div class="divider"></div>
+            <p>&#149 <b>Open File</b>: CmdOrCtrl + O &#149 <b>Open Hex File</b>: CmdOrCtrl + Shift + O &#149 <b>Save File</b>: CmdOrCtrl + S </p>
+            
           </div>
         </div>
         <div id="about-tab" class="col s12">
