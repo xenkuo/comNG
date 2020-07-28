@@ -41,7 +41,7 @@ var breakpointBuff = [];
 var half_line = false;
 var decoIndex = 0;
 var ansiWait = false;
-var captureFile;
+var captureFileStream;
 
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
@@ -278,6 +278,10 @@ function editorApplyEdit(textString, appendLine, revealLine) {
       text: textString,
     },
   ]);
+
+  if (undefined !== captureFileStream) {
+    captureFileStream.write(textString);
+  }
 
   if (true === revealLine && textDownward === true)
     editor.revealLine(model.getLineCount());
@@ -785,18 +789,33 @@ document.getElementById("capture-file-switch").onclick = (e) => {
       .then((result) => {
         let e = document.getElementById("capture-file-path");
         if (result.canceled === false) {
-          captureFile = result.filePath;
-          e.value = captureFile;
+          let path = result.filePath;
+          e.value = path;
+          captureFileStream = fs.createWriteStream(path, { flags: "a" });
+
+          configUpdate("advance.capture.switch", true);
+          configUpdate("advance.capture.filePath", path);
         } else {
-          captureFile = undefined;
+          if (undefined !== captureFileStream) captureFileStream.end();
+          captureFileStream = undefined;
           e.value = "";
+
+          configUpdate("advance.capture.switch", false);
+          configUpdate("advance.capture.filePath", "");
         }
       });
   } else {
-    captureFile = undefined;
-    document.getElementById("capture-file-path").value = "";
+    if (undefined !== captureFileStream) captureFileStream.end();
+    captureFileStream = undefined;
+
+    configUpdate("advance.capture.switch", false);
   }
 };
+
+document.getElementById("capture-file-path").ondblclick = (e) => {
+  console.log(e.target.value);
+};
+
 document.getElementById("editor-area").ondragover = () => {
   return false;
 };

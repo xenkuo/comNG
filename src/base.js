@@ -64,6 +64,10 @@ const store = new Store({
       store.set("transmit.hexmode", false);
       store.set("about.insiderPreview", false);
     },
+    "1.0.10": (store) => {
+      store.set("advance.capture.switch", false);
+      store.set("advance.capture.filePath", "");
+    },
   },
 });
 
@@ -207,6 +211,16 @@ window.onload = () => {
 
   document.getElementById("sign-switch").checked = config.advance.sign.switch;
   document.getElementById("sign-name").value = config.advance.sign.name;
+
+  document.getElementById("capture-file-switch").checked =
+    config.advance.capture.switch;
+  document.getElementById("capture-file-path").value =
+    config.advance.capture.filePath;
+  if (true === config.advance.capture.switch) {
+    captureFileStream = fs.createWriteStream(config.advance.capture.filePath, {
+      flags: "a",
+    });
+  }
 
   document.getElementById("insider-preview").checked =
     config.about.insiderPreview;
