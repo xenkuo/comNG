@@ -7,8 +7,6 @@ var modemSignal = {
   cts: false,
   dsr: false,
   dcd: false,
-  rts: false,
-  dtr: false,
 };
 
 function portUpdate() {
@@ -70,6 +68,7 @@ function modemSignalTimerHandle() {
   });
 }
 
+// Only readonly signals need reset
 function modemSignalReset() {
   modemSignal.cts = false;
   modemSignal.dsr = false;
@@ -161,9 +160,15 @@ document.getElementById("port-switch").onclick = (e) => {
       // cause issues to other devices.
       // To fit your device's private behavior, first config setting before
       // open the port.
-      port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
-        if (e !== null) console.error(e);
-      });
+      port.set(
+        {
+          rts: config.general.modemSignal.rts,
+          dtr: config.general.modemSignal.dtr,
+        },
+        (e) => {
+          if (e !== null) console.error(e);
+        }
+      );
     });
 
     port.on("error", (e) => {
@@ -204,33 +209,45 @@ document.getElementById("port-switch").onclick = (e) => {
 document.getElementById("rts-btn").onclick = (e) => {
   console.log("rts click");
 
-  if (modemSignal.rts === true) {
-    modemSignal.rts = false;
+  if (config.general.modemSignal.rts === true) {
+    configUpdate("general.modemSignal.rts", false);
     e.target.classList.add("grey");
   } else {
-    modemSignal.rts = true;
+    configUpdate("general.modemSignal.rts", true);
     e.target.classList.remove("grey");
   }
 
   if (port === undefined || port.isOpen === false) return;
-  port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
-    if (e !== null) console.error(e);
-  });
+  port.set(
+    {
+      rts: config.general.modemSignal.rts,
+      dtr: config.general.modemSignal.dtr,
+    },
+    (e) => {
+      if (e !== null) console.error(e);
+    }
+  );
 };
 
 document.getElementById("dtr-btn").onclick = (e) => {
   console.log("dtr click");
 
-  if (modemSignal.dtr === true) {
-    modemSignal.dtr = false;
+  if (config.general.modemSignal.dtr === true) {
+    configUpdate("general.modemSignal.dtr", false);
     e.target.classList.add("grey");
   } else {
-    modemSignal.dtr = true;
+    configUpdate("general.modemSignal.dtr", true);
     e.target.classList.remove("grey");
   }
 
   if (port === undefined || port.isOpen === false) return;
-  port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
-    if (e !== null) console.error(e);
-  });
+  port.set(
+    {
+      rts: config.general.modemSignal.rts,
+      dtr: config.general.modemSignal.dtr,
+    },
+    (e) => {
+      if (e !== null) console.error(e);
+    }
+  );
 };

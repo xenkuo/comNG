@@ -64,9 +64,13 @@ const store = new Store({
       store.set("transmit.hexmode", false);
       store.set("about.insiderPreview", false);
     },
-    "1.0.10": (store) => {
+    "1.0.11": (store) => {
       store.set("fileops.capture.switch", false);
       store.set("fileops.capture.filePath", "");
+      store.delete("general.modemSignal");
+      store.set("general.modemSignal.switch", false);
+      store.set("general.modemSignal.rts", false);
+      store.set("general.modemSignal.dtr", false);
     },
   },
 });
@@ -162,9 +166,17 @@ window.onload = () => {
   document.getElementById("hexmode-switch").checked = config.general.hexmode;
   document.getElementById("timestamp-switch").checked =
     config.general.timestamp;
+  if (true === config.general.modemSignal.rts) {
+    let e = document.getElementById("rts-btn");
+    e.classList.remove("grey");
+  }
+  if (true === config.general.modemSignal.dtr) {
+    let e = document.getElementById("dtr-btn");
+    e.classList.remove("grey");
+  }
   document.getElementById("modem-signal-switch").checked =
-    config.general.modemSignal;
-  if (config.general.modemSignal === true) {
+    config.general.modemSignal.switch;
+  if (config.general.modemSignal.switch === true) {
     document.getElementById("modem-signal-bar").hidden = false;
   } else {
     document.getElementById("modem-signal-bar").hidden = true;
@@ -442,7 +454,7 @@ document.getElementById("timestamp-switch").onclick = (e) => {
 document.getElementById("modem-signal-switch").onclick = (e) => {
   let state = e.target.checked;
 
-  configUpdate("general.modemSignal", state);
+  configUpdate("general.modemSignal.switch", state);
   if (state === true) {
     document.getElementById("modem-signal-bar").hidden = false;
   } else {
