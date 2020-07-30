@@ -7,8 +7,8 @@ var modemSignal = {
   cts: false,
   dsr: false,
   dcd: false,
-  rts: true,
-  dtr: true,
+  rts: false,
+  dtr: false,
 };
 
 function portUpdate() {
@@ -74,16 +74,12 @@ function modemSignalReset() {
   modemSignal.cts = false;
   modemSignal.dsr = false;
   modemSignal.dcd = false;
-  modemSignal.rts = true;
-  modemSignal.dtr = true;
   document.getElementById("cts-btn").style.cssText =
     "background-color: #dfdfdf !important";
   document.getElementById("dsr-btn").style.cssText =
     "background-color: #dfdfdf !important";
   document.getElementById("dcd-btn").style.cssText =
     "background-color: #dfdfdf !important";
-  document.getElementById("rts-btn").style.backgroundColor = "";
-  document.getElementById("dtr-btn").style.backgroundColor = "";
 }
 
 function serialGetOptions() {
@@ -159,10 +155,15 @@ document.getElementById("port-switch").onclick = (e) => {
       if (config.general.modemSignal === true) {
         modemSignalTimer = setInterval(modemSignalTimerHandle, 100);
       }
-      // Set below signal will cause some device reboot.
-      // port.set({ rts: true, dtr: true }, (e) => {
-      //   if (e !== null) console.error(e);
-      // });
+      // Some device use rts/dtr for private purpose, so below code
+      // may cause strange behaviors.
+      // Below setting can fix known issues on certain devices, but may
+      // cause issues to other devices.
+      // To fit your device's private behavior, first config setting before
+      // open the port.
+      port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
+        if (e !== null) console.error(e);
+      });
     });
 
     port.on("error", (e) => {
@@ -202,38 +203,34 @@ document.getElementById("port-switch").onclick = (e) => {
 
 document.getElementById("rts-btn").onclick = (e) => {
   console.log("rts click");
-  if (port === undefined || port.isOpen === false) return;
 
   if (modemSignal.rts === true) {
     modemSignal.rts = false;
-    e.target.style.backgroundColor = "#dfdfdf";
-    port.set({ rts: false }, (e) => {
-      if (e !== null) console.error(e);
-    });
+    e.target.classList.add("grey");
   } else {
     modemSignal.rts = true;
-    e.target.style.backgroundColor = "";
-    port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
-      if (e !== null) console.error(e);
-    });
+    e.target.classList.remove("grey");
   }
+
+  if (port === undefined || port.isOpen === false) return;
+  port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
+    if (e !== null) console.error(e);
+  });
 };
 
 document.getElementById("dtr-btn").onclick = (e) => {
   console.log("dtr click");
-  if (port === undefined || port.isOpen === false) return;
 
   if (modemSignal.dtr === true) {
     modemSignal.dtr = false;
-    e.target.style.backgroundColor = "#dfdfdf";
-    port.set({ dtr: false }, (e) => {
-      if (e !== null) console.error(e);
-    });
+    e.target.classList.add("grey");
   } else {
     modemSignal.dtr = true;
-    e.target.style.backgroundColor = "";
-    port.set({ rts: modemSignal.rts, dtr: true }, (e) => {
-      if (e !== null) console.error(e);
-    });
+    e.target.classList.remove("grey");
   }
+
+  if (port === undefined || port.isOpen === false) return;
+  port.set({ rts: modemSignal.rts, dtr: modemSignal.dtr }, (e) => {
+    if (e !== null) console.error(e);
+  });
 };
