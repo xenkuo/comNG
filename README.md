@@ -42,8 +42,8 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 
 ## 用户界面
 
-![image](/image/preview.jpg)
-![image](/image/demo.gif)
+![image](image/preview.jpg)
+![image](image/demo.gif)
 
 ## 使用方法
 
