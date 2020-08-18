@@ -79,20 +79,22 @@ git clone git@gitee.com:xenkuo/comNG.git
 
 ### 安装依赖文件
 
-```
-cd comNG
-yarn
-```
-
-Windows 下安装 node 和 electron 比较麻烦，建议使用以下 `.npmrc` 文件配置：
+请先安装 yarn 和 node-gyp。建议使用以下 `.npmrc` 文件配置：
 
 ```
 registry=https://registry.npm.taobao.org
 electron_mirror=https://cdn.npm.taobao.org/dist/electron/
-electron_custom_dir=7.1.11
+electron_custom_dir=7.2.4
 ```
 
-Windows 下安装 native 编译工具更麻烦，建议多试试，因为我现在在其他 Windows 上也安装不成功了。。。
+Windows 下安装 node-gyp 比较麻烦，建议多试试。
+
+基础工具安装完成后执行下面的命令：
+
+```
+cd comNG
+yarn
+```
 
 ### 运行
 
