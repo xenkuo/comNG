@@ -12,6 +12,8 @@
 - [ ] 发送文件
 - [ ] 执行脚本
 - [ ] 多窗口
+- [ ] 字符模式统一转换不可打印字符
+- [ ] 周期性自动枚举可用串口
 
 ## 介绍
 
@@ -109,6 +111,6 @@ yarn run start
 yarn make
 ```
 
-## Licence
+## License
 
 comNG is [MIT](./LICENSE) licensed and all it's dependencies are MIT licensed.
