@@ -324,11 +324,11 @@ function breakpointProcess(line) {
   return false;
 }
 
-function showString(inBuffer) {
-  // 1. trim anis escape codes
+function filterAnsiCode(inBuffer) {
   let inArray = [...inBuffer];
   let outArray = [];
   let arrayLen = inArray.length;
+
   for (let i = 0; i < arrayLen; i++) {
     if (ansiWait === false) {
       if (0x1b !== inArray[i]) {
@@ -344,25 +344,32 @@ function showString(inBuffer) {
       }
     }
   }
-  let buffer = Buffer.from(outArray);
+
+  return Buffer.from(outArray);
+}
+
+function showString(inBuffer) {
+  // 1. trim ansi escape codes
+  let buffer = filterAnsiCode(inBuffer)
 
   // 2. output full line
   let index = -1;
+  let outputTmp = buffer;
   while ((index = buffer.indexOf("\n")) !== -1) {
     let line = buffer.slice(0, index + 1);
-    // console.log(line)
 
     if (half_line === true) {
-      editorApplyEdit(line.toString(), true, true);
+      outputTmp = line;
       half_line = false;
     } else {
       let timestamp = "";
 
       if (config.general.timestamp === true) timestamp = getTimestamp();
-      editorApplyEdit((timestamp + line).toString(), true, true);
+      outputTmp = timestamp + line;
     }
+    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '-'), true, true);
+
     buffer = buffer.slice(index + 1, buffer.length);
-    // console.log(buff)
 
     if (config.advance.breakpoint.switch === true) {
       if (breakpointProcess(line) === true) {
@@ -374,15 +381,16 @@ function showString(inBuffer) {
 
   // 3. output partial line
   if (buffer.length !== 0) {
-    if (half_line === false) {
+    if (half_line === true) {
+      outputTmp = buffer;
+    } else {
       let timestamp = "";
 
       if (config.general.timestamp === true) timestamp = getTimestamp();
-      editorApplyEdit((timestamp + buffer).toString(), true, true);
+      outputTmp = timestamp + buffer;
       half_line = true;
-    } else {
-      editorApplyEdit(buffer.toString(), true, true);
     }
+    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '-'), true, true);
   }
   if (config.advance.breakpoint.switch === true) {
     breakpointBuff = buffer;
