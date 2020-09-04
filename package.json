@@ -10,7 +10,7 @@
     "start": "electron-forge start",
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
-    "premake": "rm src/index.js.map",
+    "premake": "rm -f src/index.js.map",
     "terser": "terser src/base.js src/editor.js src/serialport.js -o src/index.js -c -m",
     "make": "electron-forge make",
     "publish": "electron-forge publish",

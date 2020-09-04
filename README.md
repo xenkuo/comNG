@@ -8,6 +8,13 @@
 
 请参考 [comNG 完整文档](doc/Introduction.md)
 
+## Todo
+- [ ] 发送文件
+- [ ] 执行脚本
+- [ ] 多窗口
+- [ ] 字符模式统一转换不可打印字符
+- [ ] 周期性自动枚举可用串口
+
 ## 介绍
 
 comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
@@ -74,20 +81,22 @@ git clone git@gitee.com:xenkuo/comNG.git
 
 ### 安装依赖文件
 
-```
-cd comNG
-yarn
-```
-
-Windows 下安装 node 和 electron 比较麻烦，建议使用以下 `.npmrc` 文件配置：
+请先安装 yarn 和 node-gyp。建议使用以下 `.npmrc` 文件配置：
 
 ```
 registry=https://registry.npm.taobao.org
 electron_mirror=https://cdn.npm.taobao.org/dist/electron/
-electron_custom_dir=7.1.11
+electron_custom_dir=7.2.4
 ```
 
-Windows 下安装 native 编译工具更麻烦，建议多试试，因为我现在在其他 Windows 上也安装不成功了。。。
+Windows 下安装 node-gyp 比较麻烦，建议多试试。
+
+基础工具安装完成后执行下面的命令：
+
+```
+cd comNG
+yarn
+```
 
 ### 运行
 
@@ -102,6 +111,6 @@ yarn run start
 yarn make
 ```
 
-## Licence
+## License
 
 comNG is [MIT](./LICENSE) licensed and all it's dependencies are MIT licensed.

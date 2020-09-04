@@ -5,7 +5,7 @@
 `comNGLang` 是 `comNG` 定义的一套简单的串口日志语法格式。如果串口输出数据符合 `comNGLang` 的语法格式，这些数据就会在 `comNG` 里自动高亮显示。传统的日志高亮需要在串口数据里添加额外的标识符，比如 [ANSI escape codes](https://www.lihaoyi.com/post/BuildyourownCommandLinewithANSIescapecodes.html)。这种方式有两个问题：
 
 - 输出端的复杂度增大
-- 不是所有的串口助手不支持这种语法
+- 大部分的串口助手不支持这种语法
 
 `comNGLang` 不再有类似的问题。
 
@@ -128,3 +128,8 @@
 ### 其他标签
 
 其他的标签比较简单，这里也是尽量包含常用格式，大家试试应该就明白了。
+
+## 备注
+
+- `comNG` 会自动过滤掉 Ansi escape code.
+- `comNG` 会把不可打印字符替换为 `-` 字符。
