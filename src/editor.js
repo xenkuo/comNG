@@ -350,7 +350,7 @@ function filterAnsiCode(inBuffer) {
 
 function showString(inBuffer) {
   // 1. trim ansi escape codes
-  let buffer = filterAnsiCode(inBuffer)
+  let buffer = filterAnsiCode(inBuffer);
 
   // 2. output full line
   let index = -1;
@@ -367,7 +367,11 @@ function showString(inBuffer) {
       if (config.general.timestamp === true) timestamp = getTimestamp();
       outputTmp = timestamp + line;
     }
-    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '-'), true, true);
+    editorApplyEdit(
+      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, "."),
+      true,
+      true
+    );
 
     buffer = buffer.slice(index + 1, buffer.length);
 
@@ -390,7 +394,11 @@ function showString(inBuffer) {
       outputTmp = timestamp + buffer;
       half_line = true;
     }
-    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '-'), true, true);
+    editorApplyEdit(
+      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, "."),
+      true,
+      true
+    );
   }
   if (config.advance.breakpoint.switch === true) {
     breakpointBuff = buffer;
