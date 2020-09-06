@@ -17,7 +17,7 @@ function portUpdate() {
     .list()
     .then((ports) => {
       ports.forEach((item, index) => {
-        console.log(item, index);
+        // console.log(item, index);
         pSelect.options.add(new Option(item.path, index));
         if (index === config.pathIndex) pSelect.selectedIndex = index;
       });

@@ -258,7 +258,7 @@ window.onload = () => {
   );
 
   document.getElementById("app-version").innerHTML = appVersion;
-  console.log("Current Version: ", appVersion);
+  console.log("comNG Version: ", appVersion);
 
   function platformUpdateCheck(assets) {
     const os = require("os");

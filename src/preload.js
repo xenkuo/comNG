@@ -3,8 +3,6 @@
 
 let pjson = require("../package.json");
 if ("dev" == pjson.mode) {
-  console.log("dev mode");
-
   const fs = require("fs");
   let terser = require("terser");
   let options = {
