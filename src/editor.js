@@ -500,7 +500,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
-    readOnly: true,
+    // readOnly: true,
     folding: false,
     fontFamily: config.general.fontFamily,
     fontSize: config.general.fontSize,
@@ -512,9 +512,9 @@ amdRequire(["vs/editor/editor.main"], function () {
     wordWrapBreakAfterCharacters: "",
     wordWrapBreakBeforeCharacters: "",
     lineNumbersMinChars: 4,
-    minimap: {
-      enabled: false,
-    },
+    // minimap: {
+    //   enabled: false,
+    // },
     scrollbar: {
       vertical: "auto",
       useShadows: false,
