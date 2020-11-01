@@ -1,8 +1,11 @@
 @import url("../node_modules/material-design-icons/iconfont/material-icons.css");
 @import url("../node_modules/materialize-css/dist/css/materialize.css");
+@import url("../node_modules/chrome-tabs/css/chrome-tabs.css");
 
 :root {
-  --nav-height: 24px;
+  --nav-height: 36px;
+  --drag-width: 120px;
+  --icon-width: 24px;
   --menu-height: 200px;
   --bar-height: 53px;
   --trans-btn-height: 20px;
@@ -41,19 +44,34 @@ body {
 
 nav {
   /* -webkit-app-region: drag; */
-  background-color: #fafafa;
+  /* background-color: #fafafa; */
   height: var(--nav-height);
   line-height: 24px;
+  background-color: #dee1e6;
 }
 
+.chrome-tabs {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - var(--drag-width) - (var(--icon-width) / 2));
+  height: var(--nav-height);
+}
+
+#add-tab {
+  position: absolute;
+  -webkit-user-select: none;
+  top: 8px;
+  right: calc(var(--drag-width) - 4px);
+  color: #26a69a;
+}
 /* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
 .nav-drag-region {
   top: 6px;
-  left: 6px;
-  display: block;
+  right: 0px;
   position: absolute;
-  width: calc(100% - 12px);
-  height: 24px;
+  width: var(--drag-width);
+  height: var(--nav-height);
   z-index: -1;
   -webkit-app-region: drag;
 }
@@ -79,9 +97,11 @@ blockquote {
 
 .tiny-btn {
   -webkit-app-region: no-drag;
-  margin: 5px !important;
+  position: absolute;
+  top: 8px;
   width: 12px;
   height: 12px;
+  margin: 5px !important;
 }
 
 .no-head {

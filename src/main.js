@@ -21,9 +21,10 @@ if (require("electron-squirrel-startup")) {
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-
+let windowPool = [];
 const createWindow = () => {
+  let mainWindow;
+
   let width = store.get("window.width", widthDefault);
   let height = store.get("window.height", heightDefault);
 
@@ -60,21 +61,6 @@ const createWindow = () => {
     mainWindow = null;
   });
 
-  // Prevent window size change after min-restore but introduce  extra latch
-  // mainWindow.on("restore", () => {
-  //   mainWindow.setContentSize(
-  //     store.get("window.width", widthDefault),
-  //     store.get("window.height", heightDefault)
-  //   );
-  // });
-
-  // Can fix right 1px border disappear issue which is caused by screen scale.
-  // With price of much extra latch when resizing or moving window
-  // mainWindow.on("resize", () => {
-  //   let rect = mainWindow.getBounds();
-  //   mainWindow.setBounds(rect);
-  // });
-
   Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
     console.log("Pressed cmd/ctrl x");
     mainWindow.webContents.send("main-cmd", "ClearLog");
@@ -104,6 +90,13 @@ const createWindow = () => {
     console.log("Pressed cmd/ctrl s");
     mainWindow.webContents.send("main-cmd", "SaveFile");
   });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+T", () => {
+    console.log("Pressed cmd/ctrl t");
+    mainWindow.webContents.send("main-cmd", "NewTab");
+  });
+
+  return mainWindow;
 };
 
 const getTheLock = app.requestSingleInstanceLock();
@@ -114,14 +107,16 @@ if (!getTheLock) {
     console.log("event: " + event);
     console.log("commandLine: " + commandLine);
     console.log("workingDirectory: " + workingDirectory);
-    createWindow();
+    let window = createWindow();
+    windowPool.push(window);
   });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
   app.on("ready", () => {
-    createWindow();
+    let window = createWindow();
+    windowPool.push(window);
   });
 
   // Quit when all windows are closed.
@@ -129,6 +124,7 @@ if (!getTheLock) {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== "darwin") {
+      windowPool.length = 0;
       app.quit();
     }
   });
@@ -136,8 +132,9 @@ if (!getTheLock) {
   app.on("activate", () => {
     // On OS X it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (mainWindow === null) {
-      createWindow();
+    if (0 === windowPool.length) {
+      let window = createWindow();
+      windowPool.push(window);
     }
   });
 }

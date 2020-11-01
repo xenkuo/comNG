@@ -86,6 +86,8 @@
     }
   },
   "dependencies": {
+    "chrome-tabs": "^5.4.0",
+    "draggabilly": "^2.3.0",
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "^1.0.0",
     "electron-store": "^5.1.0",

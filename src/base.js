@@ -56,7 +56,7 @@ const store = new Store({
       store.set("general.modemSignal", false);
       store.set(
         "general.fontFamily",
-        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
+        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', Menlo, 'Lucida Console', 'Courier New', monospace, 'Source Han Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
       );
       store.set("general.fontSize", 12);
     },
@@ -118,6 +118,9 @@ ipcRenderer.on("main-cmd", (event, arg) => {
       break;
     case "SaveFile":
       saveToFile();
+      break;
+    case "NewTab":
+      newTab();
       break;
     default:
       console.log("Unknown commands");

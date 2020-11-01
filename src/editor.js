@@ -5,6 +5,7 @@ const path = require("path");
 const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 const hexy = require("hexy");
+const ChromeTabs = require("chrome-tabs");
 
 const amdRequire = amdLoader.require;
 
@@ -35,6 +36,7 @@ const decoTable = [
 ];
 
 var editor;
+var chromeTabs = new ChromeTabs();
 var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
@@ -42,6 +44,10 @@ var half_line = false;
 var decoIndex = 0;
 var ansiWait = false;
 var captureFileStream;
+
+// tabEl -> view
+// view -> {model, state}
+var tabsMap = new Map();
 
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
@@ -164,7 +170,6 @@ function highlightToggle() {
   } else {
     decoRemove(model, targetClassName);
   }
-
   return null;
 }
 
@@ -194,8 +199,16 @@ function openFile() {
     .then((result) => {
       if (result.canceled === false) {
         const file = result.filePaths[0];
+        // show text
         const text = fs.readFileSync(file).toString();
         editor.getModel().setValue(text);
+
+        // setup tab title
+        const title = file.split(/[\\|/]/).pop();
+        const el = chromeTabs.activeTabEl;
+        let titleEl = el.querySelector(".chrome-tab-title");
+        el.align = "center";
+        titleEl.innerHTML = title;
       }
     });
 }
@@ -224,11 +237,7 @@ function openBinFile() {
 }
 
 function saveToFile() {
-  let fileName = new Date(+new Date() + 8 * 3600 * 1000);
-  fileName = "Log-" + fileName.toISOString();
-  fileName = fileName.replace(/[.|:]/g, "-");
-  if (config.advance.sign.switch === true && config.advance.sign.name !== "")
-    fileName += "-" + config.advance.sign.name;
+  let fileName = chromeTabs.activeTabEl.innerText;
 
   dialog
     .showSaveDialog({
@@ -243,6 +252,10 @@ function saveToFile() {
         fs.writeFileSync(file, text);
       }
     });
+}
+
+function newTab() {
+  chromeTabs.addTab();
 }
 
 function getTimestamp() {
@@ -497,6 +510,7 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   editor = monaco.editor.create(document.getElementById("editor-area"), {
+    model: null,
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
@@ -725,6 +739,66 @@ amdRequire(["vs/editor/editor.main"], function () {
       }
     }
   });
+
+  // Chrometabs section, refer to:
+  // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
+  let tabsEl = document.querySelector(".chrome-tabs");
+
+  tabsEl.addEventListener("tabAdd", ({ detail }) => {
+    // console.log("tab add");
+
+    // create a new model
+    let model = monaco.editor.createModel();
+    editor.setModel(model);
+    monaco.editor.setTheme("comNGTheme");
+    monaco.editor.setModelLanguage(model, "comNGLang");
+
+    let el = detail.tabEl;
+    // setup the title with time
+    let date = new Date();
+    date = date.toString().split(" ");
+    let title = date[0] + "-" + date[4].replace(/[.|:]/g, "-");
+    let titleEl = el.querySelector(".chrome-tab-title");
+    el.align = "center";
+    titleEl.innerHTML = title;
+
+    // setup the map between table and model/state
+    let view = {
+      model: model,
+      state: null,
+    };
+    tabsMap.set(el, view);
+  });
+
+  tabsEl.addEventListener("activeTabChange", ({ detail }) => {
+    // console.log("tab change");
+    let el = detail.tabEl;
+
+    // Save before tab's state
+    let model = editor.getModel();
+    tabsMap.forEach((view, _) => {
+      if (model === view.model) {
+        view.state = editor.saveViewState();
+      }
+    });
+
+    // Restore new tab's state
+    let view = tabsMap.get(el);
+    editor.setModel(view.model);
+    editor.restoreViewState(view.state);
+  });
+
+  tabsEl.addEventListener("tabRemove", ({ detail }) => {
+    // console.log("tab remove");
+    tabsMap.delete(detail.tabEl);
+    if (0 === tabsMap.size) chromeTabs.addTab();
+  });
+
+  chromeTabs.init(tabsEl);
+  chromeTabs.addTab();
+  document.getElementById("add-tab").onclick = () => {
+    chromeTabs.addTab();
+  };
 });
 
 document.getElementById("clear-btn").onclick = () => {
