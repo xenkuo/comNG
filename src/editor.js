@@ -198,14 +198,17 @@ function openFile() {
     })
     .then((result) => {
       if (result.canceled === false) {
-        const file = result.filePaths[0];
+        const path = result.filePaths[0];
         // show text
-        const text = fs.readFileSync(file).toString();
+        const text = fs.readFileSync(path).toString();
         editor.getModel().setValue(text);
 
-        // setup tab title
-        const title = file.split(/[\\|/]/).pop();
+        // setup tab
+        const title = path.split(/[\\|/]/).pop();
         const el = chromeTabs.activeTabEl;
+        // 1. setup filepath
+        tabsMap.get(el).path = path;
+        // 2. setup title
         let titleEl = el.querySelector(".chrome-tab-title");
         el.align = "center";
         titleEl.innerHTML = title;
@@ -225,33 +228,54 @@ function openBinFile() {
     })
     .then((result) => {
       if (result.canceled === false) {
+        // show hex text
         editor.getModel().setValue("");
-
-        const path = result.filePaths[0];
         fs.readFile(path, (e, data) => {
           if (e) throw err;
           showHex(data, false);
         });
+
+        // setup tab
+        const title = path.split(/[\\|/]/).pop();
+        const el = chromeTabs.activeTabEl;
+        // 1. setup filepath
+        tabsMap.get(el).path = path;
+        // 2. setup title
+        let titleEl = el.querySelector(".chrome-tab-title");
+        el.align = "center";
+        titleEl.innerHTML = title;
       }
     });
 }
 
 function saveToFile() {
-  let fileName = chromeTabs.activeTabEl.innerText;
+  const el = chromeTabs.activeTabEl;
+  const view = tabsMap.get(el);
+  if (view.path !== null) {
+    // has path info
+    const text = editor.getModel().getValue();
+    fs.writeFileSync(view.path, text);
+  } else {
+    // no path info
+    const fileName = chromeTabs.activeTabEl.innerText;
 
-  dialog
-    .showSaveDialog({
-      properties: ["createDirectory"],
-      defaultPath: fileName,
-      filters: [{ name: "comNG Log", extensions: ["cnl"] }],
-    })
-    .then((result) => {
-      if (result.canceled === false) {
-        const file = result.filePath;
-        const text = editor.getModel().getValue();
-        fs.writeFileSync(file, text);
-      }
-    });
+    dialog
+      .showSaveDialog({
+        properties: ["createDirectory"],
+        defaultPath: fileName,
+        filters: [{ name: "comNG Log", extensions: ["cnl"] }],
+      })
+      .then((result) => {
+        if (result.canceled === false) {
+          // save to file
+          const path = result.filePath;
+          const text = editor.getModel().getValue();
+          fs.writeFileSync(path, text);
+          // update tab's path
+          view.path = path;
+        }
+      });
+  }
 }
 
 function newTab() {
@@ -765,6 +789,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     // setup the map between table and model/state
     let view = {
       model: model,
+      path: null,
       state: null,
     };
     tabsMap.set(el, view);
