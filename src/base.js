@@ -615,7 +615,7 @@ document.getElementById("issue").onclick = (e) => {
   shell.openExternal(e.target.href);
 };
 
-document.getElementById("start-me").onclick = (e) => {
+document.getElementById("star-me").onclick = (e) => {
   e.preventDefault();
   shell.openExternal(e.target.href);
 };
