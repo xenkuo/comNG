@@ -194,7 +194,6 @@ function openFile() {
   dialog
     .showOpenDialog({
       properties: ["openFile"],
-      filters: [{ name: "comNG log", extensions: ["cnl", "txt"] }],
     })
     .then((result) => {
       if (result.canceled === false) {
@@ -262,8 +261,8 @@ function saveToFile() {
     dialog
       .showSaveDialog({
         properties: ["createDirectory"],
-        defaultPath: fileName,
-        filters: [{ name: "comNG Log", extensions: ["cnl"] }],
+        defaultPath: fileName + ".log",
+        filters: [{ extensions: ["log"] }],
       })
       .then((result) => {
         if (result.canceled === false) {

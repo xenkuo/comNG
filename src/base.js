@@ -56,7 +56,7 @@ const store = new Store({
       store.set("general.modemSignal", false);
       store.set(
         "general.fontFamily",
-        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', Menlo, 'Lucida Console', 'Courier New', monospace, 'Source Han Sans SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
+        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
       );
       store.set("general.fontSize", 12);
     },
@@ -71,6 +71,12 @@ const store = new Store({
       store.set("general.modemSignal.switch", false);
       store.set("general.modemSignal.rts", false);
       store.set("general.modemSignal.dtr", false);
+    },
+    "2.0.1": (store) => {
+      store.set(
+        "general.fontFamily",
+        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace, 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
+      );
     },
   },
 });
