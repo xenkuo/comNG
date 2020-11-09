@@ -577,7 +577,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
-    contextMenuOrder: 1.5,
+    contextMenuOrder: 3.5,
     run: highlightToggle,
   });
 
@@ -585,12 +585,12 @@ amdRequire(["vs/editor/editor.main"], function () {
     id: "highlight-clear-all",
     label: "Highlight Clear All",
     keybindings: [
-      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_X,
+      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E,
     ],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: "9_cutcopypaste",
-    contextMenuOrder: 1.5,
+    contextMenuOrder: 3.6,
     run: hightlightClearAll,
   });
 
@@ -598,9 +598,9 @@ amdRequire(["vs/editor/editor.main"], function () {
     // Do nothing but prevent default action: close window
   });
 
-  editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_X, () => {
-    // Do nothing but prevent default action: close window
-  });
+  // editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_X, () => {
+  //   // Do nothing but prevent default action: close window
+  // });
 
   function getLinePairRange(range) {
     let s = range.startColumn;

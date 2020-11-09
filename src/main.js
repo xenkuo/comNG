@@ -61,8 +61,8 @@ const createWindow = () => {
     mainWindow = null;
   });
 
-  Shortcut.register(mainWindow, "CmdOrCtrl+X", () => {
-    console.log("Pressed cmd/ctrl x");
+  Shortcut.register(mainWindow, "CmdOrCtrl+Shift+X", () => {
+    console.log("Pressed cmd/ctrl shift x");
     mainWindow.webContents.send("main-cmd", "ClearLog");
   });
 
