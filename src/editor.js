@@ -46,7 +46,7 @@ var ansiWait = false;
 var captureFileStream;
 
 // tabEl -> view
-// view -> {model, state}
+// view -> {path, model, state}
 var tabsMap = new Map();
 
 function uriFromPath(_path) {
