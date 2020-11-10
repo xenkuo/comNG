@@ -26,13 +26,13 @@ const hmEofOffset = hmStrOffset + hmStrLength; // 78
 
 const decoMod = 7;
 const decoTable = [
-  { style: "hl-red", color: "ff8a80" },
-  { style: "hl-orange", color: "ffd180" },
-  { style: "hl-yellow", color: "ffff8d" },
-  { style: "hl-green", color: "b9f6ca" },
-  { style: "hl-blue", color: "8dd8ff" },
-  { style: "hl-indigo", color: "8c9eff" },
-  { style: "hl-purple", color: "ea80fc" },
+  { style: "hl-red", color: "#ff8a80" },
+  { style: "hl-orange", color: "#ffd180" },
+  { style: "hl-yellow", color: "#ffff8d" },
+  { style: "hl-green", color: "#b9f6ca" },
+  { style: "hl-blue", color: "#8dd8ff" },
+  { style: "hl-indigo", color: "#8c9eff" },
+  { style: "hl-purple", color: "#ea80fc" },
 ];
 
 var editor;
