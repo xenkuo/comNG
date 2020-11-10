@@ -261,7 +261,7 @@ function saveToFile() {
     dialog
       .showSaveDialog({
         properties: ["createDirectory"],
-        defaultPath: fileName + ".log",
+        defaultPath: fileName,
         filters: [{ extensions: ["log"] }],
       })
       .then((result) => {
@@ -780,7 +780,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     // setup the title with time
     let date = new Date();
     date = date.toString().split(" ");
-    let title = date[0] + "-" + date[4].replace(/[.|:]/g, "-");
+    let title = date[0] + "-" + date[4].replace(/[.|:]/g, "-") + ".log";
     let titleEl = el.querySelector(".chrome-tab-title");
     el.align = "center";
     titleEl.innerHTML = title;
@@ -888,10 +888,9 @@ document.getElementById("breakpoint-after-lines").onblur = (e) => {
 
 document.getElementById("capture-file-switch").onclick = (e) => {
   if (e.target.checked === true) {
-    let fileName = new Date();
-    fileName = "Capture-" + fileName.toLocaleString();
-    fileName = fileName.replace(/[:/, ]/g, "-");
-    fileName = fileName.replace(/--/g, "-");
+    let date = new Date();
+    date = date.toString().split(" ");
+    let fileName = date[0] + "-" + date[4].replace(/[.|:]/g, "-");
 
     if (config.advance.sign.switch === true && config.advance.sign.name !== "")
       fileName += "-by-" + config.advance.sign.name;
@@ -900,7 +899,7 @@ document.getElementById("capture-file-switch").onclick = (e) => {
       .showSaveDialog({
         properties: ["createDirectory"],
         defaultPath: fileName,
-        filters: [{ name: "comNG Log", extensions: ["cnl"] }],
+        filters: [{ extensions: ["log"] }],
       })
       .then((result) => {
         let pathEle = document.getElementById("capture-file-path");
