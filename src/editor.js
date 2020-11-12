@@ -522,10 +522,6 @@ amdRequire(["vs/editor/editor.main"], function () {
   monaco.editor.defineTheme("comNGTheme", {
     base: "vs",
     inherit: false,
-    colors: {
-      "editor.background": "#fafafa",
-      "scrollbarSlider.background": "#fafafa",
-    },
     rules: [
       { token: "number", foreground: "2e7d32" },
       { token: "bracket", foreground: "ff9800" },
