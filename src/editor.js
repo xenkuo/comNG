@@ -5,6 +5,7 @@ const path = require("path");
 const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 const hexy = require("hexy");
+const languageDetect = require("language-detect");
 const ChromeTabs = require("chrome-tabs");
 
 const amdRequire = amdLoader.require;
@@ -198,9 +199,19 @@ function openFile() {
     .then((result) => {
       if (result.canceled === false) {
         const path = result.filePaths[0];
+        const model = editor.getModel();
+        // setup model theme and language
+        const lang = languageDetect.filename(path);
+        if (undefined !== lang && "Text" !== lang) {
+          monaco.editor.setTheme("Visual Studio");
+          monaco.editor.setModelLanguage(model, lang.toLowerCase());
+        }
+
         // show text
-        const text = fs.readFileSync(path).toString();
-        editor.getModel().setValue(text);
+        fs.readFile(path, (e, data) => {
+          if (e) throw err;
+          editor.getModel().setValue(data.toString());
+        });
 
         // setup tab
         const title = path.split(/[\\|/]/).pop();
