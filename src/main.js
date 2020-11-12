@@ -83,6 +83,11 @@ const createWindow = () => {
 
   Shortcut.register(mainWindow, "CmdOrCtrl+Shift+O", () => {
     console.log("Pressed cmd/ctrl shift o");
+    mainWindow.webContents.send("main-cmd", "OpenFileInNewTab");
+  });
+
+  Shortcut.register(mainWindow, "CmdOrCtrl+B", () => {
+    console.log("Pressed cmd/ctrl shift b");
     mainWindow.webContents.send("main-cmd", "OpenBinFile");
   });
 
@@ -94,6 +99,27 @@ const createWindow = () => {
   Shortcut.register(mainWindow, "CmdOrCtrl+T", () => {
     console.log("Pressed cmd/ctrl t");
     mainWindow.webContents.send("main-cmd", "NewTab");
+  });
+
+  Shortcut.register(mainWindow, "CmdorCtrl+1", () => {
+    console.log("Pressed cmd/ctrl 1");
+    mainWindow.webContents.send("main-cmd", "1");
+  });
+  Shortcut.register(mainWindow, "CmdorCtrl+2", () => {
+    console.log("Pressed cmd/ctrl 2");
+    mainWindow.webContents.send("main-cmd", "2");
+  });
+  Shortcut.register(mainWindow, "CmdorCtrl+3", () => {
+    console.log("Pressed cmd/ctrl 3");
+    mainWindow.webContents.send("main-cmd", "3");
+  });
+  Shortcut.register(mainWindow, "CmdorCtrl+4", () => {
+    console.log("Pressed cmd/ctrl 4");
+    mainWindow.webContents.send("main-cmd", "4");
+  });
+  Shortcut.register(mainWindow, "CmdorCtrl+5", () => {
+    console.log("Pressed cmd/ctrl 5");
+    mainWindow.webContents.send("main-cmd", "5");
   });
 
   return mainWindow;

@@ -226,6 +226,11 @@ function openFile() {
     });
 }
 
+function openFileInNewTab() {
+  chromeTabs.addTab();
+  openFile();
+}
+
 function openBinFile() {
   if (true !== config.general.hexmode) {
     toast("Please first enable 'Hex Mode' in General tab.");
@@ -290,6 +295,14 @@ function saveToFile() {
 
 function newTab() {
   chromeTabs.addTab();
+}
+
+function switchTab(tabIndex) {
+  const elParent = chromeTabs.el.children[0];
+
+  if (tabIndex >= elParent.childElementCound) return;
+  const el = elParent.children[tabIndex - 1];
+  chromeTabs.setCurrentTab(el);
 }
 
 function getTimestamp() {

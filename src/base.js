@@ -119,6 +119,9 @@ ipcRenderer.on("main-cmd", (event, arg) => {
     case "OpenFile":
       openFile();
       break;
+    case "OpenFileInNewTab":
+      openFileInNewTab();
+      break;
     case "OpenBinFile":
       openBinFile();
       break;
@@ -127,6 +130,13 @@ ipcRenderer.on("main-cmd", (event, arg) => {
       break;
     case "NewTab":
       newTab();
+      break;
+    case "1":
+    case "2":
+    case "3":
+    case "4":
+    case "5":
+      switchTab(arg);
       break;
     default:
       console.log("Unknown commands");
