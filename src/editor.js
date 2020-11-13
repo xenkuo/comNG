@@ -7,6 +7,7 @@ const { dialog } = require("electron").remote;
 const hexy = require("hexy");
 const languageDetect = require("language-detect");
 const ChromeTabs = require("chrome-tabs");
+const chokidar = require("chokidar");
 
 const amdRequire = amdLoader.require;
 
@@ -50,6 +51,21 @@ var captureFileStream;
 // view -> {path, model, state}
 var tabsMap = new Map();
 
+// -----------------------chokidar watch section
+const watcher = chokidar.watch("./a.bc", {
+  ignored: /(^|[\/\\])\../, // ignore dotfiles
+  persistent: true,
+});
+
+watcher.on("change", (path) => {
+  console.log(path + "content changed");
+});
+
+watcher.on("unlink", (path) => {
+  console.log(path + "removed");
+});
+
+// ------------------------editor section
 function uriFromPath(_path) {
   var pathName = path.resolve(_path).replace(/\\/g, "/");
   if (pathName.length > 0 && pathName.charAt(0) !== "/") {
@@ -199,8 +215,10 @@ function openFile() {
     .then((result) => {
       if (result.canceled === false) {
         const path = result.filePaths[0];
-        const model = editor.getModel();
+        // add to watcher
+        watcher.add(path);
         // setup model theme and language
+        const model = editor.getModel();
         const lang = languageDetect.filename(path);
         if (undefined !== lang && "Text" !== lang) {
           monaco.editor.setTheme("Visual Studio");
@@ -216,9 +234,15 @@ function openFile() {
         // setup tab
         const title = path.split(/[\\|/]/).pop();
         const el = chromeTabs.activeTabEl;
-        // 1. setup filepath
+        const view = tabsMap.get(el);
+        // 1. setup file watcher
+        if (null !== view.path) {
+          watcher.unwatch(view.path);
+        }
+        watcher.add(path);
+        // 2. setup tabsMap file path
         tabsMap.get(el).path = path;
-        // 2. setup title
+        // 3. setup title
         let titleEl = el.querySelector(".chrome-tab-title");
         el.align = "center";
         titleEl.innerHTML = title;
@@ -226,6 +250,7 @@ function openFile() {
     });
 }
 
+// ----------------------editor function section
 function openFileInNewTab() {
   chromeTabs.addTab();
   openFile();
@@ -243,6 +268,7 @@ function openBinFile() {
     })
     .then((result) => {
       if (result.canceled === false) {
+        const path = result.filePaths[0];
         // show hex text
         editor.getModel().setValue("");
         fs.readFile(path, (e, data) => {
@@ -253,9 +279,15 @@ function openBinFile() {
         // setup tab
         const title = path.split(/[\\|/]/).pop();
         const el = chromeTabs.activeTabEl;
-        // 1. setup filepath
+        const view = tabsMap.get(el);
+        // 1. setup file watcher
+        if (null !== view.path) {
+          watcher.unwatch(view.path);
+        }
+        watcher.add(path);
+        // 2. setup filepath
         tabsMap.get(el).path = path;
-        // 2. setup title
+        // 3. setup title
         let titleEl = el.querySelector(".chrome-tab-title");
         el.align = "center";
         titleEl.innerHTML = title;
@@ -783,7 +815,7 @@ amdRequire(["vs/editor/editor.main"], function () {
     }
   });
 
-  // Chrometabs section, refer to:
+  // --------------------------Chrometabs section, refer to:
   // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
   let tabsEl = document.querySelector(".chrome-tabs");
 
@@ -833,7 +865,11 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   tabsEl.addEventListener("tabRemove", ({ detail }) => {
-    // console.log("tab remove");
+    // delete from watcher
+    const view = tabsMap.get(detail.tabEl);
+    watcher.unwatch(view.path);
+
+    // delete from tabsMap
     tabsMap.delete(detail.tabEl);
     if (0 === tabsMap.size) chromeTabs.addTab();
   });

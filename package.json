@@ -86,6 +86,7 @@
     }
   },
   "dependencies": {
+    "chokidar": "^3.4.3",
     "chrome-tabs": "^5.4.0",
     "draggabilly": "^2.3.0",
     "electron-localshortcut": "^3.2.1",
