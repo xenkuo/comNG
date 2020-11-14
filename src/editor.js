@@ -57,12 +57,24 @@ const watcher = chokidar.watch("./a.bc", {
   persistent: true,
 });
 
-watcher.on("change", (path) => {
-  console.log(path + "content changed");
-});
+// Disable watch change, as we can not know who change the file: myself or other process.
+// watcher.on("change", (path) => {
+//   console.log(path + "content changed");
+//   tabsMap.forEach((view, el) => {
+//     if (path === view.path) {
+//       el.children[2].children[1].style.color = "#26a69a";
+//     }
+//   });
+// });
 
 watcher.on("unlink", (path) => {
   console.log(path + "removed");
+  tabsMap.forEach((view, el) => {
+    if (path === view.path) {
+      view.path = null;
+      el.children[2].children[1].style.color = "#f54336";
+    }
+  });
 });
 
 // ------------------------editor section
@@ -320,6 +332,8 @@ function saveToFile() {
           fs.writeFileSync(path, text);
           // update tab's path
           view.path = path;
+          // add to watcher
+          watcher.add(path);
         }
       });
   }
@@ -867,7 +881,9 @@ amdRequire(["vs/editor/editor.main"], function () {
   tabsEl.addEventListener("tabRemove", ({ detail }) => {
     // delete from watcher
     const view = tabsMap.get(detail.tabEl);
-    watcher.unwatch(view.path);
+    if (null !== view.path) {
+      watcher.unwatch(view.path);
+    }
 
     // delete from tabsMap
     tabsMap.delete(detail.tabEl);
