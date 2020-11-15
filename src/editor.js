@@ -314,6 +314,7 @@ function saveToFile() {
     // has path info
     const text = editor.getModel().getValue();
     fs.writeFileSync(view.path, text);
+    el.children[2].children[1].style.color = "#000000";
   } else {
     // no path info
     const fileName = chromeTabs.activeTabEl.innerText;
@@ -332,6 +333,7 @@ function saveToFile() {
           fs.writeFileSync(path, text);
           // update tab's path
           view.path = path;
+          el.children[2].children[1].style.color = "#000000";
           // add to watcher
           watcher.add(path);
         }
@@ -598,12 +600,16 @@ amdRequire(["vs/editor/editor.main"], function () {
     ],
   });
 
+  let readOnlyEditor = false;
+  if (true === config.general.hexmode) {
+    readOnlyEditor = true;
+  }
   editor = monaco.editor.create(document.getElementById("editor-area"), {
     model: null,
     theme: "comNGTheme",
     language: "comNGLang",
     automaticLayout: true,
-    // readOnly: true,
+    readOnly: readOnlyEditor,
     folding: false,
     fontFamily: config.general.fontFamily,
     fontSize: config.general.fontSize,

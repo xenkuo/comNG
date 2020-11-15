@@ -183,6 +183,7 @@ window.onload = () => {
   portUpdate();
 
   document.getElementById("hexmode-switch").checked = config.general.hexmode;
+
   document.getElementById("timestamp-switch").checked =
     config.general.timestamp;
   if (true === config.general.modemSignal.rts) {
@@ -464,6 +465,7 @@ document.getElementById("menu-tabs").onclick = () => {
 
 document.getElementById("hexmode-switch").onclick = (e) => {
   configUpdate("general.hexmode", e.target.checked);
+  editor.updateOptions({ readOnly: e.target.checked });
 };
 
 document.getElementById("timestamp-switch").onclick = (e) => {
@@ -588,11 +590,11 @@ document.getElementById("trans-repeat-switch").onchange = (e) => {
 };
 
 document.getElementById("trans-log-btn").onclick = () => {
-  let logObj = document.getElementById("trans-log-area");
+  let logEl = document.getElementById("trans-log-area");
 
-  logObj.value = "";
-  mcss.updateTextFields(logObj);
-  mcss.textareaAutoResize(logObj);
+  logEl.value = "";
+  mcss.updateTextFields(logEl);
+  mcss.textareaAutoResize(logEl);
 };
 
 document.getElementById("insider-preview").onclick = (e) => {
