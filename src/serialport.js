@@ -123,7 +123,7 @@ function serialGetOptions() {
 
 function toast(text) {
   mcss.toast({ html: text, displayLength: 1000 });
-  // alert(text)
+  // alert(text);
 }
 
 function serialClose() {

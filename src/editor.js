@@ -46,6 +46,7 @@ var half_line = false;
 var decoIndex = 0;
 var ansiWait = false;
 var captureFileStream;
+var localSave = false;
 
 // tabEl -> view
 // view -> {path, model, state}
@@ -57,15 +58,21 @@ const watcher = chokidar.watch("./a.bc", {
   persistent: true,
 });
 
-// Disable watch change, as we can not know who change the file: myself or other process.
-// watcher.on("change", (path) => {
-//   console.log(path + "content changed");
-//   tabsMap.forEach((view, el) => {
-//     if (path === view.path) {
-//       el.children[2].children[1].style.color = "#26a69a";
-//     }
-//   });
-// });
+watcher.on("change", (path) => {
+  console.log(path + " content changed");
+  if (true === localSave) {
+    localSave = false;
+    return;
+  }
+  tabsMap.forEach((view, el) => {
+    if (path === view.path) {
+      fs.readFile(path, (e, data) => {
+        if (e) throw e;
+        view.model.setValue(data.toString());
+      });
+    }
+  });
+});
 
 watcher.on("unlink", (path) => {
   console.log(path + "removed");
@@ -239,7 +246,7 @@ function openFile() {
 
         // show text
         fs.readFile(path, (e, data) => {
-          if (e) throw err;
+          if (e) throw e;
           editor.getModel().setValue(data.toString());
         });
 
@@ -315,6 +322,9 @@ function saveToFile() {
     const text = editor.getModel().getValue();
     fs.writeFileSync(view.path, text);
     el.children[2].children[1].style.color = "#000000";
+
+    // update localSave state
+    localSave = true;
   } else {
     // no path info
     const fileName = chromeTabs.activeTabEl.innerText;
@@ -339,6 +349,8 @@ function saveToFile() {
           titleEl.innerHTML = path.basename(filePath);
           // add to watcher
           watcher.add(filePath);
+          // update localSave state
+          localSave = true;
         }
       });
   }
