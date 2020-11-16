@@ -860,6 +860,11 @@ amdRequire(["vs/editor/editor.main"], function () {
     el.align = "center";
     titleEl.innerHTML = title;
 
+    // setup content change listener for model
+    model.onDidChangeContent(() => {
+      el.children[2].children[1].style.color = "#26a69a";
+    });
+
     // setup the map between table and model/state
     let view = {
       model: model,
