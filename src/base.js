@@ -75,7 +75,7 @@ const store = new Store({
     "2.0.1": (store) => {
       store.set(
         "general.fontFamily",
-        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace, 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
+        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', 'Courier New', 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
       );
     },
   },
