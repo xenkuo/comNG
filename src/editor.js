@@ -328,14 +328,17 @@ function saveToFile() {
       .then((result) => {
         if (result.canceled === false) {
           // save to file
-          const path = result.filePath;
+          const filePath = result.filePath;
           const text = editor.getModel().getValue();
-          fs.writeFileSync(path, text);
+          fs.writeFileSync(filePath, text);
           // update tab's path
-          view.path = path;
+          view.path = filePath;
           el.children[2].children[1].style.color = "#000000";
+          // update tab title
+          let titleEl = el.querySelector(".chrome-tab-title");
+          titleEl.innerHTML = path.basename(filePath);
           // add to watcher
-          watcher.add(path);
+          watcher.add(filePath);
         }
       });
   }
