@@ -955,9 +955,7 @@ document.getElementById("clear-btn").onclick = () => {
 document.getElementById("editor-font-family").onblur = (e) => {
   let font = e.target.value.trim();
 
-  if (font === "")
-    font =
-      "Consolas, 'SF Mono', Menlo, 'Lucida Console', 'Courier New', monospace";
+  if (font === "") font = defaultFont;
   editor.updateOptions({ fontFamily: font });
   configUpdate("general.fontFamily", font);
 };

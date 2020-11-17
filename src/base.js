@@ -5,7 +5,8 @@ const Store = require("electron-store");
 const appVersion = remote.app.getVersion();
 const appUpdaterUrl =
   "https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest";
-
+const defaultFont =
+  "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', 'Courier New', 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'";
 var mcss = require("materialize-css");
 mcss.AutoInit();
 
@@ -14,69 +15,66 @@ var barHeight;
 var menuHeight;
 var textDownward = true;
 
-const store = new Store({
+const configDb = new Store({
   projectVersion: appVersion,
   migrations: {
-    "1.0.3": (store) => {
-      store.delete("desert");
-      store.delete("about");
-      store.set("window.width", 600);
-      store.set("window.height", 640);
-      store.set("window.widthBefore", 600);
-      store.set("window.heightBefore", 640);
-      store.set("window.xBefore", 0);
-      store.set("window.yBefore", 0);
+    "1.0.3": (db) => {
+      db.delete("desert");
+      db.delete("about");
+      db.set("window.width", 600);
+      db.set("window.height", 640);
+      db.set("window.widthBefore", 600);
+      db.set("window.heightBefore", 640);
+      db.set("window.xBefore", 0);
+      db.set("window.yBefore", 0);
 
-      store.set("menu.hidden", true);
-      store.set("menu.tab", "general");
+      db.set("menu.hidden", true);
+      db.set("menu.tab", "general");
 
-      store.set("baudIndex", 3);
-      store.set("pathIndex", 0);
+      db.set("baudIndex", 3);
+      db.set("pathIndex", 0);
 
-      store.set("general.hexmode", false);
-      store.set("general.timestamp", false);
-      store.set("general.customized", 4800);
-      store.set("general.databitsIndex", 0);
-      store.set("general.parityIndex", 0);
-      store.set("general.stopbitsIndex", 0);
-      store.set("general.flowcontrolIndex", 0);
+      db.set("general.hexmode", false);
+      db.set("general.timestamp", false);
+      db.set("general.customized", 4800);
+      db.set("general.databitsIndex", 0);
+      db.set("general.parityIndex", 0);
+      db.set("general.stopbitsIndex", 0);
+      db.set("general.flowcontrolIndex", 0);
 
-      store.set("transmit.eof", "\r\n");
+      db.set("transmit.eof", "\r\n");
 
-      store.set("advance.sign.switch", false);
-      store.set("advance.sign.name", "");
-      store.set("advance.breakpoint.switch", false);
-      store.set("advance.breakpoint.onText", "Error");
-      store.set("advance.breakpoint.afterLines", 5);
-      store.set("advance.barColor.head", "#ffba3a");
-      store.set("advance.barColor.middle", "#ffba3a");
-      store.set("advance.barColor.tail", "#ffba3a");
+      db.set("advance.sign.switch", false);
+      db.set("advance.sign.name", "");
+      db.set("advance.breakpoint.switch", false);
+      db.set("advance.breakpoint.onText", "Error");
+      db.set("advance.breakpoint.afterLines", 5);
+      db.set("advance.barColor.head", "#ffba3a");
+      db.set("advance.barColor.middle", "#ffba3a");
+      db.set("advance.barColor.tail", "#ffba3a");
     },
-    "1.0.4": (store) => {
-      store.set("general.modemSignal", false);
-      store.set(
+    "1.0.4": (db) => {
+      db.set("general.modemSignal", false);
+      db.set(
         "general.fontFamily",
         "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', Menlo, 'Lucida Console', 'Courier New', monospace"
       );
-      store.set("general.fontSize", 12);
+      db.set("general.fontSize", 12);
     },
-    "1.0.6": (store) => {
-      store.set("transmit.hexmode", false);
-      store.set("about.insiderPreview", false);
+    "1.0.6": (db) => {
+      db.set("transmit.hexmode", false);
+      db.set("about.insiderPreview", false);
     },
-    "1.0.11": (store) => {
-      store.set("fileops.capture.switch", false);
-      store.set("fileops.capture.filePath", "");
-      store.delete("general.modemSignal");
-      store.set("general.modemSignal.switch", false);
-      store.set("general.modemSignal.rts", false);
-      store.set("general.modemSignal.dtr", false);
+    "1.0.11": (db) => {
+      db.set("fileops.capture.switch", false);
+      db.set("fileops.capture.filePath", "");
+      db.delete("general.modemSignal");
+      db.set("general.modemSignal.switch", false);
+      db.set("general.modemSignal.rts", false);
+      db.set("general.modemSignal.dtr", false);
     },
-    "2.0.1": (store) => {
-      store.set(
-        "general.fontFamily",
-        "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', 'Courier New', 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
-      );
+    "2.0.4": (db) => {
+      db.set("general.fontFamily", defaultFont);
     },
   },
 });
@@ -94,7 +92,7 @@ function configUpdate(key, value) {
     console.error("config key structure error");
   }
 
-  store.set(key, value);
+  configDb.set(key, value);
 }
 
 ipcRenderer.on("main-cmd", (event, arg) => {
@@ -145,7 +143,7 @@ ipcRenderer.on("main-cmd", (event, arg) => {
 });
 
 window.onload = () => {
-  config = store.store;
+  config = configDb.store;
   document.getElementById("menu-area").hidden = config.menu.hidden;
 
   barHeight = getComputedStyle(document.documentElement)

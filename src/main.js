@@ -96,6 +96,11 @@ const createWindow = () => {
     mainWindow.webContents.send("main-cmd", "SaveFile");
   });
 
+  // Shortcut.register(mainWindow, "CmdOrCtrl+Shift+S", () => {
+  //   console.log("Pressed cmd/ctrl shift s");
+  //   mainWindow.webContents.send("main-cmd", "SaveASFile");
+  // });
+
   Shortcut.register(mainWindow, "CmdOrCtrl+T", () => {
     console.log("Pressed cmd/ctrl t");
     mainWindow.webContents.send("main-cmd", "NewTab");
