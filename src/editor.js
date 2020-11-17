@@ -78,10 +78,10 @@ watcher.on("change", (filePath) => {
   });
 });
 
-watcher.on("unlink", (path) => {
-  console.log(path + "removed");
+watcher.on("unlink", (filePath) => {
+  console.log(filePath + "removed");
   tabsMap.forEach((view, el) => {
-    if (path === view.path) {
+    if (filePath === view.path) {
       view.path = null;
       el.children[2].children[1].style.color = "#f54336";
     }
@@ -292,25 +292,25 @@ function openBinFile() {
     })
     .then((result) => {
       if (result.canceled === false) {
-        const path = result.filePaths[0];
+        const filePath = result.filePaths[0];
         // show hex text
         editor.getModel().setValue("");
-        fs.readFile(path, (e, data) => {
+        fs.readFile(filePath, (e, data) => {
           if (e) throw err;
           showHex(data, false);
         });
 
         // setup tab
-        const title = path.split(/[\\|/]/).pop();
+        const title = path.basename(filePath);
         const el = chromeTabs.activeTabEl;
         const view = tabsMap.get(el);
         // 1. setup file watcher
         if (null !== view.path) {
           watcher.unwatch(view.path);
         }
-        watcher.add(path);
+        watcher.add(filePath);
         // 2. setup filepath
-        tabsMap.get(el).path = path;
+        tabsMap.get(el).path = filePath;
         // 3. setup title
         let titleEl = el.querySelector(".chrome-tab-title");
         el.align = "center";
@@ -1008,12 +1008,12 @@ document.getElementById("capture-file-switch").onclick = (e) => {
       .then((result) => {
         let pathEle = document.getElementById("capture-file-path");
         if (result.canceled === false) {
-          let path = result.filePath;
-          pathEle.value = path;
-          captureFileStream = fs.createWriteStream(path, { flags: "w" });
+          let filePath = result.filePath;
+          pathEle.value = filePath;
+          captureFileStream = fs.createWriteStream(filePath, { flags: "w" });
 
           configUpdate("fileops.capture.switch", true);
-          configUpdate("fileops.capture.filePath", path);
+          configUpdate("fileops.capture.filePath", filePath);
         } else {
           if (undefined !== captureFileStream) captureFileStream.end();
           captureFileStream = undefined;
