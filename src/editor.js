@@ -356,6 +356,11 @@ function saveToFile() {
           watcher.add(filePath);
           // update localSave state
           localSave = true;
+          // update theme accord to new file extension
+          const lang = languageDetect.filename(filePath);
+          if (undefined !== lang && "Text" !== lang) {
+            monaco.editor.setModelLanguage(view.model, lang.toLowerCase());
+          }
         }
       });
   }
