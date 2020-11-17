@@ -237,36 +237,38 @@ function openFile() {
     })
     .then((result) => {
       if (result.canceled === false) {
-        const path = result.filePaths[0];
+        const filePath = result.filePaths[0];
         // add to watcher
-        watcher.add(path);
+        watcher.add(filePath);
         // setup model theme and language
         const model = editor.getModel();
-        const lang = languageDetect.filename(path);
+        const lang = languageDetect.filename(filePath);
         if (undefined !== lang && "Text" !== lang) {
           monaco.editor.setTheme("Visual Studio");
           monaco.editor.setModelLanguage(model, lang.toLowerCase());
         }
 
         // show text
-        fs.readFile(path, (e, data) => {
+        fs.readFile(filePath, "utf8", (e, data) => {
           if (e) throw e;
-          editor.getModel().setValue(data.toString());
+          editor.getModel().setValue(data);
         });
 
         // setup tab
-        const title = path.split(/[\\|/]/).pop();
+        const title = path.basename(filePath);
         const el = chromeTabs.activeTabEl;
         const view = tabsMap.get(el);
+
         // 1. setup file watcher
         if (null !== view.path) {
           watcher.unwatch(view.path);
         }
-        watcher.add(path);
+        watcher.add(filePath);
         // 2. setup tabsMap file path
-        tabsMap.get(el).path = path;
+        tabsMap.get(el).path = filePath;
         // 3. setup title
         let titleEl = el.querySelector(".chrome-tab-title");
+
         el.align = "center";
         titleEl.innerHTML = title;
       }
