@@ -879,7 +879,9 @@ amdRequire(["vs/editor/editor.main"], function () {
     titleEl.innerHTML = title;
 
     // setup content change listener for model
-    model.onDidChangeContent(() => {
+    model.onDidChangeContent((e) => {
+      // console.log(e);
+      if (e.isFlush === true) return;
       el.children[2].children[1].style.color = "#26a69a";
     });
 
