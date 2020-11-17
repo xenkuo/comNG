@@ -10,17 +10,10 @@
   --bar-height: 53px;
   --trans-btn-height: 20px;
   --modem-btn-height: 10px;
-  --body-border-widht: 0px;
   --bar-color-head: #fafafa;
   --bar-color-middle: #fafafa;
   --bar-color-tail: #fafafa;
 }
-
-/* @media (-webkit-device-pixel-ratio: 1) {
-  :root {
-    --body-border-widht: 1px;
-  }
-} */
 
 html {
   height: 100%;
@@ -29,7 +22,6 @@ html {
 
 body {
   position: fixed;
-  border: var(--body-border-widht) solid #26a69a;
   height: 100%;
   width: 100%;
   background-color: #fafafa;
@@ -254,7 +246,6 @@ input {
   height: var(--bar-height);
   /* position: fixed; */
   position: sticky;
-  bottom: var(--body-border-widht);
   line-height: var(--bar-height);
   background: -webkit-linear-gradient(
     60deg,
