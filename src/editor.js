@@ -58,18 +58,22 @@ const watcher = chokidar.watch("./a.bc", {
   persistent: true,
 });
 
-watcher.on("change", (path) => {
-  console.log(path + " content changed");
+watcher.on("change", (filePath) => {
+  // console.log(filePath + " content changed");
   if (true === localSave) {
     localSave = false;
     return;
   }
   tabsMap.forEach((view, el) => {
-    if (path === view.path) {
-      fs.readFile(path, (e, data) => {
-        if (e) throw e;
-        view.model.setValue(data.toString());
-      });
+    if (filePath === view.path) {
+      // Here we add a 100ms delay as external editor (or the watcher itself)
+      // seems like first trigger the change event then will keep lock the file
+      // for small amount time.
+      // This will sometimes cause readFileSync or readFile return empty content and no
+      // error watched.
+      setTimeout(() => {
+        view.model.setValue(fs.readFileSync(filePath, "utf8"));
+      }, 100);
     }
   });
 });
