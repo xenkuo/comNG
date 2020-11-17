@@ -244,7 +244,6 @@ function openFile() {
         const model = editor.getModel();
         const lang = languageDetect.filename(filePath);
         if (undefined !== lang && "Text" !== lang) {
-          monaco.editor.setTheme("Visual Studio");
           monaco.editor.setModelLanguage(model, lang.toLowerCase());
         }
 
@@ -603,7 +602,7 @@ amdRequire(["vs/editor/editor.main"], function () {
   // Define a new theme that contains only rules that match this language
   monaco.editor.defineTheme("comNGTheme", {
     base: "vs",
-    inherit: false,
+    inherit: true,
     rules: [
       { token: "number", foreground: "2e7d32" },
       { token: "bracket", foreground: "ff9800" },
@@ -866,7 +865,6 @@ amdRequire(["vs/editor/editor.main"], function () {
     // create a new model
     let model = monaco.editor.createModel();
     editor.setModel(model);
-    monaco.editor.setTheme("comNGTheme");
     monaco.editor.setModelLanguage(model, "comNGLang");
 
     let el = detail.tabEl;
