@@ -319,7 +319,7 @@ function openBinFile() {
     });
 }
 
-function saveToFile() {
+function saveFile() {
   const el = chromeTabs.activeTabEl;
   const view = tabsMap.get(el);
   if (view.path !== null) {
@@ -364,6 +364,43 @@ function saveToFile() {
         }
       });
   }
+}
+
+function saveAsFile() {
+  const el = chromeTabs.activeTabEl;
+  const view = tabsMap.get(el);
+  // no path info
+  const fileName = chromeTabs.activeTabEl.innerText;
+
+  dialog
+    .showSaveDialog({
+      properties: ["createDirectory"],
+      defaultPath: fileName,
+      filters: [{ extensions: ["log"] }],
+    })
+    .then((result) => {
+      if (result.canceled === false) {
+        // save to file
+        const filePath = result.filePath;
+        const text = editor.getModel().getValue();
+        fs.writeFileSync(filePath, text);
+        // update tab's path
+        view.path = filePath;
+        el.children[2].children[1].style.color = "#000000";
+        // update tab title
+        let titleEl = el.querySelector(".chrome-tab-title");
+        titleEl.innerHTML = path.basename(filePath);
+        // add to watcher
+        watcher.add(filePath);
+        // update localSave state
+        localSave = true;
+        // update theme accord to new file extension
+        const lang = languageDetect.filename(filePath);
+        if (undefined !== lang && "Text" !== lang) {
+          monaco.editor.setModelLanguage(view.model, lang.toLowerCase());
+        }
+      }
+    });
 }
 
 function newTab() {
