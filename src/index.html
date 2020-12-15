@@ -123,59 +123,75 @@
                 />
               </div>
             </div>
-          </div>
-          <div class="col s2 no-head">
-            <div class="input-field col s12">
-              <select id="databits-select">
-                <option value="1" selected>8</option>
-                <option value="2">7</option>
-                <option value="3">6</option>
-                <option value="4">5</option>
-              </select>
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Font Size</p>
+              </div>
+              <div class="input-field col s8 config-item">
+                <input
+                  id="editor-font-size"
+                  type="text"
+                  placeholder="12"
+                />
+              </div>
             </div>
-
-            <div class="input-field col s12">
-              <select id="parity-select">
-                <option value="1" selected>None</option>
-                <option value="2">Even</option>
-                <option value="3">Odd</option>
-                <option value="4">Mark</option>
-                <option value="5">Space</option>
-              </select>
-            </div>
-
-            <div class="input-field col s12">
-              <select id="stopbits-select">
-                <option value="1" selected>1</option>
-                <option value="2">2</option>
-              </select>
-            </div>
-
-            <div class="input-field col s12">
-              <select id="flowcontrol-select">
-                <option value="1" selected>None</option>
-                <option value="2">RTSCTS</option>
-                <option value="3">XON</option>
-                <option value="4">XOFF</option>
-              </select>
+            <div class="row config-row">
+              <div class="col s4 config-key">
+                <p>Font Family</p>
+              </div>
+              <div class="input-field col s8 config-item">
+                <input
+                  id="editor-font-family"
+                  type="text"
+                />
+              </div>
             </div>
           </div>
-          <div class="col s1 no-head"></div>
-          <div class="col s3 no-head">
-            <div class="input-field col s12 config-item">
-              <input
-                id="editor-font-family"
-                placeholder="Font Family"
-                type="text"
-              />
+          <div class="col s6">
+            <div class="col s5">
+              <div class="col s12 config-key">
+                <p>Port Options</p>
+              </div>
             </div>
-            <div class="input-field col s12 config-item">
-              <input
-                id="editor-font-size"
-                placeholder="Font Size"
-                type="text"
-              />
+
+            <div class="col s7 config-list">
+
+              <div class="input-field col s12">
+                <select id="databits-select">
+                  <option value="1" selected>8</option>
+                  <option value="2">7</option>
+                  <option value="3">6</option>
+                  <option value="4">5</option>
+                </select>
+              </div>
+  
+              <div class="input-field col s12">
+                <select id="parity-select">
+                  <option value="1" selected>None</option>
+                  <option value="2">Even</option>
+                  <option value="3">Odd</option>
+                  <option value="4">Mark</option>
+                  <option value="5">Space</option>
+                </select>
+              </div>
+  
+              <div class="input-field col s12">
+                <select id="stopbits-select">
+                  <option value="1" selected>1</option>
+                  <option value="2">2</option>
+                </select>
+              </div>
+  
+              <div class="input-field col s12">
+                <select id="flowcontrol-select">
+                  <option value="1" selected>None</option>
+                  <option value="2">RTSCTS</option>
+                  <option value="3">XON</option>
+                  <option value="4">XOFF</option>
+                </select>
+              </div>
             </div>
+            
           </div>
         </div>
         <div id="transmit-tab" class="col s12">
