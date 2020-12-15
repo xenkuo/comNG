@@ -42,6 +42,11 @@ nav {
   background-color: #dee1e6;
 }
 
+td,
+th {
+  padding: 5px !important;
+}
+
 .chrome-tabs {
   position: absolute;
   top: 0px;

@@ -87,7 +87,7 @@ const createWindow = () => {
   });
 
   Shortcut.register(mainWindow, "CmdOrCtrl+B", () => {
-    console.log("Pressed cmd/ctrl shift b");
+    console.log("Pressed cmd/ctrl b");
     mainWindow.webContents.send("main-cmd", "OpenBinFile");
   });
 

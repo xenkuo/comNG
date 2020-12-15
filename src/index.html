@@ -42,7 +42,9 @@
       <!-- <div class="chrome-tabs-bottom-bar"></div> -->
     </div>
 
-    <div title="创建标签" id="add-tab"><i class="material-icons">add_box</i></div>
+    <div id="add-tab">
+      <i class="material-icons">add_box</i>
+    </div>
 
     <div id="editor-area"></div>
 
@@ -57,7 +59,6 @@
             <li class="tab col s2"><a href="#advance-tab">advance</a></li>
             <li class="tab col s2"><a href="#fileops-tab">file ops</a></li>
             <li class="tab col s2"><a href="#about-tab">about</a></li>
-            
           </ul>
         </div>
         <div id="general-tab" class="col s12">
@@ -128,11 +129,7 @@
                 <p>Font Size</p>
               </div>
               <div class="input-field col s8 config-item">
-                <input
-                  id="editor-font-size"
-                  type="text"
-                  placeholder="12"
-                />
+                <input id="editor-font-size" type="text" placeholder="12" />
               </div>
             </div>
             <div class="row config-row">
@@ -140,10 +137,7 @@
                 <p>Font Family</p>
               </div>
               <div class="input-field col s8 config-item">
-                <input
-                  id="editor-font-family"
-                  type="text"
-                />
+                <input id="editor-font-family" type="text" />
               </div>
             </div>
           </div>
@@ -155,7 +149,6 @@
             </div>
 
             <div class="col s7 config-list">
-
               <div class="input-field col s12">
                 <select id="databits-select">
                   <option value="1" selected>8</option>
@@ -164,7 +157,7 @@
                   <option value="4">5</option>
                 </select>
               </div>
-  
+
               <div class="input-field col s12">
                 <select id="parity-select">
                   <option value="1" selected>None</option>
@@ -174,14 +167,14 @@
                   <option value="5">Space</option>
                 </select>
               </div>
-  
+
               <div class="input-field col s12">
                 <select id="stopbits-select">
                   <option value="1" selected>1</option>
                   <option value="2">2</option>
                 </select>
               </div>
-  
+
               <div class="input-field col s12">
                 <select id="flowcontrol-select">
                   <option value="1" selected>None</option>
@@ -191,7 +184,6 @@
                 </select>
               </div>
             </div>
-            
           </div>
         </div>
         <div id="transmit-tab" class="col s12">
@@ -327,7 +319,8 @@
 
             <div class="row config-row">
               <div class="input-field col s12">
-                <input placeholder="Trigger pattern, such as 'Error'"
+                <input
+                  placeholder="Trigger pattern, such as 'Error'"
                   value="Error"
                   id="breakpoint-on-text"
                   type="text"
@@ -338,7 +331,12 @@
 
             <div class="row config-row">
               <div class="input-field col s12">
-                <input placeholder="After lines, such as '5'" value="5" id="breakpoint-after-lines" type="text" />
+                <input
+                  placeholder="After lines, such as '5'"
+                  value="5"
+                  id="breakpoint-after-lines"
+                  type="text"
+                />
               </div>
             </div>
           </div>
@@ -380,10 +378,63 @@
             </div>
           </div>
           <div class="col s12">
-            <blockquote>File Operations</blockquote>
+            <blockquote>Extra Shortcuts</blockquote>
             <div class="divider"></div>
-            <p>&#149 <b>Open File</b>: CmdOrCtrl + O &#149 <b>Open Hex File</b>: CmdOrCtrl + Shift + O &#149 <b>Save File</b>: CmdOrCtrl + S </p>
-            
+
+            <div class="row">
+              <div class="col s6">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Open File</td>
+                      <td>Cmd/Ctrl + O</td>
+                    </tr>
+                    <tr>
+                      <td>Open File in New Tab</td>
+                      <td>Cmd/Ctrl + Shift + O</td>
+                    </tr>
+                    <tr>
+                      <td>Open Binary File</td>
+                      <td>Cmd/Ctrl + B</td>
+                    </tr>
+                    <tr>
+                      <td>Save File</td>
+                      <td>Cmd/Ctrl + S</td>
+                    </tr>
+                    <tr>
+                      <td>Save as File</td>
+                      <td>Cmd/Ctrl + Shift + S</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col s6">
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Switch Port</td>
+                      <td>Cmd/Ctrl + D</td>
+                    </tr>
+                    <tr>
+                      <td>Clear Log</td>
+                      <td>Cmd/Ctrl + X</td>
+                    </tr>
+                    <tr>
+                      <td>Switch Port&Clear Log</td>
+                      <td>Cmd/Ctrl + Shift + D</td>
+                    </tr>
+                    <tr>
+                      <td>New Tab</td>
+                      <td>Cmd/Ctrl + T</td>
+                    </tr>
+                    <tr>
+                      <td>Swtich to Tab 1..5</td>
+                      <td>Cmd/Ctrl + 1..5</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
         <div id="about-tab" class="col s12">
@@ -394,6 +445,8 @@
             <div class="col s3">
               <p id="app-version"></p>
             </div>
+          </div>
+          <div>
             <div class="col s3 label-key">
               <p>Licence</p>
             </div>
@@ -467,15 +520,11 @@
         <div class="col s1"></div>
         <div class="col s1"></div>
 
-        <a
-          class="btn-small waves-effect modem-btn grey col s1"
-          id="rts-btn"
+        <a class="btn-small waves-effect modem-btn grey col s1" id="rts-btn"
           >RTS</a
         >
         <div class="col s1"></div>
-        <a
-          class="btn-small waves-effect modem-btn grey col s1"
-          id="dtr-btn"
+        <a class="btn-small waves-effect modem-btn grey col s1" id="dtr-btn"
           >DTR</a
         >
       </div>
