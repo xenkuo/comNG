@@ -439,8 +439,9 @@ document.body.onclick = (e) => {
   if (e.isTrusted === false) return;
   // don't process when click on menu-btn
   if (e.target.parentNode.id === "menu-btn") return;
-  // don't process when we are in Transmit tab
+  // don't process when we are in Transmit tab/Graphic tab
   if (document.getElementById("menu-tabs").M_Tabs.index === 1) return;
+  if (document.getElementById("menu-tabs").M_Tabs.index === 4) return;
 
   let pos = e.clientY;
   let range = document.body.offsetHeight;
