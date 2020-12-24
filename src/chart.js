@@ -1,6 +1,9 @@
-const echarts = require("echarts");
+const echarts = require("echarts/lib/echarts");
+require("echarts/lib/chart/bar");
+require("echarts/lib/component/tooltip");
+require("echarts/lib/component/title");
 
-var myChart = echarts.init(document.getElementById("chart-tab"));
+var myChart = echarts.init(document.getElementById("chart-content"));
 
 var option = {
   title: {

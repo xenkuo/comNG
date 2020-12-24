@@ -309,8 +309,13 @@ input {
 }
 
 #chart-tab {
-  background-color: #fafafa;
   height: calc(var(--menu-height) - 26px);
+}
+
+#chart-content {
+  background-color: #fafafa;
+  height: inherit;
+  width: 100%;
 }
 
 #licence-row {
