@@ -1,30 +1,41 @@
-const echarts = require("echarts/lib/echarts");
-require("echarts/lib/chart/bar");
-require("echarts/lib/component/tooltip");
-require("echarts/lib/component/title");
-
-var myChart = echarts.init(document.getElementById("chart-content"));
-
-var option = {
-  title: {
-    text: "ECharts entry example",
+var trace1 = {
+  x: [1, 2, 3, 4],
+  y: [10, 15, 13, 17],
+  mode: "markers",
+  marker: {
+    color: "rgb(219, 64, 82)",
+    size: 12,
   },
-  tooltip: {},
-  legend: {
-    data: ["Sales"],
-  },
-  xAxis: {
-    data: ["shirt", "cardign", "chiffon shirt", "pants", "heels", "socks"],
-  },
-  yAxis: {},
-  series: [
-    {
-      name: "Sales",
-      type: "bar",
-      data: [5, 20, 36, 10, 10, 20],
-    },
-  ],
 };
 
-// use configuration item and data specified to show chart
-myChart.setOption(option);
+var trace2 = {
+  x: [2, 3, 4, 5],
+  y: [16, 5, 11, 9],
+  mode: "lines",
+  line: {
+    color: "rgb(55, 128, 191)",
+    width: 3,
+  },
+};
+
+var trace3 = {
+  x: [1, 2, 3, 4],
+  y: [12, 9, 15, 12],
+  mode: "lines+markers",
+  marker: {
+    color: "rgb(128, 0, 128)",
+    size: 8,
+  },
+  line: {
+    color: "rgb(128, 0, 128)",
+    width: 1,
+  },
+};
+
+var data = [trace1, trace2, trace3];
+
+var layout = {
+  title: "Line and Scatter Styling",
+};
+
+Plotly.newPlot("myDiv", data, layout);
