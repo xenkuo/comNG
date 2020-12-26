@@ -35,7 +35,12 @@ var trace3 = {
 var data = [trace1, trace2, trace3];
 
 var layout = {
-  title: "Line and Scatter Styling",
+  title: "Demo",
 };
 
-Plotly.newPlot("myDiv", data, layout);
+Plotly.newPlot("myDiv", data, layout, {
+  responsive: true,
+  displayModeBar: true,
+  scrollZoom: true,
+  displaylogo: false,
+});
