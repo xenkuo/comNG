@@ -1,34 +1,58 @@
 var Plotly = require("plotly.js-dist");
 
-var d1 = {
-  x: [1, 2, 3, 4, 5, 6],
-  y: [10, 15, 13, 17, 20, 13],
-  mode: "lines + markers",
-};
-
-var d2 = {
-  x: [2, 3, 4, 5, 6, 7],
-  y: [16, 5, 11, 9, 8, 10],
-  mode: "lines",
-};
-
-var data = [d1, d2];
-
 var layout = {
   // showlegend: false,
   margin: {
-    l: 20,
+    l: 40,
     r: 0,
     t: 40,
     b: 40,
   },
-  dragmode: "pan",
+  xaxis: {
+    autorange: true,
+    rangeslider: { range: [0] },
+    type: "linear",
+  },
 };
+
 var config = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
+  dragmode: "pan",
 };
 
-Plotly.newPlot("myDiv", data, layout, config);
+function rand() {
+  return 1000000 * Math.random();
+}
+
+Plotly.newPlot(
+  "chart",
+  [
+    {
+      y: [1, 2, 3].map(rand),
+      mode: "lines+markers",
+    },
+    {
+      y: [1, 2].map(rand),
+      mode: "lines+markers",
+    },
+  ],
+  layout,
+  config
+);
+
+var cnt = 0;
+var interval = setInterval(function () {
+  Plotly.extendTraces(
+    "chart",
+    {
+      y: [[rand()], [rand()]],
+    },
+    [0, 1]
+  );
+
+  cnt = cnt + 1;
+  if (cnt === 1000) clearInterval(interval);
+}, 500);
