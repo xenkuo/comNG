@@ -1,46 +1,34 @@
-var trace1 = {
-  x: [1, 2, 3, 4],
-  y: [10, 15, 13, 17],
-  mode: "markers",
-  marker: {
-    color: "rgb(219, 64, 82)",
-    size: 12,
-  },
+var Plotly = require("plotly.js-dist");
+
+var d1 = {
+  x: [1, 2, 3, 4, 5, 6],
+  y: [10, 15, 13, 17, 20, 13],
+  mode: "lines + markers",
 };
 
-var trace2 = {
-  x: [2, 3, 4, 5],
-  y: [16, 5, 11, 9],
+var d2 = {
+  x: [2, 3, 4, 5, 6, 7],
+  y: [16, 5, 11, 9, 8, 10],
   mode: "lines",
-  line: {
-    color: "rgb(55, 128, 191)",
-    width: 3,
-  },
 };
 
-var trace3 = {
-  x: [1, 2, 3, 4],
-  y: [12, 9, 15, 12],
-  mode: "lines+markers",
-  marker: {
-    color: "rgb(128, 0, 128)",
-    size: 8,
-  },
-  line: {
-    color: "rgb(128, 0, 128)",
-    width: 1,
-  },
-};
-
-var data = [trace1, trace2, trace3];
+var data = [d1, d2];
 
 var layout = {
-  title: "Demo",
+  // showlegend: false,
+  margin: {
+    l: 20,
+    r: 0,
+    t: 40,
+    b: 40,
+  },
+  dragmode: "pan",
 };
-
-Plotly.newPlot("myDiv", data, layout, {
+var config = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
-});
+};
+
+Plotly.newPlot("myDiv", data, layout, config);

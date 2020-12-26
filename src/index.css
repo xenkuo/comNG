@@ -308,6 +308,9 @@ input {
   line-height: 43px;
 }
 
+#chart-tab {
+  background-color: #ffffff;
+}
 #myDiv {
   height: calc(var(--menu-height) - 26px);
 }
