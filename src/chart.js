@@ -60,5 +60,13 @@ var interval = setInterval(function () {
   );
 
   cnt = cnt + 1;
+  if (cnt > 100) {
+    Plotly.relayout("chart", {
+      xaxis: {
+        range: [cnt - 100, cnt],
+        rangeslider: {},
+      },
+    });
+  }
   if (cnt === 1000) clearInterval(interval);
-}, 500);
+}, 100);
