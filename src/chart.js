@@ -14,6 +14,7 @@ var layout = {
   xaxis: {
     rangeslider: {},
   },
+  dragmode: "pan",
 };
 
 var config = {
@@ -21,11 +22,15 @@ var config = {
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
-  dragmode: "pan",
 };
 
 function rand() {
-  return Math.random();
+  let x = Math.random();
+  if (x < 0.9) {
+    return x * 10;
+  }
+
+  return x * 1000;
 }
 
 Plotly.newPlot(
