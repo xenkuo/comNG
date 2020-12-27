@@ -10,7 +10,7 @@ const widthDefault = 600;
 const widthMin = 600;
 const widthMax = 1024;
 const heightDefault = 640;
-const heightMin = 400;
+const heightMin = 600;
 const heightMax = 768;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.

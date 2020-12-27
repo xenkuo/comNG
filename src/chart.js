@@ -1,7 +1,10 @@
-var Plotly = require("plotly.js-dist");
+const Plotly = require("plotly.js-dist");
+
+const chartEl = document.getElementById("chart");
 
 var layout = {
   // showlegend: false,
+  width: window.innerWidth - 20,
   margin: {
     l: 40,
     r: 0,
@@ -9,9 +12,7 @@ var layout = {
     b: 40,
   },
   xaxis: {
-    autorange: true,
-    rangeslider: { range: [0] },
-    type: "linear",
+    rangeslider: {},
   },
 };
 
@@ -24,19 +25,19 @@ var config = {
 };
 
 function rand() {
-  return 1000000 * Math.random();
+  return Math.random();
 }
 
 Plotly.newPlot(
-  "chart",
+  chartEl,
   [
     {
       y: [1, 2, 3].map(rand),
-      mode: "lines+markers",
+      mode: "lines",
     },
     {
       y: [1, 2].map(rand),
-      mode: "lines+markers",
+      mode: "lines",
     },
   ],
   layout,
