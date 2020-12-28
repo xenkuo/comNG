@@ -1,8 +1,10 @@
 const Plotly = require("plotly.js-dist");
 
 const chartEl = document.getElementById("chart");
+const rangeShiftThreshold = 200;
+var rangeCnt = 0;
 
-var layout = {
+const chartLayout = {
   // showlegend: false,
   width: window.innerWidth - 20,
   margin: {
@@ -17,14 +19,34 @@ var layout = {
   dragmode: "pan",
 };
 
-var config = {
+const chartConfig = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
 };
 
-function rand() {
+function traceAppend() {
+  Plotly.extendTraces(
+    chartEl,
+    {
+      y: [[randGen()], [randGen()]],
+    },
+    [0, 1]
+  );
+
+  rangeCnt++;
+  if (rangeCnt > rangeShiftThreshold) {
+    Plotly.relayout(chartEl, {
+      xaxis: {
+        range: [rangeCnt - rangeShiftThreshold, rangeCnt],
+        rangeslider: {},
+      },
+    });
+  }
+}
+
+function randGen() {
   let x = Math.random();
   if (x < 0.9) {
     return x * 10;
@@ -37,36 +59,19 @@ Plotly.newPlot(
   chartEl,
   [
     {
-      y: [1, 2, 3].map(rand),
+      y: [1, 2, 3].map(randGen),
       mode: "lines",
     },
     {
-      y: [1, 2].map(rand),
+      y: [1, 2].map(randGen),
       mode: "lines",
     },
   ],
-  layout,
-  config
+  chartLayout,
+  chartConfig
 );
 
-var cnt = 0;
-var interval = setInterval(function () {
-  Plotly.extendTraces(
-    "chart",
-    {
-      y: [[rand()], [rand()]],
-    },
-    [0, 1]
-  );
-
-  cnt = cnt + 1;
-  if (cnt > 100) {
-    Plotly.relayout("chart", {
-      xaxis: {
-        range: [cnt - 100, cnt],
-        rangeslider: {},
-      },
-    });
-  }
-  if (cnt === 1000) clearInterval(interval);
+var interval = setInterval(() => {
+  traceAppend();
+  if (rangeCnt > 1000) clearInterval(interval);
 }, 100);
