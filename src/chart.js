@@ -46,32 +46,40 @@ function traceAppend() {
   }
 }
 
-function randGen() {
-  let x = Math.random();
-  if (x < 0.9) {
-    return x * 10;
-  }
+const emptyTrace = {
+  y: [0],
+};
 
-  return x * 1000;
+var chartData = [];
+for (let i = 0; i < 2; i++) {
+  chartData.push(emptyTrace);
 }
 
-Plotly.newPlot(
-  chartEl,
-  [
-    {
-      y: [1, 2, 3].map(randGen),
-      mode: "lines",
-    },
-    {
-      y: [1, 2].map(randGen),
-      mode: "lines",
-    },
-  ],
-  chartLayout,
-  chartConfig
-);
+function randGen() {
+  return Math.random();
+}
+
+Plotly.newPlot(chartEl, chartData, chartLayout, chartConfig);
 
 var interval = setInterval(() => {
   traceAppend();
-  if (rangeCnt > 1000) clearInterval(interval);
+  // if (rangeCnt > 100) clearInterval(interval);
+  if (rangeCnt > 100) {
+    rangeCnt = 0;
+    Plotly.newPlot(
+      chartEl,
+      [
+        {
+          y: [1, 2, 3].map(randGen),
+          mode: "lines",
+        },
+        {
+          y: [1, 2].map(randGen),
+          mode: "lines",
+        },
+      ],
+      chartLayout,
+      chartConfig
+    );
+  }
 }, 100);
