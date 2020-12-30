@@ -4,6 +4,9 @@ const chartEl = document.getElementById("chart");
 const rangeShiftThreshold = 200;
 var rangeCnt = 0;
 
+var ChannelCount = 0;
+var channelData = [];
+
 const chartLayout = {
   // showlegend: false,
   width: window.innerWidth - 20,
@@ -26,13 +29,14 @@ const chartConfig = {
   displaylogo: false,
 };
 
-function traceAppend() {
+function traceAppend(data, indices) {
   Plotly.extendTraces(
     chartEl,
     {
-      y: [[randGen()], [randGen()]],
+      y: data,
     },
-    [0, 1]
+    // [0, -1]
+    indices
   );
 
   rangeCnt++;
@@ -45,41 +49,36 @@ function traceAppend() {
     });
   }
 }
-
-const emptyTrace = {
-  y: [0],
-};
-
-var chartData = [];
-for (let i = 0; i < 2; i++) {
-  chartData.push(emptyTrace);
-}
-
 function randGen() {
   return Math.random();
 }
 
-Plotly.newPlot(chartEl, chartData, chartLayout, chartConfig);
+var interval;
+document.getElementById("chart-switch").onclick = (e) => {
+  if (e.target.checked === true) {
+    Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
 
-var interval = setInterval(() => {
-  traceAppend();
-  if (rangeCnt > 100) clearInterval(interval);
-  if (rangeCnt > 100) {
-    rangeCnt = 0;
-    Plotly.newPlot(
-      chartEl,
-      [
-        {
-          y: [1, 2, 3].map(randGen),
-          mode: "lines",
-        },
-        {
-          y: [1, 2].map(randGen),
-          mode: "lines",
-        },
-      ],
-      chartLayout,
-      chartConfig
-    );
+    interval = setInterval(() => {
+      var data = [];
+      var indices = [];
+      for (let i = 0; i < ChannelCount; i++) {
+        data.push([randGen()]);
+        indices.push(i);
+      }
+      traceAppend(data, indices);
+    }, 100);
+  } else {
+    clearInterval(interval);
   }
-}, 100);
+};
+
+document.getElementById("chart-channel-select").onchange = () => {
+  ChannelCount = document.getElementById("chart-channel-select").value;
+
+  let channelDataTmp = [];
+  for (let i = 0; i < ChannelCount; i++) {
+    channelDataTmp.push({ y: [0] });
+  }
+
+  channelData = channelDataTmp;
+};
