@@ -169,7 +169,7 @@ input {
 }
 
 .input-field {
-  margin-top: 0px;
+  /* margin-top: 0px; */
   margin-bottom: -5px;
 }
 
@@ -311,9 +311,17 @@ input {
 #chart-tab {
   background-color: #ffffff;
 }
+
 #chart {
   align-content: center;
   height: calc(var(--menu-height) - 26px);
+}
+
+#chart-menu {
+  position: absolute;
+  z-index: 999;
+  background-color: #ffd180;
+  line-height: 18px;
 }
 
 #licence-row {
