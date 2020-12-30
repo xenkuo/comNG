@@ -11,7 +11,7 @@ const chartLayout = {
     l: 40,
     r: 0,
     t: 40,
-    b: 40,
+    b: 0,
   },
   xaxis: {
     rangeslider: {},
@@ -63,7 +63,7 @@ Plotly.newPlot(chartEl, chartData, chartLayout, chartConfig);
 
 var interval = setInterval(() => {
   traceAppend();
-  // if (rangeCnt > 100) clearInterval(interval);
+  if (rangeCnt > 100) clearInterval(interval);
   if (rangeCnt > 100) {
     rangeCnt = 0;
     Plotly.newPlot(

@@ -320,8 +320,8 @@ input {
 #chart-menu {
   position: absolute;
   z-index: 999;
-  background-color: #ffd180;
-  line-height: 18px;
+  /* background-color: #ffd180; */
+  line-height: 40px;
 }
 
 #licence-row {
