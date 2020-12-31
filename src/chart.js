@@ -12,6 +12,9 @@ const chartConfig = {
   scrollZoom: true,
   displaylogo: false,
 };
+const rangesliderLayout = {
+  thickness: 0.1,
+};
 
 var chartLayout = {
   // showlegend: false,
@@ -20,10 +23,10 @@ var chartLayout = {
     l: 40,
     r: 0,
     t: 40,
-    b: 0,
+    b: 4,
   },
   xaxis: {
-    rangeslider: {},
+    rangeslider: rangesliderLayout,
   },
   dragmode: "pan",
 };
@@ -38,11 +41,23 @@ function channelDataReset() {
   }
 }
 
-function traceAppend(data, indices) {
+function array2frame(array, length) {
+  var frame = [];
+  var indices = [];
+
+  for (let i = 0; i < channelCount && i < length; i++) {
+    frame.push([array[i]]);
+    indices.push(i);
+  }
+
+  return { data: frame, indices };
+}
+
+function frameAppend(frame, indices) {
   Plotly.extendTraces(
     chartEl,
     {
-      y: data,
+      y: frame,
     },
     indices
   );
@@ -52,11 +67,12 @@ function traceAppend(data, indices) {
     Plotly.relayout(chartEl, {
       xaxis: {
         range: [frameCount - frameShiftThreshold, frameCount],
-        rangeslider: {},
+        rangeslider: rangesliderLayout,
       },
     });
   }
 }
+
 function randGen() {
   return Math.random();
 }
@@ -71,13 +87,12 @@ document.getElementById("chart-switch").onclick = (e) => {
     Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
 
     interval = setInterval(() => {
-      var data = [];
-      var indices = [];
+      var array = [];
       for (let i = 0; i < channelCount; i++) {
-        data.push([randGen()]);
-        indices.push(i);
+        array.push(randGen() * i);
       }
-      traceAppend(data, indices);
+      let { data: frame, indices } = array2frame(array, channelCount);
+      frameAppend(frame, indices);
     }, 100);
   } else {
     clearInterval(interval);
