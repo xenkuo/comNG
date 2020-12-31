@@ -50,7 +50,7 @@ function array2frame(array, length) {
     indices.push(i);
   }
 
-  return { data: frame, indices };
+  return { frame, indices };
 }
 
 function frameAppend(frame, indices) {
@@ -73,10 +73,6 @@ function frameAppend(frame, indices) {
   }
 }
 
-function randGen() {
-  return Math.random();
-}
-
 var interval;
 document.getElementById("chart-switch").onclick = (e) => {
   if (e.target.checked === true) {
@@ -89,11 +85,10 @@ document.getElementById("chart-switch").onclick = (e) => {
     interval = setInterval(() => {
       var array = [];
       for (let i = 0; i < channelCount; i++) {
-        array.push(randGen() * i);
+        array.push(Math.random() * i);
       }
-      let { data: frame, indices } = array2frame(array, channelCount);
-      frameAppend(frame, indices);
-    }, 100);
+      arrayAppend(array, channelCount);
+    }, 10);
   } else {
     clearInterval(interval);
   }
@@ -114,3 +109,8 @@ document.getElementById("chart-clean").onclick = () => {
   // create new plot
   Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
 };
+
+function arrayAppend(array, length) {
+  let { frame, indices } = array2frame(array, length);
+  frameAppend(frame, indices);
+}
