@@ -4,6 +4,7 @@ const chartEl = document.getElementById("chart");
 const frameShiftThreshold = 100;
 var chartEnable = false;
 var frameCount = 0;
+var frameBuffer = [];
 
 var channelCount = 0;
 var channelData = [];
@@ -31,10 +32,6 @@ var chartLayout = {
   },
   dragmode: "pan",
 };
-
-function channelCountUpdate() {
-  channelCount = document.getElementById("chart-channel-select").value;
-}
 
 function channelDataReset() {
   frameBuffer = [];
@@ -79,28 +76,11 @@ function frameAppend(frame, indices) {
 document.getElementById("chart-switch").onclick = (e) => {
   if (e.target.checked === true) {
     chartEnable = true;
-    if (0 === channelCount) {
-      channelCountUpdate();
-      channelDataReset();
-    }
+    if (0 === channelCount) channelDataReset();
     Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
-
-    // interval = setInterval(() => {
-    //   var array = [];
-    //   for (let i = 0; i < channelCount; i++) {
-    //     array.push(Math.random() * i);
-    //   }
-    //   arrayAppend(array, channelCount);
-    // }, 10);
   } else {
     chartEnable = false;
-    // clearInterval(interval);
   }
-};
-
-document.getElementById("chart-channel-select").onchange = () => {
-  channelCountUpdate();
-  channelDataReset();
 };
 
 document.getElementById("chart-clean").onclick = () => {
@@ -119,15 +99,25 @@ function arrayAppend(array, length) {
   frameAppend(frame, indices);
 }
 
-var frameBuffer = [];
 function chartFrameProcess(buffer) {
+  if (false === chartEnable) return;
+
   frameBuffer += buffer;
 
   let index = -1;
   while ((index = frameBuffer.indexOf("\n")) !== -1) {
     let frame = frameBuffer.slice(0, index + 1);
     let frameArray = frame.toString().trim().split(" ");
-    arrayAppend(frameArray.slice(1, frameArray.length), frameArray.length - 1);
+    if ("NGF" === frameArray[0]) {
+      frameArray = frameArray.slice(1, frameArray.length);
+      if (frameArray.length !== channelCount) {
+        channelCount = frameArray.length;
+        channelDataReset();
+
+        Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
+      }
+      arrayAppend(frameArray, frameArray.length);
+    }
 
     frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length);
   }

@@ -324,6 +324,11 @@ input {
   line-height: 40px;
 }
 
+#chart-switch-div,
+#chart-clean-div {
+  display: inline-block;
+}
+
 #licence-row {
   margin-top: 6px;
 }
