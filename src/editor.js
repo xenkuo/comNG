@@ -520,7 +520,8 @@ function filterAnsiCode(inBuffer) {
 
 function showString(inBuffer) {
   // 1. trim ansi escape codes
-  let buffer = filterAnsiCode(inBuffer);
+  // let buffer = filterAnsiCode(inBuffer);
+  let buffer = inBuffer;
 
   // 2. output full line
   let index = -1;
