@@ -42,6 +42,7 @@ var chromeTabs = new ChromeTabs();
 var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
+var chartFrameBuff = [];
 var half_line = false;
 var decoIndex = 0;
 var ansiWait = false;
@@ -297,7 +298,7 @@ function openBinFile() {
         editor.getModel().setValue("");
         fs.readFile(filePath, (e, data) => {
           if (e) throw err;
-          showHex(data, false);
+          hexModeProcess(data, false);
         });
 
         // setup tab
@@ -457,10 +458,10 @@ function editorApplyEdit(textString, appendLine, revealLine) {
     editor.revealLine(model.getLineCount());
 }
 
-function showHex(buffer, revealLine) {
+function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: "twos" });
   const model = editor.getModel();
-  const lineCount = model.getLineCount();
+  // const lineCount = model.getLineCount();
 
   editorApplyEdit(text, false, revealLine);
 }
@@ -518,7 +519,7 @@ function filterAnsiCode(inBuffer) {
   return Buffer.from(outArray);
 }
 
-function showString(inBuffer) {
+function stringModeProcess(inBuffer) {
   // 1. trim ansi escape codes
   // let buffer = filterAnsiCode(inBuffer);
   let buffer = inBuffer;
@@ -1105,14 +1106,6 @@ document.getElementById("editor-area").ondrop = (e) => {
 
   return false;
 };
-
-function editorShowSerialData(buffer) {
-  if (config.general.hexmode === true) {
-    showHex(buffer, true);
-  } else {
-    showString(buffer);
-  }
-}
 
 function editorStateReset() {
   breakpointHit = false;

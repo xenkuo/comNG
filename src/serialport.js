@@ -196,7 +196,14 @@ document.getElementById("port-switch").onclick = (e) => {
       toast("Error: Write failed, please try again");
     });
 
-    port.on("data", editorShowSerialData);
+    port.on("data", (data) => {
+      if (config.general.hexmode === true) {
+        hexModeProcess(data, true);
+      } else {
+        chartFrameProcess(data);
+        stringModeProcess(data);
+      }
+    });
   } else {
     if (port === undefined || port.isOpen === false) {
       document.getElementById("port-switch").checked = false;

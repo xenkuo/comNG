@@ -2,6 +2,7 @@ const Plotly = require("plotly.js-dist");
 
 const chartEl = document.getElementById("chart");
 const frameShiftThreshold = 100;
+var chartEnable = false;
 var frameCount = 0;
 
 var channelCount = 0;
@@ -36,6 +37,7 @@ function channelCountUpdate() {
 }
 
 function channelDataReset() {
+  frameBuffer = [];
   for (let i = 0; i < channelCount; i++) {
     channelData[i] = { y: [0], mode: "lines" };
   }
@@ -73,24 +75,26 @@ function frameAppend(frame, indices) {
   }
 }
 
-var interval;
+// var interval;
 document.getElementById("chart-switch").onclick = (e) => {
   if (e.target.checked === true) {
+    chartEnable = true;
     if (0 === channelCount) {
       channelCountUpdate();
       channelDataReset();
     }
     Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
 
-    interval = setInterval(() => {
-      var array = [];
-      for (let i = 0; i < channelCount; i++) {
-        array.push(Math.random() * i);
-      }
-      arrayAppend(array, channelCount);
-    }, 10);
+    // interval = setInterval(() => {
+    //   var array = [];
+    //   for (let i = 0; i < channelCount; i++) {
+    //     array.push(Math.random() * i);
+    //   }
+    //   arrayAppend(array, channelCount);
+    // }, 10);
   } else {
-    clearInterval(interval);
+    chartEnable = false;
+    // clearInterval(interval);
   }
 };
 
@@ -113,4 +117,18 @@ document.getElementById("chart-clean").onclick = () => {
 function arrayAppend(array, length) {
   let { frame, indices } = array2frame(array, length);
   frameAppend(frame, indices);
+}
+
+var frameBuffer = [];
+function chartFrameProcess(buffer) {
+  frameBuffer += buffer;
+
+  let index = -1;
+  while ((index = frameBuffer.indexOf("\n")) !== -1) {
+    let frame = frameBuffer.slice(0, index + 1);
+    let frameArray = frame.toString().trim().split(" ");
+    arrayAppend(frameArray.slice(1, frameArray.length), frameArray.length - 1);
+
+    frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length);
+  }
 }
