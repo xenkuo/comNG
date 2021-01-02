@@ -3280,10 +3280,10 @@ plist@^3.0.0, plist@^3.0.1:
     xmlbuilder "^9.0.7"
     xmldom "0.1.x"
 
-plotly.js-dist@^1.58.4:
+plotly.js-basic-dist-min@^1.58.4:
   version "1.58.4"
-  resolved "https://registry.npm.taobao.org/plotly.js-dist/download/plotly.js-dist-1.58.4.tgz#d57b73d27af57a0d6cd2cf9428a001962889cf5b"
-  integrity sha1-1Xtz0nr1eg1s0s+UKKABliiJz1s=
+  resolved "https://registry.npm.taobao.org/plotly.js-basic-dist-min/download/plotly.js-basic-dist-min-1.58.4.tgz#14ea6116756f389b10c2b5e3a300b85f92f17881"
+  integrity sha1-FOphFnVvOJsQwrXjowC4X5LxeIE=
 
 prebuild-install@^5.3.0:
   version "5.3.3"

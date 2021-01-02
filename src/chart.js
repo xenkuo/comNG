@@ -1,4 +1,4 @@
-const Plotly = require("plotly.js-dist");
+const Plotly = require("plotly.js-basic-dist-min");
 
 const chartEl = document.getElementById("chart");
 const frameShiftThreshold = 100;

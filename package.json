@@ -1,7 +1,7 @@
 {
   "name": "comNG",
   "productName": "comNG",
-  "version": "2.0.4",
+  "version": "2.0.6",
   "mode": "develop",
   "description": "A powerful serialport tool with modernx UI",
   "repository": "https://github.com/xenkuo/comNG",
@@ -11,7 +11,7 @@
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
     "premake": "rm -f src/index.js.map",
-    "terser": "terser src/base.js src/editor.js src/serialport.js -o src/index.js -c -m",
+    "terser": "terser src/base.js src/editor.js src/serialport.js src/chart.js -o src/index.js -c -m",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
     "lint": "echo \"No linting configured\""
@@ -97,7 +97,7 @@
     "material-design-icons": "^3.0.1",
     "materialize-css": "^1.0.0-rc.2",
     "monaco-editor": "^0.20.0",
-    "plotly.js-dist": "^1.58.4",
+    "plotly.js-basic-dist-min": "^1.58.4",
     "serialport": "^8.0.7"
   },
   "devDependencies": {
