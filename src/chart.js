@@ -6,16 +6,13 @@ var chartEnable = false;
 var frameCount = 0;
 var frameBuffer = [];
 
-var channelCount = 0;
-var channelData = [];
+var channelCount = 1;
+var channelData = [{}];
 const chartConfig = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
-};
-const rangesliderLayout = {
-  thickness: 0.1,
 };
 
 var chartLayout = {
@@ -25,16 +22,17 @@ var chartLayout = {
     l: 40,
     r: 0,
     t: 40,
-    b: 4,
+    b: 20,
   },
   xaxis: {
-    rangeslider: rangesliderLayout,
+    range: [0, 100],
   },
   dragmode: "pan",
 };
 
 function channelDataReset() {
   frameBuffer = [];
+  channelData = [channelCount];
   for (let i = 0; i < channelCount; i++) {
     channelData[i] = { y: [0], mode: "lines" };
   }
@@ -66,7 +64,6 @@ function frameAppend(frame, indices) {
     Plotly.relayout(chartEl, {
       xaxis: {
         range: [frameCount - frameShiftThreshold, frameCount],
-        rangeslider: rangesliderLayout,
       },
     });
   }
@@ -76,7 +73,6 @@ function frameAppend(frame, indices) {
 document.getElementById("chart-switch").onclick = (e) => {
   if (e.target.checked === true) {
     chartEnable = true;
-    if (0 === channelCount) channelDataReset();
     Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
   } else {
     chartEnable = false;
@@ -84,7 +80,7 @@ document.getElementById("chart-switch").onclick = (e) => {
 };
 
 document.getElementById("chart-clean").onclick = () => {
-  // clear old state
+  // reset state
   Plotly.purge(chartEl);
   frameCount = 0;
   chartLayout.xaxis.range = [0, 100];
