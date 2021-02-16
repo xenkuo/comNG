@@ -15,6 +15,7 @@
 - [x] 多窗口
 - [x] 字符模式统一转换不可打印字符
 - [ ] ~~周期性自动枚举可用串口~~
+- [x] 通用数据图形化界面 
 
 ## 介绍
 
@@ -23,6 +24,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 专业的 UI 和交互设计
 - 支持多标签，多实例
 - 专业的 Hex 模式
+- 通用的数据图形化界面
 - 内建的 comNGLang 高亮语法
 - 手动文本高亮：类似于 notepad++ 的 Style Token
 - 搜索文本高亮：类似于 vscode 的搜索文本高亮
@@ -52,6 +54,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 
 ## 用户界面
 ![image](image/preview.jpg)
+![image](image/chart.png)
 ![image](image/preview.gif)
 ![image](image/hex-edit.gif)
 

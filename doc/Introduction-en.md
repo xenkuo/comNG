@@ -16,12 +16,14 @@ Focus on stable serialport communication and best **on-site data explore**, **co
 
 - built-in comNGLang syntax
 - built-in word highlighter
+- multi tabs
+- powerful Hex mode
+- generic data visualization interface
 - globally highlight word you selected (monaco built-in)
 - globally highlight word you searched (monaco built-in)
 - breakpoint on certain text
 - timestamp append and name sign
 - cross platform: Windows, Linux and Mac
-- powerful Hex mode
 - a simple simulated terminal mode
 
 Of course it supports common features that other COM tools have:
@@ -42,7 +44,9 @@ Features not supported:
 ## User Interface
 
 ![image](../image/preview.jpg)
-![image](../image/demo.gif)
+![image](../image/chart.png)
+![image](../image/preview.gif)
+![image](../image/hex-edit.gif)
 
 ## Usage
 
