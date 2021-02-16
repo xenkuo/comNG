@@ -6,7 +6,7 @@ var chartEnable = false;
 var frameCount = 0;
 var frameBuffer = [];
 
-var channelCount = 1;
+var channelCount = 2;
 var channelData = [{}];
 const chartConfig = {
   responsive: true,
@@ -29,6 +29,8 @@ var chartLayout = {
   },
   dragmode: "pan",
 };
+
+resetChart();
 
 function channelDataReset() {
   frameBuffer = [];
@@ -69,6 +71,16 @@ function frameAppend(frame, indices) {
   }
 }
 
+function resetChart() {
+  // reset state
+  Plotly.purge(chartEl);
+  frameCount = 0;
+  chartLayout.xaxis.range = [0, 100];
+  channelDataReset();
+
+  // create new plot
+  Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
+}
 // var interval;
 document.getElementById("chart-switch").onclick = (e) => {
   if (e.target.checked === true) {
@@ -79,16 +91,7 @@ document.getElementById("chart-switch").onclick = (e) => {
   }
 };
 
-document.getElementById("chart-clean").onclick = () => {
-  // reset state
-  Plotly.purge(chartEl);
-  frameCount = 0;
-  chartLayout.xaxis.range = [0, 100];
-  channelDataReset();
-
-  // create new plot
-  Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
-};
+document.getElementById("chart-clean").onclick = () => resetChart();
 
 function arrayAppend(array, length) {
   let { frame, indices } = array2frame(array, length);
