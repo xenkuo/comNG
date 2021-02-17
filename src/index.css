@@ -283,10 +283,19 @@ input {
   border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
 }
 
+#trans-data {
+  font-size: 12px;
+  font-family: "Cascadia Mono", Consolas, "SF Mono", "Ubuntu Mono",
+    "Lucida Console", monospace;
+}
+
 #trans-log-area {
   font-size: 12px;
-  max-height: 140px;
-  overflow-y: scroll;
+  font-family: "Cascadia Mono", Consolas, "SF Mono", "Ubuntu Mono",
+    "Lucida Console", monospace;
+  max-height: 146px;
+  padding: 4px;
+  overflow: auto;
 }
 
 #trans-eof-row {
