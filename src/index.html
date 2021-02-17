@@ -185,13 +185,14 @@
           </div>
         </div>
         <div id="transmit-tab" class="col s12">
-          <div class="col s7">
+          <div class="col s12">
             <div class="row config-row">
-              <div class="input-field col s8">
+              <div class="col s1"></div>
+              <div class="input-field col s9">
                 <input value="AT" id="trans-data" type="text" />
               </div>
 
-              <div class="col s4">
+              <div class="col s2">
                 <a class="btn-small waves-effect" id="trans-send-btn"
                   ><i class="material-icons">send</i></a
                 >
@@ -199,24 +200,24 @@
             </div>
 
             <div class="row config-row">
+              <div class="col s1"></div>
               <div class="col s1 config-key">
                 <p>EOF</p>
               </div>
-              <div class="input-field col s4" id="trans-eof-row">
+              <div class="input-field col s2" id="trans-eof-row">
                 <select id="trans-eof-select">
                   <option value="1" selected>CRLF</option>
                   <option value="2">LF</option>
                   <option value="3">CR</option>
-                  <option value="4">TERM</option>
+                  <option value="4">Terminal</option>
                 </select>
               </div>
-            </div>
 
-            <div class="row config-row">
-              <div class="col s3 config-key">
+              <div class="col s1"></div>
+              <div class="col s2 config-key">
                 <p>Hex Mode</p>
               </div>
-              <div class="col s5 config-item">
+              <div class="col s4 config-item">
                 <div class="switch">
                   <label>
                     Off
@@ -228,10 +229,11 @@
               </div>
             </div>
             <div class="row config-row">
-              <div class="col s3 config-key">
+              <div class="col s1"></div>
+              <div class="col s1 config-key">
                 <p>Repeat</p>
               </div>
-              <div class="col s5 config-item">
+              <div class="col s4 config-item">
                 <div class="switch">
                   <label>
                     Off
@@ -241,13 +243,11 @@
                   </label>
                 </div>
               </div>
-              <div class="col s2 config-key">
-                <p>Interval</p>
-              </div>
+
               <div class="input-field col s2 config-item">
                 <input
                   id="trans-repeat-interval"
-                  placeholder="ms"
+                  placeholder="repeat interval, unit: ms"
                   value="1000"
                   type="text"
                 />
@@ -255,19 +255,20 @@
             </div>
           </div>
 
-          <div class="col s5">
+          <div class="col s12">
             <!-- <p id="trans-log-p">transmit log</p> -->
             <div class="row" id="trans-log-row">
+              <div class="col s1"></div>
               <div class="input-field col s9">
                 <textarea
                   id="trans-log-area"
                   class="materialize-textarea"
-                  placeholder="History"
                   readonly
                 ></textarea>
+                <label for="trans-log-area">History</label>
               </div>
 
-              <div class="col s3 right-btn">
+              <div class="col s2 right-btn">
                 <a class="btn-small waves-effect red" id="trans-log-btn"
                   ><i class="material-icons">clear</i></a
                 >

@@ -285,7 +285,7 @@ input {
 
 #trans-log-area {
   font-size: 12px;
-  max-height: 136px;
+  max-height: 140px;
   overflow-y: scroll;
 }
 
@@ -296,7 +296,7 @@ input {
 
 #trans-send-btn,
 #trans-log-btn {
-  margin-top: 16px;
+  margin-top: 28px;
 
   height: var(--trans-btn-height) !important;
   line-height: var(--trans-btn-height) !important;
