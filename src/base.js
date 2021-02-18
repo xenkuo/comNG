@@ -14,6 +14,7 @@ var config;
 var barHeight;
 var menuHeight;
 var textDownward = true;
+var ctrlKeyPressed = false;
 
 const configDb = new Store({
   projectVersion: appVersion,
@@ -343,7 +344,7 @@ window.onresize = () => {
 
 document.onkeydown = function (e) {
   e = e || window.event;
-  // console.log(e.which, e.keyCode);
+  console.log(e.which, e.keyCode);
 
   switch (e.which || e.keyCode) {
     case 13: // the enter key
@@ -358,7 +359,23 @@ document.onkeydown = function (e) {
         serialWrite(transDataEl.value + "\t");
         transDataEl.value = "";
       }
-
+      break;
+    case 17:
+      if (document.activeElement.id === "trans-data") {
+        ctrlKeyPressed = true;
+        setTimeout;
+        setTimeout(() => {
+          ctrlKeyPressed = false;
+        }, 1000);
+      }
+      break;
+    case 67:
+      if (document.activeElement.id === "trans-data") {
+        if (true === ctrlKeyPressed) {
+          ctrlKeyPressed = false;
+          serialWrite([3]); // send ctrl+c
+        }
+      }
       break;
     default:
       break;
