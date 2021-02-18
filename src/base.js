@@ -76,6 +76,9 @@ const configDb = new Store({
     "2.0.4": (db) => {
       db.set("general.fontFamily", defaultFont);
     },
+    "2.1.0": (db) => {
+      db.set("transmit.eof", "\r\n");
+    },
   },
 });
 
@@ -229,8 +232,6 @@ window.onload = () => {
     transEofIndex = 1;
   } else if ("\r" === config.transmit.eof) {
     transEofIndex = 2;
-  } else if ("term" === config.transmit.eof) {
-    transEofIndex = 3;
   }
   transEof.selectedIndex = transEofIndex;
   mcss.FormSelect.init(transEof);
@@ -342,12 +343,22 @@ window.onresize = () => {
 
 document.onkeydown = function (e) {
   e = e || window.event;
+  // console.log(e.which, e.keyCode);
+
   switch (e.which || e.keyCode) {
-    case 13:
-      console.log("Enter key pressed.");
+    case 13: // the enter key
       if (document.activeElement.id === "trans-data") {
         document.getElementById("trans-send-btn").click();
       }
+      break;
+    case 9: // the tab key
+      if (document.activeElement.id === "trans-data") {
+        if (e.preventDefault) e.preventDefault();
+        const transDataEl = document.getElementById("trans-data");
+        serialWrite(transDataEl.value + "\t");
+        transDataEl.value = "";
+      }
+
       break;
     default:
       break;
@@ -532,12 +543,9 @@ document.getElementById("trans-send-btn").onclick = () => {
   if (true === config.transmit.hexmode) {
     dataOut = Buffer.from(dataIn, "hex");
   } else {
-    if (eof === "term") {
-      eof = "\n";
-      dataObj.value = "";
-    }
     dataOut += eof;
   }
+
   if (serialWrite(dataOut) === false) return;
 
   logObj.value += "\n" + dataIn;
@@ -556,6 +564,9 @@ document.getElementById("trans-send-btn").onclick = () => {
       serialWrite(dataOut);
     }, interval);
   }
+
+  // clear data element
+  dataObj.value = "";
 };
 
 document.getElementById("trans-eof-select").onchange = (e) => {
@@ -567,9 +578,6 @@ document.getElementById("trans-eof-select").onchange = (e) => {
       break;
     case 2:
       eof = "\r";
-      break;
-    case 3:
-      eof = "term";
       break;
     default:
       break;
