@@ -29,9 +29,8 @@ var chartLayout = {
   },
   font: {
     family:
-      "Cascadia Mono, Consolas, SF Mono, Ubuntu Mono, Lucida Console, monospace",
+      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
     size: 10,
-    // color: "#7f7f7f",
   },
   dragmode: "pan",
 };
@@ -42,7 +41,18 @@ function channelDataReset() {
   frameBuffer = [];
   channelData = [channelCount];
   for (let i = 0; i < channelCount; i++) {
-    channelData[i] = { y: [0], mode: "lines" };
+    channelData[i] = {
+      y: [0],
+      mode: "lines",
+      line: { width: 1.5 },
+      hoverlabel: {
+        font: {
+          family:
+            "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
+          size: 10,
+        },
+      },
+    };
   }
 }
 

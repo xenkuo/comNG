@@ -337,8 +337,9 @@ input {
   display: inline-block;
 }
 
-#chart-clean {
-  transform: scale(0.65);
+#chart-clean,
+#downward-btn {
+  transform: scale(0.64);
 }
 
 #licence-row {
@@ -347,11 +348,6 @@ input {
 #licence-key {
   height: 24px;
   margin-bottom: 0px;
-}
-
-#downward-btn {
-  transform: scale(0.65);
-  transform-origin: left;
 }
 
 #baud-input,
