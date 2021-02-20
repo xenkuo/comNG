@@ -445,7 +445,7 @@
             </div>
             <div title="清除数据" id="chart-clean-div">
               <a
-                class="waves-effect btn-floating btn-small grey"
+                class="waves-effect btn-floating btn-small red"
                 id="chart-clean"
                 ><i class="material-icons">delete</i></a
               >
@@ -575,26 +575,25 @@
           </select>
         </div>
 
+        <div title="串口开关" class="switch col s2">
+          <label>
+            <input type="checkbox" id="port-switch" />
+            <span class="lever"></span>
+          </label>
+        </div>
+
+        <div class="col s1">
+          <a class="waves-effect btn-floating btn-small red" id="clear-btn"
+            ><i class="material-icons">delete</i></a
+          >
+        </div>
+
         <div class="col s1"></div>
+
         <div title="自动刷新" class="col s1">
           <a class="waves-effect btn-floating btn-small" id="downward-btn"
             ><i class="material-icons">trending_down</i></a
           >
-        </div>
-
-        <div title="清空数据" class="col s3">
-          <div class="col s4">
-            <a class="waves-effect btn-floating btn-small red" id="clear-btn"
-              ><i class="material-icons">delete</i></a
-            >
-          </div>
-
-          <div title="串口开关" class="switch col s8">
-            <label>
-              <input type="checkbox" id="port-switch" />
-              <span class="lever"></span>
-            </label>
-          </div>
         </div>
       </div>
     </div>

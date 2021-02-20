@@ -27,6 +27,12 @@ var chartLayout = {
   xaxis: {
     range: [0, 100],
   },
+  font: {
+    family:
+      "Cascadia Mono, Consolas, SF Mono, Ubuntu Mono, Lucida Console, monospace",
+    size: 10,
+    // color: "#7f7f7f",
+  },
   dragmode: "pan",
 };
 

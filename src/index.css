@@ -337,6 +337,10 @@ input {
   display: inline-block;
 }
 
+#chart-clean {
+  transform: scale(0.65);
+}
+
 #licence-row {
   margin-top: 6px;
 }
@@ -346,7 +350,7 @@ input {
 }
 
 #downward-btn {
-  transform: scale(0.62);
+  transform: scale(0.65);
   transform-origin: left;
 }
 
