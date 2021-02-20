@@ -242,7 +242,6 @@ input {
 
 /* Neumorphism button UI, need bar background set to: #55b9f3 */
 /* #menu-btn,
-#refresh-btn,
 #clear-btn {
   background: linear-gradient(145deg, #4da7db, #5bc6ff) !important;
   box-shadow: 9px 9px 19px #489dcf, -9px -9px 19px #62d5ff !important;
@@ -344,11 +343,6 @@ input {
 #licence-key {
   height: 24px;
   margin-bottom: 0px;
-}
-
-#refresh-btn {
-  transform: scale(0.62);
-  transform-origin: left;
 }
 
 #downward-btn {

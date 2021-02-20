@@ -10,6 +10,7 @@ var modemSignal = {
 };
 
 function portUpdate() {
+  console.log("port update");
   let pSelect = document.getElementById("path-select");
   pSelect.options.length = 0;
 

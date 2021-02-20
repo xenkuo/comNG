@@ -687,7 +687,16 @@ document.getElementById("path-select").onchange = (e) => {
   }, 400);
 };
 
-document.getElementById("refresh-btn").onclick = portUpdate;
+// Automatically update port
+var pathUpdated = false;
+document.getElementById("path-input").onmouseover = (e) => {
+  if (true === pathUpdated) return;
+  pathUpdated = true;
+  portUpdate();
+};
+document.getElementById("path-input").onmouseleave = (e) => {
+  pathUpdated = false;
+};
 
 document.getElementById("downward-btn").onclick = (e) => {
   if (textDownward === true) {
