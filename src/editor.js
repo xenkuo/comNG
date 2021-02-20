@@ -974,7 +974,7 @@ amdRequire(["vs/editor/editor.main"], function () {
 
   chromeTabs.init(tabsEl);
   chromeTabs.addTab();
-  document.getElementById("add-tab").onclick = () => {
+  document.getElementById("tab-add-btn").onclick = () => {
     chromeTabs.addTab();
   };
 });

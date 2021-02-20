@@ -10,9 +10,9 @@
   --bar-height: 53px;
   --trans-btn-height: 20px;
   --modem-btn-height: 10px;
-  --bar-color-head: #fafafa;
-  --bar-color-middle: #fafafa;
-  --bar-color-tail: #fafafa;
+  --bar-color-head: #ffba3a;
+  --bar-color-middle: #ffba3a;
+  --bar-color-tail: #ffba3a;
 }
 
 html {
@@ -55,7 +55,7 @@ th {
   height: var(--nav-height);
 }
 
-#add-tab {
+#tab-add-btn {
   position: absolute;
   -webkit-user-select: none;
   top: 8px;
