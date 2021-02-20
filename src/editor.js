@@ -404,6 +404,14 @@ function saveAsFile() {
     });
 }
 
+function createFileName() {
+  let date = new Date();
+  date = date.toString().split(" ");
+  let name = date[0] + "-" + date[4].replace(/[.|:]/g, "-") + ".log";
+
+  return name;
+}
+
 function newTab() {
   chromeTabs.addTab();
 }
@@ -913,9 +921,7 @@ amdRequire(["vs/editor/editor.main"], function () {
 
     let el = detail.tabEl;
     // setup the title with time
-    let date = new Date();
-    date = date.toString().split(" ");
-    let title = date[0] + "-" + date[4].replace(/[.|:]/g, "-") + ".log";
+    let title = createFileName();
     let titleEl = el.querySelector(".chrome-tab-title");
     el.align = "center";
     titleEl.innerHTML = title;
@@ -1034,12 +1040,7 @@ document.getElementById("breakpoint-after-lines").onblur = (e) => {
 
 document.getElementById("capture-file-switch").onclick = (e) => {
   if (e.target.checked === true) {
-    let date = new Date();
-    date = date.toString().split(" ");
-    let fileName = date[0] + "-" + date[4].replace(/[.|:]/g, "-");
-
-    if (config.advance.sign.switch === true && config.advance.sign.name !== "")
-      fileName += "-by-" + config.advance.sign.name;
+    let fileName = createFileName();
 
     dialog
       .showSaveDialog({
