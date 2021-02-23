@@ -4,8 +4,11 @@
 
 :root {
   --nav-height: 36px;
-  --drag-width: 120px;
   --icon-width: 24px;
+  --icon-init-left: 246px;
+  --drag-min-width: 120px;
+  --tab-std-width: 240px;
+  --tabs-offset: 6px;
   --menu-height: 350px;
   --bar-height: 53px;
   --trans-btn-height: 20px;
@@ -51,7 +54,8 @@ th {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: calc(100% - var(--drag-width) - (var(--icon-width) / 2));
+  /* width: calc(100% - var(--drag-width) - (var(--icon-width) / 2)); */
+  width: 0px;
   height: var(--nav-height);
 }
 
@@ -59,15 +63,16 @@ th {
   position: absolute;
   -webkit-user-select: none;
   top: 8px;
-  right: calc(var(--drag-width) - 4px);
+  left: var(--icon-init-left);
+  /* right: calc(var(--drag-width) - 4px); */
   color: #26a69a;
 }
 /* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
-.nav-drag-region {
+#drag-area {
   top: 6px;
   right: 0px;
   position: absolute;
-  width: var(--drag-width);
+  /* width: var(--drag-width); */
   height: var(--nav-height);
   z-index: -1;
   -webkit-app-region: drag;

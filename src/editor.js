@@ -6,7 +6,6 @@ const amdLoader = require("../node_modules/monaco-editor/min/vs/loader.js");
 const { dialog } = require("electron").remote;
 const hexy = require("hexy");
 const languageDetect = require("language-detect");
-const ChromeTabs = require("chrome-tabs");
 const chokidar = require("chokidar");
 
 const amdRequire = amdLoader.require;
@@ -38,7 +37,6 @@ const decoTable = [
 ];
 
 var editor;
-var chromeTabs = new ChromeTabs();
 var breakpointHit = false;
 var breakpointAfterLines = 0;
 var breakpointBuff = [];
@@ -909,10 +907,11 @@ amdRequire(["vs/editor/editor.main"], function () {
 
   // --------------------------Chrometabs section, refer to:
   // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
-  let tabsEl = document.querySelector(".chrome-tabs");
+  const tabsEl = document.querySelector(".chrome-tabs");
 
   tabsEl.addEventListener("tabAdd", ({ detail }) => {
-    // console.log("tab add");
+    console.log("tab add");
+    nav_area_update("tabAdd");
 
     // create a new model
     let model = monaco.editor.createModel();
@@ -943,7 +942,6 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   tabsEl.addEventListener("activeTabChange", ({ detail }) => {
-    // console.log("tab change");
     let el = detail.tabEl;
 
     // Save before tab's state
@@ -961,6 +959,10 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   tabsEl.addEventListener("tabRemove", ({ detail }) => {
+    console.log("tab remove");
+
+    nav_area_update("tabRemove");
+
     // delete from watcher
     const view = tabsMap.get(detail.tabEl);
     if (null !== view.path) {

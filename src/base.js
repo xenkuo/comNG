@@ -7,8 +7,11 @@ const appUpdaterUrl =
   "https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest";
 const defaultFont =
   "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', 'Courier New', 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'";
-var mcss = require("materialize-css");
+const mcss = require("materialize-css");
+const ChromeTabs = require("chrome-tabs");
+
 mcss.AutoInit();
+var chromeTabs = new ChromeTabs();
 
 var config;
 var barHeight;
@@ -149,21 +152,44 @@ ipcRenderer.on("main-cmd", (event, arg) => {
   }
 });
 
+var iconWidth;
+var tabsOffset;
+var tabStdWidth;
+var dragMinWidth;
+
+function nav_area_update() {
+  const windowWidth = window.innerWidth;
+  const tabsAreaEl = document.getElementById("tabs-area");
+  const tabAddEl = document.getElementById("tab-add-btn");
+  const dragAreaEl = document.getElementById("drag-area");
+  const tabsMaxWidth = windowWidth - dragMinWidth;
+
+  let tabsAreaWidth = parseInt(tabsAreaEl.style.width) | tabsAreaEl.offsetWidth;
+  const els = document.getElementsByClassName("chrome-tab");
+  tabsAreaWidth = els.length * tabStdWidth + tabsOffset;
+  if (tabsAreaWidth > tabsMaxWidth) tabsAreaWidth = tabsMaxWidth;
+
+  tabsAreaEl.style.width = tabsAreaWidth + "px";
+  tabAddEl.style.left = tabsAreaWidth + "px";
+  dragAreaEl.style.width = windowWidth - tabsAreaWidth - iconWidth + "px";
+}
+
 window.onload = () => {
   config = configDb.store;
   document.getElementById("menu-area").hidden = config.menu.hidden;
 
-  barHeight = getComputedStyle(document.documentElement)
-    .getPropertyValue("--bar-height")
-    .trim()
-    .split("px")[0];
-  barHeight = parseInt(barHeight);
-  menuHeight = getComputedStyle(document.documentElement)
-    .getPropertyValue("--menu-height")
-    .trim()
-    .split("px")[0];
-  menuHeight = parseInt(menuHeight);
+  // 0: update elements size and position
+  const cStyle = getComputedStyle(document.documentElement);
 
+  // 1: update css variable
+  iconWidth = parseInt(cStyle.getPropertyValue("--icon-width"));
+  tabsOffset = parseInt(cStyle.getPropertyValue("--tabs-offset"));
+  tabStdWidth = parseInt(cStyle.getPropertyValue("--tab-std-width"));
+  dragMinWidth = parseInt(cStyle.getPropertyValue("--drag-min-width"));
+  barHeight = parseInt(cStyle.getPropertyValue("--bar-height"));
+  menuHeight = parseInt(cStyle.getPropertyValue("--menu-height"));
+
+  // 2: update editor height
   let nav = document.getElementById("nav-area");
   let bar = document.getElementById("bar-area");
   let menu = document.getElementById("menu-area");
@@ -184,8 +210,6 @@ window.onload = () => {
   baudSelect.options[0].text = config.general.customized;
   baudSelect.selectedIndex = config.baudIndex;
   mcss.FormSelect.init(baudSelect);
-
-  portUpdate();
 
   document.getElementById("hexmode-switch").checked = config.general.hexmode;
 
@@ -340,6 +364,8 @@ window.onresize = () => {
     bar.offsetHeight -
     menu.offsetHeight +
     "px";
+
+  nav_area_update();
 };
 
 document.onkeydown = function (e) {

@@ -2,7 +2,7 @@
 // It has the same sandbox as a Chrome extension.
 
 let pjson = require("../package.json");
-if ("develop" == pjson.mode) {
+if ("dev" == pjson.mode) {
   const fs = require("fs");
   let terser = require("terser");
   let options = {
