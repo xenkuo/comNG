@@ -910,8 +910,8 @@ amdRequire(["vs/editor/editor.main"], function () {
   const tabsEl = document.querySelector(".chrome-tabs");
 
   tabsEl.addEventListener("tabAdd", ({ detail }) => {
-    console.log("tab add");
-    nav_area_update("tabAdd");
+    // console.log("tab add");
+    navigator_layout_update();
 
     // create a new model
     let model = monaco.editor.createModel();
@@ -959,9 +959,8 @@ amdRequire(["vs/editor/editor.main"], function () {
   });
 
   tabsEl.addEventListener("tabRemove", ({ detail }) => {
-    console.log("tab remove");
-
-    nav_area_update("tabRemove");
+    // console.log("tab remove");
+    navigator_layout_update();
 
     // delete from watcher
     const view = tabsMap.get(detail.tabEl);

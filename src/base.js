@@ -157,7 +157,7 @@ var tabsOffset;
 var tabStdWidth;
 var dragMinWidth;
 
-function nav_area_update() {
+function navigator_layout_update() {
   const windowWidth = window.innerWidth;
   const tabsAreaEl = document.getElementById("tabs-area");
   const tabAddEl = document.getElementById("tab-add-btn");
@@ -365,7 +365,7 @@ window.onresize = () => {
     menu.offsetHeight +
     "px";
 
-  nav_area_update();
+  navigator_layout_update();
 };
 
 document.onkeydown = function (e) {
