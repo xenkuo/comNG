@@ -1,5 +1,8 @@
 # comNG -- 串口助手
 
+
+> 作者QQ: 445639270，有上位机、产测软件开发需求可于作者联系，作者也要恰饭的。。。
+
 `comNG` 是一款具有现代化 UI 设计并且功能强大的串口助手软件。
 
 `comNG` is a powerful serial port tool with modern UI design. For English users, please refer to [comNG Introduction](doc/Introduction-en.md)
