@@ -204,19 +204,21 @@
               <div class="col s1 config-key">
                 <p>EOF</p>
               </div>
-              <div class="input-field col s2" id="trans-eof-row">
-                <select id="trans-eof-select">
-                  <option value="1" selected>CRLF</option>
-                  <option value="2">LF</option>
-                  <option value="3">CR</option>
-                </select>
+              <div class="col s2">
+                <div class="input-field" id="trans-eof-row">
+                  <select id="trans-eof-select">
+                    <option value="1" selected>CRLF</option>
+                    <option value="2">LF</option>
+                    <option value="3">CR</option>
+                  </select>
+                </div>
               </div>
 
               <div class="col s1"></div>
-              <div class="col s2 config-key">
+              <div class="col s1 config-key">
                 <p>Hex Mode</p>
               </div>
-              <div class="col s4 config-item">
+              <div class="col s3 config-item">
                 <div class="switch">
                   <label>
                     Off
@@ -230,9 +232,22 @@
             <div class="row config-row">
               <div class="col s1"></div>
               <div class="col s1 config-key">
+                <p>Clean</p>
+              </div>
+              <div class="col s2 config-item">
+                <div class="switch">
+                  <label>
+                    <input type="checkbox" id="trans-clean-switch" />
+                    <span class="lever"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="col s1"></div>
+              <div class="col s1 config-key">
                 <p>Repeat</p>
               </div>
-              <div class="col s4 config-item">
+              <div class="col s3 config-item">
                 <div class="switch">
                   <label>
                     Off
@@ -242,8 +257,7 @@
                   </label>
                 </div>
               </div>
-
-              <div class="input-field col s2 config-item">
+              <div class="input-field col s1 config-item">
                 <input
                   id="trans-repeat-interval"
                   placeholder="repeat interval, unit: ms"

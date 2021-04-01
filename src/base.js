@@ -83,6 +83,9 @@ const configDb = new Store({
     "2.1.0": (db) => {
       db.set("transmit.eof", "\r\n");
     },
+    "2.1.1": (db) => {
+      db.set("transmit.clean", false);
+    },
   },
 });
 
@@ -251,6 +254,7 @@ window.onload = () => {
 
   document.getElementById("trans-hexmode-switch").checked =
     config.transmit.hexmode;
+  document.getElementById("trans-clean-switch").checked = config.transmit.clean;
   let transEof = document.getElementById("trans-eof-select");
   let transEofIndex = 0;
   if ("\n" === config.transmit.eof) {
@@ -609,7 +613,7 @@ document.getElementById("trans-send-btn").onclick = () => {
   }
 
   // clear data element
-  dataObj.value = "";
+  if (true === config.transmit.clean) dataObj.value = "";
 };
 
 document.getElementById("trans-eof-select").onchange = (e) => {
@@ -633,6 +637,12 @@ document.getElementById("trans-hexmode-switch").onchange = (e) => {
   let checked = e.target.checked;
 
   configUpdate("transmit.hexmode", checked);
+};
+
+document.getElementById("trans-clean-switch").onchange = (e) => {
+  let checked = e.target.checked;
+
+  configUpdate("transmit.clean", checked);
 };
 
 document.getElementById("trans-repeat-switch").onchange = (e) => {
