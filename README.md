@@ -57,6 +57,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 抓取至文件
 
 ## 用户界面
+
 ![image](image/preview.jpg)
 ![image](image/chart.png)
 ![image](image/preview.gif)
@@ -85,7 +86,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 
 ### 克隆代码
 
-```
+```ps
 git clone git@gitee.com:xenkuo/comNG.git
 ```
 
@@ -142,14 +143,14 @@ yarn
 
 ### 运行
 
-```
+```ps
 code .
 yarn run start
 ```
 
 ### 编译
 
-```
+```ps
 yarn make
 ```
 

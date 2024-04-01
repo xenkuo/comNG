@@ -14,7 +14,8 @@
     "terser": "terser src/base.js src/editor.js src/serialport.js src/chart.js -o src/index.js -c -m",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "lint": "npx eslint src",
+    "prettier": "npx prettier src --write"
   },
   "keywords": [],
   "author": {
@@ -109,6 +110,8 @@
     "electron": "7.2.4",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.5",
     "terser": "^4.6.13"
   }
 }

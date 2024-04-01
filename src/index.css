@@ -1,6 +1,6 @@
-@import url("../node_modules/material-design-icons/iconfont/material-icons.css");
-@import url("../node_modules/materialize-css/dist/css/materialize.css");
-@import url("../node_modules/chrome-tabs/css/chrome-tabs.css");
+@import url('../node_modules/material-design-icons/iconfont/material-icons.css');
+@import url('../node_modules/materialize-css/dist/css/materialize.css');
+@import url('../node_modules/chrome-tabs/css/chrome-tabs.css');
 
 :root {
   --nav-height: 36px;
@@ -296,14 +296,14 @@ input {
 
 #trans-data {
   font-size: 12px;
-  font-family: "Cascadia Mono", Consolas, "SF Mono", "Ubuntu Mono",
-    "Lucida Console", monospace;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono',
+    'Lucida Console', monospace;
 }
 
 #trans-log-area {
   font-size: 12px;
-  font-family: "Cascadia Mono", Consolas, "SF Mono", "Ubuntu Mono",
-    "Lucida Console", monospace;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono',
+    'Lucida Console', monospace;
   max-height: 146px;
   padding: 4px;
   overflow: auto;

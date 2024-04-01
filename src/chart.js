@@ -1,19 +1,19 @@
-const Plotly = require("plotly.js-basic-dist-min");
+const Plotly = require('plotly.js-basic-dist-min')
 
-const chartEl = document.getElementById("chart");
-const frameShiftThreshold = 100;
-var chartEnable = false;
-var frameCount = 0;
-var frameBuffer = [];
+const chartEl = document.getElementById('chart')
+const frameShiftThreshold = 100
+var chartEnable = false
+var frameCount = 0
+var frameBuffer = []
 
-var channelCount = 2;
-var channelData = [{}];
+var channelCount = 2
+var channelData = [{}]
 const chartConfig = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
-};
+}
 
 var chartLayout = {
   // showlegend: false,
@@ -29,43 +29,43 @@ var chartLayout = {
   },
   font: {
     family:
-      "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
+      '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif',
     size: 10,
   },
-  dragmode: "pan",
-};
+  dragmode: 'pan',
+}
 
-resetChart();
+resetChart()
 
 function channelDataReset() {
-  frameBuffer = [];
-  channelData = [channelCount];
+  frameBuffer = []
+  channelData = [channelCount]
   for (let i = 0; i < channelCount; i++) {
     channelData[i] = {
       y: [0],
-      mode: "lines",
+      mode: 'lines',
       line: { width: 1.5 },
       hoverlabel: {
         font: {
           family:
-            "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif",
+            '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif',
           size: 10,
         },
       },
-    };
+    }
   }
 }
 
 function array2frame(array, length) {
-  var frame = [];
-  var indices = [];
+  var frame = []
+  var indices = []
 
   for (let i = 0; i < channelCount && i < length; i++) {
-    frame.push([array[i]]);
-    indices.push(i);
+    frame.push([array[i]])
+    indices.push(i)
   }
 
-  return { frame, indices };
+  return { frame, indices }
 }
 
 function frameAppend(frame, indices) {
@@ -75,65 +75,65 @@ function frameAppend(frame, indices) {
       y: frame,
     },
     indices
-  );
+  )
 
-  frameCount++;
+  frameCount++
   if (frameCount > frameShiftThreshold) {
     Plotly.relayout(chartEl, {
       xaxis: {
         range: [frameCount - frameShiftThreshold, frameCount],
       },
-    });
+    })
   }
 }
 
 function resetChart() {
   // reset state
-  Plotly.purge(chartEl);
-  frameCount = 0;
-  chartLayout.xaxis.range = [0, 100];
-  channelDataReset();
+  Plotly.purge(chartEl)
+  frameCount = 0
+  chartLayout.xaxis.range = [0, 100]
+  channelDataReset()
 
   // create new plot
-  Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
+  Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
 }
 // var interval;
-document.getElementById("chart-switch").onclick = (e) => {
+document.getElementById('chart-switch').onclick = (e) => {
   if (e.target.checked === true) {
-    chartEnable = true;
-    Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
+    chartEnable = true
+    Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
   } else {
-    chartEnable = false;
+    chartEnable = false
   }
-};
+}
 
-document.getElementById("chart-clean").onclick = () => resetChart();
+document.getElementById('chart-clean').onclick = () => resetChart()
 
 function arrayAppend(array, length) {
-  let { frame, indices } = array2frame(array, length);
-  frameAppend(frame, indices);
+  let { frame, indices } = array2frame(array, length)
+  frameAppend(frame, indices)
 }
 
 function chartFrameProcess(buffer) {
-  if (false === chartEnable) return;
+  if (false === chartEnable) return
 
-  frameBuffer += buffer;
+  frameBuffer += buffer
 
-  let index = -1;
-  while ((index = frameBuffer.indexOf("\n")) !== -1) {
-    let frame = frameBuffer.slice(0, index + 1);
-    let frameArray = frame.toString().trim().split(" ");
-    if ("NGF" === frameArray[0]) {
-      frameArray = frameArray.slice(1, frameArray.length);
+  let index = -1
+  while ((index = frameBuffer.indexOf('\n')) !== -1) {
+    let frame = frameBuffer.slice(0, index + 1)
+    let frameArray = frame.toString().trim().split(' ')
+    if ('NGF' === frameArray[0]) {
+      frameArray = frameArray.slice(1, frameArray.length)
       if (frameArray.length !== channelCount) {
-        channelCount = frameArray.length;
-        channelDataReset();
+        channelCount = frameArray.length
+        channelDataReset()
 
-        Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig);
+        Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
       }
-      arrayAppend(frameArray, frameArray.length);
+      arrayAppend(frameArray, frameArray.length)
     }
 
-    frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length);
+    frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length)
   }
 }
