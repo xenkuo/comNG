@@ -107,10 +107,10 @@
     "@electron-forge/maker-dmg": "^6.0.0-beta.49",
     "@electron-forge/maker-squirrel": "6.0.0-beta.47",
     "@electron-forge/publisher-github": "^6.0.0-beta.50",
-    "electron": "7.2.4",
+    "electron": "7.3.3",
     "electron-rebuild": "^1.10.0",
     "eslint": "^6.8.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint-config-prettier": "6.15.0",
     "prettier": "^3.2.5",
     "terser": "^4.6.13"
   }
