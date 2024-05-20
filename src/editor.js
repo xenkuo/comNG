@@ -8,6 +8,8 @@ const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 
+const deco = require('./decorator.js')
+
 const amdRequire = amdLoader.require
 
 const hmUnitCount = 16
@@ -25,24 +27,12 @@ const hmStrOffset = hmSpanOffset + hmSpanLength // 62
 const hmStrLength = 16
 const hmEofOffset = hmStrOffset + hmStrLength // 78
 
-const decoMod = 7
-const decoTable = [
-  { style: 'hl-red', color: '#ff8a80' },
-  { style: 'hl-orange', color: '#ffd180' },
-  { style: 'hl-yellow', color: '#ffff8d' },
-  { style: 'hl-green', color: '#b9f6ca' },
-  { style: 'hl-blue', color: '#8dd8ff' },
-  { style: 'hl-indigo', color: '#8c9eff' },
-  { style: 'hl-purple', color: '#ea80fc' },
-]
-
 var editor
 var breakpointHit = false
 var breakpointAfterLines = 0
 var breakpointBuff = []
 var chartFrameBuff = []
 var half_line = false
-var decoIndex = 0
 var ansiWait = false
 var captureFileStream
 var localSave = false
@@ -96,76 +86,6 @@ function uriFromPath(_path) {
   return encodeURI('file://' + pathName)
 }
 
-function decoGet() {
-  return decoTable[decoIndex++ % decoMod]
-}
-
-function decoApply(model, text) {
-  let matches = model.findMatches(
-    text,
-    false,
-    false,
-    true,
-    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
-    null,
-    false
-  )
-  let decoration = decoGet()
-
-  console.log(decoration.style, decoration.color)
-
-  for (let i of matches) {
-    let range = i.range
-
-    model.deltaDecorations(
-      [],
-      [
-        {
-          range: range,
-          options: {
-            className: decoration.style,
-            overviewRuler: {
-              color: decoration.color,
-              position: 4, // position right
-            },
-          },
-        },
-      ]
-    )
-  }
-}
-
-function decoRemoveOld(model, text) {
-  let matches = model.findMatches(
-    text,
-    false,
-    false,
-    true,
-    // "`~!@#$%^&*()-=+[{]}\\|;:'\",.<>/?",
-    null,
-    false
-  )
-
-  for (let match of matches) {
-    let decos = model.getDecorationsInRange(match.range)
-
-    // super word remove decoration will cause sub word decoration to 1
-    for (let deco of decos) {
-      model.deltaDecorations([deco.id], [])
-    }
-  }
-}
-
-function decoRemove(model, targetClassName) {
-  let decos = model.getAllDecorations()
-
-  for (let deco of decos) {
-    if (targetClassName === deco.options.className) {
-      model.deltaDecorations([deco.id], [])
-    }
-  }
-}
-
 function highlightToggle() {
   console.log('highligh toggle')
   let model = editor.getModel()
@@ -205,9 +125,9 @@ function highlightToggle() {
     }
   }
   if (1 === applyDeco) {
-    decoApply(model, text)
+    deco.apply(model, text)
   } else {
-    decoRemove(model, targetClassName)
+    deco.remove(model, targetClassName)
   }
   return null
 }
@@ -892,7 +812,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     if (range.isEmpty() === true) {
       showCursors(model, range)
     } else {
-      let deco = decoGet()
+      let deco = deco.get()
       for (
         let line = range.startLineNumber;
         line <= range.endLineNumber;
@@ -1114,6 +1034,7 @@ function editorStateReset() {
   breakpointAfterLines = 0
   breakpointBuff = []
   half_line = false
-  decoIndex = 0
   ansiWait = false
+
+  deco.init()
 }
