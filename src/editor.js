@@ -8,7 +8,7 @@ const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 
-const deco = require('./decorator.js')
+const hlt = require('./utilities/highlight.js')
 
 const amdRequire = amdLoader.require
 
@@ -84,69 +84,6 @@ function uriFromPath(_path) {
     pathName = '/' + pathName
   }
   return encodeURI('file://' + pathName)
-}
-
-function highlightToggle() {
-  console.log('highligh toggle')
-  let model = editor.getModel()
-  let range = editor.getSelection()
-  let text = model.getValueInRange(range)
-  if (text === '') {
-    let word = model.getWordAtPosition(editor.getPosition())
-    if (null === word) text = ''
-    else {
-      text = word.word
-      range.startColumn = word.startColumn
-      range.endColumn = word.endColumn
-    }
-  }
-
-  if (text === '') return
-
-  let applyDeco = 1
-  let targetClassName = ''
-  let targetzIndex = 0
-  let decos = model.getDecorationsInRange(range)
-  for (let deco of decos) {
-    if (
-      deco.options.className !== null &&
-      deco.options.className.indexOf('hl-') !== -1
-    ) {
-      applyDeco = 0
-      if (targetzIndex === 0) {
-        targetzIndex = deco.options.zIndex
-        targetClassName = deco.options.className
-      } else {
-        if (deco.options.zIndex > targetzIndex) {
-          targetzIndex = deco.options.zIndex
-          targetClassName = deco.options.className
-        }
-      }
-    }
-  }
-  if (1 === applyDeco) {
-    deco.apply(model, text)
-  } else {
-    deco.remove(model, targetClassName)
-  }
-  return null
-}
-
-function hightlightClearAll() {
-  console.log('highlight clear all')
-
-  let model = editor.getModel()
-  let decos = model.getAllDecorations()
-
-  for (let deco of decos) {
-    if (deco.options.className === null) continue
-    if (
-      deco.options.className.indexOf('hl-') !== -1 ||
-      deco.options.className === 'hex-cursor'
-    ) {
-      model.deltaDecorations([deco.id], [])
-    }
-  }
 }
 
 function openFile() {
@@ -640,7 +577,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     keybindingContext: null,
     contextMenuGroupId: '9_cutcopypaste',
     contextMenuOrder: 3.5,
-    run: highlightToggle,
+    run: hlt.toggle,
   })
 
   editor.addAction({
@@ -653,7 +590,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     keybindingContext: null,
     contextMenuGroupId: '9_cutcopypaste',
     contextMenuOrder: 3.6,
-    run: hightlightClearAll,
+    run: hlt.clear,
   })
 
   editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
@@ -1036,5 +973,5 @@ function editorStateReset() {
   half_line = false
   ansiWait = false
 
-  deco.init()
+  hlt.init()
 }
