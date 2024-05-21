@@ -1,10 +1,10 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const Shortcut = require('electron-localshortcut')
+const Store = require('./utilities/store.js')
 
-const Store = require('electron-store')
-
-const store = new Store()
+const store = Store.init(app.getVersion())
+// console.log(app.getPath('appData'))
 
 const widthDefault = 600
 const widthMin = 600
