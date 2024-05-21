@@ -19,7 +19,7 @@ function portUpdate() {
       ports.forEach((item, index) => {
         // console.log(item, index);
         pSelect.options.add(new Option(item.path, index))
-        if (index === config.pathIndex) pSelect.selectedIndex = index
+        if (index === config.get('pathIndex')) pSelect.selectedIndex = index
       })
       mcss.FormSelect.init(pSelect)
     })
@@ -85,14 +85,14 @@ function serialGetOptions() {
   let openOptions = {}
 
   let baudRate = parseInt(
-    document.getElementById('baud-select').options[config.baudIndex].text
+    document.getElementById('baud-select').options[config.get('baudIndex')].text
   )
   if (isNaN(baudRate) === true) baudRate = 115200
   openOptions.baudRate = baudRate
 
   let dataBits = parseInt(
     document.getElementById('databits-select').options[
-      config.general.databitsIndex
+      config.get('general.databitsIndex')
     ].text
   )
   if (isNaN(dataBits) === true) dataBits = 8
@@ -100,12 +100,12 @@ function serialGetOptions() {
 
   let parity = document
     .getElementById('parity-select')
-    .options[config.general.parityIndex].text.toLowerCase()
+    .options[config.get('general.parityIndex')].text.toLowerCase()
   openOptions.parity = parity
 
   let stopBits = parseInt(
     document.getElementById('stopbits-select').options[
-      config.general.stopbitsIndex
+      config.get('general.stopbitsIndex')
     ].text
   )
   if (isNaN(stopBits) === true) stopBits = 1
@@ -113,7 +113,7 @@ function serialGetOptions() {
 
   let flowcontrol = document
     .getElementById('flowcontrol-select')
-    .options[config.general.flowcontrolIndex].text.toLowerCase()
+    .options[config.get('general.flowcontrolIndex')].text.toLowerCase()
   openOptions[flowcontrol] = true
 
   openOptions.autoOpen = true
@@ -151,7 +151,7 @@ document.getElementById('port-switch').onclick = (e) => {
     port.on('open', () => {
       console.log('port open event')
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
-      if (config.general.modemSignal === true) {
+      if (config.get('general.modemSignal') === true) {
         modemSignalTimer = setInterval(modemSignalTimerHandle, 100)
       }
       // Some device use rts/dtr for private purpose, so below code
@@ -162,8 +162,8 @@ document.getElementById('port-switch').onclick = (e) => {
       // open the port.
       port.set(
         {
-          rts: config.general.modemSignal.rts,
-          dtr: config.general.modemSignal.dtr,
+          rts: config.get('general.modemSignal.rts'),
+          dtr: config.get('general.modemSignal.dtr'),
         },
         (e) => {
           if (e !== null) console.error(e)
@@ -197,7 +197,7 @@ document.getElementById('port-switch').onclick = (e) => {
     })
 
     port.on('data', (data) => {
-      if (config.general.hexmode === true) {
+      if (config.get('general.hexmode') === true) {
         hexModeProcess(data, true)
       } else {
         chartFrameProcess(data)
@@ -216,19 +216,19 @@ document.getElementById('port-switch').onclick = (e) => {
 document.getElementById('rts-btn').onclick = (e) => {
   console.log('rts click')
 
-  if (config.general.modemSignal.rts === true) {
-    configUpdate('general.modemSignal.rts', false)
+  if (config.get('general.modemSignal.rts') === true) {
+    config.set('general.modemSignal.rts', false)
     e.target.classList.add('grey')
   } else {
-    configUpdate('general.modemSignal.rts', true)
+    config.set('general.modemSignal.rts', true)
     e.target.classList.remove('grey')
   }
 
   if (port === undefined || port.isOpen === false) return
   port.set(
     {
-      rts: config.general.modemSignal.rts,
-      dtr: config.general.modemSignal.dtr,
+      rts: config.get('general.modemSignal.rts'),
+      dtr: config.get('general.modemSignal.dtr'),
     },
     (e) => {
       if (e !== null) console.error(e)
@@ -239,19 +239,19 @@ document.getElementById('rts-btn').onclick = (e) => {
 document.getElementById('dtr-btn').onclick = (e) => {
   console.log('dtr click')
 
-  if (config.general.modemSignal.dtr === true) {
-    configUpdate('general.modemSignal.dtr', false)
+  if (config.get('general.modemSignal.dtr') === true) {
+    config.set('general.modemSignal.dtr', false)
     e.target.classList.add('grey')
   } else {
-    configUpdate('general.modemSignal.dtr', true)
+    config.set('general.modemSignal.dtr', true)
     e.target.classList.remove('grey')
   }
 
   if (port === undefined || port.isOpen === false) return
   port.set(
     {
-      rts: config.general.modemSignal.rts,
-      dtr: config.general.modemSignal.dtr,
+      rts: config.get('general.modemSignal.rts'),
+      dtr: config.get('general.modemSignal.dtr'),
     },
     (e) => {
       if (e !== null) console.error(e)

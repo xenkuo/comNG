@@ -137,7 +137,7 @@ function openFileInNewTab() {
 }
 
 function openBinFile() {
-  if (true !== config.general.hexmode) {
+  if (true !== config.get('general.hexmode')) {
     toast("Please first enable 'Hex Mode' in General tab.")
     return
   }
@@ -341,13 +341,13 @@ function breakpointProcess(line) {
       breakpointBuff = []
     }
 
-    if (bpLine.includes(config.advance.breakpoint.onText) === true) {
+    if (bpLine.includes(config.get('advance.breakpoint.onText')) === true) {
       breakpointHit = true
       breakpointAfterLines = 0
     }
   } else {
     breakpointAfterLines++
-    if (breakpointAfterLines >= config.advance.breakpoint.afterLines) {
+    if (breakpointAfterLines >= config.get('advance.breakpoint.afterLines')) {
       breakpointHit = false
       breakpointAfterLines = 0
 
@@ -399,7 +399,7 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (config.general.timestamp === true) timestamp = getTimestamp()
+      if (config.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + line
     }
     editorApplyEdit(
@@ -410,7 +410,7 @@ function stringModeProcess(inBuffer) {
 
     buffer = buffer.slice(index + 1, buffer.length)
 
-    if (config.advance.breakpoint.switch === true) {
+    if (config.get('advance.breakpoint.switch') === true) {
       if (breakpointProcess(line) === true) {
         buffer = Buffer.from('')
         serialClose()
@@ -425,7 +425,7 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (config.general.timestamp === true) timestamp = getTimestamp()
+      if (config.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + buffer
       half_line = true
     }
@@ -435,7 +435,7 @@ function stringModeProcess(inBuffer) {
       true
     )
   }
-  if (config.advance.breakpoint.switch === true) {
+  if (config.get('advance.breakpoint.switch') === true) {
     breakpointBuff = buffer
   }
 }
@@ -528,7 +528,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   })
 
   let readOnlyEditor = false
-  if (true === config.general.hexmode) {
+  if (true === config.get('general.hexmode')) {
     readOnlyEditor = true
   }
   editor = monaco.editor.create(document.getElementById('editor-area'), {
@@ -538,8 +538,8 @@ amdRequire(['vs/editor/editor.main'], function () {
     automaticLayout: true,
     readOnly: readOnlyEditor,
     folding: false,
-    fontFamily: config.general.fontFamily,
-    fontSize: config.general.fontSize,
+    fontFamily: config.get('general.fontFamily'),
+    fontSize: config.get('general.fontSize'),
     overviewRulerBorder: false,
     scrollBeyondLastLine: false,
     smoothScrolling: true,
@@ -740,7 +740,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   }
 
   editor.onMouseUp(() => {
-    if (false === config.general.hexmode) return
+    if (false === config.get('general.hexmode')) return
 
     let model = editor.getModel()
     let range = editor.getSelection()
@@ -840,13 +840,13 @@ amdRequire(['vs/editor/editor.main'], function () {
 document.getElementById('clear-btn').onclick = () => {
   let value = ''
 
-  if (config.advance.sign.switch === true) {
+  if (config.get('advance.sign.switch') === true) {
     value =
       '------This file captured at ' +
       new Date().toLocaleString() +
       ' with comNG'
-    if (config.advance.sign.name !== '')
-      value += ' by ' + config.advance.sign.name + '.------'
+    if (config.get('advance.sign.name') !== '')
+      value += ' by ' + config.get('advance.sign.name') + '.------'
     else value += '.------'
     value += '\n'
   }
@@ -860,7 +860,7 @@ document.getElementById('editor-font-family').onblur = (e) => {
 
   if (font === '') font = defaultFont
   editor.updateOptions({ fontFamily: font })
-  configUpdate('general.fontFamily', font)
+  config.set('general.fontFamily', font)
 }
 
 document.getElementById('editor-font-size').onblur = (e) => {
@@ -868,32 +868,32 @@ document.getElementById('editor-font-size').onblur = (e) => {
   if (size === '') size = 12
 
   editor.updateOptions({ fontSize: size })
-  configUpdate('general.fontSize', size)
+  config.set('general.fontSize', size)
 }
 
 document.getElementById('breakpoint-switch').onclick = (e) => {
   if (e.target.checked === true) {
-    if (config.advance.breakpoint.onText.length === 0) {
+    if (config.get('advance.breakpoint.onText.length') === 0) {
       toast('Error: Breakpoint on-text cant be empty')
       e.target.checked = false
       return
     }
   }
 
-  configUpdate('advance.breakpoint.switch', e.target.checked)
+  config.set('advance.breakpoint.switch', e.target.checked)
   breakpointHit = false
   breakpointAfterLines = 0
 }
 
 document.getElementById('breakpoint-on-text').onblur = (e) => {
-  configUpdate('advance.breakpoint.onText', e.target.value)
+  config.set('advance.breakpoint.onText', e.target.value)
 }
 
 document.getElementById('breakpoint-after-lines').onblur = (e) => {
   let lines = parseInt(e.target.value)
 
   if (isNaN(lines) === true) lines = 5
-  configUpdate('advance.breakpoint.afterLines', lines)
+  config.set('advance.breakpoint.afterLines', lines)
 }
 
 document.getElementById('capture-file-switch').onclick = (e) => {
@@ -913,15 +913,15 @@ document.getElementById('capture-file-switch').onclick = (e) => {
           pathEle.value = filePath
           captureFileStream = fs.createWriteStream(filePath, { flags: 'w' })
 
-          configUpdate('fileops.capture.switch', true)
-          configUpdate('fileops.capture.filePath', filePath)
+          config.set('fileops.capture.switch', true)
+          config.set('fileops.capture.filePath', filePath)
         } else {
           if (undefined !== captureFileStream) captureFileStream.end()
           captureFileStream = undefined
           pathEle.value = ''
 
-          configUpdate('fileops.capture.switch', false)
-          configUpdate('fileops.capture.filePath', '')
+          config.set('fileops.capture.switch', false)
+          config.set('fileops.capture.filePath', '')
 
           // restore check status
           e.target.checked = false
@@ -931,7 +931,7 @@ document.getElementById('capture-file-switch').onclick = (e) => {
     if (undefined !== captureFileStream) captureFileStream.end()
     captureFileStream = undefined
 
-    configUpdate('fileops.capture.switch', false)
+    config.set('fileops.capture.switch', false)
   }
 }
 
