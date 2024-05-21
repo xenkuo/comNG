@@ -18,7 +18,7 @@ var menuHeight
 var textDownward = true
 var ctrlKeyPressed = false
 
-const config = new Store({
+const store = new Store({
   projectVersion: appVersion,
   migrations: {
     '1.0.3': (db) => {
@@ -161,7 +161,7 @@ function navigator_layout_update() {
 }
 
 window.onload = () => {
-  document.getElementById('menu-area').hidden = config.get('menu.hidden')
+  document.getElementById('menu-area').hidden = store.get('menu.hidden')
 
   // 0: update elements size and position
   const cStyle = getComputedStyle(document.documentElement)
@@ -188,124 +188,124 @@ window.onload = () => {
     'px'
 
   mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(
-    config.get('menu.tab')
+    store.get('menu.tab')
   )
 
   let baudSelect = document.getElementById('baud-select')
-  baudSelect.options[0].text = config.get('general.customized')
-  baudSelect.selectedIndex = config.get('baudIndex')
+  baudSelect.options[0].text = store.get('general.customized')
+  baudSelect.selectedIndex = store.get('baudIndex')
   mcss.FormSelect.init(baudSelect)
 
   document.getElementById('hexmode-switch').checked =
-    config.get('general.hexmode')
+    store.get('general.hexmode')
 
   document.getElementById('timestamp-switch').checked =
-    config.get('general.timestamp')
-  if (true === config.get('general.modemSignal.rts')) {
+    store.get('general.timestamp')
+  if (true === store.get('general.modemSignal.rts')) {
     let e = document.getElementById('rts-btn')
     e.classList.remove('grey')
   }
-  if (true === config.get('general.modemSignal.dtr')) {
+  if (true === store.get('general.modemSignal.dtr')) {
     let e = document.getElementById('dtr-btn')
     e.classList.remove('grey')
   }
-  document.getElementById('modem-signal-switch').checked = config.get(
+  document.getElementById('modem-signal-switch').checked = store.get(
     'general.modemSignal.switch'
   )
-  if (config.get('general.modemSignal.switch') === true) {
+  if (store.get('general.modemSignal.switch') === true) {
     document.getElementById('modem-signal-bar').hidden = false
   } else {
     document.getElementById('modem-signal-bar').hidden = true
   }
-  document.getElementById('customized').value = config.get('general.customized')
+  document.getElementById('customized').value = store.get('general.customized')
 
   let databits = document.getElementById('databits-select')
-  databits.selectedIndex = config.get('general.databitsIndex')
+  databits.selectedIndex = store.get('general.databitsIndex')
   mcss.FormSelect.init(databits)
   let parity = document.getElementById('parity-select')
-  parity.selectedIndex = config.get('general.parityIndex')
+  parity.selectedIndex = store.get('general.parityIndex')
   mcss.FormSelect.init(parity)
   let stopbits = document.getElementById('stopbits-select')
-  stopbits.selectedIndex = config.get('general.stopbitsIndex')
+  stopbits.selectedIndex = store.get('general.stopbitsIndex')
   mcss.FormSelect.init(stopbits)
   let flowcontrol = document.getElementById('flowcontrol-select')
-  flowcontrol.selectedIndex = config.get('general.flowcontrolIndex')
+  flowcontrol.selectedIndex = store.get('general.flowcontrolIndex')
   mcss.FormSelect.init(flowcontrol)
 
   document.getElementById('editor-font-family').value =
-    config.get('general.fontFamily')
+    store.get('general.fontFamily')
   document.getElementById('editor-font-size').value =
-    config.get('general.fontSize')
+    store.get('general.fontSize')
 
   document.getElementById('trans-hexmode-switch').checked =
-    config.get('transmit.hexmode')
+    store.get('transmit.hexmode')
   document.getElementById('trans-clean-switch').checked =
-    config.get('transmit.clean')
+    store.get('transmit.clean')
   let transEof = document.getElementById('trans-eof-select')
   let transEofIndex = 0
-  if ('\n' === config.get('transmit.eof')) {
+  if ('\n' === store.get('transmit.eof')) {
     transEofIndex = 1
-  } else if ('\r' === config.get('transmit.eof')) {
+  } else if ('\r' === store.get('transmit.eof')) {
     transEofIndex = 2
   }
   transEof.selectedIndex = transEofIndex
   mcss.FormSelect.init(transEof)
 
-  document.getElementById('breakpoint-switch').checked = config.get(
+  document.getElementById('breakpoint-switch').checked = store.get(
     'advance.breakpoint.switch'
   )
-  document.getElementById('breakpoint-on-text').value = config.get(
+  document.getElementById('breakpoint-on-text').value = store.get(
     'advance.breakpoint.onText'
   )
-  document.getElementById('breakpoint-after-lines').value = config.get(
+  document.getElementById('breakpoint-after-lines').value = store.get(
     'advance.breakpoint.afterLines'
   )
 
-  document.getElementById('sign-switch').checked = config.get(
+  document.getElementById('sign-switch').checked = store.get(
     'advance.sign.switch'
   )
-  document.getElementById('sign-name').value = config.get('advance.sign.name')
+  document.getElementById('sign-name').value = store.get('advance.sign.name')
 
-  document.getElementById('capture-file-switch').checked = config.get(
+  document.getElementById('capture-file-switch').checked = store.get(
     'fileops.capture.switch'
   )
-  document.getElementById('capture-file-path').value = config.get(
+  document.getElementById('capture-file-path').value = store.get(
     'fileops.capture.filePath'
   )
-  if (true === config.get('fileops.capture.switch')) {
+  if (true === store.get('fileops.capture.switch')) {
     captureFileStream = fs.createWriteStream(
-      config.get('fileops.capture.filePath'),
+      store.get('fileops.capture.filePath'),
       {
         flags: 'a',
       }
     )
   }
 
-  document.getElementById('insider-preview').checked = config.get(
+  document.getElementById('insider-preview').checked = store.get(
     'about.insiderPreview'
   )
 
-  document.getElementById('bar-color-head').value = config.get(
+  document.getElementById('bar-color-head').value = store.get(
     'advance.barColor.head'
   )
-  document.getElementById('bar-color-middle').value = config.get(
+  document.getElementById('bar-color-middle').value = store.get(
     'advance.barColor.middle'
   )
-  document.getElementById('bar-color-tail').value = config.get(
+  document.getElementById('bar-color-tail').value = store.get(
     'advance.barColor.tail'
   )
 
   document.documentElement.style.setProperty(
     '--bar-color-head',
-    config.get('advance.barColor.head')
+    store.get('advance.barColor.head')
   )
   document.documentElement.style.setProperty(
     '--bar-color-middle',
-    config.get('advance.barColor.middle')
+    store.get('advance.barColor.middle')
   )
   document.documentElement.style.setProperty(
     '--bar-color-tail',
-    config.get('advance.barColor.tail')
+    store.get('advance.barColor.tail')
   )
 
   document.getElementById('app-version').innerHTML = appVersion
@@ -335,7 +335,7 @@ window.onload = () => {
     .then((res) => {
       if (
         res.prerelease === true &&
-        config.get('about.insiderPreview') === false
+        store.get('about.insiderPreview') === false
       )
         return
 
@@ -357,8 +357,8 @@ window.onload = () => {
 }
 
 window.onresize = () => {
-  config.set('window.width', window.innerWidth)
-  config.set('window.height', window.innerHeight)
+  store.set('window.width', window.innerWidth)
+  store.set('window.height', window.innerHeight)
 
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
@@ -436,15 +436,15 @@ document.getElementById('nav-area').ondblclick = () => {
     window.innerHeight === screen.height
   ) {
     window.resizeTo(
-      config.get('window.widthBefore'),
-      config.get('window.heightBefore')
+      store.get('window.widthBefore'),
+      store.get('window.heightBefore')
     )
-    window.moveTo(config.get('window.xBefore'), config.get('window.yBefore'))
+    window.moveTo(store.get('window.xBefore'), store.get('window.yBefore'))
   } else {
-    config.set('window.widthBefore', window.innerWidth)
-    config.set('window.heightBefore', window.innerHeight)
-    config.set('window.xBefore', window.screenX)
-    config.set('window.yBefore', window.screenY)
+    store.set('window.widthBefore', window.innerWidth)
+    store.set('window.heightBefore', window.innerHeight)
+    store.set('window.xBefore', window.screenX)
+    store.set('window.yBefore', window.screenY)
 
     window.resizeTo(screen.width, screen.height)
     window.moveTo(0, 0)
@@ -465,15 +465,15 @@ document.getElementById('max-btn').onclick = () => {
     window.innerHeight === screen.height
   ) {
     window.resizeTo(
-      config.get('window.widthBefore'),
-      config.get('window.heightBefore')
+      store.get('window.widthBefore'),
+      store.get('window.heightBefore')
     )
-    window.moveTo(config.get('window.xBefore'), config.get('window.yBefore'))
+    window.moveTo(store.get('window.xBefore'), store.get('window.yBefore'))
   } else {
-    config.set('window.widthBefore', window.innerWidth)
-    config.set('window.heightBefore', window.innerHeight)
-    config.set('window.xBefore', window.screenX)
-    config.set('window.yBefore', window.screenY)
+    store.set('window.widthBefore', window.innerWidth)
+    store.set('window.heightBefore', window.innerHeight)
+    store.set('window.xBefore', window.screenX)
+    store.set('window.yBefore', window.screenY)
 
     window.resizeTo(screen.width, screen.height)
     window.moveTo(0, 0)
@@ -492,12 +492,12 @@ document.getElementById('menu-btn').onclick = () => {
     editor.style.height = editor.offsetHeight - menuHeight + 'px'
     menu.hidden = false
 
-    config.set('menu.hidden', false)
+    store.set('menu.hidden', false)
   } else {
     editor.style.height = editor.offsetHeight + menuHeight + 'px'
     menu.hidden = true
 
-    config.set('menu.hidden', true)
+    store.set('menu.hidden', true)
   }
 }
 
@@ -521,7 +521,7 @@ document.body.onclick = (e) => {
       editor.style.height = editor.offsetHeight + menuHeight + 'px'
       menu.hidden = true
 
-      config.set('menu.hidden', true)
+      store.set('menu.hidden', true)
     }
   }
 }
@@ -529,22 +529,22 @@ document.body.onclick = (e) => {
 document.getElementById('menu-tabs').onclick = () => {
   let tabs = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
 
-  config.set('menu.tab', tabs.$content[0].id)
+  store.set('menu.tab', tabs.$content[0].id)
 }
 
 document.getElementById('hexmode-switch').onclick = (e) => {
-  config.set('general.hexmode', e.target.checked)
+  store.set('general.hexmode', e.target.checked)
   editor.updateOptions({ readOnly: e.target.checked })
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {
-  config.set('general.timestamp', e.target.checked)
+  store.set('general.timestamp', e.target.checked)
 }
 
 document.getElementById('modem-signal-switch').onclick = (e) => {
   let state = e.target.checked
 
-  config.set('general.modemSignal.switch', state)
+  store.set('general.modemSignal.switch', state)
   if (state === true) {
     document.getElementById('modem-signal-bar').hidden = false
   } else {
@@ -556,7 +556,7 @@ document.getElementById('customized').onblur = (e) => {
   let customized = parseInt(e.target.value)
 
   if (isNaN(customized) === true) customized = 4800
-  config.set('general.customized', customized)
+  store.set('general.customized', customized)
 
   let baudSelect = document.getElementById('baud-select')
 
@@ -565,27 +565,27 @@ document.getElementById('customized').onblur = (e) => {
 }
 
 document.getElementById('databits-select').onchange = (e) => {
-  config.set('general.databitsIndex', e.target.selectedIndex)
+  store.set('general.databitsIndex', e.target.selectedIndex)
 }
 
 document.getElementById('parity-select').onchange = (e) => {
-  config.set('general.parityIndex', e.target.selectedIndex)
+  store.set('general.parityIndex', e.target.selectedIndex)
 }
 
 document.getElementById('stopbits-select').onchange = (e) => {
-  config.set('general.stopbitsIndex', e.target.selectedIndex)
+  store.set('general.stopbitsIndex', e.target.selectedIndex)
 }
 
 document.getElementById('flowcontrol-select').onchange = (e) => {
-  config.set('general.flowcontrolIndex', e.target.selectedIndex)
+  store.set('general.flowcontrolIndex', e.target.selectedIndex)
 }
 
 document.getElementById('sign-switch').onclick = (e) => {
-  config.set('advance.sign.switch', e.target.checked)
+  store.set('advance.sign.switch', e.target.checked)
 }
 
 document.getElementById('sign-name').onblur = (e) => {
-  config.set('advance.sign.name', e.target.value)
+  store.set('advance.sign.name', e.target.value)
 }
 
 let transRepeatTimer = undefined
@@ -595,8 +595,8 @@ document.getElementById('trans-send-btn').onclick = () => {
 
   let dataIn = dataObj.value
   let dataOut = dataIn
-  let eof = config.get('transmit.eof')
-  if (true === config.get('transmit.hexmode')) {
+  let eof = store.get('transmit.eof')
+  if (true === store.get('transmit.hexmode')) {
     dataOut = Buffer.from(dataIn, 'hex')
   } else {
     dataOut += eof
@@ -622,7 +622,7 @@ document.getElementById('trans-send-btn').onclick = () => {
   }
 
   // clear data element
-  if (true === config.get('transmit.clean')) dataObj.value = ''
+  if (true === store.get('transmit.clean')) dataObj.value = ''
 }
 
 document.getElementById('trans-eof-select').onchange = (e) => {
@@ -639,19 +639,19 @@ document.getElementById('trans-eof-select').onchange = (e) => {
       break
   }
 
-  config.set('transmit.eof', eof)
+  store.set('transmit.eof', eof)
 }
 
 document.getElementById('trans-hexmode-switch').onchange = (e) => {
   let checked = e.target.checked
 
-  config.set('transmit.hexmode', checked)
+  store.set('transmit.hexmode', checked)
 }
 
 document.getElementById('trans-clean-switch').onchange = (e) => {
   let checked = e.target.checked
 
-  config.set('transmit.clean', checked)
+  store.set('transmit.clean', checked)
 }
 
 document.getElementById('trans-repeat-switch').onchange = (e) => {
@@ -670,28 +670,28 @@ document.getElementById('trans-log-btn').onclick = () => {
 }
 
 document.getElementById('insider-preview').onclick = (e) => {
-  config.set('about.insiderPreview', e.target.checked)
+  store.set('about.insiderPreview', e.target.checked)
 }
 
 document.getElementById('bar-color-head').oninput = (e) => {
   let color = e.target.value
 
   document.documentElement.style.setProperty('--bar-color-head', color)
-  config.set('advance.barColor.head', color)
+  store.set('advance.barColor.head', color)
 }
 
 document.getElementById('bar-color-middle').oninput = (e) => {
   let color = e.target.value
 
   document.documentElement.style.setProperty('--bar-color-middle', color)
-  config.set('advance.barColor.middle', color)
+  store.set('advance.barColor.middle', color)
 }
 
 document.getElementById('bar-color-tail').oninput = (e) => {
   let color = e.target.value
 
   document.documentElement.style.setProperty('--bar-color-tail', color)
-  config.set('advance.barColor.tail', color)
+  store.set('advance.barColor.tail', color)
 }
 
 document.getElementById('issue').onclick = (e) => {
@@ -712,7 +712,7 @@ document.getElementById('comnglang').onclick = (e) => {
 document.getElementById('baud-select').onchange = (e) => {
   let ele = e.target
 
-  config.set('baudIndex', ele.selectedIndex)
+  store.set('baudIndex', ele.selectedIndex)
   if (port === undefined || port.isOpen === false) return
 
   let baudRate = parseInt(ele.options[ele.selectedIndex].text)
@@ -723,7 +723,7 @@ document.getElementById('baud-select').onchange = (e) => {
 }
 
 document.getElementById('path-select').onchange = (e) => {
-  config.set('pathIndex', e.target.selectedIndex)
+  store.set('pathIndex', e.target.selectedIndex)
   if (port === undefined || port.isOpen === false) return
 
   port.close()
