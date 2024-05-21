@@ -6,7 +6,6 @@ const appUpdaterUrl =
   'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 const mcss = require('materialize-css')
 const ChromeTabs = require('chrome-tabs')
-const Store = require('electron-store')
 
 mcss.AutoInit()
 var chromeTabs = new ChromeTabs()
@@ -16,8 +15,7 @@ var menuHeight
 var textDownward = true
 var ctrlKeyPressed = false
 
-const store = new Store()
-// console.log(remote.app.getPath('appData'))
+const store = remote.getGlobal('store')
 
 ipcRenderer.on('main-cmd', (event, arg) => {
   console.log(arg)
