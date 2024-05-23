@@ -3,14 +3,13 @@
 const fs = require('fs')
 const path = require('path')
 const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js')
+const amdRequire = amdLoader.require
 const { dialog } = require('electron').remote
 const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 
 const hlt = require('./utilities/highlight.js')
-
-const amdRequire = amdLoader.require
 
 const hmUnitCount = 16
 const hmUnitBytes = 2
@@ -764,7 +763,7 @@ amdRequire(['vs/editor/editor.main'], function () {
 
   // --------------------------Chrometabs section, refer to:
   // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
-  const tabsEl = document.querySelector('.chrome-tabs')
+  const tabsEl = document.getElementById('tabs-area')
 
   tabsEl.addEventListener('tabAdd', ({ detail }) => {
     // console.log("tab add");
@@ -835,6 +834,8 @@ amdRequire(['vs/editor/editor.main'], function () {
   document.getElementById('tab-add-btn').onclick = () => {
     chromeTabs.addTab()
   }
+
+  return editor
 })
 
 document.getElementById('clear-btn').onclick = () => {
