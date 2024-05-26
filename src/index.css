@@ -5,10 +5,10 @@
 :root {
   --nav-height: 36px;
   --icon-width: 24px;
-  --icon-init-left: 246px;
+  --icon-init-left: 240px;
   --drag-min-width: 120px;
   --tab-std-width: 240px;
-  --tabs-offset: 6px;
+  --tabs-offset: 0px;
   --menu-height: 350px;
   --bar-height: 53px;
   --trans-btn-height: 20px;
@@ -59,13 +59,38 @@ th {
   height: var(--nav-height);
 }
 
+.chrome-tabs .chrome-tab .chrome-tab-content {
+  padding: 7px 8px;
+}
+
 #tab-add-btn {
   position: absolute;
   -webkit-user-select: none;
-  top: 8px;
+  user-select: none;
+  top: 10px;
   left: var(--icon-init-left);
-  /* right: calc(var(--drag-width) - 4px); */
   color: #26a69a;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+@media (hover: hover) {
+  #tab-add-btn:hover {
+    background-color: #fafafa;
+  }
+
+  #tab-add-btn:hover:active {
+    background-color: #fafafa;
+  }
+}
+
+@media not all and (hover: hover) {
+  #tab-add-btn:active {
+    background-color: #fafafa;
+  }
 }
 /* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
 #drag-area {
@@ -107,7 +132,7 @@ blockquote {
 .tiny-btn {
   -webkit-app-region: no-drag;
   position: absolute;
-  top: 8px;
+  top: 10px;
   width: 12px;
   height: 12px;
   margin: 5px !important;
