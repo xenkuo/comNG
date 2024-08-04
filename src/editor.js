@@ -748,7 +748,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     if (range.isEmpty() === true) {
       showCursors(model, range)
     } else {
-      let deco = deco.get()
+      let deco = hlt.decoGet()
       for (
         let line = range.startLineNumber;
         line <= range.endLineNumber;
@@ -974,5 +974,5 @@ function editorStateReset() {
   half_line = false
   ansiWait = false
 
-  hlt.init()
+  hlt.reset()
 }
