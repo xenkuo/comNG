@@ -1,7 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const Shortcut = require('electron-localshortcut')
-const Store = require('./utilities/store.js')
+const Store = require('./modules/store.js')
 
 global.store = Store.init(app.getVersion())
 // console.log(app.getPath('appData'))

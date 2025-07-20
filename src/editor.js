@@ -9,7 +9,7 @@ const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 
-const hlt = require('./utilities/highlight.js')
+const hlt = require('./modules/highlight.js')
 
 const hmUnitCount = 16
 const hmUnitBytes = 2
