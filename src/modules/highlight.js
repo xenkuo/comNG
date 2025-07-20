@@ -11,7 +11,7 @@ const decoTable = [
   { style: 'hl-purple', color: '#ea80fc' },
 ]
 
-function _get() {
+function decoGet() {
   return decoTable[decoIndex++ % decoMod]
 }
 
@@ -25,7 +25,7 @@ function _apply(model, text) {
     null,
     false
   )
-  let decoration = _get()
+  let decoration = decoGet()
 
   console.log(decoration.style, decoration.color)
 
@@ -149,6 +149,7 @@ function hltClear(editor) {
 }
 module.exports = {
   reset,
+  decoGet,
   toggle: hltToggle,
   clear: hltClear,
 }
