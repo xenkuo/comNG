@@ -58,136 +58,47 @@
           </ul>
         </div>
         <div id="general-tab-placeholder"></div>
-        <script>
-          // Synchronously load the general-tab.html fragment into the placeholder
-          var xhr = new XMLHttpRequest()
-          xhr.open('GET', 'tabs/general-tab.html', false) // false for synchronous
-          xhr.send(null)
-          if (xhr.status === 200) {
-            document.getElementById('general-tab-placeholder').outerHTML =
-              xhr.responseText
-          }
-        </script>
         <div id="transmit-tab-placeholder"></div>
-        <script>
-          // Synchronously load the transmit-tab.html fragment into the placeholder
-          var xhr2 = new XMLHttpRequest()
-          xhr2.open('GET', 'tabs/transmit-tab.html', false) // false for synchronous
-          xhr2.send(null)
-          if (xhr2.status === 200) {
-            document.getElementById('transmit-tab-placeholder').outerHTML =
-              xhr2.responseText
-          }
-        </script>
         <div id="advance-tab-placeholder"></div>
-        <script>
-          var xhr3 = new XMLHttpRequest()
-          xhr3.open('GET', 'tabs/advance-tab.html', false)
-          xhr3.send(null)
-          if (xhr3.status === 200) {
-            document.getElementById('advance-tab-placeholder').outerHTML =
-              xhr3.responseText
-          }
-        </script>
         <div id="fileops-tab-placeholder"></div>
-        <script>
-          var xhr4 = new XMLHttpRequest()
-          xhr4.open('GET', 'tabs/fileops-tab.html', false)
-          xhr4.send(null)
-          if (xhr4.status === 200) {
-            document.getElementById('fileops-tab-placeholder').outerHTML =
-              xhr4.responseText
-          }
-        </script>
         <div id="chart-tab-placeholder"></div>
-        <script>
-          var xhr5 = new XMLHttpRequest()
-          xhr5.open('GET', 'tabs/chart-tab.html', false)
-          xhr5.send(null)
-          if (xhr5.status === 200) {
-            document.getElementById('chart-tab-placeholder').outerHTML =
-              xhr5.responseText
-          }
-        </script>
         <div id="about-tab-placeholder"></div>
         <script>
-          var xhr6 = new XMLHttpRequest()
-          xhr6.open('GET', 'tabs/about-tab.html', false)
-          xhr6.send(null)
-          if (xhr6.status === 200) {
-            document.getElementById('about-tab-placeholder').outerHTML =
-              xhr6.responseText
-          }
+          // Synchronously load all tab HTML fragments into their placeholders
+          const tabFragments = [
+            { id: 'general-tab-placeholder', file: 'tabs/general-tab.html' },
+            { id: 'transmit-tab-placeholder', file: 'tabs/transmit-tab.html' },
+            { id: 'advance-tab-placeholder', file: 'tabs/advance-tab.html' },
+            { id: 'fileops-tab-placeholder', file: 'tabs/fileops-tab.html' },
+            { id: 'chart-tab-placeholder', file: 'tabs/chart-tab.html' },
+            { id: 'about-tab-placeholder', file: 'tabs/about-tab.html' },
+          ]
+          tabFragments.forEach(function (tab) {
+            var xhr = new XMLHttpRequest()
+            xhr.open('GET', tab.file, false)
+            xhr.send(null)
+            if (xhr.status === 200) {
+              var el = document.getElementById(tab.id)
+              if (el) el.outerHTML = xhr.responseText
+            }
+          })
         </script>
       </div>
     </div>
 
-    <div class="row" id="bar-area">
-      <div class="col s12" id="modem-signal-bar" hidden>
-        <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled" id="cts-btn">CTS</a>
-        <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled" id="dsr-btn">DSR</a>
-        <div class="col s1"></div>
-        <a class="btn-small modem-btn col s1 disabled" id="dcd-btn">DCD</a>
-        <div class="col s1"></div>
-        <div class="col s1"></div>
-
-        <a class="btn-small waves-effect modem-btn grey col s1" id="rts-btn"
-          >RTS</a
-        >
-        <div class="col s1"></div>
-        <a class="btn-small waves-effect modem-btn grey col s1" id="dtr-btn"
-          >DTR</a
-        >
-      </div>
-      <div class="col s2">
-        <a id="menu-btn" class="waves-effect btn-floating btn-small"
-          ><i title="设置" class="material-icons">menu</i></a
-        >
-      </div>
-
-      <div class="col s10">
-        <div class="input-field col s3" id="baud-input">
-          <div class="container">
-            <select id="baud-select">
-              <option value="1">4800</option>
-              <option value="2">9600</option>
-              <option value="3">19200</option>
-              <option value="4" selected>115200</option>
-              <option value="5">921600</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="input-field col s4" id="path-input">
-          <select id="path-select">
-            <option value="0">Select port ...</option>
-          </select>
-        </div>
-
-        <div title="串口开关" class="switch col s2">
-          <label>
-            <input type="checkbox" id="port-switch" />
-            <span class="lever"></span>
-          </label>
-        </div>
-
-        <div class="col s1">
-          <a class="waves-effect btn-floating btn-small red" id="clear-btn"
-            ><i class="material-icons">delete</i></a
-          >
-        </div>
-
-        <div class="col s1"></div>
-
-        <div title="自动刷新" class="col s1">
-          <a class="waves-effect btn-floating btn-small" id="downward-btn"
-            ><i class="material-icons">trending_down</i></a
-          >
-        </div>
-      </div>
-    </div>
+    <div id="bar-area-placeholder"></div>
+    <script>
+      // Synchronously load the bar-area.html fragment into the placeholder
+      ;(function () {
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', 'bar-area.html', false)
+        xhr.send(null)
+        if (xhr.status === 200) {
+          var el = document.getElementById('bar-area-placeholder')
+          if (el) el.outerHTML = xhr.responseText
+        }
+      })()
+    </script>
 
     <!-- You can also require other files to run in this process -->
     <script src="index.js"></script>

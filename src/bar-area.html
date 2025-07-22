@@ -1,0 +1,55 @@
+<div class="row" id="bar-area">
+  <div class="col s12" id="modem-signal-bar" hidden>
+    <div class="col s1"></div>
+    <a class="btn-small modem-btn col s1 disabled" id="cts-btn">CTS</a>
+    <div class="col s1"></div>
+    <a class="btn-small modem-btn col s1 disabled" id="dsr-btn">DSR</a>
+    <div class="col s1"></div>
+    <a class="btn-small modem-btn col s1 disabled" id="dcd-btn">DCD</a>
+    <div class="col s1"></div>
+    <div class="col s1"></div>
+    <a class="btn-small waves-effect modem-btn grey col s1" id="rts-btn">RTS</a>
+    <div class="col s1"></div>
+    <a class="btn-small waves-effect modem-btn grey col s1" id="dtr-btn">DTR</a>
+  </div>
+  <div class="col s2">
+    <a id="menu-btn" class="waves-effect btn-floating btn-small">
+      <i title="设置" class="material-icons">menu</i>
+    </a>
+  </div>
+  <div class="col s10">
+    <div class="input-field col s3" id="baud-input">
+      <div class="container">
+        <select id="baud-select">
+          <option value="1">4800</option>
+          <option value="2">9600</option>
+          <option value="3">19200</option>
+          <option value="4" selected>115200</option>
+          <option value="5">921600</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-field col s4" id="path-input">
+      <select id="path-select">
+        <option value="0">Select port ...</option>
+      </select>
+    </div>
+    <div title="串口开关" class="switch col s2">
+      <label>
+        <input type="checkbox" id="port-switch" />
+        <span class="lever"></span>
+      </label>
+    </div>
+    <div class="col s1">
+      <a class="waves-effect btn-floating btn-small red" id="clear-btn">
+        <i class="material-icons">delete</i>
+      </a>
+    </div>
+    <div class="col s1"></div>
+    <div title="自动刷新" class="col s1">
+      <a class="waves-effect btn-floating btn-small" id="downward-btn">
+        <i class="material-icons">trending_down</i>
+      </a>
+    </div>
+  </div>
+</div>
