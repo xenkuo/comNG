@@ -57,492 +57,68 @@
             <li class="tab col s2"><a href="#about-tab">about</a></li>
           </ul>
         </div>
-        <div id="general-tab" class="col s12">
-          <div class="col s6">
-            <div class="row config-row">
-              <div class="col s5 config-key">
-                <p>Hex Mode</p>
-              </div>
-              <div class="col s7 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="hexmode-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s5 config-key">
-                <p>Timestamp</p>
-              </div>
-              <div class="col s7 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="timestamp-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s5 config-key">
-                <p>Modem Signal</p>
-              </div>
-              <div class="col s7 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="modem-signal-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s7 config-key">
-                <p>Customized Baud Rate</p>
-              </div>
-              <div class="input-field col s3 config-item">
-                <input
-                  id="customized"
-                  value="9600"
-                  type="text"
-                  class="validate"
-                />
-              </div>
-            </div>
-            <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Font Size</p>
-              </div>
-              <div class="input-field col s8 config-item">
-                <input id="editor-font-size" type="text" placeholder="12" />
-              </div>
-            </div>
-            <div class="row config-row">
-              <div class="col s4 config-key">
-                <p>Font Family</p>
-              </div>
-              <div class="input-field col s8 config-item">
-                <input id="editor-font-family" type="text" />
-              </div>
-            </div>
-          </div>
-          <div class="col s6">
-            <div class="col s5">
-              <div class="col s12 config-key">
-                <p>Port Options</p>
-              </div>
-            </div>
-
-            <div class="col s7 config-list">
-              <div class="input-field col s12">
-                <select id="databits-select">
-                  <option value="1" selected>8</option>
-                  <option value="2">7</option>
-                  <option value="3">6</option>
-                  <option value="4">5</option>
-                </select>
-              </div>
-
-              <div class="input-field col s12">
-                <select id="parity-select">
-                  <option value="1" selected>None</option>
-                  <option value="2">Even</option>
-                  <option value="3">Odd</option>
-                  <option value="4">Mark</option>
-                  <option value="5">Space</option>
-                </select>
-              </div>
-
-              <div class="input-field col s12">
-                <select id="stopbits-select">
-                  <option value="1" selected>1</option>
-                  <option value="2">2</option>
-                </select>
-              </div>
-
-              <div class="input-field col s12">
-                <select id="flowcontrol-select">
-                  <option value="1" selected>None</option>
-                  <option value="2">RTSCTS</option>
-                  <option value="3">XON</option>
-                  <option value="4">XOFF</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="transmit-tab" class="col s12">
-          <div class="col s12">
-            <div class="row config-row">
-              <div class="col s1"></div>
-              <div class="input-field col s9">
-                <input placeholder="Data" id="trans-data" type="text" />
-              </div>
-
-              <div class="col s2">
-                <a class="btn-small waves-effect" id="trans-send-btn"
-                  ><i class="material-icons">send</i></a
-                >
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="col s1"></div>
-              <div class="col s1 config-key">
-                <p>EOF</p>
-              </div>
-              <div class="col s2">
-                <div class="input-field" id="trans-eof-row">
-                  <select id="trans-eof-select">
-                    <option value="1" selected>CRLF</option>
-                    <option value="2">LF</option>
-                    <option value="3">CR</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="col s1"></div>
-              <div class="col s1 config-key">
-                <p>Hex Mode</p>
-              </div>
-              <div class="col s3 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="trans-hexmode-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="row config-row">
-              <div class="col s1"></div>
-              <div class="col s1 config-key">
-                <p>Clean</p>
-              </div>
-              <div class="col s2 config-item">
-                <div class="switch">
-                  <label>
-                    <input type="checkbox" id="trans-clean-switch" />
-                    <span class="lever"></span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="col s1"></div>
-              <div class="col s1 config-key">
-                <p>Repeat</p>
-              </div>
-              <div class="col s3 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="trans-repeat-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-              <div class="input-field col s1 config-item">
-                <input
-                  id="trans-repeat-interval"
-                  placeholder="repeat interval, unit: ms"
-                  value="1000"
-                  type="text"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col s12">
-            <!-- <p id="trans-log-p">transmit log</p> -->
-            <div class="row" id="trans-log-row">
-              <div class="col s1"></div>
-              <div class="input-field col s9">
-                <textarea
-                  id="trans-log-area"
-                  class="materialize-textarea"
-                ></textarea>
-                <label for="trans-log-area">History</label>
-              </div>
-
-              <div class="col s2 right-btn">
-                <a class="btn-small waves-effect red" id="trans-log-btn"
-                  ><i class="material-icons">delete</i></a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="advance-tab" class="col s12">
-          <div class="col s4">
-            <blockquote>Sign</blockquote>
-            <div class="divider"></div>
-            <div class="row config-row">
-              <div class="col s12 config-item center">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="sign-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input placeholder="Name" type="text" id="sign-name" />
-              </div>
-            </div>
-          </div>
-
-          <div class="col s4">
-            <blockquote>Breakpoint</blockquote>
-            <div class="divider"></div>
-            <div class="row config-row">
-              <div class="col s12 config-item center">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="breakpoint-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input
-                  placeholder="Trigger pattern, such as 'Error'"
-                  value="Error"
-                  id="breakpoint-on-text"
-                  type="text"
-                  maxlength="16"
-                />
-              </div>
-            </div>
-
-            <div class="row config-row">
-              <div class="input-field col s12">
-                <input
-                  placeholder="After lines, such as '5'"
-                  value="5"
-                  id="breakpoint-after-lines"
-                  type="text"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div class="col s4">
-            <blockquote>Bar Color</blockquote>
-            <div class="divider"></div>
-            <div class="center" id="color-panel">
-              <input value="#ffba3a" id="bar-color-head" type="color" />
-              <input value="#ff8a80" id="bar-color-middle" type="color" />
-              <input value="#80d8ff" id="bar-color-tail" type="color" />
-            </div>
-          </div>
-        </div>
-        <div id="fileops-tab" class="col s12">
-          <div class="col s12">
-            <blockquote>Capture to File</blockquote>
-            <div class="divider"></div>
-            <div class="row config-row">
-              <div class="col s3 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="capture-file-switch" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-              <div class="input-field col s9">
-                <input
-                  readonly
-                  value=""
-                  placeholder="Capture File Path"
-                  id="capture-file-path"
-                  type="text"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="col s12">
-            <blockquote>Extra Shortcuts</blockquote>
-            <div class="divider"></div>
-
-            <div class="row">
-              <div class="col s6">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Open File</td>
-                      <td>Cmd/Ctrl + O</td>
-                    </tr>
-                    <tr>
-                      <td>Open File in New Tab</td>
-                      <td>Cmd/Ctrl + Shift + O</td>
-                    </tr>
-                    <tr>
-                      <td>Open Binary File</td>
-                      <td>Cmd/Ctrl + B</td>
-                    </tr>
-                    <tr>
-                      <td>Save File</td>
-                      <td>Cmd/Ctrl + S</td>
-                    </tr>
-                    <tr>
-                      <td>Save as File</td>
-                      <td>Cmd/Ctrl + Shift + S</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col s6">
-                <table>
-                  <tbody>
-                    <tr>
-                      <td>Switch Port</td>
-                      <td>Cmd/Ctrl + D</td>
-                    </tr>
-                    <tr>
-                      <td>Clear Log</td>
-                      <td>Cmd/Ctrl + X</td>
-                    </tr>
-                    <tr>
-                      <td>Switch Port&Clear Log</td>
-                      <td>Cmd/Ctrl + Shift + D</td>
-                    </tr>
-                    <tr>
-                      <td>New Tab</td>
-                      <td>Cmd/Ctrl + T</td>
-                    </tr>
-                    <tr>
-                      <td>Swtich to Tab 1..5</td>
-                      <td>Cmd/Ctrl + 1..5</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div id="chart-tab" class="col s12">
-          <div id="chart" class="col s12"></div>
-          <div class="col s6" id="chart-menu">
-            <div title="可视化开关" id="chart-switch-div" class="switch">
-              <label>
-                <input type="checkbox" id="chart-switch" />
-                <span class="lever"></span>
-              </label>
-            </div>
-            <div title="清除数据" id="chart-clean-div">
-              <a
-                class="waves-effect btn-floating btn-small red"
-                id="chart-clean"
-                ><i class="material-icons">delete</i></a
-              >
-            </div>
-          </div>
-        </div>
-        <div id="about-tab" class="col s12">
-          <div class="col s6">
-            <div class="row label-row">
-              <div class="col s3 label-key">
-                <p>Version</p>
-              </div>
-              <div class="col s3">
-                <p id="app-version"></p>
-              </div>
-            </div>
-            <div class="row label-row">
-              <div class="col s3 label-key">
-                <p>Licence</p>
-              </div>
-              <div class="col s3">
-                <p>MIT</p>
-              </div>
-            </div>
-            <div class="row label-row">
-              <div class="col s3 label-key">
-                <p>Star Me</p>
-              </div>
-              <div class="col s3">
-                <p>
-                  <a href="https://gitee.com/xenkuo/comNG" id="star-me"
-                    >Star ME!</a
-                  >
-                </p>
-              </div>
-            </div>
-            <div class="row label-row">
-              <div class="col s3 label-key">
-                <p>Feedback</p>
-              </div>
-              <div class="col s9">
-                <p>
-                  <a href="https://gitee.com/xenkuo/comNG/issues" id="issue"
-                    >Feedback</a
-                  >
-                </p>
-              </div>
-            </div>
-            <div class="row label-row">
-              <div class="col s3 label-key">
-                <p>Documents</p>
-              </div>
-              <div class="col s9">
-                <p>
-                  <a
-                    href="https://gitee.com/xenkuo/comNG/blob/master/doc/Introduction.md"
-                    id="comnglang"
-                    >User Manual</a
-                  >
-                </p>
-              </div>
-            </div>
-            <div class="row label-row">
-              <div class="col s4 config-key">
-                <p>Preview</p>
-              </div>
-              <div class="col s8 config-item">
-                <div class="switch">
-                  <label>
-                    Off
-                    <input type="checkbox" id="insider-preview" />
-                    <span class="lever"></span>
-                    On
-                  </label>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col s6 image">
-            <div align="center">
-              <p class="config-key">Donation</p>
-              <img src="../image/donation.png" />
-            </div>
-          </div>
-        </div>
+        <div id="general-tab-placeholder"></div>
+        <script>
+          // Synchronously load the general-tab.html fragment into the placeholder
+          var xhr = new XMLHttpRequest()
+          xhr.open('GET', 'tabs/general-tab.html', false) // false for synchronous
+          xhr.send(null)
+          if (xhr.status === 200) {
+            document.getElementById('general-tab-placeholder').outerHTML =
+              xhr.responseText
+          }
+        </script>
+        <div id="transmit-tab-placeholder"></div>
+        <script>
+          // Synchronously load the transmit-tab.html fragment into the placeholder
+          var xhr2 = new XMLHttpRequest()
+          xhr2.open('GET', 'tabs/transmit-tab.html', false) // false for synchronous
+          xhr2.send(null)
+          if (xhr2.status === 200) {
+            document.getElementById('transmit-tab-placeholder').outerHTML =
+              xhr2.responseText
+          }
+        </script>
+        <div id="advance-tab-placeholder"></div>
+        <script>
+          var xhr3 = new XMLHttpRequest()
+          xhr3.open('GET', 'tabs/advance-tab.html', false)
+          xhr3.send(null)
+          if (xhr3.status === 200) {
+            document.getElementById('advance-tab-placeholder').outerHTML =
+              xhr3.responseText
+          }
+        </script>
+        <div id="fileops-tab-placeholder"></div>
+        <script>
+          var xhr4 = new XMLHttpRequest()
+          xhr4.open('GET', 'tabs/fileops-tab.html', false)
+          xhr4.send(null)
+          if (xhr4.status === 200) {
+            document.getElementById('fileops-tab-placeholder').outerHTML =
+              xhr4.responseText
+          }
+        </script>
+        <div id="chart-tab-placeholder"></div>
+        <script>
+          var xhr5 = new XMLHttpRequest()
+          xhr5.open('GET', 'tabs/chart-tab.html', false)
+          xhr5.send(null)
+          if (xhr5.status === 200) {
+            document.getElementById('chart-tab-placeholder').outerHTML =
+              xhr5.responseText
+          }
+        </script>
+        <div id="about-tab-placeholder"></div>
+        <script>
+          var xhr6 = new XMLHttpRequest()
+          xhr6.open('GET', 'tabs/about-tab.html', false)
+          xhr6.send(null)
+          if (xhr6.status === 200) {
+            document.getElementById('about-tab-placeholder').outerHTML =
+              xhr6.responseText
+          }
+        </script>
       </div>
     </div>
 

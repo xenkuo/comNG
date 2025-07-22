@@ -1,0 +1,69 @@
+<div id="advance-tab" class="col s12">
+  <div class="col s4">
+    <blockquote>Sign</blockquote>
+    <div class="divider"></div>
+    <div class="row config-row">
+      <div class="col s12 config-item center">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="sign-switch" />
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row config-row">
+      <div class="input-field col s12">
+        <input placeholder="Name" type="text" id="sign-name" />
+      </div>
+    </div>
+  </div>
+  <div class="col s4">
+    <blockquote>Breakpoint</blockquote>
+    <div class="divider"></div>
+    <div class="row config-row">
+      <div class="col s12 config-item center">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="breakpoint-switch" />
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row config-row">
+      <div class="input-field col s12">
+        <input
+          placeholder="Trigger pattern, such as 'Error'"
+          value="Error"
+          id="breakpoint-on-text"
+          type="text"
+          maxlength="16"
+        />
+      </div>
+    </div>
+    <div class="row config-row">
+      <div class="input-field col s12">
+        <input
+          placeholder="After lines, such as '5'"
+          value="5"
+          id="breakpoint-after-lines"
+          type="text"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col s4">
+    <blockquote>Bar Color</blockquote>
+    <div class="divider"></div>
+    <div class="center" id="color-panel">
+      <input value="#ffba3a" id="bar-color-head" type="color" />
+      <input value="#ff8a80" id="bar-color-middle" type="color" />
+      <input value="#80d8ff" id="bar-color-tail" type="color" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,95 @@
+<div id="transmit-tab" class="col s12">
+  <div class="col s12">
+    <div class="row config-row">
+      <div class="col s1"></div>
+      <div class="input-field col s9">
+        <input placeholder="Data" id="trans-data" type="text" />
+      </div>
+      <div class="col s2">
+        <a class="btn-small waves-effect" id="trans-send-btn">
+          <i class="material-icons">send</i>
+        </a>
+      </div>
+    </div>
+    <div class="row config-row">
+      <div class="col s1"></div>
+      <div class="col s1 config-key">
+        <p>EOF</p>
+      </div>
+      <div class="col s2">
+        <div class="input-field" id="trans-eof-row">
+          <select id="trans-eof-select">
+            <option value="1" selected>CRLF</option>
+            <option value="2">LF</option>
+            <option value="3">CR</option>
+          </select>
+        </div>
+      </div>
+      <div class="col s1"></div>
+      <div class="col s1 config-key">
+        <p>Hex Mode</p>
+      </div>
+      <div class="col s3 config-item">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="trans-hexmode-switch" />
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="row config-row">
+      <div class="col s1"></div>
+      <div class="col s1 config-key">
+        <p>Clean</p>
+      </div>
+      <div class="col s2 config-item">
+        <div class="switch">
+          <label>
+            <input type="checkbox" id="trans-clean-switch" />
+            <span class="lever"></span>
+          </label>
+        </div>
+      </div>
+      <div class="col s1"></div>
+      <div class="col s1 config-key">
+        <p>Repeat</p>
+      </div>
+      <div class="col s3 config-item">
+        <div class="switch">
+          <label>
+            Off
+            <input type="checkbox" id="trans-repeat-switch" />
+            <span class="lever"></span>
+            On
+          </label>
+        </div>
+      </div>
+      <div class="input-field col s1 config-item">
+        <input
+          id="trans-repeat-interval"
+          placeholder="repeat interval, unit: ms"
+          value="1000"
+          type="text"
+        />
+      </div>
+    </div>
+  </div>
+  <div class="col s12">
+    <!-- <p id="trans-log-p">transmit log</p> -->
+    <div class="row" id="trans-log-row">
+      <div class="col s1"></div>
+      <div class="input-field col s9">
+        <textarea id="trans-log-area" class="materialize-textarea"></textarea>
+        <label for="trans-log-area">History</label>
+      </div>
+      <div class="col s2 right-btn">
+        <a class="btn-small waves-effect red" id="trans-log-btn">
+          <i class="material-icons">delete</i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
