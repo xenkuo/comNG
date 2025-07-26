@@ -73,11 +73,12 @@ var dragMinWidth
 
 function navigator_layout_update() {
   const windowWidth = window.innerWidth
-  const logEl = document.getElementById('logo')
+  const logoEl = document.getElementById('logo')
+  const logoWidth = parseInt(logoEl.style.width) | logoEl.offsetWidth
   const tabsAreaEl = document.getElementById('tabs-area')
-  const tabAddEl = document.getElementById('tab-add-btn')
+  const tabAddBtnEl = document.getElementById('tab-add-btn')
   const dragAreaEl = document.getElementById('drag-area')
-  const tabsMaxWidth = windowWidth - dragMinWidth
+  const tabsMaxWidth = windowWidth - dragMinWidth - logoWidth - tabsOffset
 
   let tabsAreaWidth = parseInt(tabsAreaEl.style.width) | tabsAreaEl.offsetWidth
   const els = document.getElementsByClassName('chrome-tab')
@@ -85,12 +86,12 @@ function navigator_layout_update() {
   if (tabsAreaWidth > tabsMaxWidth) tabsAreaWidth = tabsMaxWidth
 
   tabsAreaEl.style.width = tabsAreaWidth + 'px'
-  tabAddEl.style.left = tabsOffset + tabsAreaWidth + 'px'
+  tabAddBtnEl.style.left = tabsOffset + tabsAreaWidth + 'px'
   dragAreaEl.style.width =
     windowWidth -
     tabsAreaWidth -
     tabsOffset -
-    (parseInt(tabAddEl.style.width) | tabAddEl.offsetWidth) +
+    (parseInt(tabAddBtnEl.style.width) | tabAddBtnEl.offsetWidth) +
     'px'
 }
 
