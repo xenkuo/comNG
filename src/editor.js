@@ -42,7 +42,7 @@ var tabsMap = new Map()
 
 // -----------------------chokidar watch section
 const watcher = chokidar.watch('./a.bc', {
-  ignored: /(^|[\/\\])\../, // ignore dotfiles
+  ignored: /(^|[/\\])\../, // ignore dotfiles
   persistent: true,
 })
 
