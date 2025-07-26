@@ -83,7 +83,7 @@ th {
   -webkit-app-region: no-drag;
   position: absolute;
   height: 24px;
-  font-size: 16px;
+  font-size: 20px;
   text-align: center;
   width: var(--icon-width);
   left: var(--logo-left);

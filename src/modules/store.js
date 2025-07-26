@@ -71,6 +71,10 @@ function init(version) {
       '2.1.1': (db) => {
         db.set('transmit.clean', false)
       },
+      '2.1.2': (db) => {
+        db.delete('window.xBefore')
+        db.delete('window.yBefore')
+      },
     },
   })
 }

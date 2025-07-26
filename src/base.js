@@ -367,23 +367,13 @@ document.getElementById('nav-area').onmousedown = () => {
 }
 
 document.getElementById('nav-area').ondblclick = () => {
-  if (
-    window.innerWidth === screen.width ||
-    window.innerHeight === screen.height
-  ) {
-    window.resizeTo(
-      store.get('window.widthBefore'),
-      store.get('window.heightBefore')
-    )
-    window.moveTo(store.get('window.xBefore'), store.get('window.yBefore'))
-  } else {
-    store.set('window.widthBefore', window.innerWidth)
-    store.set('window.heightBefore', window.innerHeight)
-    store.set('window.xBefore', window.screenX)
-    store.set('window.yBefore', window.screenY)
+  // only for Mac, see above comment
+  win = remote.getCurrentWindow()
 
-    window.resizeTo(screen.width, screen.height)
-    window.moveTo(0, 0)
+  if (win.isMaximized()) {
+    win.restore()
+  } else {
+    win.maximize()
   }
 }
 
@@ -396,23 +386,12 @@ document.getElementById('min-btn').onclick = () => {
 }
 
 document.getElementById('max-btn').onclick = () => {
-  if (
-    window.innerWidth === screen.width ||
-    window.innerHeight === screen.height
-  ) {
-    window.resizeTo(
-      store.get('window.widthBefore'),
-      store.get('window.heightBefore')
-    )
-    window.moveTo(store.get('window.xBefore'), store.get('window.yBefore'))
-  } else {
-    store.set('window.widthBefore', window.innerWidth)
-    store.set('window.heightBefore', window.innerHeight)
-    store.set('window.xBefore', window.screenX)
-    store.set('window.yBefore', window.screenY)
+  win = remote.getCurrentWindow()
 
-    window.resizeTo(screen.width, screen.height)
-    window.moveTo(0, 0)
+  if (win.isMaximized()) {
+    win.restore()
+  } else {
+    win.maximize()
   }
 }
 
