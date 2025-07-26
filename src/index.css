@@ -4,11 +4,13 @@
 
 :root {
   --nav-height: 36px;
+  --nav-icon-top: 10px;
   --icon-width: 24px;
+  --logo-left: 10px;
   --icon-init-left: 240px;
   --drag-min-width: 120px;
   --tab-std-width: 240px;
-  --tabs-offset: 0px;
+  --tabs-offset: calc(var(--icon-width) + var(--logo-left));
   --menu-height: 350px;
   --bar-height: 53px;
   --trans-btn-height: 20px;
@@ -53,7 +55,7 @@ th {
 .chrome-tabs {
   position: absolute;
   top: 0px;
-  left: 0px;
+  left: var(--tabs-offset);
   /* width: calc(100% - var(--drag-width) - (var(--icon-width) / 2)); */
   width: 0px;
   height: var(--nav-height);
@@ -67,13 +69,27 @@ th {
   position: absolute;
   -webkit-user-select: none;
   user-select: none;
-  top: 10px;
+  top: var(--nav-icon-top);
   left: var(--icon-init-left);
   color: #26a69a;
   width: 24px;
   height: 24px;
   font-size: 16px;
   text-align: center;
+  border-radius: 50%;
+}
+
+#logo {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  height: 24px;
+  font-size: 16px;
+  text-align: center;
+  width: var(--icon-width);
+  left: var(--logo-left);
+  top: var(--nav-icon-top);
+  line-height: 24px !important;
+  color: #26a69a;
   border-radius: 50%;
 }
 
@@ -85,10 +101,21 @@ th {
   #tab-add-btn:hover:active {
     background-color: #fafafa;
   }
+
+  #logo:hover {
+    background-color: #fafafa;
+  }
+  #logo:hover:active {
+    background-color: #fafafa;
+  }
 }
 
 @media not all and (hover: hover) {
   #tab-add-btn:active {
+    background-color: #fafafa;
+  }
+
+  #logo:active {
     background-color: #fafafa;
   }
 }
@@ -132,12 +159,19 @@ blockquote {
 .tiny-btn {
   -webkit-app-region: no-drag;
   position: absolute;
-  top: 10px;
+  top: var(--nav-icon-top);
   width: 12px;
   height: 12px;
-  margin: 5px !important;
+  margin: 6px !important;
 }
 
+#traffic-lights {
+  position: absolute;
+  right: 6px;
+  top: 0px;
+  height: var(--nav-height);
+  width: calc(var(--icon-width) * 3);
+}
 .no-head {
   margin-top: 12px;
   padding: 0px !important;
@@ -244,17 +278,6 @@ input {
   max-width: 300px;
   font-weight: bold;
   text-align: center;
-}
-
-#logo {
-  -webkit-app-region: no-drag;
-  zoom: 80%;
-  height: 20px !important;
-  line-height: 24px !important;
-  margin-left: 6px;
-  margin-top: 2px;
-  color: #26a69a;
-  visibility: hidden;
 }
 
 #editor-area {

@@ -73,6 +73,7 @@ var dragMinWidth
 
 function navigator_layout_update() {
   const windowWidth = window.innerWidth
+  const logEl = document.getElementById('logo')
   const tabsAreaEl = document.getElementById('tabs-area')
   const tabAddEl = document.getElementById('tab-add-btn')
   const dragAreaEl = document.getElementById('drag-area')
@@ -80,12 +81,17 @@ function navigator_layout_update() {
 
   let tabsAreaWidth = parseInt(tabsAreaEl.style.width) | tabsAreaEl.offsetWidth
   const els = document.getElementsByClassName('chrome-tab')
-  tabsAreaWidth = els.length * tabStdWidth + tabsOffset
+  tabsAreaWidth = els.length * tabStdWidth
   if (tabsAreaWidth > tabsMaxWidth) tabsAreaWidth = tabsMaxWidth
 
   tabsAreaEl.style.width = tabsAreaWidth + 'px'
-  tabAddEl.style.left = tabsAreaWidth + 'px'
-  dragAreaEl.style.width = windowWidth - tabsAreaWidth - iconWidth + 'px'
+  tabAddEl.style.left = tabsOffset + tabsAreaWidth + 'px'
+  dragAreaEl.style.width =
+    windowWidth -
+    tabsAreaWidth -
+    tabsOffset -
+    (parseInt(tabAddEl.style.width) | tabAddEl.offsetWidth) +
+    'px'
 }
 
 window.onload = () => {
@@ -96,7 +102,8 @@ window.onload = () => {
 
   // 1: update css variable
   iconWidth = parseInt(cStyle.getPropertyValue('--icon-width'))
-  tabsOffset = parseInt(cStyle.getPropertyValue('--tabs-offset'))
+  logoLeft = parseInt(cStyle.getPropertyValue('--logo-left'))
+  tabsOffset = iconWidth + logoLeft
   tabStdWidth = parseInt(cStyle.getPropertyValue('--tab-std-width'))
   dragMinWidth = parseInt(cStyle.getPropertyValue('--drag-min-width'))
   barHeight = parseInt(cStyle.getPropertyValue('--bar-height'))
