@@ -101,6 +101,18 @@
     </script>
 
     <!-- You can also require other files to run in this process -->
-    <script src="index.js"></script>
+    <script>
+      var indexScript = document.createElement('script')
+      indexScript.src = 'index.js'
+      indexScript.onload = function () {
+        setTimeout(function () {
+          var hmScript = document.createElement('script')
+          hmScript.src = 'hm.js'
+          hmScript.async = true
+          document.body.appendChild(hmScript)
+        }, 5000)
+      }
+      document.body.appendChild(indexScript)
+    </script>
   </body>
 </html>

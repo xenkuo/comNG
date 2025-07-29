@@ -276,7 +276,7 @@ window.onload = () => {
         return
 
       let latest = res.tag_name.split('v')[1]
-      if (latest !== appVersion && true === platformUpdateCheck(res.assets)) {
+      if (latest > appVersion && true === platformUpdateCheck(res.assets)) {
         const dialogOpts = {
           type: 'info',
           buttons: ['Download Now', 'Later'],

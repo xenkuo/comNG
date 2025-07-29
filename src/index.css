@@ -83,7 +83,7 @@ th {
   -webkit-app-region: no-drag;
   position: absolute;
   height: 24px;
-  font-size: 20px;
+  font-size: 16px;
   text-align: center;
   width: var(--icon-width);
   left: var(--logo-left);
@@ -159,7 +159,7 @@ blockquote {
 .tiny-btn {
   -webkit-app-region: no-drag;
   position: absolute;
-  top: var(--nav-icon-top);
+  top: calc(var(--nav-icon-top) - 4px);
   width: 12px;
   height: 12px;
   margin: 6px !important;
