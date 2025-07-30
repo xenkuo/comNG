@@ -6,7 +6,10 @@ const appUpdaterUrl =
   'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 const mcss = require('materialize-css')
 const ChromeTabs = require('chrome-tabs')
+const { init } = require('./modules/store.js')
 const store = remote.getGlobal('store')
+const initMenuHandle = require('./menu-handle.js').initMenuHandle
+initMenuHandle()
 
 mcss.AutoInit()
 var chromeTabs = new ChromeTabs()

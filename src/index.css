@@ -130,6 +130,16 @@ th {
   -webkit-app-region: drag;
 }
 
+#menu-handle {
+  background-color: #26a69a;
+  width: 100%;
+  height: 4px;
+  border-radius: 2%;
+  margin-bottom: 0px;
+  cursor: n-resize;
+  /* -webkit-app-region: drag; */
+}
+
 blockquote {
   margin-top: 10px;
   margin-bottom: 6px;
