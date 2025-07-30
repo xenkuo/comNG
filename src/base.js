@@ -7,6 +7,7 @@ const appUpdaterUrl =
 const mcss = require('materialize-css')
 const ChromeTabs = require('chrome-tabs')
 const { init } = require('./modules/store.js')
+const { memoryUsage } = require('process')
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./menu-handle.js').initMenuHandle
 initMenuHandle()
@@ -15,7 +16,8 @@ mcss.AutoInit()
 var chromeTabs = new ChromeTabs()
 
 var barHeight
-var menuHeight
+var menuInfo = require('./menu-handle.js').menuInfo
+
 var textDownward = true
 var ctrlKeyPressed = false
 
@@ -111,7 +113,7 @@ window.onload = () => {
   tabStdWidth = parseInt(cStyle.getPropertyValue('--tab-std-width'))
   dragMinWidth = parseInt(cStyle.getPropertyValue('--drag-min-width'))
   barHeight = parseInt(cStyle.getPropertyValue('--bar-height'))
-  menuHeight = parseInt(cStyle.getPropertyValue('--menu-height'))
+  menuInfo.height = parseInt(cStyle.getPropertyValue('--menu-height'))
 
   // 2: update editor height
   let nav = document.getElementById('nav-area')
@@ -303,7 +305,6 @@ window.onresize = () => {
   let bar = document.getElementById('bar-area')
   let menu = document.getElementById('menu-area')
   let editor = document.getElementById('editor-area')
-
   editor.style.height =
     window.innerHeight -
     nav.offsetHeight -
@@ -407,12 +408,12 @@ document.getElementById('menu-btn').onclick = () => {
   let editor = document.getElementById('editor-area')
 
   if (menu.hidden === true) {
-    editor.style.height = editor.offsetHeight - menuHeight + 'px'
+    editor.style.height = editor.offsetHeight - menuInfo.height + 'px'
     menu.hidden = false
 
     store.set('menu.hidden', false)
   } else {
-    editor.style.height = editor.offsetHeight + menuHeight + 'px'
+    editor.style.height = editor.offsetHeight + menuInfo.height + 'px'
     menu.hidden = true
 
     store.set('menu.hidden', true)
@@ -431,12 +432,12 @@ document.body.onclick = (e) => {
   let pos = e.clientY
   let range = document.body.offsetHeight
 
-  if (pos > range - barHeight || pos < range - barHeight - menuHeight) {
+  if (pos > range - barHeight || pos < range - barHeight - menuInfo.height) {
     let menu = document.getElementById('menu-area')
     let editor = document.getElementById('editor-area')
 
     if (menu.hidden === false) {
-      editor.style.height = editor.offsetHeight + menuHeight + 'px'
+      editor.style.height = editor.offsetHeight + menuInfo.height + 'px'
       menu.hidden = true
 
       store.set('menu.hidden', true)

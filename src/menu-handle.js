@@ -1,3 +1,5 @@
+const menuInfo = { height: 0 }
+
 function dragElement(elmnt) {
   var offsetX = 0,
     offsetY = 0,
@@ -36,6 +38,8 @@ function dragElement(elmnt) {
 
     menuEl.style.height = menuEl.offsetHeight + offsetY + 'px'
     editorEl.style.height = editorEl.offsetHeight - offsetY + 'px'
+
+    menuInfo.height = parseInt(menuEl.style.height)
   }
 
   function closeDragElement() {
@@ -51,4 +55,5 @@ function initMenuHandle() {
 
 module.exports = {
   initMenuHandle,
+  menuInfo,
 }

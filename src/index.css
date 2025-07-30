@@ -131,7 +131,7 @@ th {
 }
 
 #menu-handle {
-  background-color: #26a69a;
+  background-color: #fafafa;
   width: 100%;
   height: 4px;
   border-radius: 2%;
@@ -318,11 +318,12 @@ input {
 } */
 
 #bar-area {
-  /* width: calc(100% - 1px); */
   width: 100%;
   height: var(--bar-height);
-  /* position: fixed; */
-  position: sticky;
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 0px;
+  left: 0px;
   line-height: var(--bar-height);
   background: -webkit-linear-gradient(
     60deg,
