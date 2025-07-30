@@ -7,31 +7,8 @@
   </head>
 
   <body>
-    <nav class="z-depth-0" id="nav-area">
-      <div class="nav-drag-region" id="drag-area"></div>
-
-      <div class="nav-wrapper">
-        <i class="left material-icons" id="logo">vpn_key</i>
-
-        <div class="chrome-tabs" id="tabs-area">
-          <div class="chrome-tabs-content"></div>
-        </div>
-
-        <div id="tab-add-btn">✚</div>
-
-        <ul class="right" id="traffic-lights">
-          <li class="head-li">
-            <a title="最小化" id="min-btn" class="btn-floating tiny-btn"></a>
-          </li>
-          <li class="head-li">
-            <a title="最大化" id="max-btn" class="btn-floating tiny-btn white"></a>
-          </li>
-          <li class="head-li">
-            <a title="关闭" id="close-btn" class="btn-floating tiny-btn red"></a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <div id="nav-area-placeholder"></div>
+    <script src="fragment-loader.js"></script>
 
     <div id="editor-area"></div>
 
@@ -56,42 +33,12 @@
         <div id="fileops-tab-placeholder"></div>
         <div id="chart-tab-placeholder"></div>
         <div id="about-tab-placeholder"></div>
-        <script>
-          // Synchronously load all tab HTML fragments into their placeholders
-          const tabFragments = [
-            { id: 'general-tab-placeholder', file: 'tabs/general-tab.html' },
-            { id: 'transmit-tab-placeholder', file: 'tabs/transmit-tab.html' },
-            { id: 'advance-tab-placeholder', file: 'tabs/advance-tab.html' },
-            { id: 'fileops-tab-placeholder', file: 'tabs/fileops-tab.html' },
-            { id: 'chart-tab-placeholder', file: 'tabs/chart-tab.html' },
-            { id: 'about-tab-placeholder', file: 'tabs/about-tab.html' },
-          ]
-          tabFragments.forEach(function (tab) {
-            var xhr = new XMLHttpRequest()
-            xhr.open('GET', tab.file, false)
-            xhr.send(null)
-            if (xhr.status === 200) {
-              var el = document.getElementById(tab.id)
-              if (el) el.outerHTML = xhr.responseText
-            }
-          })
-        </script>
+        <!-- Tab fragments loaded by fragment-loader.js -->
       </div>
     </div>
 
     <div id="bar-area-placeholder"></div>
-    <script>
-      // Synchronously load the bar-area.html fragment into the placeholder
-      ;(function () {
-        var xhr = new XMLHttpRequest()
-        xhr.open('GET', 'bar-area.html', false)
-        xhr.send(null)
-        if (xhr.status === 200) {
-          var el = document.getElementById('bar-area-placeholder')
-          if (el) el.outerHTML = xhr.responseText
-        }
-      })()
-    </script>
+    <!-- Bar area fragment loaded by fragment-loader.js -->
 
     <!-- You can also require other files to run in this process -->
     <script>
