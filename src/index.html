@@ -9,48 +9,39 @@
   <body>
     <nav class="z-depth-0" id="nav-area">
       <div class="nav-drag-region" id="drag-area"></div>
+
       <div class="nav-wrapper">
-        <i class="material-icons left" id="logo">vpn_key</i>
+        <i class="left material-icons" id="logo">vpn_key</i>
+
+        <div class="chrome-tabs" id="tabs-area">
+          <div class="chrome-tabs-content"></div>
+        </div>
+
+        <div id="tab-add-btn">✚</div>
 
         <ul class="right" id="traffic-lights">
           <li class="head-li">
             <a title="最小化" id="min-btn" class="btn-floating tiny-btn"></a>
           </li>
           <li class="head-li">
-            <a
-              title="最大化"
-              id="max-btn"
-              class="btn-floating tiny-btn white"
-            ></a>
+            <a title="最大化" id="max-btn" class="btn-floating tiny-btn white"></a>
           </li>
           <li class="head-li">
-            <a
-              title="关闭"
-              id="close-btn"
-              class="btn-floating tiny-btn red"
-            ></a>
+            <a title="关闭" id="close-btn" class="btn-floating tiny-btn red"></a>
           </li>
         </ul>
       </div>
     </nav>
 
-    <div class="chrome-tabs" id="tabs-area">
-      <div class="chrome-tabs-content"></div>
-      <!-- <div class="chrome-tabs-bottom-bar"></div> -->
-    </div>
-
-    <div id="tab-add-btn">✚</div>
-
     <div id="editor-area"></div>
 
-    <div class="row col 12" id="menu-handle"></div>
     <div id="menu-area" hidden>
-      <div class="row">
-        <div class="col s12" id="menu-tabs-row">
+      <div class="row" id="menu-handle"></div>
+
+      <div class="row" id="menu-tabs-body">
+        <div class="row" id="menu-tabs-row">
           <ul class="tabs" id="menu-tabs">
-            <li class="tab col s2">
-              <a class="active" href="#general-tab">general</a>
-            </li>
+            <li class="tab col s2"><a class="active" href="#general-tab">general</a></li>
             <li class="tab col s2"><a href="#transmit-tab">transmit</a></li>
             <li class="tab col s2"><a href="#advance-tab">advance</a></li>
             <li class="tab col s2"><a href="#fileops-tab">file ops</a></li>
@@ -58,6 +49,7 @@
             <li class="tab col s2"><a href="#about-tab">about</a></li>
           </ul>
         </div>
+
         <div id="general-tab-placeholder"></div>
         <div id="transmit-tab-placeholder"></div>
         <div id="advance-tab-placeholder"></div>

@@ -2,8 +2,7 @@
 /* eslint-disable no-undef */
 const { remote, shell, ipcRenderer, clipboard } = require('electron')
 const appVersion = remote.app.getVersion()
-const appUpdaterUrl =
-  'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
+const appUpdaterUrl = 'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 const mcss = require('materialize-css')
 const ChromeTabs = require('chrome-tabs')
 const { init } = require('./modules/store.js')
@@ -122,26 +121,18 @@ window.onload = () => {
   let editor = document.getElementById('editor-area')
 
   editor.style.height =
-    window.innerHeight -
-    nav.offsetHeight -
-    bar.offsetHeight -
-    menu.offsetHeight +
-    'px'
+    window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
-  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(
-    store.get('menu.tab')
-  )
+  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
 
   let baudSelect = document.getElementById('baud-select')
   baudSelect.options[0].text = store.get('general.customized')
   baudSelect.selectedIndex = store.get('baudIndex')
   mcss.FormSelect.init(baudSelect)
 
-  document.getElementById('hexmode-switch').checked =
-    store.get('general.hexmode')
+  document.getElementById('hexmode-switch').checked = store.get('general.hexmode')
 
-  document.getElementById('timestamp-switch').checked =
-    store.get('general.timestamp')
+  document.getElementById('timestamp-switch').checked = store.get('general.timestamp')
   if (true === store.get('general.modemSignal.rts')) {
     let e = document.getElementById('rts-btn')
     e.classList.remove('grey')
@@ -150,9 +141,7 @@ window.onload = () => {
     let e = document.getElementById('dtr-btn')
     e.classList.remove('grey')
   }
-  document.getElementById('modem-signal-switch').checked = store.get(
-    'general.modemSignal.switch'
-  )
+  document.getElementById('modem-signal-switch').checked = store.get('general.modemSignal.switch')
   if (store.get('general.modemSignal.switch') === true) {
     document.getElementById('modem-signal-bar').hidden = false
   } else {
@@ -173,15 +162,11 @@ window.onload = () => {
   flowcontrol.selectedIndex = store.get('general.flowcontrolIndex')
   mcss.FormSelect.init(flowcontrol)
 
-  document.getElementById('editor-font-family').value =
-    store.get('general.fontFamily')
-  document.getElementById('editor-font-size').value =
-    store.get('general.fontSize')
+  document.getElementById('editor-font-family').value = store.get('general.fontFamily')
+  document.getElementById('editor-font-size').value = store.get('general.fontSize')
 
-  document.getElementById('trans-hexmode-switch').checked =
-    store.get('transmit.hexmode')
-  document.getElementById('trans-clean-switch').checked =
-    store.get('transmit.clean')
+  document.getElementById('trans-hexmode-switch').checked = store.get('transmit.hexmode')
+  document.getElementById('trans-clean-switch').checked = store.get('transmit.clean')
   let transEof = document.getElementById('trans-eof-select')
   let transEofIndex = 0
   if ('\n' === store.get('transmit.eof')) {
@@ -192,62 +177,35 @@ window.onload = () => {
   transEof.selectedIndex = transEofIndex
   mcss.FormSelect.init(transEof)
 
-  document.getElementById('breakpoint-switch').checked = store.get(
-    'advance.breakpoint.switch'
-  )
-  document.getElementById('breakpoint-on-text').value = store.get(
-    'advance.breakpoint.onText'
-  )
+  document.getElementById('breakpoint-switch').checked = store.get('advance.breakpoint.switch')
+  document.getElementById('breakpoint-on-text').value = store.get('advance.breakpoint.onText')
   document.getElementById('breakpoint-after-lines').value = store.get(
     'advance.breakpoint.afterLines'
   )
 
-  document.getElementById('sign-switch').checked = store.get(
-    'advance.sign.switch'
-  )
+  document.getElementById('sign-switch').checked = store.get('advance.sign.switch')
   document.getElementById('sign-name').value = store.get('advance.sign.name')
 
-  document.getElementById('capture-file-switch').checked = store.get(
-    'fileops.capture.switch'
-  )
-  document.getElementById('capture-file-path').value = store.get(
-    'fileops.capture.filePath'
-  )
+  document.getElementById('capture-file-switch').checked = store.get('fileops.capture.switch')
+  document.getElementById('capture-file-path').value = store.get('fileops.capture.filePath')
   if (true === store.get('fileops.capture.switch')) {
-    captureFileStream = fs.createWriteStream(
-      store.get('fileops.capture.filePath'),
-      {
-        flags: 'a',
-      }
-    )
+    captureFileStream = fs.createWriteStream(store.get('fileops.capture.filePath'), {
+      flags: 'a',
+    })
   }
 
-  document.getElementById('insider-preview').checked = store.get(
-    'about.insiderPreview'
-  )
+  document.getElementById('insider-preview').checked = store.get('about.insiderPreview')
 
-  document.getElementById('bar-color-head').value = store.get(
-    'advance.barColor.head'
-  )
-  document.getElementById('bar-color-middle').value = store.get(
-    'advance.barColor.middle'
-  )
-  document.getElementById('bar-color-tail').value = store.get(
-    'advance.barColor.tail'
-  )
+  document.getElementById('bar-color-head').value = store.get('advance.barColor.head')
+  document.getElementById('bar-color-middle').value = store.get('advance.barColor.middle')
+  document.getElementById('bar-color-tail').value = store.get('advance.barColor.tail')
 
-  document.documentElement.style.setProperty(
-    '--bar-color-head',
-    store.get('advance.barColor.head')
-  )
+  document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
   document.documentElement.style.setProperty(
     '--bar-color-middle',
     store.get('advance.barColor.middle')
   )
-  document.documentElement.style.setProperty(
-    '--bar-color-tail',
-    store.get('advance.barColor.tail')
-  )
+  document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
 
   document.getElementById('app-version').innerHTML = appVersion
   console.log('comNG Version: ', appVersion)
@@ -274,11 +232,7 @@ window.onload = () => {
       return data.json()
     })
     .then((res) => {
-      if (
-        res.prerelease === true &&
-        store.get('about.insiderPreview') === false
-      )
-        return
+      if (res.prerelease === true && store.get('about.insiderPreview') === false) return
 
       let latest = res.tag_name.split('v')[1]
       if (latest > appVersion && true === platformUpdateCheck(res.assets)) {
@@ -306,11 +260,7 @@ window.onresize = () => {
   let menu = document.getElementById('menu-area')
   let editor = document.getElementById('editor-area')
   editor.style.height =
-    window.innerHeight -
-    nav.offsetHeight -
-    bar.offsetHeight -
-    menu.offsetHeight +
-    'px'
+    window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
   navigator_layout_update()
 }
@@ -355,7 +305,7 @@ document.onkeydown = function (e) {
   }
 }
 
-// For drag region which nav-area is, the behavior is different between Mac and Windows/Debian:
+// For drag region which drag-area is, the behavior is different between Mac and Windows/Debian:
 // On Windows/Debian a drag region is taken as system title bar, and all event is captured by
 // system, app can't get any click or mouse event. At the same time, double click event
 // will resize app window by system, no need for app to implement manually.
@@ -365,12 +315,12 @@ document.onkeydown = function (e) {
 // In short, below two listener, onmousedown and ondbclick is only needed on Mac.
 // And there's a drawback as Windows/Debian has implemented such function internally that maximum
 // button info is not synced with system maximum and restore.
-document.getElementById('nav-area').onmousedown = () => {
+document.getElementById('drag-area').onmousedown = () => {
   // prevent text select for double click action
   return false
 }
 
-document.getElementById('nav-area').ondblclick = () => {
+document.getElementById('drag-area').ondblclick = () => {
   // only for Mac, see above comment
   win = remote.getCurrentWindow()
 
@@ -576,8 +526,7 @@ document.getElementById('trans-clean-switch').onchange = (e) => {
 document.getElementById('trans-repeat-switch').onchange = (e) => {
   let checked = e.target.checked
 
-  if (checked === false && transRepeatTimer !== undefined)
-    clearInterval(transRepeatTimer)
+  if (checked === false && transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
 }
 
 document.getElementById('trans-log-btn').onclick = () => {

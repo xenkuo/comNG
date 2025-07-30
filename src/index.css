@@ -130,16 +130,6 @@ th {
   -webkit-app-region: drag;
 }
 
-#menu-handle {
-  background-color: #fafafa;
-  width: 100%;
-  height: 4px;
-  border-radius: 2%;
-  margin-bottom: 0px;
-  cursor: n-resize;
-  /* -webkit-app-region: drag; */
-}
-
 blockquote {
   margin-top: 10px;
   margin-bottom: 6px;
@@ -294,6 +284,16 @@ input {
   height: calc(100% - var(--nav-height) - var(--bar-height));
 }
 
+#menu-handle {
+  background-color: #fafafa;
+  width: 100%;
+  height: 4px;
+  border-radius: 2%;
+  margin-bottom: 0px;
+  cursor: n-resize;
+  /* -webkit-app-region: drag; */
+}
+
 #menu-area {
   height: var(--menu-height);
   width: calc(100%);
@@ -301,6 +301,11 @@ input {
   background-color: #fafafa;
 }
 
+#menu-tabs-body {
+  height: 100%;
+  overflow: auto;
+  position: relative;
+}
 #menu-tabs-row {
   padding-left: 0px;
   padding-right: 0px;
@@ -308,6 +313,8 @@ input {
 
 #menu-tabs {
   background-color: #e0f2f1;
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /* Neumorphism button UI, need bar background set to: #55b9f3 */
@@ -355,14 +362,12 @@ input {
 
 #trans-data {
   font-size: 12px;
-  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono',
-    'Lucida Console', monospace;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace;
 }
 
 #trans-log-area {
   font-size: 12px;
-  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono',
-    'Lucida Console', monospace;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace;
   max-height: 146px;
   padding: 4px;
   overflow: auto;
@@ -388,12 +393,13 @@ input {
 }
 
 #chart-tab {
-  background-color: #ffffff;
+  background-color: #9e2f2f;
+  height: inherit;
 }
 
 #chart {
   align-content: center;
-  height: calc(var(--menu-height) - 26px);
+  height: inherit;
 }
 
 #chart-menu {
