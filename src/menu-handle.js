@@ -46,6 +46,9 @@ function dragElement(elmnt) {
     // stop moving when mouse button is released:
     document.onmouseup = null
     document.onmousemove = null
+    // Dispatch custom event for layout adjustment
+    const event = new CustomEvent('menuResize', { detail: { height: menuInfo.height } })
+    window.dispatchEvent(event)
   }
 }
 

@@ -1,6 +1,9 @@
 const Plotly = require('plotly.js-basic-dist-min')
 
 const chartEl = document.getElementById('chart')
+window.addEventListener('menuResize', function () {
+  resetChart()
+})
 const frameShiftThreshold = 100
 var chartEnable = false
 var frameCount = 0
@@ -93,13 +96,14 @@ function resetChart() {
   channelDataReset()
 
   // create new plot
-  Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
+  Plotly.react(chartEl, channelData, chartLayout, chartConfig)
 }
 // var interval;
 document.getElementById('chart-switch').onclick = (e) => {
   if (e.target.checked === true) {
     chartEnable = true
-    Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
+    resetChart()
+    // Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
   } else {
     chartEnable = false
   }
@@ -140,6 +144,6 @@ setTimeout(() => {
   if (chartEl) {
     resetChart()
   }
-}, 500)
+}, 100)
 
 // resetChart()
