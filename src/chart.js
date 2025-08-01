@@ -17,12 +17,14 @@ const chartConfig = {
 
 var chartLayout = {
   // showlegend: false,
-  width: window.innerWidth - 20,
+  // width: window.innerWidth - 20,
+  // // autosize: true,
   margin: {
-    l: 40,
-    r: 0,
-    t: 40,
-    b: 20,
+    l: 50,
+    r: 50,
+    b: 50,
+    t: 50,
+    pad: 0,
   },
   xaxis: {
     range: [0, 100],
@@ -30,12 +32,9 @@ var chartLayout = {
   font: {
     family:
       '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif',
-    size: 10,
   },
   dragmode: 'pan',
 }
-
-resetChart()
 
 function channelDataReset() {
   frameBuffer = []
@@ -49,7 +48,6 @@ function channelDataReset() {
         font: {
           family:
             '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif',
-          size: 10,
         },
       },
     }
@@ -137,3 +135,11 @@ function chartFrameProcess(buffer) {
     frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length)
   }
 }
+
+setTimeout(() => {
+  if (chartEl) {
+    resetChart()
+  }
+}, 500)
+
+// resetChart()
