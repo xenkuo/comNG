@@ -1,11 +1,13 @@
+const { reset } = require('monaco-editor/min/vs/loader')
 const Plotly = require('plotly.js-basic-dist-min')
 const chartEl = document.getElementById('chart-figure')
 
-function handleChartResize() {
+window.addEventListener('menuResized', () => {
+  relayoutChart()
+})
+window.addEventListener('chartTabLoaded', () => {
   resetChart()
-}
-window.addEventListener('menuResized', handleChartResize)
-window.addEventListener('chartTabLoaded', handleChartResize)
+})
 
 const frameShiftThreshold = 100
 var chartEnable = false
@@ -87,6 +89,13 @@ function frameAppend(frame, indices) {
       },
     })
   }
+}
+
+function relayoutChart() {
+  Plotly.purge(chartEl)
+
+  // update plot
+  Plotly.react(chartEl, channelData, chartLayout, chartConfig)
 }
 
 function resetChart() {
