@@ -23,8 +23,6 @@ const chartConfig = {
 
 var chartLayout = {
   // showlegend: false,
-  // width: window.innerWidth - 20,
-  // // autosize: true,
   margin: {
     l: 50,
     r: 50,
@@ -143,4 +141,6 @@ function chartFrameProcess(buffer) {
   }
 }
 
-// resetChart()
+module.exports = {
+  chartFrameProcess,
+}

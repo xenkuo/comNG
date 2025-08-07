@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const serial = require('serialport')
+const { chartFrameProcess } = require('./modules/chart.js')
 
 var port, modemSignalTimer
 var modemSignal = {
@@ -29,8 +30,7 @@ function portUpdate() {
 }
 
 function modemSignalTimerHandle() {
-  if (port === undefined || port.isOpen === false)
-    return clearInterval(modemSignalTimer)
+  if (port === undefined || port.isOpen === false) return clearInterval(modemSignalTimer)
 
   port.get((e, signal) => {
     if (e) return console.error(e)
@@ -38,31 +38,25 @@ function modemSignalTimerHandle() {
     if (signal.cts !== modemSignal.cts) {
       modemSignal.cts = signal.cts
       if (signal.cts === false) {
-        document.getElementById('cts-btn').style.cssText =
-          'background-color: #dfdfdf !important'
+        document.getElementById('cts-btn').style.cssText = 'background-color: #dfdfdf !important'
       } else {
-        document.getElementById('cts-btn').style.cssText =
-          'background-color: #26a69a !important'
+        document.getElementById('cts-btn').style.cssText = 'background-color: #26a69a !important'
       }
     }
     if (signal.dsr !== modemSignal.dsr) {
       modemSignal.dsr = signal.dsr
       if (signal.dsr === false) {
-        document.getElementById('dsr-btn').style.cssText =
-          'background-color: #dfdfdf !important'
+        document.getElementById('dsr-btn').style.cssText = 'background-color: #dfdfdf !important'
       } else {
-        document.getElementById('dsr-btn').style.cssText =
-          'background-color: #26a69a !important'
+        document.getElementById('dsr-btn').style.cssText = 'background-color: #26a69a !important'
       }
     }
     if (signal.dcd !== modemSignal.dcd) {
       modemSignal.dcd = signal.dcd
       if (signal.dcd === false) {
-        document.getElementById('dcd-btn').style.cssText =
-          'background-color: #dfdfdf !important'
+        document.getElementById('dcd-btn').style.cssText = 'background-color: #dfdfdf !important'
       } else {
-        document.getElementById('dcd-btn').style.cssText =
-          'background-color: #26a69a !important'
+        document.getElementById('dcd-btn').style.cssText = 'background-color: #26a69a !important'
       }
     }
   })
@@ -73,12 +67,9 @@ function modemSignalReset() {
   modemSignal.cts = false
   modemSignal.dsr = false
   modemSignal.dcd = false
-  document.getElementById('cts-btn').style.cssText =
-    'background-color: #dfdfdf !important'
-  document.getElementById('dsr-btn').style.cssText =
-    'background-color: #dfdfdf !important'
-  document.getElementById('dcd-btn').style.cssText =
-    'background-color: #dfdfdf !important'
+  document.getElementById('cts-btn').style.cssText = 'background-color: #dfdfdf !important'
+  document.getElementById('dsr-btn').style.cssText = 'background-color: #dfdfdf !important'
+  document.getElementById('dcd-btn').style.cssText = 'background-color: #dfdfdf !important'
 }
 
 function serialGetOptions() {
@@ -91,9 +82,7 @@ function serialGetOptions() {
   openOptions.baudRate = baudRate
 
   let dataBits = parseInt(
-    document.getElementById('databits-select').options[
-      store.get('general.databitsIndex')
-    ].text
+    document.getElementById('databits-select').options[store.get('general.databitsIndex')].text
   )
   if (isNaN(dataBits) === true) dataBits = 8
   openOptions.dataBits = dataBits
@@ -104,9 +93,7 @@ function serialGetOptions() {
   openOptions.parity = parity
 
   let stopBits = parseInt(
-    document.getElementById('stopbits-select').options[
-      store.get('general.stopbitsIndex')
-    ].text
+    document.getElementById('stopbits-select').options[store.get('general.stopbitsIndex')].text
   )
   if (isNaN(stopBits) === true) stopBits = 1
   openOptions.stopBits = stopBits
@@ -201,6 +188,7 @@ document.getElementById('port-switch').onclick = (e) => {
         hexModeProcess(data, true)
       } else {
         chartFrameProcess(data)
+        // chart.chartFrameProcess(data)
         stringModeProcess(data)
       }
     })

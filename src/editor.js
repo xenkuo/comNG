@@ -282,10 +282,7 @@ function getTimestamp() {
   const t = new Date()
 
   return (
-    t.toLocaleTimeString().split(' ')[0] +
-    ':' +
-    t.getMilliseconds().toString().padStart(3, 0) +
-    ' '
+    t.toLocaleTimeString().split(' ')[0] + ':' + t.getMilliseconds().toString().padStart(3, 0) + ' '
   )
 }
 
@@ -297,12 +294,7 @@ function editorApplyEdit(textString, appendLine, revealLine) {
     lastLineLength = model.getLineMaxColumn(lineCount)
   }
 
-  const range = new monaco.Range(
-    lineCount,
-    lastLineLength,
-    lineCount,
-    lastLineLength
-  )
+  const range = new monaco.Range(lineCount, lastLineLength, lineCount, lastLineLength)
 
   editor.getModel().applyEdits([
     {
@@ -316,8 +308,7 @@ function editorApplyEdit(textString, appendLine, revealLine) {
     captureFileStream.write(textString)
   }
 
-  if (true === revealLine && textDownward === true)
-    editor.revealLine(model.getLineCount())
+  if (true === revealLine && textDownward === true) editor.revealLine(model.getLineCount())
 }
 
 function hexModeProcess(buffer, revealLine) {
@@ -333,10 +324,7 @@ function breakpointProcess(line) {
     let bpLine = line
 
     if (breakpointBuff.length !== 0) {
-      bpLine = Buffer.concat(
-        [breakpointBuff, line],
-        line.length + breakpointBuff.length
-      )
+      bpLine = Buffer.concat([breakpointBuff, line], line.length + breakpointBuff.length)
       breakpointBuff = []
     }
 
@@ -401,11 +389,7 @@ function stringModeProcess(inBuffer) {
       if (store.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + line
     }
-    editorApplyEdit(
-      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
-      true,
-      true
-    )
+    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), true, true)
 
     buffer = buffer.slice(index + 1, buffer.length)
 
@@ -428,11 +412,7 @@ function stringModeProcess(inBuffer) {
       outputTmp = timestamp + buffer
       half_line = true
     }
-    editorApplyEdit(
-      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
-      true,
-      true
-    )
+    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), true, true)
   }
   if (store.get('advance.breakpoint.switch') === true) {
     breakpointBuff = buffer
@@ -441,9 +421,7 @@ function stringModeProcess(inBuffer) {
 
 amdRequire.config({
   // eslint-disable-next-line no-undef
-  baseUrl: uriFromPath(
-    path.join(__dirname, '../node_modules/monaco-editor/min')
-  ),
+  baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min')),
 })
 
 // workaround monaco-css not understanding the environment
@@ -582,9 +560,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   editor.addAction({
     id: 'highlight-clear-all',
     label: 'Highlight Clear All',
-    keybindings: [
-      monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E,
-    ],
+    keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: '9_cutcopypaste',
@@ -669,10 +645,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     let decos = model.getLineDecorations(range.startLineNumber)
     let zIndex = 1
     for (let deco of decos) {
-      if (
-        deco.options.className !== null &&
-        deco.options.className.indexOf('hl-') !== -1
-      ) {
+      if (deco.options.className !== null && deco.options.className.indexOf('hl-') !== -1) {
         if (deco.options.zIndex >= zIndex) zIndex = deco.options.zIndex + 1
       }
     }
@@ -726,8 +699,7 @@ amdRequire(['vs/editor/editor.main'], function () {
       } else {
         // str area
         if (range.startLineNumber !== range.endLineNumber) s = hmStrOffset
-        else
-          s = range.startColumn > hmStrOffset ? range.startColumn : hmStrOffset
+        else s = range.startColumn > hmStrOffset ? range.startColumn : hmStrOffset
       }
     } else {
       // default hex area
@@ -749,11 +721,7 @@ amdRequire(['vs/editor/editor.main'], function () {
       showCursors(model, range)
     } else {
       let deco = hlt.decoGet()
-      for (
-        let line = range.startLineNumber;
-        line <= range.endLineNumber;
-        line++
-      ) {
+      for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
         let lineRange = extracLineRange(range, line)
         let linePairRange = getLinePairRange(lineRange)
         selectRanges(model, lineRange, linePairRange, deco)
@@ -842,10 +810,7 @@ document.getElementById('clear-btn').onclick = () => {
   let value = ''
 
   if (store.get('advance.sign.switch') === true) {
-    value =
-      '------This file captured at ' +
-      new Date().toLocaleString() +
-      ' with comNG'
+    value = '------This file captured at ' + new Date().toLocaleString() + ' with comNG'
     if (store.get('advance.sign.name') !== '')
       value += ' by ' + store.get('advance.sign.name') + '.------'
     else value += '.------'

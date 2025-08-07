@@ -18,7 +18,6 @@ if ('dev' == pjson.mode) {
       'base.js': fs.readFileSync('./src/base.js', 'utf8'),
       'editor.js': fs.readFileSync('./src/editor.js', 'utf8'),
       'serialport.js': fs.readFileSync('./src/serialport.js', 'utf8'),
-      'chart.js': fs.readFileSync('./src/chart.js', 'utf8'),
     },
     options
   )
