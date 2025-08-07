@@ -806,7 +806,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   return editor
 })
 
-document.getElementById('clear-btn').onclick = () => {
+document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
   if (store.get('advance.sign.switch') === true) {
@@ -819,6 +819,10 @@ document.getElementById('clear-btn').onclick = () => {
 
   hexmodeIndex = 0
   editor.getModel().setValue(value)
+
+  // generate serial data clear event
+  const event = new CustomEvent('serialDataCleanup')
+  window.dispatchEvent(event)
 }
 
 document.getElementById('editor-font-family').onblur = (e) => {

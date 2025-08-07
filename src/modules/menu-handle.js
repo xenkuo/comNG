@@ -57,6 +57,6 @@ function initMenuHandle() {
 }
 
 module.exports = {
-  initMenuHandle,
   menuInfo,
+  initMenuHandle,
 }

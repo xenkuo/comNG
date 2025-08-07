@@ -8,14 +8,15 @@ const ChromeTabs = require('chrome-tabs')
 const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
 const store = remote.getGlobal('store')
-const initMenuHandle = require('./menu-handle.js').initMenuHandle
+const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
 
 mcss.AutoInit()
 var chromeTabs = new ChromeTabs()
 
 var barHeight
-var menuInfo = require('./menu-handle.js').menuInfo
+const menuInfo = require('./modules/menu-handle.js').menuInfo
+const chartControl = require('./modules/chart.js').chartControl
 
 var textDownward = true
 var ctrlKeyPressed = false
@@ -25,7 +26,7 @@ ipcRenderer.on('main-cmd', (event, arg) => {
   switch (arg) {
     case 'ClearLog':
       clipboard.writeText(editor.getModel().getValue())
-      document.getElementById('clear-btn').click()
+      document.getElementById('data-cleanup-btn').click()
       break
     case 'SwitchPort':
       document.getElementById('port-switch').click()
@@ -35,7 +36,7 @@ ipcRenderer.on('main-cmd', (event, arg) => {
       portSwitch.click()
       if (true == portSwitch.checked) {
         clipboard.writeText(editor.getModel().getValue())
-        document.getElementById('clear-btn').click()
+        document.getElementById('data-cleanup-btn').click()
       }
       break
     }
@@ -401,8 +402,11 @@ document.getElementById('menu-tabs').onclick = () => {
   store.set('menu.tab', tabs.$content[0].id)
   // generate the chart tab loaded event if id is chart-tab
   if (tabs.$content[0].id === 'chart-tab') {
-    const event = new CustomEvent('chartTabLoaded')
+    const event = new CustomEvent('chartTabActivated')
     window.dispatchEvent(event)
+    chartControl.enable = true
+  } else {
+    chartControl.enable = false
   }
 }
 

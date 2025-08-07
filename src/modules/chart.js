@@ -1,29 +1,33 @@
-const { reset } = require('monaco-editor/min/vs/loader')
 const Plotly = require('plotly.js-basic-dist-min')
 const chartEl = document.getElementById('chart-figure')
 
 window.addEventListener('menuResized', () => {
   relayoutChart()
 })
-window.addEventListener('chartTabLoaded', () => {
+window.addEventListener('chartTabActivated', () => {
+  resetChart()
+})
+window.addEventListener('serialDataCleanup', () => {
   resetChart()
 })
 
 const frameShiftThreshold = 100
-var chartEnable = false
+const chartControl = {
+  enable: false,
+}
 var frameCount = 0
 var frameBuffer = []
 
 var channelCount = 2
 var channelData = [{}]
-const chartConfig = {
+const plotConfig = {
   responsive: true,
   displayModeBar: true,
   scrollZoom: true,
   displaylogo: false,
 }
 
-var chartLayout = {
+const plotLayout = {
   // showlegend: false,
   margin: {
     l: 50,
@@ -95,29 +99,29 @@ function relayoutChart() {
   Plotly.purge(chartEl)
 
   // update plot
-  Plotly.react(chartEl, channelData, chartLayout, chartConfig)
+  Plotly.react(chartEl, channelData, plotLayout, plotConfig)
 }
 
 function resetChart() {
   // reset state
   Plotly.purge(chartEl)
   frameCount = 0
-  chartLayout.xaxis.range = [0, 100]
+  plotLayout.xaxis.range = [0, 100]
   channelDataReset()
 
   // create new plot
-  Plotly.react(chartEl, channelData, chartLayout, chartConfig)
+  Plotly.react(chartEl, channelData, plotLayout, plotConfig)
 }
 // var interval;
-document.getElementById('chart-switch').onclick = (e) => {
-  if (e.target.checked === true) {
-    chartEnable = true
-    resetChart()
-    // Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
-  } else {
-    chartEnable = false
-  }
-}
+// document.getElementById('chart-switch').onclick = (e) => {
+//   if (e.target.checked === true) {
+//     chartEnable = true
+//     resetChart()
+//     // Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
+//   } else {
+//     chartEnable = false
+//   }
+// }
 
 // document.getElementById('chart-clean').onclick = () => resetChart()
 
@@ -127,7 +131,7 @@ function arrayAppend(array, length) {
 }
 
 function chartFrameProcess(buffer) {
-  if (false === chartEnable) return
+  if (false === chartControl.enable) return
 
   frameBuffer += buffer
 
@@ -141,7 +145,7 @@ function chartFrameProcess(buffer) {
         channelCount = frameArray.length
         channelDataReset()
 
-        Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
+        Plotly.newPlot(chartEl, channelData, plotLayout, plotConfig)
       }
       arrayAppend(frameArray, frameArray.length)
     }
@@ -151,5 +155,6 @@ function chartFrameProcess(buffer) {
 }
 
 module.exports = {
+  chartControl,
   chartFrameProcess,
 }

@@ -188,7 +188,6 @@ document.getElementById('port-switch').onclick = (e) => {
         hexModeProcess(data, true)
       } else {
         chartFrameProcess(data)
-        // chart.chartFrameProcess(data)
         stringModeProcess(data)
       }
     })
