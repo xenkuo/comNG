@@ -47,7 +47,7 @@ function dragElement(elmnt) {
     document.onmouseup = null
     document.onmousemove = null
     // Dispatch custom event for layout adjustment
-    const event = new CustomEvent('menuResize', { detail: { height: menuInfo.height } })
+    const event = new CustomEvent('menuResized', { detail: { height: menuInfo.height } })
     window.dispatchEvent(event)
   }
 }

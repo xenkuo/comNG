@@ -399,6 +399,11 @@ document.getElementById('menu-tabs').onclick = () => {
   let tabs = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
 
   store.set('menu.tab', tabs.$content[0].id)
+  // generate the chart tab loaded event if id is chart-tab
+  if (tabs.$content[0].id === 'chart-tab') {
+    const event = new CustomEvent('chartTabLoaded')
+    window.dispatchEvent(event)
+  }
 }
 
 document.getElementById('hexmode-switch').onclick = (e) => {

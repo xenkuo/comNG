@@ -399,7 +399,7 @@ input {
   height: inherit;
 }
 
-#chart {
+#chart-figure {
   align-content: center;
   height: inherit;
   padding: 0px;

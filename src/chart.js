@@ -1,9 +1,12 @@
 const Plotly = require('plotly.js-basic-dist-min')
+const chartEl = document.getElementById('chart-figure')
 
-const chartEl = document.getElementById('chart')
-window.addEventListener('menuResize', function () {
+function handleChartResize() {
   resetChart()
-})
+}
+window.addEventListener('menuResized', handleChartResize)
+window.addEventListener('chartTabLoaded', handleChartResize)
+
 const frameShiftThreshold = 100
 var chartEnable = false
 var frameCount = 0
@@ -109,7 +112,7 @@ document.getElementById('chart-switch').onclick = (e) => {
   }
 }
 
-document.getElementById('chart-clean').onclick = () => resetChart()
+// document.getElementById('chart-clean').onclick = () => resetChart()
 
 function arrayAppend(array, length) {
   let { frame, indices } = array2frame(array, length)
@@ -139,11 +142,5 @@ function chartFrameProcess(buffer) {
     frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length)
   }
 }
-
-setTimeout(() => {
-  if (chartEl) {
-    resetChart()
-  }
-}, 100)
 
 // resetChart()
