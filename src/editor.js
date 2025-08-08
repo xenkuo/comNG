@@ -26,7 +26,7 @@ const hmStrOffset = hmSpanOffset + hmSpanLength // 62
 const hmStrLength = 16
 const hmEofOffset = hmStrOffset + hmStrLength // 78
 
-var editor
+var editorInst
 var breakpointHit = false
 var breakpointAfterLines = 0
 var breakpointBuff = []
@@ -96,7 +96,7 @@ function openFile() {
         // add to watcher
         watcher.add(filePath)
         // setup model theme and language
-        const model = editor.getModel()
+        const model = editorInst.getModel()
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
           monaco.editor.setModelLanguage(model, lang.toLowerCase())
@@ -105,7 +105,7 @@ function openFile() {
         // show text
         fs.readFile(filePath, 'utf8', (e, data) => {
           if (e) throw e
-          editor.getModel().setValue(data)
+          editorInst.getModel().setValue(data)
         })
 
         // setup tab
@@ -123,7 +123,7 @@ function openFile() {
         // 3. setup title
         let titleEl = el.querySelector('.chrome-tab-title')
 
-        el.align = 'center'
+        // el.align = 'center'
         titleEl.innerHTML = title
       }
     })
@@ -149,7 +149,7 @@ function openBinFile() {
       if (result.canceled === false) {
         const filePath = result.filePaths[0]
         // show hex text
-        editor.getModel().setValue('')
+        editorInst.getModel().setValue('')
         fs.readFile(filePath, (e, data) => {
           if (e) throw err
           hexModeProcess(data, false)
@@ -179,7 +179,7 @@ function saveFile() {
   const view = tabsMap.get(el)
   if (view.path !== null) {
     // has path info
-    const text = editor.getModel().getValue()
+    const text = editorInst.getModel().getValue()
     fs.writeFileSync(view.path, text)
     el.children[2].children[1].style.color = '#000000'
 
@@ -199,7 +199,7 @@ function saveFile() {
         if (result.canceled === false) {
           // save to file
           const filePath = result.filePath
-          const text = editor.getModel().getValue()
+          const text = editorInst.getModel().getValue()
           fs.writeFileSync(filePath, text)
           // update tab's path
           view.path = filePath
@@ -237,7 +237,7 @@ function saveAsFile() {
       if (result.canceled === false) {
         // save to file
         const filePath = result.filePath
-        const text = editor.getModel().getValue()
+        const text = editorInst.getModel().getValue()
         fs.writeFileSync(filePath, text)
         // update tab's path
         view.path = filePath
@@ -287,7 +287,7 @@ function getTimestamp() {
 }
 
 function editorApplyEdit(textString, appendLine, revealLine) {
-  const model = editor.getModel()
+  const model = editorInst.getModel()
   const lineCount = model.getLineCount()
   let lastLineLength = 1
   if (true === appendLine) {
@@ -296,7 +296,7 @@ function editorApplyEdit(textString, appendLine, revealLine) {
 
   const range = new monaco.Range(lineCount, lastLineLength, lineCount, lastLineLength)
 
-  editor.getModel().applyEdits([
+  editorInst.getModel().applyEdits([
     {
       forceMoveMarkers: true,
       range: range,
@@ -308,12 +308,12 @@ function editorApplyEdit(textString, appendLine, revealLine) {
     captureFileStream.write(textString)
   }
 
-  if (true === revealLine && textDownward === true) editor.revealLine(model.getLineCount())
+  if (true === revealLine && textDownward === true) editorInst.revealLine(model.getLineCount())
 }
 
 function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: 'twos' })
-  const model = editor.getModel()
+  const model = editorInst.getModel()
   // const lineCount = model.getLineCount();
 
   editorApplyEdit(text, false, revealLine)
@@ -508,7 +508,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   if (true === store.get('general.hexmode')) {
     readOnlyEditor = true
   }
-  editor = monaco.editor.create(document.getElementById('editor-area'), {
+  editorInst = monaco.editor.create(document.getElementById('editor-area'), {
     model: null,
     theme: 'comNGTheme',
     language: 'comNGLang',
@@ -546,7 +546,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   }
   monaco.languages.setLanguageConfiguration('comNGLang', editorConfig)
 
-  editor.addAction({
+  editorInst.addAction({
     id: 'highlight-toggle',
     label: 'Highlight Toggle',
     keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_E],
@@ -557,7 +557,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     run: hlt.toggle,
   })
 
-  editor.addAction({
+  editorInst.addAction({
     id: 'highlight-clear-all',
     label: 'Highlight Clear All',
     keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E],
@@ -568,7 +568,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     run: hlt.clear,
   })
 
-  editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
+  editorInst.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window
   })
 
@@ -710,11 +710,11 @@ amdRequire(['vs/editor/editor.main'], function () {
     return new monaco.Range(line, s, line, e)
   }
 
-  editor.onMouseUp(() => {
+  editorInst.onMouseUp(() => {
     if (false === store.get('general.hexmode')) return
 
-    let model = editor.getModel()
-    let range = editor.getSelection()
+    let model = editorInst.getModel()
+    let range = editorInst.getSelection()
     console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
@@ -739,7 +739,7 @@ amdRequire(['vs/editor/editor.main'], function () {
 
     // create a new model
     let model = monaco.editor.createModel()
-    editor.setModel(model)
+    editorInst.setModel(model)
     monaco.editor.setModelLanguage(model, 'comNGLang')
 
     let el = detail.tabEl
@@ -769,17 +769,17 @@ amdRequire(['vs/editor/editor.main'], function () {
     let el = detail.tabEl
 
     // Save before tab's state
-    let model = editor.getModel()
+    let model = editorInst.getModel()
     tabsMap.forEach((view, _) => {
       if (model === view.model) {
-        view.state = editor.saveViewState()
+        view.state = editorInst.saveViewState()
       }
     })
 
     // Restore new tab's state
     let view = tabsMap.get(el)
-    editor.setModel(view.model)
-    editor.restoreViewState(view.state)
+    editorInst.setModel(view.model)
+    editorInst.restoreViewState(view.state)
   })
 
   tabsEl.addEventListener('tabRemove', ({ detail }) => {
@@ -803,7 +803,7 @@ amdRequire(['vs/editor/editor.main'], function () {
     chromeTabs.addTab()
   }
 
-  return editor
+  return editorInst
 })
 
 document.getElementById('data-cleanup-btn').onclick = () => {
@@ -818,7 +818,7 @@ document.getElementById('data-cleanup-btn').onclick = () => {
   }
 
   hexmodeIndex = 0
-  editor.getModel().setValue(value)
+  editorInst.getModel().setValue(value)
 
   // generate serial data clear event
   const event = new CustomEvent('serialDataCleanup')
@@ -829,7 +829,7 @@ document.getElementById('editor-font-family').onblur = (e) => {
   let font = e.target.value.trim()
 
   if (font === '') font = defaultFont
-  editor.updateOptions({ fontFamily: font })
+  editorInst.updateOptions({ fontFamily: font })
   store.set('general.fontFamily', font)
 }
 
@@ -837,7 +837,7 @@ document.getElementById('editor-font-size').onblur = (e) => {
   let size = e.target.value.trim()
   if (size === '') size = 12
 
-  editor.updateOptions({ fontSize: size })
+  editorInst.updateOptions({ fontSize: size })
   store.set('general.fontSize', size)
 }
 
@@ -908,7 +908,7 @@ document.getElementById('capture-file-switch').onclick = (e) => {
 document.getElementById('capture-file-path').ondblclick = (e) => {
   const file = e.target.value
   const text = fs.readFileSync(file).toString()
-  editor.getModel().setValue(text)
+  editorInst.getModel().setValue(text)
 }
 
 document.getElementById('editor-area').ondragover = () => {
@@ -930,7 +930,7 @@ document.getElementById('editor-area').ondrop = (e) => {
   let f = e.dataTransfer.files[0]
 
   f.text().then((text) => {
-    editor.getModel().setValue(text)
+    editorInst.getModel().setValue(text)
   })
 
   return false

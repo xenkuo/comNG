@@ -236,6 +236,10 @@ blockquote {
   background-color: #fafafa;
 }
 
+.chrome-tabs .chrome-tab .chrome-tab-title {
+  margin-top: -4px;
+}
+
 input {
   font-size: 12px !important;
 }
