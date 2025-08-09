@@ -33,7 +33,7 @@ const plotLayout = {
     l: 50,
     r: 50,
     b: 50,
-    t: 50,
+    t: 20,
     pad: 0,
   },
   xaxis: {
@@ -145,7 +145,7 @@ function chartFrameProcess(buffer) {
         channelCount = frameArray.length
         channelDataReset()
 
-        Plotly.newPlot(chartEl, channelData, plotLayout, plotConfig)
+        Plotly.react(chartEl, channelData, plotLayout, plotConfig)
       }
       arrayAppend(frameArray, frameArray.length)
     }

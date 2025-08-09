@@ -56,12 +56,11 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 文件保存和打开，支持拖动
 - 抓取至文件
 
-## 用户界面
+## 
 
-![image](image/preview.jpg)
-![image](image/chart.png)
-![image](image/preview.gif)
-![image](image/hex-edit.gif)
+![](Image/README_2025-08-09-14-41-03.png)
+![](Image/preview.png)
+![](Image/hex-mode-2.png)
 
 ## 使用方法
 

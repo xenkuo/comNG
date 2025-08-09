@@ -409,17 +409,10 @@ input {
   padding: 0px;
 }
 
-#chart-menu {
-  position: absolute;
-  z-index: 999;
-  /* background-color: #ffd180; */
-  line-height: 41px;
-}
-
-#chart-switch-div,
+/* #chart-switch-div,
 #chart-clean-div {
   display: inline-block;
-}
+} */
 
 #chart-clean {
   transform: scale(0.8);
