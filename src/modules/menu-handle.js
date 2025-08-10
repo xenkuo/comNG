@@ -36,13 +36,21 @@ function dragElement(elmnt) {
     let menuEl = document.getElementById('menu-area')
     let editorEl = document.getElementById('editor-area')
 
+    if (menuEl.offsetHeight + offsetY < 350) {
+      offsetY = 0
+    } else if (editorEl.offsetHeight - offsetY < 200) {
+      offsetY = 0
+    }
+
     menuEl.style.height = menuEl.offsetHeight + offsetY + 'px'
     editorEl.style.height = editorEl.offsetHeight - offsetY + 'px'
 
     menuInfo.height = parseInt(menuEl.style.height)
   }
 
-  function closeDragElement() {
+  function closeDragElement(e) {
+    e = e || window.event
+    e.preventDefault()
     // stop moving when mouse button is released:
     document.onmouseup = null
     document.onmousemove = null

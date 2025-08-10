@@ -576,12 +576,17 @@ document.getElementById('issue').onclick = (e) => {
   shell.openExternal(e.target.href)
 }
 
-document.getElementById('star-me').onclick = (e) => {
+document.getElementById('gitee-star').onclick = (e) => {
   e.preventDefault()
   shell.openExternal(e.target.href)
 }
 
-document.getElementById('comnglang').onclick = (e) => {
+document.getElementById('github-star').onclick = (e) => {
+  e.preventDefault()
+  shell.openExternal(e.target.href)
+}
+
+document.getElementById('documents').onclick = (e) => {
   e.preventDefault()
   shell.openExternal(e.target.href)
 }

@@ -1,48 +1,36 @@
-# comNG -- 串口助手
+# comNG -- 现代化串口助手
 
-> 2023/7/17: 1000 Star 后重新开启更新。现在是 360 Star，让我们看看会不会有这天到来，毕竟这只是个小小的串口助手软件。
-
-> comNG 已经开发迭代了大概一年半了吧。目前基本已经实现了预期的绝大多数的功能，所以开发工作也该告一段落了。
-> 我会发布全平台的 v2.1.1 版本，之后如果没有大的功能升级或者 bug 修复，短时间内应该不会有更新了。
+> 距离上次的发布已经 4 年有余，期间我一直在使用 comNG。
+> 现在 Gitee 上有 450 多个 star，github 上也有 60 多个 star，非常感谢大家的认可。
 > 
-> 仅以此软件献给所有的嵌入式工程师，希望你们都能找到自己喜欢的开发工具。
+> 本来说的 1000star 后更新，我感觉等不及了。
+> 主要计划以下更新：
+>
+> 1. 代码模块化重构、功能修复和优化。
+> 2. 发布一款与 comNG 匹配的无线串口硬件。
+> 3. 搭建用户社区。
 
-`comNG` 是一款具有现代化 UI 设计并且功能强大的串口助手软件。
-
-`comNG` is a powerful serial port tool with modern UI design. For English users, please refer to [comNG Introduction](doc/Introduction-en.md)
-
-## 文档
-
-请参考 [comNG 完整文档](doc/Introduction.md)
-
-## Todo
-
-- [ ] ~~发送文件~~
-- [ ] ~~执行脚本~~
-- [x] 多窗口
-- [x] 字符模式统一转换不可打印字符
-- [x] 自动枚举可用串口
-- [x] 通用数据图形化界面 
+## 文档 Doc
 
 ## 介绍
 
 comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
 
-- 专业的 UI 和交互设计
+- 现代高效的 UI 和交互设计
 - 支持多标签，多实例
 - 专业的 Hex 模式
 - 通用的数据图形化界面
-- 内建的 comNGLang 高亮语法
+- 自动文本高亮（基于内建的 comNGLang 语法）
 - 手动文本高亮：类似于 notepad++ 的 Style Token
 - 搜索文本高亮：类似于 vscode 的搜索文本高亮
 - 选择文本高亮：类似于 vscode 的选择文本高亮
 - 支持 minimap 功能：类似于 vscode 的 minimap
-- 基于文本内容的中断功能，这是一个全新设计的功能
+- 基于文本内容的中断功能：收到特定数据后自动关闭串口。
 - 日志文档的签名：时间和姓名
+  - TODO: 日志保存后加密。
 - 常用命令支持快捷键操作，比如打开/关闭串口、打开/保存文件、清除文本、高亮文本等
 - 跨平台：Windows， Mac OS 以及 基于 Debian 的 Linux 系统，比如 Ubuntu 和 Deepin
 - 自定义主题（只支持软件下方 Bar 的背景色。）
-- 经过特定优化的串口发送模式
 
 另外还包含一些串口助手通用的功能：
 
@@ -56,7 +44,9 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 - 文件保存和打开，支持拖动
 - 抓取至文件
 
-## 
+请参考 [comNG 完整文档](doc/Introduction.md)， for English version please refer to [comNG Introduction](doc/Introduction-en.md)。
+
+## Screenshot
 
 ![](Image/README_2025-08-09-14-41-03.png)
 ![](Image/preview.png)
@@ -89,7 +79,7 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 git clone git@gitee.com:xenkuo/comNG.git
 ```
 
-### 设置开发环境（难！！！）
+### 设置开发环境
 
 > python 版本
 
