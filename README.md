@@ -10,8 +10,6 @@
 > 2. 发布一款与 comNG 匹配的无线串口硬件。
 > 3. 搭建用户社区。
 
-## 文档 Doc
-
 ## 介绍
 
 comNG 区别于其他串口助手的地方在于其强大的 “现场数据分析“ 能力。简单来说就是 comNG 提供的多种功能以帮助用户更方便的分析打印输出文本。这些功能包括：
@@ -48,9 +46,9 @@ comNG 区别于其他串口助手的地方在于其强大的 “现场数据分�
 
 ## Screenshot
 
-![](Image/README_2025-08-09-14-41-03.png)
-![](Image/preview.png)
-![](Image/hex-mode-2.png)
+![](image/README_2025-08-09-14-41-03.png)
+![](image/preview.png)
+![](image/hex-mode-2.png)
 
 ## 使用方法
 
