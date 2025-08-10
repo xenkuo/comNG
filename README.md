@@ -1,6 +1,6 @@
 # comNG -- 现代化串口助手
 
-> 距离上次发布已经 4 年有余， Gitee 上有 450 多个 star，github 上也有 60 多个 star，非常感谢大家的认可。
+> 距离上次发布已经 4 年有余， Gitee 上有 450 多个 star，[github](https://github.com/xenkuo/comNG) 上也有 60 多个 star，非常感谢大家的认可。
 >
 > 工作中我一直在使用 comNG，也收到了很多用户的反馈，是时候再更新一波了。
 > 
