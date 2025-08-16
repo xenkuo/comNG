@@ -8,6 +8,8 @@ const { dialog } = require('electron').remote
 const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
+const ChromeTabs = require('chrome-tabs')
+var chromeTabs = new ChromeTabs()
 
 const hlt = require('./modules/highlight.js')
 

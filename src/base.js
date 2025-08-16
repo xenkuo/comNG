@@ -4,7 +4,6 @@ const { remote, shell, ipcRenderer, clipboard } = require('electron')
 const appVersion = remote.app.getVersion()
 const appUpdaterUrl = 'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 const mcss = require('materialize-css')
-const ChromeTabs = require('chrome-tabs')
 const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
 const store = remote.getGlobal('store')
@@ -12,7 +11,6 @@ const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
 
 mcss.AutoInit()
-var chromeTabs = new ChromeTabs()
 
 var barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo

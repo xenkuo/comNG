@@ -108,24 +108,24 @@ const createWindow = () => {
     mainWindow.webContents.send('main-cmd', 'NewTab')
   })
 
-  Shortcut.register(mainWindow, 'CmdorCtrl+1', () => {
-    console.log('Pressed cmd/ctrl 1')
+  Shortcut.register(mainWindow, 'Alt+1', () => {
+    console.log('Pressed alt 1')
     mainWindow.webContents.send('main-cmd', '1')
   })
-  Shortcut.register(mainWindow, 'CmdorCtrl+2', () => {
-    console.log('Pressed cmd/ctrl 2')
+  Shortcut.register(mainWindow, 'Alt+2', () => {
+    console.log('Pressed alt 2')
     mainWindow.webContents.send('main-cmd', '2')
   })
-  Shortcut.register(mainWindow, 'CmdorCtrl+3', () => {
-    console.log('Pressed cmd/ctrl 3')
+  Shortcut.register(mainWindow, 'Alt+3', () => {
+    console.log('Pressed alt 3')
     mainWindow.webContents.send('main-cmd', '3')
   })
-  Shortcut.register(mainWindow, 'CmdorCtrl+4', () => {
-    console.log('Pressed cmd/ctrl 4')
+  Shortcut.register(mainWindow, 'Alt+4', () => {
+    console.log('Pressed alt 4')
     mainWindow.webContents.send('main-cmd', '4')
   })
-  Shortcut.register(mainWindow, 'CmdorCtrl+5', () => {
-    console.log('Pressed cmd/ctrl 5')
+  Shortcut.register(mainWindow, 'Alt+5', () => {
+    console.log('Pressed alt 5')
     mainWindow.webContents.send('main-cmd', '5')
   })
 
