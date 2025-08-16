@@ -4,7 +4,7 @@
 
 :root {
   --nav-height: 36px;
-  --nav-icon-top: 10px;
+  --nav-icon-top: 8px;
   --icon-width: 24px;
   --logo-left: 10px;
   --icon-init-left: 240px;
@@ -63,7 +63,7 @@ th {
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-content {
-  padding: 7px 8px;
+  padding: 5px 8px;
 }
 
 #tab-add-btn {
