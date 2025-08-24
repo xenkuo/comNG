@@ -127,7 +127,7 @@ th {
   position: absolute;
   /* width: var(--drag-width); */
   height: var(--nav-height);
-  z-index: -1;
+  z-index: 9;
   -webkit-app-region: drag;
 }
 
@@ -170,6 +170,7 @@ blockquote {
   position: absolute;
   right: 6px;
   top: 0px;
+  z-index: 99; /* higher than drag area */
   height: var(--nav-height);
   width: calc(var(--icon-width) * 3);
 }

@@ -324,7 +324,7 @@ document.getElementById('drag-area').ondblclick = () => {
   win = remote.getCurrentWindow()
 
   if (win.isMaximized()) {
-    win.restore()
+    win.unmaximize()
   } else {
     win.maximize()
   }
@@ -342,7 +342,7 @@ document.getElementById('max-btn').onclick = () => {
   win = remote.getCurrentWindow()
 
   if (win.isMaximized()) {
-    win.restore()
+    win.unmaximize()
   } else {
     win.maximize()
   }
