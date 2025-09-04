@@ -49,6 +49,7 @@ const createWindow = () => {
     },
   })
 
+  app.commandLine.appendSwitch('no-sandbox')
   // and load the index.html of the app.
   mainWindow.loadFile(path.join(__dirname, 'index.html'))
 

@@ -3,7 +3,6 @@
   "semi": false,
   "singleQuote": true,
   "printWidth": 100,
-  "parser": "css",
   "useTabs": false,
   "tabWidth": 2,
   "endOfLine": "lf"

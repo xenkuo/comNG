@@ -14,7 +14,6 @@ mcss.AutoInit()
 
 var barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
-const chartControl = require('./modules/chart.js').chartControl
 
 var textDownward = true
 var ctrlKeyPressed = false
@@ -206,6 +205,9 @@ window.onload = () => {
   )
   document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
 
+  const event = new CustomEvent('chartTabActivated')
+  window.dispatchEvent(event)
+
   document.getElementById('app-version').innerHTML = appVersion
   console.log('comNG Version: ', appVersion)
 
@@ -394,19 +396,16 @@ document.body.onclick = (e) => {
   }
 }
 
-document.getElementById('menu-tabs').onclick = () => {
-  let tabs = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
+// document.getElementById('menu-tabs').onclick = () => {
+//   let tabs = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
 
-  store.set('menu.tab', tabs.$content[0].id)
-  // generate the chart tab loaded event if id is chart-tab
-  if (tabs.$content[0].id === 'chart-tab') {
-    const event = new CustomEvent('chartTabActivated')
-    window.dispatchEvent(event)
-    chartControl.enable = true
-  } else {
-    chartControl.enable = false
-  }
-}
+//   store.set('menu.tab', tabs.$content[0].id)
+//   // generate the chart tab loaded event if id is chart-tab
+//   if (tabs.$content[0].id === 'chart-tab') {
+//     const event = new CustomEvent('chartTabActivated')
+//     window.dispatchEvent(event)
+//   }
+// }
 
 document.getElementById('hexmode-switch').onclick = (e) => {
   store.set('general.hexmode', e.target.checked)

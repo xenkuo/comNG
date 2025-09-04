@@ -12,9 +12,7 @@ window.addEventListener('serialDataCleanup', () => {
 })
 
 const frameShiftThreshold = 100
-const chartControl = {
-  enable: false,
-}
+var chartEnable = false
 var frameCount = 0
 var frameBuffer = []
 
@@ -112,18 +110,13 @@ function resetChart() {
   // create new plot
   Plotly.react(chartEl, channelData, plotLayout, plotConfig)
 }
-// var interval;
-// document.getElementById('chart-switch').onclick = (e) => {
-//   if (e.target.checked === true) {
-//     chartEnable = true
-//     resetChart()
-//     // Plotly.newPlot(chartEl, channelData, chartLayout, chartConfig)
-//   } else {
-//     chartEnable = false
-//   }
-// }
-
-// document.getElementById('chart-clean').onclick = () => resetChart()
+document.getElementById('chart-switch').onclick = (e) => {
+  if (e.target.checked === true) {
+    chartEnable = true
+  } else {
+    chartEnable = false
+  }
+}
 
 function arrayAppend(array, length) {
   let { frame, indices } = array2frame(array, length)
@@ -131,7 +124,7 @@ function arrayAppend(array, length) {
 }
 
 function chartFrameProcess(buffer) {
-  if (false === chartControl.enable) return
+  if (false === chartEnable) return
 
   frameBuffer += buffer
 
@@ -155,6 +148,5 @@ function chartFrameProcess(buffer) {
 }
 
 module.exports = {
-  chartControl,
   chartFrameProcess,
 }

@@ -410,14 +410,12 @@ input {
   padding: 0px;
 }
 
-/* #chart-switch-div,
-#chart-clean-div {
-  display: inline-block;
-} */
-
-#chart-clean {
-  transform: scale(0.8);
+#chart-switch-div {
+  position: absolute;
+  right: 280px;
+  z-index: 999;
 }
+
 #downward-btn {
   transform: scale(0.64);
 }
