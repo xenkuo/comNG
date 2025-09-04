@@ -5,7 +5,7 @@ window.addEventListener('menuResized', () => {
   relayoutChart()
 })
 window.addEventListener('chartTabActivated', () => {
-  resetChart()
+  relayoutChart()
 })
 window.addEventListener('serialDataCleanup', () => {
   resetChart()
