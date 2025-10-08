@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const fs = require('fs')
 const path = require('path')
-const amdLoader = require('../node_modules/monaco-editor/min/vs/loader.js')
-const amdRequire = amdLoader.require
+const _loadMonaco = require('./modules/monaco.js')
+
+const fs = require('fs')
 const { dialog } = require('electron').remote
 const hexy = require('hexy')
 const languageDetect = require('language-detect')
@@ -419,21 +419,9 @@ function stringModeProcess(inBuffer) {
   }
 }
 
-amdRequire.config({
-  // eslint-disable-next-line no-undef
-  baseUrl: uriFromPath(path.join(__dirname, '../node_modules/monaco-editor/min')),
-})
-
-// workaround monaco-css not understanding the environment
-self.module = undefined
-
-amdRequire(['vs/editor/editor.main'], function () {
-  monacox = monaco
-  const event = new CustomEvent('monacoloaded')
-  window.dispatchEvent(event)
-})
-
 window.addEventListener('monacoloaded', (e) => {
+  monacox = e.detail.monaco
+
   monacox.languages.register({
     id: 'comNGLang',
   })
