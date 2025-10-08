@@ -12,11 +12,11 @@ initMenuHandle()
 
 mcss.AutoInit()
 
-var barHeight
+let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
 
-var textDownward = true
-var ctrlKeyPressed = false
+let textDownward = true
+let ctrlKeyPressed = false
 
 ipcRenderer.on('main-cmd', (event, arg) => {
   console.log(arg)
@@ -68,10 +68,10 @@ ipcRenderer.on('main-cmd', (event, arg) => {
   }
 })
 
-var iconWidth
-var tabsOffset
-var tabStdWidth
-var dragMinWidth
+let iconWidth
+let tabsOffset
+let tabStdWidth
+let dragMinWidth
 
 function navigator_layout_update() {
   const windowWidth = window.innerWidth
@@ -82,9 +82,8 @@ function navigator_layout_update() {
   const dragAreaEl = document.getElementById('drag-area')
   const tabsMaxWidth = windowWidth - dragMinWidth - logoWidth - tabsOffset
 
-  let tabsAreaWidth = parseInt(tabsAreaEl.style.width) | tabsAreaEl.offsetWidth
   const els = document.getElementsByClassName('chrome-tab')
-  tabsAreaWidth = els.length * tabStdWidth
+  let tabsAreaWidth = els.length * tabStdWidth
   if (tabsAreaWidth > tabsMaxWidth) tabsAreaWidth = tabsMaxWidth
 
   tabsAreaEl.style.width = tabsAreaWidth + 'px'
@@ -105,7 +104,7 @@ window.onload = () => {
 
   // 1: update css variable
   iconWidth = parseInt(cStyle.getPropertyValue('--icon-width'))
-  logoLeft = parseInt(cStyle.getPropertyValue('--logo-left'))
+  let logoLeft = parseInt(cStyle.getPropertyValue('--logo-left'))
   tabsOffset = iconWidth + logoLeft
   tabStdWidth = parseInt(cStyle.getPropertyValue('--tab-std-width'))
   dragMinWidth = parseInt(cStyle.getPropertyValue('--drag-min-width'))
@@ -187,7 +186,7 @@ window.onload = () => {
   document.getElementById('capture-file-switch').checked = store.get('fileops.capture.switch')
   document.getElementById('capture-file-path').value = store.get('fileops.capture.filePath')
   if (true === store.get('fileops.capture.switch')) {
-    captureFileStream = fs.createWriteStream(store.get('fileops.capture.filePath'), {
+    let captureFileStream = fs.createWriteStream(store.get('fileops.capture.filePath'), {
       flags: 'a',
     })
   }
@@ -284,7 +283,6 @@ document.onkeydown = function (e) {
     case 17:
       if (document.activeElement.id === 'trans-data') {
         ctrlKeyPressed = true
-        setTimeout
         setTimeout(() => {
           ctrlKeyPressed = false
         }, 1000)
@@ -320,7 +318,7 @@ document.getElementById('drag-area').onmousedown = () => {
 
 document.getElementById('drag-area').ondblclick = () => {
   // only for Mac, see above comment
-  win = remote.getCurrentWindow()
+  let win = remote.getCurrentWindow()
 
   if (win.isMaximized()) {
     win.unmaximize()
@@ -460,7 +458,7 @@ document.getElementById('sign-name').onblur = (e) => {
   store.set('advance.sign.name', e.target.value)
 }
 
-let transRepeatTimer = undefined
+let transRepeatTimer
 document.getElementById('trans-send-btn').onclick = () => {
   const logObj = document.getElementById('trans-log-area')
   const dataObj = document.getElementById('trans-data')
@@ -609,7 +607,7 @@ document.getElementById('path-select').onchange = (e) => {
 }
 
 // Automatically update port
-var pathUpdated = false
+let pathUpdated = false
 document.getElementById('path-input').onmouseover = (e) => {
   if (true === pathUpdated) return
   pathUpdated = true

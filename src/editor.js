@@ -9,7 +9,7 @@ const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 const ChromeTabs = require('chrome-tabs')
-var chromeTabs = new ChromeTabs()
+let chromeTabs = new ChromeTabs()
 
 const hlt = require('./modules/highlight.js')
 
@@ -28,19 +28,19 @@ const hmStrOffset = hmSpanOffset + hmSpanLength // 62
 const hmStrLength = 16
 const hmEofOffset = hmStrOffset + hmStrLength // 78
 
-var editorInst
-var breakpointHit = false
-var breakpointAfterLines = 0
-var breakpointBuff = []
-var chartFrameBuff = []
-var half_line = false
-var ansiWait = false
-var captureFileStream
-var localSave = false
+let editorInst
+let breakpointHit = false
+let breakpointAfterLines = 0
+let breakpointBuff = []
+let chartFrameBuff = []
+let half_line = false
+let ansiWait = false
+let captureFileStream
+let localSave = false
 
 // tabEl -> view
 // view -> {path, model, state}
-var tabsMap = new Map()
+let tabsMap = new Map()
 
 // -----------------------chokidar watch section
 const watcher = chokidar.watch('./a.bc', {
@@ -80,8 +80,8 @@ watcher.on('unlink', (filePath) => {
 
 // ------------------------editor section
 function uriFromPath(_path) {
-  var pathName = path.resolve(_path).replace(/\\/g, '/')
-  if (pathName.length > 0 && pathName.charAt(0) !== '/') {
+  let pathName = path.resolve(_path).replace(/\\/g, '/')
+  if (pathName.length > 0 && !pathName.startsWith('/')) {
     pathName = '/' + pathName
   }
   return encodeURI('file://' + pathName)
@@ -315,8 +315,6 @@ function editorApplyEdit(textString, appendLine, revealLine) {
 
 function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: 'twos' })
-  const model = editorInst.getModel()
-  // const lineCount = model.getLineCount();
 
   editorApplyEdit(text, false, revealLine)
 }
@@ -468,13 +466,12 @@ amdRequire(['vs/editor/editor.main'], function () {
 
         [/[{}()[\]]/, 'bracket'],
         [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
-        [/\d{1,4}(-|\/|\.|:)\d{1,2}\1\d{1,4}/, 'time'],
+        [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
+        [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
+        [/\b(?:\d{1,3}\.){3}\d{1,3}\b/, 'ip'],
         [
-          /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)(-|\/|\.|:)(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\2(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
-          'ip',
-        ],
-        [
-          /[0-9a-fA-F]{2}(-|\/|\.|:)[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
+          /[0-9a-fA-F]{2}[-/.:][0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
+          /[0-9a-fA-F]{2}[-/.:][0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
           'mac',
         ],
         [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
@@ -819,7 +816,7 @@ document.getElementById('data-cleanup-btn').onclick = () => {
     value += '\n'
   }
 
-  hexmodeIndex = 0
+  let hexmodeIndex = 0
   editorInst.getModel().setValue(value)
 
   // generate serial data clear event

@@ -1,11 +1,11 @@
 // fragment-loader.js
 // Reusable function to synchronously load an HTML fragment into a placeholder
 function loadFragment(placeholderId, fragmentFile) {
-  var xhr = new XMLHttpRequest()
+  let xhr = new XMLHttpRequest()
   xhr.open('GET', fragmentFile, false)
   xhr.send(null)
   if (xhr.status === 200) {
-    var el = document.getElementById(placeholderId)
+    let el = document.getElementById(placeholderId)
     if (el) el.outerHTML = xhr.responseText
   }
 }
