@@ -27,7 +27,7 @@ const hmSpanLength = 3
 const hmStrOffset = hmSpanOffset + hmSpanLength // 62
 const hmStrLength = 16
 const hmEofOffset = hmStrOffset + hmStrLength // 78
-
+let monacox = null
 let editorInst
 let breakpointHit = false
 let breakpointAfterLines = 0
@@ -101,7 +101,7 @@ function openFile() {
         const model = editorInst.getModel()
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
-          monaco.editor.setModelLanguage(model, lang.toLowerCase())
+          monacox.editor.setModelLanguage(model, lang.toLowerCase())
         }
 
         // show text
@@ -216,7 +216,7 @@ function saveFile() {
           // update theme accord to new file extension
           const lang = languageDetect.filename(filePath)
           if (undefined !== lang && 'Text' !== lang) {
-            monaco.editor.setModelLanguage(view.model, lang.toLowerCase())
+            monacox.editor.setModelLanguage(view.model, lang.toLowerCase())
           }
         }
       })
@@ -254,7 +254,7 @@ function saveAsFile() {
         // update theme accord to new file extension
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
-          monaco.editor.setModelLanguage(view.model, lang.toLowerCase())
+          monacox.editor.setModelLanguage(view.model, lang.toLowerCase())
         }
       }
     })
@@ -296,7 +296,7 @@ function editorApplyEdit(textString, appendLine, revealLine) {
     lastLineLength = model.getLineMaxColumn(lineCount)
   }
 
-  const range = new monaco.Range(lineCount, lastLineLength, lineCount, lastLineLength)
+  const range = new monacox.Range(lineCount, lastLineLength, lineCount, lastLineLength)
 
   editorInst.getModel().applyEdits([
     {
@@ -428,10 +428,16 @@ amdRequire.config({
 self.module = undefined
 
 amdRequire(['vs/editor/editor.main'], function () {
-  monaco.languages.register({
+  monacox = monaco
+  const event = new CustomEvent('monacoloaded')
+  window.dispatchEvent(event)
+})
+
+window.addEventListener('monacoloaded', (e) => {
+  monacox.languages.register({
     id: 'comNGLang',
   })
-  monaco.languages.setMonarchTokensProvider('comNGLang', {
+  monacox.languages.setMonarchTokensProvider('comNGLang', {
     defaultToken: '',
 
     tokenizer: {
@@ -469,11 +475,6 @@ amdRequire(['vs/editor/editor.main'], function () {
         [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
         [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
         [/\b(?:\d{1,3}\.){3}\d{1,3}\b/, 'ip'],
-        [
-          /[0-9a-fA-F]{2}[-/.:][0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
-          /[0-9a-fA-F]{2}[-/.:][0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}\1[0-9a-fA-F]{2}/,
-          'mac',
-        ],
         [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
         [/0[xX][0-9a-fA-F]+/, 'number'],
         [/[0-9a-fA-F]{4,}/, 'number'],
@@ -483,7 +484,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   })
 
   // Define a new theme that contains only rules that match this language
-  monaco.editor.defineTheme('comNGTheme', {
+  monacox.editor.defineTheme('comNGTheme', {
     base: 'vs',
     inherit: true,
     rules: [
@@ -507,7 +508,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   if (true === store.get('general.hexmode')) {
     readOnlyEditor = true
   }
-  editorInst = monaco.editor.create(document.getElementById('editor-area'), {
+  editorInst = monacox.editor.create(document.getElementById('editor-area'), {
     model: null,
     theme: 'comNGTheme',
     language: 'comNGLang',
@@ -543,12 +544,12 @@ amdRequire(['vs/editor/editor.main'], function () {
       ["'", "'"],
     ],
   }
-  monaco.languages.setLanguageConfiguration('comNGLang', editorConfig)
+  monacox.languages.setLanguageConfiguration('comNGLang', editorConfig)
 
   editorInst.addAction({
     id: 'highlight-toggle',
     label: 'Highlight Toggle',
-    keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_E],
+    keybindings: [monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_E],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: '9_cutcopypaste',
@@ -559,7 +560,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   editorInst.addAction({
     id: 'highlight-clear-all',
     label: 'Highlight Clear All',
-    keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyMod.Shift + monaco.KeyCode.KEY_E],
+    keybindings: [monacox.KeyMod.CtrlCmd + monacox.KeyMod.Shift + monacox.KeyCode.KEY_E],
     precondition: null,
     keybindingContext: null,
     contextMenuGroupId: '9_cutcopypaste',
@@ -567,11 +568,11 @@ amdRequire(['vs/editor/editor.main'], function () {
     run: hlt.clear,
   })
 
-  editorInst.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_W, () => {
+  editorInst.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_W, () => {
     // Do nothing but prevent default action: close window
   })
 
-  // editor.addCommand(monaco.KeyMod.CtrlCmd + monaco.KeyCode.KEY_X, () => {
+  // editor.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_X, () => {
   //   // Do nothing but prevent default action: close window
   // });
 
@@ -599,7 +600,7 @@ amdRequire(['vs/editor/editor.main'], function () {
       e = (e - hmStrOffset) * hmUnitLength + hmHexOffset
     }
 
-    return new monaco.Range(range.startLineNumber, s, range.startLineNumber, e)
+    return new monacox.Range(range.startLineNumber, s, range.startLineNumber, e)
   }
 
   function showCursors(model, range) {
@@ -706,7 +707,7 @@ amdRequire(['vs/editor/editor.main'], function () {
       e = hmSpanOffset
     }
 
-    return new monaco.Range(line, s, line, e)
+    return new monacox.Range(line, s, line, e)
   }
 
   editorInst.onMouseUp(() => {
@@ -737,9 +738,9 @@ amdRequire(['vs/editor/editor.main'], function () {
     navigator_layout_update()
 
     // create a new model
-    let model = monaco.editor.createModel()
+    let model = monacox.editor.createModel()
     editorInst.setModel(model)
-    monaco.editor.setModelLanguage(model, 'comNGLang')
+    monacox.editor.setModelLanguage(model, 'comNGLang')
 
     let el = detail.tabEl
     // setup the title with time
@@ -801,10 +802,7 @@ amdRequire(['vs/editor/editor.main'], function () {
   document.getElementById('tab-add-btn').onclick = () => {
     chromeTabs.addTab()
   }
-
-  return editorInst
 })
-
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
