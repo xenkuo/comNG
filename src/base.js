@@ -15,7 +15,6 @@ mcss.AutoInit()
 let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
 
-let textDownward = true
 let ctrlKeyPressed = false
 
 ipcRenderer.on('main-cmd', (event, arg) => {
@@ -615,14 +614,4 @@ document.getElementById('path-input').onmouseover = (e) => {
 }
 document.getElementById('path-input').onmouseleave = (e) => {
   pathUpdated = false
-}
-
-document.getElementById('downward-btn').onclick = (e) => {
-  if (textDownward === true) {
-    textDownward = false
-    e.target.classList.add('grey')
-  } else {
-    textDownward = true
-    e.target.classList.remove('grey')
-  }
 }

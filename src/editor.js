@@ -2,6 +2,8 @@
 /* eslint-disable no-undef */
 const path = require('path')
 const _loadMonaco = require('./modules/monaco.js')
+const monacoUtilities = require('./modules/monaco-utilities.js')
+const hlt = require('./modules/highlight.js')
 
 const fs = require('fs')
 const { dialog } = require('electron').remote
@@ -10,8 +12,6 @@ const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 const ChromeTabs = require('chrome-tabs')
 let chromeTabs = new ChromeTabs()
-
-const hlt = require('./modules/highlight.js')
 
 const hmUnitCount = 16
 const hmUnitBytes = 2
@@ -260,14 +260,6 @@ function saveAsFile() {
     })
 }
 
-function createFileName() {
-  let date = new Date()
-  date = date.toString().split(' ')
-  let name = date[0] + '-' + date[4].replace(/[.|:]/g, '-') + '.log'
-
-  return name
-}
-
 function newTab() {
   chromeTabs.addTab()
 }
@@ -280,43 +272,10 @@ function switchTab(tabIndex) {
   chromeTabs.setCurrentTab(el)
 }
 
-function getTimestamp() {
-  const t = new Date()
-
-  return (
-    t.toLocaleTimeString().split(' ')[0] + ':' + t.getMilliseconds().toString().padStart(3, 0) + ' '
-  )
-}
-
-function editorApplyEdit(textString, appendLine, revealLine) {
-  const model = editorInst.getModel()
-  const lineCount = model.getLineCount()
-  let lastLineLength = 1
-  if (true === appendLine) {
-    lastLineLength = model.getLineMaxColumn(lineCount)
-  }
-
-  const range = new monacox.Range(lineCount, lastLineLength, lineCount, lastLineLength)
-
-  editorInst.getModel().applyEdits([
-    {
-      forceMoveMarkers: true,
-      range: range,
-      text: textString,
-    },
-  ])
-
-  if (undefined !== captureFileStream) {
-    captureFileStream.write(textString)
-  }
-
-  if (true === revealLine && textDownward === true) editorInst.revealLine(model.getLineCount())
-}
-
 function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: 'twos' })
 
-  editorApplyEdit(text, false, revealLine)
+  monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
 }
 
 function breakpointProcess(line) {
@@ -386,10 +345,16 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
+      if (store.get('general.timestamp') === true) timestamp = monacoUtilities.getTimestamp()
       outputTmp = timestamp + line
     }
-    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), true, true)
+    monacoUtilities.applyEdit(
+      monacox,
+      editorInst,
+      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
+      true,
+      true
+    )
 
     buffer = buffer.slice(index + 1, buffer.length)
 
@@ -408,11 +373,17 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
+      if (store.get('general.timestamp') === true) timestamp = monacoUtilities.getTimestamp()
       outputTmp = timestamp + buffer
       half_line = true
     }
-    editorApplyEdit(outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), true, true)
+    monacoUtilities.applyEdit(
+      monacox,
+      editorInst,
+      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
+      true,
+      true
+    )
   }
   if (store.get('advance.breakpoint.switch') === true) {
     breakpointBuff = buffer
@@ -463,6 +434,7 @@ window.addEventListener('monacoloaded', (e) => {
         [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
         [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
         [/\b(?:\d{1,3}\.){3}\d{1,3}\b/, 'ip'],
+        [/([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}/, 'mac'],
         [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
         [/0[xX][0-9a-fA-F]+/, 'number'],
         [/[0-9a-fA-F]{4,}/, 'number'],
@@ -478,7 +450,7 @@ window.addEventListener('monacoloaded', (e) => {
     rules: [
       { token: 'number', foreground: '2e7d32' },
       { token: 'bracket', foreground: 'ff9800' },
-      { token: 'timestamp', foreground: '009688' },
+      { token: 'timestamp', foreground: 'ff9800' },
       { token: 'time', foreground: '2196f3' },
       { token: 'ip', foreground: '03a9f4' },
       { token: 'mac', foreground: '00bcd4' },
@@ -523,7 +495,7 @@ window.addEventListener('monacoloaded', (e) => {
     },
   })
 
-  let editorConfig = {
+  monacox.languages.setLanguageConfiguration('comNGLang', {
     brackets: [
       ['{', '}'],
       ['[', ']'],
@@ -531,8 +503,21 @@ window.addEventListener('monacoloaded', (e) => {
       ['"', '"'],
       ["'", "'"],
     ],
-  }
-  monacox.languages.setLanguageConfiguration('comNGLang', editorConfig)
+    autoClosingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"' },
+      { open: "'", close: "'" },
+    ],
+    surroundingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"' },
+      { open: "'", close: "'" },
+    ],
+  })
 
   editorInst.addAction({
     id: 'highlight-toggle',
@@ -564,7 +549,7 @@ window.addEventListener('monacoloaded', (e) => {
   //   // Do nothing but prevent default action: close window
   // });
 
-  function getLinePairRange(range) {
+  function _getLinePairRange(range) {
     let s = range.startColumn
     if (s <= hmSpanOffset) {
       // hex area
@@ -591,8 +576,8 @@ window.addEventListener('monacoloaded', (e) => {
     return new monacox.Range(range.startLineNumber, s, range.startLineNumber, e)
   }
 
-  function showCursors(model, range) {
-    let cordRange = getLinePairRange(range)
+  function _showCursors(model, range) {
+    let cordRange = _getLinePairRange(range)
     if (undefined === cordRange) return
 
     // first remove old decos
@@ -628,7 +613,7 @@ window.addEventListener('monacoloaded', (e) => {
     )
   }
 
-  function selectRanges(model, range, pairRange, decoration) {
+  function _selectRanges(model, range, pairRange, decoration) {
     // first remove old decos
     let decos = model.getLineDecorations(range.startLineNumber)
     let zIndex = 1
@@ -664,8 +649,9 @@ window.addEventListener('monacoloaded', (e) => {
     )
   }
 
-  function extracLineRange(range, line) {
-    let s = (e = 1)
+  function _extractLineRange(range, line) {
+    let s = 1
+    let e = 1
 
     if (line === range.startLineNumber) {
       s = range.startColumn
@@ -706,13 +692,13 @@ window.addEventListener('monacoloaded', (e) => {
     console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
-      showCursors(model, range)
+      _showCursors(model, range)
     } else {
       let deco = hlt.decoGet()
       for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
-        let lineRange = extracLineRange(range, line)
-        let linePairRange = getLinePairRange(lineRange)
-        selectRanges(model, lineRange, linePairRange, deco)
+        let lineRange = _extractLineRange(range, line)
+        let linePairRange = _getLinePairRange(lineRange)
+        _selectRanges(model, lineRange, linePairRange, deco)
       }
     }
   })
@@ -732,7 +718,7 @@ window.addEventListener('monacoloaded', (e) => {
 
     let el = detail.tabEl
     // setup the title with time
-    let title = createFileName()
+    let title = monacoUtilities.generateFileName()
     let titleEl = el.querySelector('.chrome-tab-title')
     el.align = 'center'
     titleEl.innerHTML = title
@@ -853,7 +839,7 @@ document.getElementById('breakpoint-after-lines').onblur = (e) => {
 
 document.getElementById('capture-file-switch').onclick = (e) => {
   if (e.target.checked === true) {
-    let fileName = createFileName()
+    let fileName = monacoUtilities.generateFileName()
 
     dialog
       .showSaveDialog({
