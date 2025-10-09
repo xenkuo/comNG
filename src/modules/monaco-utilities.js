@@ -97,6 +97,17 @@ document.getElementById('downward-btn').onclick = (e) => {
   }
 }
 
+document.getElementById('breakpoint-on-text').onblur = (e) => {
+  store.set('advance.breakpoint.onText', e.target.value)
+}
+
+document.getElementById('breakpoint-after-lines').onblur = (e) => {
+  let lines = parseInt(e.target.value)
+
+  if (isNaN(lines) === true) lines = 5
+  store.set('advance.breakpoint.afterLines', lines)
+}
+
 module.exports = {
   applyEdit,
   generateFileName,

@@ -278,7 +278,7 @@ function hexModeProcess(buffer, revealLine) {
   monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
 }
 
-function breakpointProcess(line) {
+function _breakpointProcess(line) {
   if (breakpointHit === false) {
     let bpLine = line
 
@@ -304,7 +304,7 @@ function breakpointProcess(line) {
   return false
 }
 
-function filterAnsiCode(inBuffer) {
+function _filterAnsiCode(inBuffer) {
   let inArray = [...inBuffer]
   let outArray = []
   let arrayLen = inArray.length
@@ -317,11 +317,9 @@ function filterAnsiCode(inBuffer) {
       } else {
         ansiWait = true
       }
-    } else {
-      if (0x6d === inArray[i]) {
-        // m
-        ansiWait = false
-      }
+    } else if (0x6d === inArray[i]) {
+      // m
+      ansiWait = false
     }
   }
 
@@ -330,12 +328,12 @@ function filterAnsiCode(inBuffer) {
 
 function stringModeProcess(inBuffer) {
   // 1. trim ansi escape codes
-  // let buffer = filterAnsiCode(inBuffer);
+  // let buffer = _filterAnsiCode(inBuffer);
   let buffer = inBuffer
 
   // 2. output full line
   let index = -1
-  let outputTmp = buffer
+  let outputTmp
   while ((index = buffer.indexOf('\n')) !== -1) {
     let line = buffer.slice(0, index + 1)
 
@@ -359,7 +357,7 @@ function stringModeProcess(inBuffer) {
     buffer = buffer.slice(index + 1, buffer.length)
 
     if (store.get('advance.breakpoint.switch') === true) {
-      if (breakpointProcess(line) === true) {
+      if (_breakpointProcess(line) === true) {
         buffer = Buffer.from('')
         serialClose()
       }
@@ -777,6 +775,7 @@ window.addEventListener('monacoloaded', (e) => {
     chromeTabs.addTab()
   }
 })
+
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
@@ -824,17 +823,6 @@ document.getElementById('breakpoint-switch').onclick = (e) => {
   store.set('advance.breakpoint.switch', e.target.checked)
   breakpointHit = false
   breakpointAfterLines = 0
-}
-
-document.getElementById('breakpoint-on-text').onblur = (e) => {
-  store.set('advance.breakpoint.onText', e.target.value)
-}
-
-document.getElementById('breakpoint-after-lines').onblur = (e) => {
-  let lines = parseInt(e.target.value)
-
-  if (isNaN(lines) === true) lines = 5
-  store.set('advance.breakpoint.afterLines', lines)
 }
 
 document.getElementById('capture-file-switch').onclick = (e) => {

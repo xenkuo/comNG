@@ -21,7 +21,7 @@ ipcRenderer.on('main-cmd', (event, arg) => {
   console.log(arg)
   switch (arg) {
     case 'ClearLog':
-      clipboard.writeText(editor.getModel().getValue())
+      clipboard.writeText(editorInst.getModel().getValue())
       document.getElementById('data-cleanup-btn').click()
       break
     case 'SwitchPort':
@@ -30,8 +30,8 @@ ipcRenderer.on('main-cmd', (event, arg) => {
     case 'ClearLog&SwitchPort': {
       let portSwitch = document.getElementById('port-switch')
       portSwitch.click()
-      if (true == portSwitch.checked) {
-        clipboard.writeText(editor.getModel().getValue())
+      if (portSwitch.checked) {
+        clipboard.writeText(editorInst.getModel().getValue())
         document.getElementById('data-cleanup-btn').click()
       }
       break
@@ -114,9 +114,9 @@ window.onload = () => {
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
   let menu = document.getElementById('menu-area')
-  let editor = document.getElementById('editor-area')
+  let editorEl = document.getElementById('editor-area')
 
-  editor.style.height =
+  editorEl.style.height =
     window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
   mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
@@ -254,8 +254,8 @@ window.onresize = () => {
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
   let menu = document.getElementById('menu-area')
-  let editor = document.getElementById('editor-area')
-  editor.style.height =
+  let editorEl = document.getElementById('editor-area')
+  editorEl.style.height =
     window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
   navigator_layout_update()
@@ -350,15 +350,15 @@ document.getElementById('close-btn').onclick = () => {
 
 document.getElementById('menu-btn').onclick = () => {
   let menu = document.getElementById('menu-area')
-  let editor = document.getElementById('editor-area')
+  let editorEl = document.getElementById('editor-area')
 
   if (menu.hidden === true) {
-    editor.style.height = editor.offsetHeight - menuInfo.height + 'px'
+    editorEl.style.height = editorEl.offsetHeight - menuInfo.height + 'px'
     menu.hidden = false
 
     store.set('menu.hidden', false)
   } else {
-    editor.style.height = editor.offsetHeight + menuInfo.height + 'px'
+    editorEl.style.height = editorEl.offsetHeight + menuInfo.height + 'px'
     menu.hidden = true
 
     store.set('menu.hidden', true)
@@ -379,10 +379,10 @@ document.body.onclick = (e) => {
 
   if (pos > range - barHeight || pos < range - barHeight - menuInfo.height) {
     let menu = document.getElementById('menu-area')
-    let editor = document.getElementById('editor-area')
+    let editorEl = document.getElementById('editor-area')
 
     if (menu.hidden === false) {
-      editor.style.height = editor.offsetHeight + menuInfo.height + 'px'
+      editorEl.style.height = editorEl.offsetHeight + menuInfo.height + 'px'
       menu.hidden = true
 
       store.set('menu.hidden', true)
@@ -403,7 +403,7 @@ document.getElementById('menu-tabs').onclick = () => {
 
 document.getElementById('hexmode-switch').onclick = (e) => {
   store.set('general.hexmode', e.target.checked)
-  editor.updateOptions({ readOnly: e.target.checked })
+  editorInst.updateOptions({ readOnly: e.target.checked })
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {
