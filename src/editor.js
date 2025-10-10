@@ -79,13 +79,7 @@ watcher.on('unlink', (filePath) => {
 })
 
 // ------------------------editor section
-function uriFromPath(_path) {
-  let pathName = path.resolve(_path).replace(/\\/g, '/')
-  if (pathName.length > 0 && !pathName.startsWith('/')) {
-    pathName = '/' + pathName
-  }
-  return encodeURI('file://' + pathName)
-}
+
 
 function openFile() {
   dialog
