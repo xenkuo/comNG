@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const path = require('path')
-const _loadMonaco = require('./modules/monaco.js')
+const initMonaco = require('./modules/monaco.js').initMonaco
 const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
 
@@ -79,7 +79,6 @@ watcher.on('unlink', (filePath) => {
 })
 
 // ------------------------editor section
-
 
 function openFile() {
   dialog
@@ -382,6 +381,7 @@ function stringModeProcess(inBuffer) {
   }
 }
 
+initMonaco()
 window.addEventListener('monacoloaded', (e) => {
   monacox = e.detail.monaco
 
@@ -808,7 +808,7 @@ document.getElementById('editor-font-size').onblur = (e) => {
 document.getElementById('breakpoint-switch').onclick = (e) => {
   if (e.target.checked === true) {
     if (store.get('advance.breakpoint.onText.length') === 0) {
-      toast('Error: Breakpoint on-text cant be empty')
+      toast('Error: Breakpoint on-text can not be empty')
       e.target.checked = false
       return
     }

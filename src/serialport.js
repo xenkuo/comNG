@@ -3,8 +3,8 @@
 const serial = require('serialport')
 const { chartFrameProcess } = require('./modules/chart.js')
 
-var port, modemSignalTimer
-var modemSignal = {
+let port, modemSignalTimer
+let modemSignal = {
   cts: false,
   dsr: false,
   dcd: false,
@@ -109,7 +109,7 @@ function serialGetOptions() {
 }
 
 function toast(text) {
-  mcss.toast({ html: text, displayLength: 1000 })
+  mcss.toast({ html: text, displayLength: 2000 })
   // alert(text);
 }
 

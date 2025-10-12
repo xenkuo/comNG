@@ -2,7 +2,6 @@ const { remote } = require('electron')
 const { dialog } = require('electron').remote
 const store = remote.getGlobal('store')
 const fs = require('fs')
-const { get } = require('http')
 
 let captureFileStream
 let textDownward = true
