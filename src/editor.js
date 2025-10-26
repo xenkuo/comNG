@@ -88,8 +88,6 @@ function openFile() {
     .then((result) => {
       if (result.canceled === false) {
         const filePath = result.filePaths[0]
-        // add to watcher
-        watcher.add(filePath)
         // setup model theme and language
         const model = editorInst.getModel()
         const lang = languageDetect.filename(filePath)
@@ -442,7 +440,7 @@ window.addEventListener('monacoloaded', (e) => {
     rules: [
       { token: 'number', foreground: '2e7d32' },
       { token: 'bracket', foreground: 'ff9800' },
-      { token: 'timestamp', foreground: 'ff9800' },
+      { token: 'timestamp', foreground: 'f5984a' },
       { token: 'time', foreground: '2196f3' },
       { token: 'ip', foreground: '03a9f4' },
       { token: 'mac', foreground: '00bcd4' },
@@ -476,14 +474,14 @@ window.addEventListener('monacoloaded', (e) => {
     wordWrap: 'on',
     wordWrapBreakAfterCharacters: '',
     wordWrapBreakBeforeCharacters: '',
-    lineNumbersMinChars: 4,
+    lineNumbersMinChars: 5,
     // minimap: {
     //   enabled: false,
     // },
     scrollbar: {
       vertical: 'auto',
       useShadows: false,
-      verticalScrollbarSize: 10,
+      // verticalScrollbarSize: 10,
     },
   })
 
