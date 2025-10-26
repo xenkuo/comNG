@@ -328,8 +328,15 @@ input {
 /* #menu-btn,
 #data-cleanup-btn {
   background: linear-gradient(145deg, #4da7db, #5bc6ff) !important;
-  box-shadow: 9px 9px 19px #489dcf, -9px -9px 19px #62d5ff !important;
+  box-shadow:
+    9px 9px 19px #489dcf,
+    -9px -9px 19px #62d5ff !important;
 } */
+
+#menu-btn {
+  position: relative;
+  left: 20px;
+}
 
 #bar-area {
   width: 100%;
