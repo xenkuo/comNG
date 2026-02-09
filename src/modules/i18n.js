@@ -43,6 +43,9 @@ const labelI18n = {
     txHexMode: '十六进制',
     autoClean: '自动清除',
     autoRepeat: '自动重发',
+    signature: '签名',
+    breakpoint: '文本断点',
+    barColor: '控制板配色',
   },
   en: {
     general: 'General',
@@ -62,6 +65,9 @@ const labelI18n = {
     txHexMode: 'Hex Mode',
     autoClean: 'Auto Clean',
     autoRepeat: 'Auto Repeat',
+    signature: 'Signature',
+    breakpoint: 'Break on Text',
+    barColor: 'Bar Color',
   },
 }
 
