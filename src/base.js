@@ -5,6 +5,7 @@ const { remote, shell, ipcRenderer, clipboard } = require('electron')
 const mcss = require('materialize-css')
 const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
+const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
@@ -95,9 +96,9 @@ function navigator_layout_update() {
 
 window.onload = () => {
   mcss.AutoInit()
-
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
 
+  applyLanguage()
   // 0: update elements size and position
   const cStyle = getComputedStyle(document.documentElement)
 

@@ -151,7 +151,7 @@ if (!getTheLock) {
   app.on('ready', () => {
     let window = createWindow()
     windowPool.push(window)
-    console.log(app.getLocale())
+    // console.log(app.getLocale())
   })
 
   // Quit when all windows are closed.
