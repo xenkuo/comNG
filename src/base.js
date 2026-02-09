@@ -103,7 +103,7 @@ window.onload = () => {
 
   // 1: update css variable
   iconWidth = parseInt(cStyle.getPropertyValue('--icon-width'))
-  let logoLeft = parseInt(cStyle.getPropertyValue('--logo-left'))
+  let logoLeft = parseInt(cStyle.getPropertyValue('--nav-margin'))
   tabsOffset = iconWidth + logoLeft
   tabStdWidth = parseInt(cStyle.getPropertyValue('--tab-std-width'))
   dragMinWidth = parseInt(cStyle.getPropertyValue('--drag-min-width'))

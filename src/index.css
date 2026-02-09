@@ -6,11 +6,11 @@
   --nav-height: 36px;
   --nav-icon-top: 8px;
   --icon-width: 24px;
-  --logo-left: 10px;
+  --nav-margin: 10px;
   --icon-init-left: 240px;
   --drag-min-width: 120px;
   --tab-std-width: 240px;
-  --tabs-offset: calc(var(--icon-width) + var(--logo-left));
+  --tabs-offset: calc(var(--icon-width) + var(--nav-margin));
   --menu-height: 350px;
   --menu-handle-height: 4px;
   --bar-height: 53px;
@@ -86,7 +86,7 @@ th {
   font-size: 16px;
   text-align: center;
   width: var(--icon-width);
-  left: var(--logo-left);
+  left: var(--nav-margin);
   top: var(--nav-icon-top);
   line-height: 24px !important;
   color: #26a69a;
@@ -167,7 +167,7 @@ blockquote {
 
 #traffic-lights {
   position: absolute;
-  right: 6px;
+  right: var(--nav-margin);
   top: 0px;
   z-index: 99; /* higher than drag area */
   height: var(--nav-height);
