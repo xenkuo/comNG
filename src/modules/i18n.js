@@ -39,6 +39,10 @@ const labelI18n = {
     fontSize: '字体大小',
     fontFamily: '字体',
     protocolOptions: '通信配置',
+    eof: '换行符',
+    txHexMode: '十六进制',
+    autoClean: '自动清除',
+    autoRepeat: '自动重发',
   },
   en: {
     general: 'General',
@@ -54,6 +58,10 @@ const labelI18n = {
     fontSize: 'Font Size',
     fontFamily: 'Font Family',
     protocolOptions: 'Protocol Options',
+    eof: 'EOF',
+    txHexMode: 'Hex Mode',
+    autoClean: 'Auto Clean',
+    autoRepeat: 'Auto Repeat',
   },
 }
 

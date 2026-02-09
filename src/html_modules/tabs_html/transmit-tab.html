@@ -14,7 +14,7 @@
     <div class="row config-row">
       <div class="col s1"></div>
       <div class="col s1 config-key">
-        <p>EOF</p>
+        <p i18n-label="eof"></p>
       </div>
       <div class="col s2">
         <div class="input-field" id="trans-eof-row">
@@ -27,7 +27,7 @@
       </div>
       <div class="col s1"></div>
       <div class="col s1 config-key">
-        <p>Hex Mode</p>
+        <p i18n-label="txHexMode"></p>
       </div>
       <div class="col s3 config-item">
         <div class="switch">
@@ -43,7 +43,7 @@
     <div class="row config-row">
       <div class="col s1"></div>
       <div class="col s1 config-key">
-        <p>Clean</p>
+        <p i18n-label="autoClean"></p>
       </div>
       <div class="col s2 config-item">
         <div class="switch">
@@ -55,7 +55,7 @@
       </div>
       <div class="col s1"></div>
       <div class="col s1 config-key">
-        <p>Repeat</p>
+        <p i18n-label="autoRepeat"></p>
       </div>
       <div class="col s3 config-item">
         <div class="switch">
@@ -67,18 +67,12 @@
           </label>
         </div>
       </div>
-      <div class="input-field col s1 config-item">
-        <input
-          id="trans-repeat-interval"
-          placeholder="repeat interval, unit: ms"
-          value="1000"
-          type="text"
-        />
+      <div class="input-field col s2 config-item">
+        <input id="trans-repeat-interval" placeholder="interval: ms" value="1000" type="text" />
       </div>
     </div>
   </div>
   <div class="col s12">
-    <!-- <p id="trans-log-p">transmit log</p> -->
     <div class="row" id="trans-log-row">
       <div class="col s1"></div>
       <div class="input-field col s9">
