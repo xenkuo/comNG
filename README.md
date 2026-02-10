@@ -55,7 +55,9 @@ For more details please refer to [comNG Introduction](doc/Introduction-en.md)。
 
 添加下面的微信入群。在这里大家会一起讨论新功能，新 idea。
 
-<img src="image/friends.png" alt="QR code" style="width: 300px;"/>
+<div  align="center">   
+  <img src="image/friends.png" alt="QR code" style="width: 300px;"/>
+</div>
 
 ### 快捷键列表
 
