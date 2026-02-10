@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 const { remote, shell, ipcRenderer, clipboard } = require('electron')
 
-const mcss = require('@materializecss/materialize')
+const mcss = require('materialize-css')
 const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
 const { applyLanguage } = require('./modules/i18n.js')
