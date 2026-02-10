@@ -13,7 +13,7 @@ initMenuHandle()
 
 let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
-
+let tabsInst = null
 let ctrlKeyPressed = false
 
 ipcRenderer.on('main-cmd', (event, arg) => {
@@ -96,6 +96,7 @@ function navigator_layout_update() {
 
 window.onload = () => {
   mcss.AutoInit()
+  tabsInst = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
 
   applyLanguage()
@@ -350,14 +351,16 @@ document.body.onclick = (e) => {
   }
 }
 
-document.getElementById('menu-tabs').onclick = () => {
-  let tabs = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
-
-  store.set('menu.tab', tabs.$content[0].id)
-  // generate the chart tab loaded event if id is chart-tab
-  if (tabs.$content[0].id === 'chart-tab') {
-    const event = new CustomEvent('chartTabActivated')
-    window.dispatchEvent(event)
+document.getElementById('menu-tabs').onclick = (e) => {
+  if (e.target.hash === '#chart-tab') {
+    // don't store chart tab index to prevent error chart rendering
+    setTimeout(() => {
+      const event = new CustomEvent('chartTabActivated')
+      el = document.getElementById('chart-figure')
+      el.dispatchEvent(event)
+    }, 100)
+  } else {
+    store.set('menu.tab', e.target.hash.replace('#', ''))
   }
 }
 

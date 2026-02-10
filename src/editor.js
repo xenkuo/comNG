@@ -784,7 +784,8 @@ document.getElementById('data-cleanup-btn').onclick = () => {
 
   // generate serial data clear event
   const event = new CustomEvent('serialDataCleanup')
-  window.dispatchEvent(event)
+  let el = document.getElementById('chart-figure')
+  el.dispatchEvent(event)
 }
 
 document.getElementById('editor-font-family').onblur = (e) => {

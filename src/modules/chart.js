@@ -1,15 +1,15 @@
 const Plotly = require('plotly.js-basic-dist-min')
 const chartEl = document.getElementById('chart-figure')
 
-window.addEventListener('menuResized', () => {
+chartEl.addEventListener('menuResized', () => {
   console.log('Menu resized, relayout chart')
   relayoutChart()
 })
-window.addEventListener('chartTabActivated', () => {
+chartEl.addEventListener('chartTabActivated', () => {
   console.log('Chart tab activated, relayout chart')
   relayoutChart()
 })
-window.addEventListener('serialDataCleanup', () => {
+chartEl.addEventListener('serialDataCleanup', () => {
   console.log('Serial data cleaned up, reset chart')
   resetChart()
 })
@@ -116,6 +116,7 @@ function resetChart() {
 document.getElementById('chart-switch').onclick = (e) => {
   if (e.target.checked === true) {
     chartEnable = true
+    relayoutChart()
   } else {
     chartEnable = false
   }

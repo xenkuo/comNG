@@ -56,7 +56,8 @@ function dragElement(elmnt) {
     document.onmousemove = null
     // Dispatch custom event for layout adjustment
     const event = new CustomEvent('menuResized', { detail: { height: menuInfo.height } })
-    window.dispatchEvent(event)
+    let el = document.getElementById('chart-figure')
+    el.dispatchEvent(event)
   }
 }
 
