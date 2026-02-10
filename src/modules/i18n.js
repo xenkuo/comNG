@@ -92,9 +92,9 @@ const labelI18n = {
 }
 
 function applyLanguage() {
-  // 如果语言不存在，默认英文
   let lang = locale.split('-')[0]
   if (!titleI18n[lang]) lang = 'en'
+  // lang = 'zh' // for test
 
   document.querySelectorAll('[i18n-title]').forEach((el) => {
     const key = el.getAttribute('i18n-title')
