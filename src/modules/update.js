@@ -25,28 +25,32 @@ function checkForUpdates() {
   }
 
   fetch(appUpdaterUrl)
-    .then((data) => {
-      return data.json()
+    .then((response) => {
+      if (response.status == 200) return response.json()
+      else throw new Error('Failed to fetch update information: ' + response.status)
     })
-    .then((res) => {
-      if (res.prerelease === true && store.get('about.insiderPreview') === false) return
+    .then((respJson) => {
+      if (respJson.prerelease === true && store.get('about.insiderPreview') === false) return
 
-      let latest = res.tag_name.split('v')[1]
-      if (latest > appVersion && true === platformUpdateCheck(res.assets)) {
+      let latest = respJson.tag_name.split('v')[1]
+      if (latest > appVersion && true === platformUpdateCheck(respJson.assets)) {
         const dialogOpts = {
           type: 'info',
           buttons: ['取消', '下载'],
           defaultId: 1,
           title: '发现新版本',
           message: 'Version: ' + latest + ' released!',
-          detail: res.body,
+          detail: respJson.body,
         }
 
         dialog.showMessageBox(dialogOpts).then((returnValue) => {
           if (returnValue.response === 1)
-            shell.openExternal(res.author.html_url + '/comNG/releases')
+            shell.openExternal(respJson.author.html_url + '/comNG/releases')
         })
       }
+    })
+    .catch((error) => {
+      console.error(error)
     })
 
   document.getElementById('app-version').innerHTML = appVersion
