@@ -94,7 +94,7 @@ const labelI18n = {
 function applyLanguage() {
   let lang = locale.split('-')[0]
   if (!titleI18n[lang]) lang = 'en'
-  lang = 'zh' // for test
+  // lang = 'zh' // for test
 
   document.querySelectorAll('[i18n-title]').forEach((el) => {
     const key = el.getAttribute('i18n-title')
