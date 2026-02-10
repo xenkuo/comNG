@@ -87,6 +87,7 @@
     }
   },
   "dependencies": {
+    "@materializecss/materialize": "^2.3.2",
     "chokidar": "3.6.0",
     "chrome-tabs": "^5.4.0",
     "draggabilly": "^2.3.0",
@@ -96,7 +97,6 @@
     "hexy": "0.3.5",
     "language-detect": "^1.1.0",
     "material-design-icons": "^3.0.1",
-    "materialize-css": "1.0.0",
     "monaco-editor": "0.20.0",
     "plotly.js-basic-dist-min": "1.58.5",
     "serialport": "^8.0.7"
