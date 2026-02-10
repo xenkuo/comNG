@@ -24,12 +24,14 @@ function checkForUpdates() {
     return false
   }
 
-  fetch(appUpdaterUrl)
-    .then((response) => {
-      if (response.status == 200) return response.json()
-      else throw new Error('Failed to fetch update information: ' + response.status)
-    })
-    .then((respJson) => {
+  const performUpdate = async () => {
+    try {
+      const response = await fetch(appUpdaterUrl)
+      if (response.status !== 200) {
+        throw new Error('Failed to fetch update information: ' + response.status)
+      }
+      const respJson = await response.json()
+
       if (respJson.prerelease === true && store.get('about.insiderPreview') === false) return
 
       let latest = respJson.tag_name.split('v')[1]
@@ -48,10 +50,12 @@ function checkForUpdates() {
             shell.openExternal(respJson.author.html_url + '/comNG/releases')
         })
       }
-    })
-    .catch((error) => {
+    } catch (error) {
       console.error(error)
-    })
+    }
+  }
+
+  performUpdate()
 
   document.getElementById('app-version').innerHTML = appVersion
   console.log('comNG Version: ', appVersion)
