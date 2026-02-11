@@ -5,15 +5,13 @@ const initMonaco = require('./modules/monaco.js').initMonaco
 const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
+const chromeTabsModule = require('./modules/chrome-tabs.js')
 
 const fs = require('fs')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
-const ChromeTabs = require('chrome-tabs')
-let chromeTabs = new ChromeTabs()
-// Make chromeTabs globally accessible
-window.chromeTabs = chromeTabs
+// ChromeTabs functionality moved to chrome-tabs module
 
 // Hex mode constants imported from hex-mode module
 let monacox = null
@@ -27,11 +25,7 @@ let ansiWait = false
 let captureFileStream
 let localSave = false
 
-// tabEl -> view
-// view -> {path, model, state}
-let tabsMap = new Map()
-// Make tabsMap globally accessible
-window.tabsMap = tabsMap
+// tabsMap functionality moved to chrome-tabs module
 
 // -----------------------chokidar watch section
 const watcher = chokidar.watch('./a.bc', {
@@ -117,8 +111,7 @@ function openFile() {
 
 // ----------------------editor function section
 function openFileInNewTab() {
-  chromeTabs.addTab()
-  openFile()
+  chromeTabsModule.openFileInNewTab(openFile)
 }
 
 function saveFile() {
@@ -206,15 +199,11 @@ function saveAsFile() {
 }
 
 function newTab() {
-  chromeTabs.addTab()
+  chromeTabsModule.newTab()
 }
 
 function switchTab(tabIndex) {
-  const elParent = chromeTabs.el.children[0]
-
-  if (tabIndex >= elParent.childElementCound) return
-  const el = elParent.children[tabIndex - 1]
-  chromeTabs.setCurrentTab(el)
+  chromeTabsModule.switchTab(tabIndex)
 }
 
 function hexModeProcess(buffer, revealLine) {
@@ -503,79 +492,12 @@ window.addEventListener('monacoloaded', (e) => {
   // Initialize hex mode handlers
   hexMode.initHexModeHandlers(editorInst, monacox, hlt)
 
-  // --------------------------Chrometabs section, refer to:
-  // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
-  const tabsEl = document.getElementById('tabs-area')
-
-  tabsEl.addEventListener('tabAdd', ({ detail }) => {
-    // console.log("tab add");
-    navigator_layout_update()
-
-    // create a new model
-    let model = monacox.editor.createModel()
-    editorInst.setModel(model)
-    monacox.editor.setModelLanguage(model, 'comNGLang')
-
-    let el = detail.tabEl
-    // setup the title with time
-    let title = monacoUtilities.generateFileName()
-    let titleEl = el.querySelector('.chrome-tab-title')
-    el.align = 'center'
-    titleEl.innerHTML = title
-
-    // setup content change listener for model
-    model.onDidChangeContent((e) => {
-      // console.log(e);
-      if (e.isFlush === true) return
-      el.children[2].children[1].style.color = '#26a69a'
-    })
-
-    // setup the map between table and model/state
-    let view = {
-      model: model,
-      path: null,
-      state: null,
-    }
-    tabsMap.set(el, view)
+  // Initialize ChromeTabs module
+  chromeTabsModule.initChromeTabs({
+    monacox: monacox,
+    editorInst: editorInst,
+    watcher: watcher
   })
-
-  tabsEl.addEventListener('activeTabChange', ({ detail }) => {
-    let el = detail.tabEl
-
-    // Save before tab's state
-    let model = editorInst.getModel()
-    tabsMap.forEach((view, _) => {
-      if (model === view.model) {
-        view.state = editorInst.saveViewState()
-      }
-    })
-
-    // Restore new tab's state
-    let view = tabsMap.get(el)
-    editorInst.setModel(view.model)
-    editorInst.restoreViewState(view.state)
-  })
-
-  tabsEl.addEventListener('tabRemove', ({ detail }) => {
-    // console.log("tab remove");
-    navigator_layout_update()
-
-    // delete from watcher
-    const view = tabsMap.get(detail.tabEl)
-    if (null !== view.path) {
-      watcher.unwatch(view.path)
-    }
-
-    // delete from tabsMap
-    tabsMap.delete(detail.tabEl)
-    if (0 === tabsMap.size) chromeTabs.addTab()
-  })
-
-  chromeTabs.init(tabsEl)
-  chromeTabs.addTab()
-  document.getElementById('tab-add-btn').onclick = () => {
-    chromeTabs.addTab()
-  }
 })
 
 document.getElementById('data-cleanup-btn').onclick = () => {

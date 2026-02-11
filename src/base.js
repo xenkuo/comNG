@@ -8,6 +8,7 @@ const { memoryUsage } = require('process')
 const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
 const hexModeB = require('./modules/hex-mode.js')
+const chromeTabsModuleB = require('./modules/chrome-tabs.js')
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
@@ -52,14 +53,14 @@ ipcRenderer.on('main-cmd', (event, arg) => {
       saveAsFile()
       break
     case 'NewTab':
-      newTab()
+      chromeTabsModuleB.newTab()
       break
     case '1':
     case '2':
     case '3':
     case '4':
     case '5':
-      switchTab(arg)
+      chromeTabsModuleB.switchTab(parseInt(arg))
       break
     default:
       console.log('Unknown commands')
