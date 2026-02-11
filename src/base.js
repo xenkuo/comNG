@@ -19,11 +19,11 @@ const menuInfo = require('./modules/menu-handle.js').menuInfo
 let tabsInst = null
 let ctrlKeyPressed = false
 
+// Make hexModeB globally accessible for IPC handler
+window.hexModeB = hexModeB
+
 // Initialize IPC handlers
-ipcHandler.initIPCHandlers({
-  chromeTabsModule: chromeTabsModuleB,
-  hexModeModule: hexModeB
-})
+ipcHandler.initIPCHandlers()
 
 let iconWidth
 let tabsOffset

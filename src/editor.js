@@ -198,20 +198,10 @@ function saveAsFile() {
     })
 }
 
-function newTab() {
-  chromeTabsModule.newTab()
-}
-
-function switchTab(tabIndex) {
-  chromeTabsModule.switchTab(tabIndex)
-}
-
-function hexModeProcess(buffer, revealLine) {
+// Expose hexModeProcess globally for serialport.js to use
+window.hexModeProcess = (buffer, revealLine) => {
   hexMode.hexModeProcess(buffer, revealLine, monacox, editorInst)
 }
-
-// Expose hexModeProcess globally for serialport.js to use
-window.hexModeProcess = hexModeProcess
 
 function _breakpointProcess(line) {
   if (breakpointHit === false) {

@@ -1,26 +1,23 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const { ipcRenderer, clipboard } = require('electron')
+const chromeTabsModule = require('./chrome-tabs.js')
 
 /**
  * Initialize IPC command handlers
- * @param {object} modules - Object containing required modules
- * @param {object} modules.chromeTabsModule - Chrome tabs module
- * @param {object} modules.hexModeModule - Hex mode module
  */
-function initIPCHandlers(modules) {
+function initIPCHandlers() {
   ipcRenderer.on('main-cmd', (event, arg) => {
     console.log(arg)
-    handleCommand(arg, modules)
+    handleCommand(arg)
   })
 }
 
 /**
  * Handle IPC commands from main process
  * @param {string} command - Command name
- * @param {object} modules - Modules object
  */
-function handleCommand(command, modules) {
+function handleCommand(command) {
   switch (command) {
     case 'ClearLog':
       _handleClearLog()
@@ -38,7 +35,7 @@ function handleCommand(command, modules) {
       _handleOpenFileInNewTab()
       break
     case 'OpenBinFile':
-      _handleOpenBinFile(modules.hexModeModule)
+      _handleOpenBinFile()
       break
     case 'SaveFile':
       _handleSaveFile()
@@ -47,14 +44,14 @@ function handleCommand(command, modules) {
       _handleSaveAsFile()
       break
     case 'NewTab':
-      modules.chromeTabsModule.newTab()
+      chromeTabsModule.newTab()
       break
     case '1':
     case '2':
     case '3':
     case '4':
     case '5':
-      modules.chromeTabsModule.switchTab(parseInt(command))
+      chromeTabsModule.switchTab(parseInt(command))
       break
     default:
       console.log('Unknown commands')
@@ -105,10 +102,9 @@ function _handleOpenFileInNewTab() {
 
 /**
  * Handle OpenBinFile command
- * @param {object} hexModeModule - Hex mode module
  */
-function _handleOpenBinFile(hexModeModule) {
-  hexModeModule.openBinFile(
+function _handleOpenBinFile() {
+  window.hexModeB.openBinFile(
     window.editorInst, 
     window.chromeTabs, 
     window.tabsMap, 
