@@ -7,6 +7,7 @@ const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
 const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
+const hexModeB = require('./modules/hex-mode.js')
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
@@ -42,8 +43,8 @@ ipcRenderer.on('main-cmd', (event, arg) => {
       openFileInNewTab()
       break
     case 'OpenBinFile':
-      openBinFile()
-      break
+      hexModeB.openBinFile(window.editorInst, window.chromeTabs, window.tabsMap, window.watcher, window.monacox)
+      break;
     case 'SaveFile':
       saveFile()
       break

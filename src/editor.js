@@ -4,29 +4,18 @@ const path = require('path')
 const initMonaco = require('./modules/monaco.js').initMonaco
 const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
+const hexMode = require('./modules/hex-mode.js')
 
 const fs = require('fs')
 const { dialog } = require('electron').remote
-const hexy = require('hexy')
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
 const ChromeTabs = require('chrome-tabs')
 let chromeTabs = new ChromeTabs()
+// Make chromeTabs globally accessible
+window.chromeTabs = chromeTabs
 
-const hmUnitCount = 16
-const hmUnitBytes = 2
-const hmUnitSpanLength = 1
-const hmUnitLength = hmUnitBytes + hmUnitSpanLength // 3
-
-const hmAddrOffset = 1
-const hmAddrLength = 10
-const hmHexOffset = hmAddrOffset + hmAddrLength // 11
-const hmHexLength = hmUnitLength * hmUnitCount // 16 * 3 = 48
-const hmSpanOffset = hmHexOffset + hmHexLength // 59
-const hmSpanLength = 3
-const hmStrOffset = hmSpanOffset + hmSpanLength // 62
-const hmStrLength = 16
-const hmEofOffset = hmStrOffset + hmStrLength // 78
+// Hex mode constants imported from hex-mode module
 let monacox = null
 let editorInst
 let breakpointHit = false
@@ -41,12 +30,16 @@ let localSave = false
 // tabEl -> view
 // view -> {path, model, state}
 let tabsMap = new Map()
+// Make tabsMap globally accessible
+window.tabsMap = tabsMap
 
 // -----------------------chokidar watch section
 const watcher = chokidar.watch('./a.bc', {
   ignored: /(^|[/\\])\../, // ignore dotfiles
   persistent: true,
 })
+// Make watcher globally accessible
+window.watcher = watcher
 
 watcher.on('change', (filePath) => {
   // console.log(filePath + " content changed");
@@ -126,45 +119,6 @@ function openFile() {
 function openFileInNewTab() {
   chromeTabs.addTab()
   openFile()
-}
-
-function openBinFile() {
-  if (true !== store.get('general.hexmode')) {
-    toast("Please first enable 'Hex Mode' in General tab.")
-    return
-  }
-
-  dialog
-    .showOpenDialog({
-      properties: ['openFile'],
-    })
-    .then((result) => {
-      if (result.canceled === false) {
-        const filePath = result.filePaths[0]
-        // show hex text
-        editorInst.getModel().setValue('')
-        fs.readFile(filePath, (e, data) => {
-          if (e) throw err
-          hexModeProcess(data, false)
-        })
-
-        // setup tab
-        const title = path.basename(filePath)
-        const el = chromeTabs.activeTabEl
-        const view = tabsMap.get(el)
-        // 1. setup file watcher
-        if (null !== view.path) {
-          watcher.unwatch(view.path)
-        }
-        watcher.add(filePath)
-        // 2. setup filepath
-        tabsMap.get(el).path = filePath
-        // 3. setup title
-        let titleEl = el.querySelector('.chrome-tab-title')
-        el.align = 'center'
-        titleEl.innerHTML = title
-      }
-    })
 }
 
 function saveFile() {
@@ -264,10 +218,11 @@ function switchTab(tabIndex) {
 }
 
 function hexModeProcess(buffer, revealLine) {
-  const text = hexy.hexy(buffer, { format: 'twos' })
-
-  monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
+  hexMode.hexModeProcess(buffer, revealLine, monacox, editorInst)
 }
+
+// Expose hexModeProcess globally for serialport.js to use
+window.hexModeProcess = hexModeProcess
 
 function _breakpointProcess(line) {
   if (breakpointHit === false) {
@@ -382,6 +337,8 @@ function stringModeProcess(inBuffer) {
 initMonaco()
 window.addEventListener('monacoloaded', (e) => {
   monacox = e.detail.monaco
+  // Make monacox globally accessible
+  window.monacox = monacox
 
   monacox.languages.register({
     id: 'comNGLang',
@@ -484,6 +441,8 @@ window.addEventListener('monacoloaded', (e) => {
       // verticalScrollbarSize: 10,
     },
   })
+  // Make editorInst globally accessible
+  window.editorInst = editorInst
 
   monacox.languages.setLanguageConfiguration('comNGLang', {
     brackets: [
@@ -539,159 +498,10 @@ window.addEventListener('monacoloaded', (e) => {
   //   // Do nothing but prevent default action: close window
   // });
 
-  function _getLinePairRange(range) {
-    let s = range.startColumn
-    if (s <= hmSpanOffset) {
-      // hex area
-      if (s < hmHexOffset) s = range.startColumn = hmHexOffset
-      s = Math.round((s - hmHexOffset) / hmUnitLength) + hmStrOffset
-    } else {
-      // str area
-      if (s < hmStrOffset) s = range.startColumn = hmStrOffset
-      s = (s - hmStrOffset) * hmUnitLength + hmHexOffset
-    }
+  // Hex mode functions are now in the hex-mode module
 
-    let e = range.endColumn
-    if (e <= hmStrOffset) {
-      // hex area
-      if (e < hmHexOffset) e = range.endColumn = hmHexOffset
-      if (e > hmSpanOffset) e = range.endColumn = hmSpanOffset
-      e = Math.round((e - hmHexOffset) / hmUnitLength) + hmStrOffset
-    } else {
-      // str area
-      if (e < hmStrOffset) e = range.endColumn = hmStrOffset
-      e = (e - hmStrOffset) * hmUnitLength + hmHexOffset
-    }
-
-    return new monacox.Range(range.startLineNumber, s, range.startLineNumber, e)
-  }
-
-  function _showCursors(model, range) {
-    let cordRange = _getLinePairRange(range)
-    if (undefined === cordRange) return
-
-    // first remove old decos
-    let decos = model.getLineDecorations(range.startLineNumber)
-    for (let deco of decos) {
-      if (deco.options.className === 'hex-cursor') {
-        model.deltaDecorations([deco.id], [])
-      }
-    }
-
-    model.deltaDecorations(
-      [],
-      [
-        {
-          range: range,
-          options: {
-            className: 'hex-cursor',
-            zIndex: 999,
-          },
-        },
-        {
-          range: cordRange,
-          options: {
-            className: 'hex-cursor',
-            zIndex: 999,
-            overviewRuler: {
-              color: '#f06292',
-              position: 4, // 2: center, 4: right, 1: left, 7: full
-            },
-          },
-        },
-      ]
-    )
-  }
-
-  function _selectRanges(model, range, pairRange, decoration) {
-    // first remove old decos
-    let decos = model.getLineDecorations(range.startLineNumber)
-    let zIndex = 1
-    for (let deco of decos) {
-      if (deco.options.className !== null && deco.options.className.indexOf('hl-') !== -1) {
-        if (deco.options.zIndex >= zIndex) zIndex = deco.options.zIndex + 1
-      }
-    }
-
-    // then apply new decos
-    model.deltaDecorations(
-      [],
-      [
-        {
-          range: range,
-          options: {
-            className: decoration.style,
-            zIndex: zIndex,
-          },
-        },
-        {
-          range: pairRange,
-          options: {
-            className: decoration.style,
-            zIndex: zIndex,
-            overviewRuler: {
-              color: decoration.color,
-              position: 4, // 2: center, 4: right, 1: left, 7: full
-            },
-          },
-        },
-      ]
-    )
-  }
-
-  function _extractLineRange(range, line) {
-    let s = 1
-    let e = 1
-
-    if (line === range.startLineNumber) {
-      s = range.startColumn
-      if (s <= hmSpanOffset) {
-        // hex area
-        if (range.startLineNumber !== range.endLineNumber) e = hmSpanOffset
-        else e = range.endColumn
-      } else {
-        // str area
-        if (range.startLineNumber !== range.endLineNumber) e = hmEofOffset
-        else e = range.endColumn
-      }
-    } else if (line === range.endLineNumber) {
-      e = range.endColumn
-      if (e <= hmStrOffset) {
-        // hex area
-        if (range.startLineNumber !== range.endLineNumber) s = hmHexOffset
-        else s = range.startColumn
-      } else {
-        // str area
-        if (range.startLineNumber !== range.endLineNumber) s = hmStrOffset
-        else s = range.startColumn > hmStrOffset ? range.startColumn : hmStrOffset
-      }
-    } else {
-      // default hex area
-      s = hmHexOffset
-      e = hmSpanOffset
-    }
-
-    return new monacox.Range(line, s, line, e)
-  }
-
-  editorInst.onMouseUp(() => {
-    if (false === store.get('general.hexmode')) return
-
-    let model = editorInst.getModel()
-    let range = editorInst.getSelection()
-    console.log('In: ' + range)
-
-    if (range.isEmpty() === true) {
-      _showCursors(model, range)
-    } else {
-      let deco = hlt.decoGet()
-      for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
-        let lineRange = _extractLineRange(range, line)
-        let linePairRange = _getLinePairRange(lineRange)
-        _selectRanges(model, lineRange, linePairRange, deco)
-      }
-    }
-  })
+  // Initialize hex mode handlers
+  hexMode.initHexModeHandlers(editorInst, monacox, hlt)
 
   // --------------------------Chrometabs section, refer to:
   // https://stackoverflow.com/questions/38266951/how-to-create-chrome-like-tab-on-electron
