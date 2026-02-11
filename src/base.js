@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const { remote, shell, ipcRenderer, clipboard } = require('electron')
+const { remote, shell } = require('electron')
 
 const mcss = require('materialize-css')
 const { init } = require('./modules/store.js')
@@ -9,6 +9,7 @@ const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
 const hexModeB = require('./modules/hex-mode.js')
 const chromeTabsModuleB = require('./modules/chrome-tabs.js')
+const ipcHandler = require('./modules/ipc-handler.js')
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
@@ -18,54 +19,10 @@ const menuInfo = require('./modules/menu-handle.js').menuInfo
 let tabsInst = null
 let ctrlKeyPressed = false
 
-ipcRenderer.on('main-cmd', (event, arg) => {
-  console.log(arg)
-  switch (arg) {
-    case 'ClearLog':
-      clipboard.writeText(editorInst.getModel().getValue())
-      document.getElementById('data-cleanup-btn').click()
-      break
-    case 'SwitchPort':
-      document.getElementById('port-switch').click()
-      break
-    case 'ClearLog&SwitchPort': {
-      let portSwitch = document.getElementById('port-switch')
-      portSwitch.click()
-      if (portSwitch.checked) {
-        clipboard.writeText(editorInst.getModel().getValue())
-        document.getElementById('data-cleanup-btn').click()
-      }
-      break
-    }
-    case 'OpenFile':
-      openFile()
-      break
-    case 'OpenFileInNewTab':
-      openFileInNewTab()
-      break
-    case 'OpenBinFile':
-      hexModeB.openBinFile(window.editorInst, window.chromeTabs, window.tabsMap, window.watcher, window.monacox)
-      break;
-    case 'SaveFile':
-      saveFile()
-      break
-    case 'SaveAsFile':
-      saveAsFile()
-      break
-    case 'NewTab':
-      chromeTabsModuleB.newTab()
-      break
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-      chromeTabsModuleB.switchTab(parseInt(arg))
-      break
-    default:
-      console.log('Unknown commands')
-      break
-  }
+// Initialize IPC handlers
+ipcHandler.initIPCHandlers({
+  chromeTabsModule: chromeTabsModuleB,
+  hexModeModule: hexModeB
 })
 
 let iconWidth
