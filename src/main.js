@@ -45,7 +45,7 @@ const createWindow = () => {
       nodeIntegration: true,
       preload: path.join(__dirname, './preload.js'),
       // enableRemoteModule: true,
-      // contextIsolation: false, // false for electron 12 and above
+      // contextIsolation: false, // Keep disabled for compatibility with nodeIntegration
     },
   })
 

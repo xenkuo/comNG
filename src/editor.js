@@ -479,8 +479,8 @@ window.addEventListener('monacoloaded', (e) => {
 
   // Hex mode functions are now in the hex-mode module
 
-  // Initialize hex mode handlers
-  hexMode.initHexModeHandlers(editorInst, monacox, hlt)
+  // Initialize hex mode handlers with explicit store reference
+  hexMode.initHexModeHandlers(editorInst, monacox, hlt, store)
 
   // Initialize ChromeTabs module
   chromeTabsModule.initChromeTabs({

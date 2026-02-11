@@ -104,7 +104,7 @@ function _handleOpenFileInNewTab() {
  * Handle OpenBinFile command
  */
 function _handleOpenBinFile() {
-  window.hexModeB.openBinFile(
+  window.hexMode.openBinFile(
     window.editorInst, 
     window.chromeTabs, 
     window.tabsMap, 

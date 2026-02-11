@@ -7,9 +7,8 @@ const { init } = require('./modules/store.js')
 const { memoryUsage } = require('process')
 const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
-const hexModeB = require('./modules/hex-mode.js')
-const chromeTabsModuleB = require('./modules/chrome-tabs.js')
 const ipcHandler = require('./modules/ipc-handler.js')
+const hexModeBase = require('./modules/hex-mode.js')
 const store = remote.getGlobal('store')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
@@ -19,8 +18,8 @@ const menuInfo = require('./modules/menu-handle.js').menuInfo
 let tabsInst = null
 let ctrlKeyPressed = false
 
-// Make hexModeB globally accessible for IPC handler
-window.hexModeB = hexModeB
+// Make hexMode globally accessible for IPC handler
+window.hexMode = hexModeBase
 
 // Initialize IPC handlers
 ipcHandler.initIPCHandlers()
