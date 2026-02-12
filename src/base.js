@@ -180,44 +180,44 @@ window.onresize = () => {
   navigator_layout_update()
 }
 
-document.onkeydown = function (e) {
-  e = e || window.event
-  // console.log(e.which, e.keyCode);
+// document.onkeydown = function (e) {
+//   e = e || window.event
+//   // console.log(e.which, e.keyCode);
 
-  switch (e.which || e.keyCode) {
-    case 13: // the enter key
-      if (document.activeElement.id === 'trans-data') {
-        document.getElementById('trans-send-btn').click()
-      }
-      break
-    case 9: // the tab key
-      if (document.activeElement.id === 'trans-data') {
-        if (e.preventDefault) e.preventDefault()
-        const transDataEl = document.getElementById('trans-data')
-        serialWrite(transDataEl.value + '\t')
-        transDataEl.value = ''
-      }
-      break
-    case 17:
-      if (document.activeElement.id === 'trans-data') {
-        ctrlKeyPressed = true
-        setTimeout(() => {
-          ctrlKeyPressed = false
-        }, 1000)
-      }
-      break
-    case 67:
-      if (document.activeElement.id === 'trans-data') {
-        if (true === ctrlKeyPressed) {
-          ctrlKeyPressed = false
-          serialWrite([3]) // send ctrl+c
-        }
-      }
-      break
-    default:
-      break
-  }
-}
+//   switch (e.which || e.keyCode) {
+//     case 13: // the enter key
+//       if (document.activeElement.id === 'trans-data') {
+//         document.getElementById('trans-send-btn').click()
+//       }
+//       break
+//     case 9: // the tab key
+//       if (document.activeElement.id === 'trans-data') {
+//         if (e.preventDefault) e.preventDefault()
+//         const transDataEl = document.getElementById('trans-data')
+//         serialWrite(transDataEl.value + '\t')
+//         transDataEl.value = ''
+//       }
+//       break
+//     case 17:
+//       if (document.activeElement.id === 'trans-data') {
+//         ctrlKeyPressed = true
+//         setTimeout(() => {
+//           ctrlKeyPressed = false
+//         }, 1000)
+//       }
+//       break
+//     case 67:
+//       if (document.activeElement.id === 'trans-data') {
+//         if (true === ctrlKeyPressed) {
+//           ctrlKeyPressed = false
+//           serialWrite([3]) // send ctrl+c
+//         }
+//       }
+//       break
+//     default:
+//       break
+//   }
+// }
 
 // For drag region which drag-area is, the behavior is different between Mac and Windows/Debian:
 // On Windows/Debian a drag region is taken as system title bar, and all event is captured by
@@ -378,43 +378,6 @@ document.getElementById('sign-name').onblur = (e) => {
   store.set('advance.sign.name', e.target.value)
 }
 
-let transRepeatTimer
-document.getElementById('trans-send-btn').onclick = () => {
-  const logObj = document.getElementById('trans-log-area')
-  const dataObj = document.getElementById('trans-data')
-
-  let dataIn = dataObj.value
-  let dataOut = dataIn
-  let eof = store.get('transmit.eof')
-  if (true === store.get('transmit.hexmode')) {
-    dataOut = Buffer.from(dataIn, 'hex')
-  } else {
-    dataOut += eof
-  }
-
-  if (serialWrite(dataOut) === false) return
-
-  logObj.value += '\n' + dataIn
-  mcss.updateTextFields(logObj)
-  mcss.textareaAutoResize(logObj)
-  logObj.scrollTop = logObj.scrollHeight
-
-  if (document.getElementById('trans-repeat-switch').checked === true) {
-    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
-
-    let interval = document.getElementById('trans-repeat-interval').value
-    interval = parseInt(interval)
-    if (isNaN(interval) === true) interval = 1000
-
-    transRepeatTimer = setInterval(() => {
-      serialWrite(dataOut)
-    }, interval)
-  }
-
-  // clear data element
-  if (true === store.get('transmit.clean')) dataObj.value = ''
-}
-
 document.getElementById('trans-eof-select').onchange = (e) => {
   let index = e.target.selectedIndex
   let eof = '\r\n'
@@ -442,12 +405,6 @@ document.getElementById('trans-clean-switch').onchange = (e) => {
   let checked = e.target.checked
 
   store.set('transmit.clean', checked)
-}
-
-document.getElementById('trans-repeat-switch').onchange = (e) => {
-  let checked = e.target.checked
-
-  if (checked === false && transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
 }
 
 document.getElementById('trans-log-btn').onclick = () => {

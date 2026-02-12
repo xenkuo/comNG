@@ -18,8 +18,8 @@ function portUpdate() {
     .list()
     .then((ports) => {
       ports.forEach((item, index) => {
-        // console.log(item, index);
-        pSelect.options.add(new Option(item.path, index))
+        console.log(item, index);
+        pSelect.options.add(new Option(item.path + ' ' + item.manufacturer, index))
         if (index === store.get('pathIndex')) pSelect.selectedIndex = index
       })
       mcss.FormSelect.init(pSelect)
@@ -144,7 +144,7 @@ document.getElementById('port-switch').onclick = (e) => {
       console.log("close the port")
       port.close();
     });
-    
+
     port.on('open', () => {
       console.log('port open event')
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
@@ -288,4 +288,47 @@ document.getElementById('path-input').onmouseover = (e) => {
 }
 document.getElementById('path-input').onmouseleave = (e) => {
   pathUpdated = false
+}
+
+let transRepeatTimer
+document.getElementById('trans-send-btn').onclick = () => {
+  const logObj = document.getElementById('trans-log-area')
+  const dataObj = document.getElementById('trans-data')
+
+  let dataIn = dataObj.value
+  let dataOut = dataIn
+  let eof = store.get('transmit.eof')
+  if (true === store.get('transmit.hexmode')) {
+    dataOut = Buffer.from(dataIn, 'hex')
+  } else {
+    dataOut += eof
+  }
+
+  if (serialWrite(dataOut) === false) return
+
+  logObj.value += '\n' + dataIn
+  mcss.updateTextFields(logObj)
+  mcss.textareaAutoResize(logObj)
+  logObj.scrollTop = logObj.scrollHeight
+
+  if (document.getElementById('trans-repeat-switch').checked === true) {
+    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+
+    let interval = document.getElementById('trans-repeat-interval').value
+    interval = parseInt(interval)
+    if (isNaN(interval) === true) interval = 1000
+
+    transRepeatTimer = setInterval(() => {
+      serialWrite(dataOut)
+    }, interval)
+  }
+
+  // clear data element
+  if (true === store.get('transmit.clean')) dataObj.value = ''
+}
+
+document.getElementById('trans-repeat-switch').onchange = (e) => {
+  let checked = e.target.checked
+
+  if (checked === false && transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
 }
