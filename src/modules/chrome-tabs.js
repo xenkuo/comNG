@@ -144,7 +144,7 @@ function newTab() {
 function switchTab(tabIndex) {
   const elParent = chromeTabs.el.children[0]
 
-  if (tabIndex >= elParent.childElementCount) return
+  if (tabIndex > elParent.childElementCount) return
   const el = elParent.children[tabIndex - 1]
   chromeTabs.setCurrentTab(el)
 }
