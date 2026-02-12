@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 function checkForUpdates() {
   const { remote, shell } = require('electron')
-  const store = remote.getGlobal('store')
+  const store = require('./store.js').init()
   const dialog = remote.dialog
 
   const appVersion = remote.app.getVersion()

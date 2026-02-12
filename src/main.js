@@ -3,7 +3,7 @@ const path = require('path')
 const Shortcut = require('electron-localshortcut')
 const Store = require('./modules/store.js')
 
-global.store = Store.init(app.getVersion())
+let mainStore = Store.initWithMigration(app.getVersion())
 // console.log(app.getPath('appData'))
 
 const widthDefault = 600
@@ -25,8 +25,8 @@ let windowPool = []
 const createWindow = () => {
   let mainWindow
 
-  let width = global.store.get('window.width', widthDefault)
-  let height = global.store.get('window.height', heightDefault)
+  let width = mainStore.get('window.width', widthDefault)
+  let height = mainStore.get('window.height', heightDefault)
 
   if (width > widthMax) width = widthMax
   if (height > heightMax) height = heightMax

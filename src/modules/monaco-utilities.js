@@ -1,6 +1,6 @@
 const { remote } = require('electron')
 const { dialog } = require('electron').remote
-const store = remote.getGlobal('store')
+const store = require('./store.js').init()
 const fs = require('fs')
 
 let captureFileStream

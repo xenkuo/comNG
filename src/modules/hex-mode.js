@@ -6,7 +6,7 @@ const { dialog } = require('electron').remote
 const hexy = require('hexy')
 const monacoUtilities = require('./monaco-utilities.js')
 // Access global store object
-const store = global.store
+const store = require('./store.js').init()
 
 // Hex mode layout constants
 const hmUnitCount = 16

@@ -18,7 +18,7 @@ function portUpdate() {
     .list()
     .then((ports) => {
       ports.forEach((item, index) => {
-        console.log(item, index);
+        // console.log(item, index);
         pSelect.options.add(new Option(item.path + ' ' + item.manufacturer, index))
         if (index === store.get('pathIndex')) pSelect.selectedIndex = index
       })
@@ -131,7 +131,7 @@ function serialWrite(data) {
 document.getElementById('port-switch').onclick = (e) => {
   if (e.target.checked === true) {
     let pathSelect = document.getElementById('path-select')
-    let portPath = pathSelect.options[pathSelect.selectedIndex].label
+    let portPath = pathSelect.options[pathSelect.selectedIndex].label.split(' ')[0]
 
     port = new serial(portPath, serialGetOptions())
 

@@ -3,20 +3,19 @@
 const { remote, shell } = require('electron')
 
 const mcss = require('materialize-css')
-const { init } = require('./modules/store.js')
-const { memoryUsage } = require('process')
 const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
 const ipcHandler = require('./modules/ipc-handler.js')
 const hexModeBase = require('./modules/hex-mode.js')
-const store = remote.getGlobal('store')
+const store = require('./modules/store.js').init()
+
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
 
 let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
 let tabsInst = null
-let ctrlKeyPressed = false
+// let ctrlKeyPressed = false
 
 // Make hexMode globally accessible for IPC handler
 window.hexMode = hexModeBase

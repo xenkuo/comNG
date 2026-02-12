@@ -3,7 +3,7 @@ const Store = require('electron-store')
 const defaultFont =
   "'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', 'Courier New', 'Source Han Sans SC', 'Microsoft YaHei', 'WenQuanYi Micro Hei'"
 
-function init(version) {
+function initWithMigration(version) {
   return new Store({
     projectVersion: version,
     migrations: {
@@ -79,6 +79,11 @@ function init(version) {
   })
 }
 
+function init() {
+  return new Store({})
+}
+
 module.exports = {
   init,
+  initWithMigration,
 }

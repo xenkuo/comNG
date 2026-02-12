@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const ChromeTabs = require('chrome-tabs')
-const path = require('path')
 const monacoUtilities = require('./monaco-utilities.js')
-const store = require('./store.js')
 
 // ChromeTabs instance
 let chromeTabs = new ChromeTabs()
@@ -11,7 +9,6 @@ let tabsMap = new Map()
 let watcher
 let monacox
 let editorInst
-let localSave = false
 
 /**
  * Initialize ChromeTabs module with required dependencies
