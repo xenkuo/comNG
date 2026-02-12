@@ -135,6 +135,16 @@ document.getElementById('port-switch').onclick = (e) => {
 
     port = new serial(portPath, serialGetOptions())
 
+    port.addListener("txData", (data) => {
+      console.log("txData", data);
+      port.serialWrite(data);
+    });
+
+    port.addListener("ctlClose", () => {
+      console.log("close the port")
+      port.close();
+    });
+    
     port.on('open', () => {
       console.log('port open event')
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
@@ -244,4 +254,38 @@ document.getElementById('dtr-btn').onclick = (e) => {
       if (e !== null) console.error(e)
     }
   )
+}
+
+document.getElementById('baud-select').onchange = (e) => {
+  let ele = e.target
+
+  store.set('baudIndex', ele.selectedIndex)
+  if (port === undefined || port.isOpen === false) return
+
+  let baudRate = parseInt(ele.options[ele.selectedIndex].text)
+  if (isNaN(baudRate) === true) baudRate = 115200
+  port.update({ baudRate: baudRate }, (e) => {
+    if (e !== null) console.error(e)
+  })
+}
+
+document.getElementById('path-select').onchange = (e) => {
+  store.set('pathIndex', e.target.selectedIndex)
+  if (port === undefined || port.isOpen === false) return
+
+  port.close()
+  setTimeout(() => {
+    document.getElementById('port-switch').click()
+  }, 400)
+}
+
+// Automatically update port
+let pathUpdated = false
+document.getElementById('path-input').onmouseover = (e) => {
+  if (true === pathUpdated) return
+  pathUpdated = true
+  portUpdate()
+}
+document.getElementById('path-input').onmouseleave = (e) => {
+  pathUpdated = false
 }

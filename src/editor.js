@@ -19,7 +19,6 @@ let editorInst
 let breakpointHit = false
 let breakpointAfterLines = 0
 let breakpointBuff = []
-let chartFrameBuff = []
 let half_line = false
 let ansiWait = false
 let captureFileStream
