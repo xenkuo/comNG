@@ -180,6 +180,8 @@ document.getElementById('port-switch').onclick = (e) => {
 
       _modemSignalReset()
       // TODO: editor dependency
+      // NOTE: as this module is required by editor.js,
+      // seems here can directly call editor.js's functions...
       editorStateReset()
     })
 
