@@ -10,7 +10,7 @@ let modemSignal = {
   dcd: false,
 }
 
-function portUpdate() {
+function _portUpdate() {
   let pSelect = document.getElementById('path-select')
   pSelect.options.length = 0
 
@@ -29,7 +29,7 @@ function portUpdate() {
     })
 }
 
-function modemSignalTimerHandle() {
+function _modemSignalTimerHandle() {
   if (port === undefined || port.isOpen === false) return clearInterval(modemSignalTimer)
 
   port.get((e, signal) => {
@@ -63,7 +63,7 @@ function modemSignalTimerHandle() {
 }
 
 // Only readonly signals need reset
-function modemSignalReset() {
+function _modemSignalReset() {
   modemSignal.cts = false
   modemSignal.dsr = false
   modemSignal.dcd = false
@@ -72,7 +72,7 @@ function modemSignalReset() {
   document.getElementById('dcd-btn').style.cssText = 'background-color: #dfdfdf !important'
 }
 
-function serialGetOptions() {
+function _serialGetOptions() {
   let openOptions = {}
 
   let baudRate = parseInt(
@@ -113,27 +113,12 @@ function toast(text) {
   // alert(text);
 }
 
-function serialClose() {
-  port === undefined ? null : port.close()
-}
-
-function serialWrite(data) {
-  if (port === undefined || port.isOpen === false) {
-    toast('Error: No port opened, cannot write')
-    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
-    return false
-  }
-
-  port.write(data)
-  return true
-}
-
 document.getElementById('port-switch').onclick = (e) => {
   if (e.target.checked === true) {
     let pathSelect = document.getElementById('path-select')
     let portPath = pathSelect.options[pathSelect.selectedIndex].label.split(' ')[0]
 
-    port = new serial(portPath, serialGetOptions())
+    port = new serial(portPath, _serialGetOptions())
 
     port.addListener("txData", (data) => {
       console.log("txData", data);
@@ -149,7 +134,7 @@ document.getElementById('port-switch').onclick = (e) => {
       console.log('port open event')
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
       if (store.get('general.modemSignal') === true) {
-        modemSignalTimer = setInterval(modemSignalTimerHandle, 100)
+        modemSignalTimer = setInterval(_modemSignalTimerHandle, 100)
       }
       // Some device use rts/dtr for private purpose, so below code
       // may cause strange behaviors.
@@ -185,7 +170,8 @@ document.getElementById('port-switch').onclick = (e) => {
         clearInterval(modemSignalTimer)
       }
 
-      modemSignalReset()
+      _modemSignalReset()
+      // TODO: editor dependency
       editorStateReset()
     })
 
@@ -198,6 +184,7 @@ document.getElementById('port-switch').onclick = (e) => {
         window.hexModeProcess(data, true)
       } else {
         chartFrameProcess(data)
+      // TODO: editor dependency
         stringModeProcess(data)
       }
     })
@@ -284,7 +271,7 @@ let pathUpdated = false
 document.getElementById('path-input').onmouseover = (e) => {
   if (true === pathUpdated) return
   pathUpdated = true
-  portUpdate()
+  _portUpdate()
 }
 document.getElementById('path-input').onmouseleave = (e) => {
   pathUpdated = false
@@ -331,4 +318,19 @@ document.getElementById('trans-repeat-switch').onchange = (e) => {
   let checked = e.target.checked
 
   if (checked === false && transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+}
+
+function serialClose() {
+  port === undefined ? null : port.close()
+}
+
+function serialWrite(data) {
+  if (port === undefined || port.isOpen === false) {
+    toast('Error: No port opened, cannot write')
+    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+    return false
+  }
+
+  port.write(data)
+  return true
 }
