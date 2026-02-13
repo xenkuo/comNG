@@ -14,9 +14,9 @@ const fs = require('fs')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
-// ChromeTabs functionality moved to chrome-tabs module
 
-// Hex mode constants imported from hex-mode module
+const { initIPCHandlers } = require('./modules/ipc-handler.js')
+
 let monacox = null
 let editorInst
 let breakpointHit = false
@@ -116,6 +116,10 @@ function openFileInNewTab() {
   chromeTabsModule.openFileInNewTab(openFile)
 }
 
+function openBinFile() {
+  hexMode.openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox)
+}
+
 function saveFile() {
   const el = chromeTabs.activeTabEl
   const view = tabsMap.get(el)
@@ -199,6 +203,14 @@ function saveAsFile() {
       }
     })
 }
+
+initIPCHandlers({
+  openFileHandler: openFile,
+  openFileInNewTabHandler: openFileInNewTab,
+  openBinFileHandler: openBinFile,
+  saveFileHandler: saveFile,
+  saveAsFileHandler: saveAsFile,
+})
 
 /**
  * Process buffer data in hex mode

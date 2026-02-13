@@ -3,10 +3,22 @@
 const { ipcRenderer, clipboard } = require('electron')
 const chromeTabsModule = require('./chrome-tabs.js')
 
+let openFileHandler = null
+let openFileInNewTabHandler = null
+let openBinFileHandler = null
+let saveFileHandler = null
+let saveAsFileHandler = null
+
 /**
  * Initialize IPC command handlers
  */
-function initIPCHandlers() {
+function initIPCHandlers(handlers) {
+  openFileHandler = handlers.openFileHandler
+  openFileInNewTabHandler = handlers.openFileInNewTabHandler
+  openBinFileHandler = handlers.openBinFileHandler
+  saveFileHandler = handlers.saveFileHandler
+  saveAsFileHandler = handlers.saveAsFileHandler
+
   ipcRenderer.on('main-cmd', (event, arg) => {
     console.log(arg)
     handleCommand(arg)
@@ -90,44 +102,38 @@ function _handleClearLogAndSwitchPort() {
  * Handle OpenFile command
  */
 function _handleOpenFile() {
-  window.openFile()
+  openFileHandler()
 }
 
 /**
  * Handle OpenFileInNewTab command
  */
 function _handleOpenFileInNewTab() {
-  window.openFileInNewTab()
+  openFileInNewTabHandler()
 }
 
 /**
  * Handle OpenBinFile command
  */
 function _handleOpenBinFile() {
-  window.hexMode.openBinFile(
-    window.editorInst, 
-    window.chromeTabs, 
-    window.tabsMap, 
-    window.watcher, 
-    window.monacox
-  )
+  openBinFileHandler()
 }
 
 /**
  * Handle SaveFile command
  */
 function _handleSaveFile() {
-  window.saveFile()
+  saveFileHandler()
 }
 
 /**
  * Handle SaveAsFile command
  */
 function _handleSaveAsFile() {
-  window.saveAsFile()
+  saveAsFileHandler()
 }
 
 // Export functions
 module.exports = {
-  initIPCHandlers
+  initIPCHandlers,
 }

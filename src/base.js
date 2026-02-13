@@ -5,7 +5,6 @@ const { remote, shell } = require('electron')
 const mcss = require('materialize-css')
 const { applyLanguage } = require('./modules/i18n.js')
 const checkForUpdates = require('./modules/update.js').checkForUpdates
-const ipcHandler = require('./modules/ipc-handler.js')
 const hexModeBase = require('./modules/hex-mode.js')
 const store = require('./modules/store.js').init()
 
@@ -19,9 +18,6 @@ let tabsInst = null
 
 // Make hexMode globally accessible for IPC handler
 window.hexMode = hexModeBase
-
-// Initialize IPC handlers
-ipcHandler.initIPCHandlers()
 
 let iconWidth
 let tabsOffset
