@@ -64,7 +64,7 @@ watcher.on('change', (filePath) => {
     localSave = false
     return
   }
-  tabsMap.forEach((view, el) => {
+  chromeTabsModule.tabsMap.forEach((view, el) => {
     if (filePath === view.path) {
       // Here we add a 100ms delay as external editor (or the watcher itself)
       // seems like first trigger the change event then will keep lock the file
@@ -113,8 +113,8 @@ function openFile() {
 
         // setup tab
         const title = path.basename(filePath)
-        const el = chromeTabs.activeTabEl
-        const view = tabsMap.get(el)
+        const el = chromeTabsModule.chromeTabs.activeTabEl
+        const view = chromeTabsModule.tabsMap.get(el)
 
         // 1. setup file watcher
         if (null !== view.path) {
@@ -122,7 +122,7 @@ function openFile() {
         }
         watcher.add(filePath)
         // 2. setup tabsMap file path
-        tabsMap.get(el).path = filePath
+        chromeTabsModule.tabsMap.get(el).path = filePath
         // 3. setup title
         let titleEl = el.querySelector('.chrome-tab-title')
 
@@ -134,16 +134,17 @@ function openFile() {
 
 // ----------------------editor function section
 function openFileInNewTab() {
-  chromeTabsModule.openFileInNewTab(openFile)
+  chromeTabsModule.newTab()
+  openFile()
 }
 
 function openBinFile() {
-  hexMode.openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst)
+  hexMode.openBinFile(editorInst, chromeTabsModule.chromeTabs, chromeTabsModule.tabsMap, watcher, monacoInst)
 }
 
 function saveFile() {
-  const el = chromeTabs.activeTabEl
-  const view = tabsMap.get(el)
+  const el = chromeTabsModule.chromeTabs.activeTabEl
+  const view = chromeTabsModule.tabsMap.get(el)
   if (view.path !== null) {
     // has path info
     const text = editorInst.getModel().getValue()
@@ -154,7 +155,7 @@ function saveFile() {
     localSave = true
   } else {
     // no path info
-    const fileName = chromeTabs.activeTabEl.innerText
+    const fileName = chromeTabsModule.chromeTabs.activeTabEl.innerText
 
     dialog
       .showSaveDialog({
@@ -189,10 +190,10 @@ function saveFile() {
 }
 
 function saveAsFile() {
-  const el = chromeTabs.activeTabEl
-  const view = tabsMap.get(el)
+  const el = chromeTabsModule.chromeTabs.activeTabEl
+  const view = chromeTabsModule.tabsMap.get(el)
   // no path info
-  const fileName = chromeTabs.activeTabEl.innerText
+  const fileName = chromeTabsModule.chromeTabs.activeTabEl.innerText
 
   dialog
     .showSaveDialog({
@@ -547,8 +548,8 @@ async function setupEditor() {
     // Initialize hex mode handlers with explicit store reference
     hexMode.initHexModeHandlers(editorInst, monacoInst, hlt, store)
 
-    // Initialize ChromeTabs module
-    chromeTabsModule.initChromeTabs({
+    // Initialize ChromeTabs module and get direct references
+    const { chromeTabs, tabsMap } = chromeTabsModule.initChromeTabs({
       monacox: monacoInst,
       editorInst: editorInst,
       watcher: watcher

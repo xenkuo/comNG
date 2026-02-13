@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 const ChromeTabs = require('chrome-tabs')
 const monacoUtilities = require('./monaco-utilities.js')
+const { navi_layout_update } = require('./utilities.js')
 
 // ChromeTabs instance
 let chromeTabs = new ChromeTabs()
@@ -18,24 +19,26 @@ function initChromeTabs(deps) {
   monacox = deps.monacox
   editorInst = deps.editorInst
   watcher = deps.watcher
-  
-  // Make chromeTabs globally accessible
-  window.chromeTabs = chromeTabs
-  window.tabsMap = tabsMap
-  
+
   // Initialize ChromeTabs
   const tabsEl = document.getElementById('tabs-area')
   chromeTabs.init(tabsEl)
-  
+
   // Setup event listeners
   _setupEventListeners(tabsEl)
-  
+
   // Add initial tab
   chromeTabs.addTab()
-  
+
   // Setup tab add button click handler
   document.getElementById('tab-add-btn').onclick = () => {
     chromeTabs.addTab()
+  }
+
+  // Return the instances for direct access
+  return {
+    chromeTabs: chromeTabs,
+    tabsMap: tabsMap
   }
 }
 
@@ -62,7 +65,7 @@ function _setupEventListeners(tabsEl) {
  * @param {object} detail - Event detail containing tabEl
  */
 function _handleTabAdd(detail) {
-  navigator_layout_update()
+  navi_layout_update()
 
   // create a new model
   let model = monacox.editor.createModel()
@@ -117,7 +120,7 @@ function _handleActiveTabChange(detail) {
  * @param {object} detail - Event detail containing tabEl
  */
 function _handleTabRemove(detail) {
-  navigator_layout_update()
+  navi_layout_update()
 
   // delete from watcher
   const view = tabsMap.get(detail.tabEl)
@@ -149,37 +152,12 @@ function switchTab(tabIndex) {
   chromeTabs.setCurrentTab(el)
 }
 
-/**
- * Open file in a new tab
- * @param {function} openFile - Function to open file
- */
-function openFileInNewTab(openFile) {
-  chromeTabs.addTab()
-  openFile()
-}
-
-/**
- * Get the current ChromeTabs instance
- * @returns {object} ChromeTabs instance
- */
-function getChromeTabs() {
-  return chromeTabs
-}
-
-/**
- * Get the tabs map
- * @returns {Map} Tabs map containing tab views
- */
-function getTabsMap() {
-  return tabsMap
-}
-
-// Export all functions
+// Export all functions and getters
 module.exports = {
   initChromeTabs,
   newTab,
   switchTab,
-  openFileInNewTab,
-  getChromeTabs,
-  getTabsMap
+  // Direct access to instances
+  get chromeTabs() { return chromeTabs; },
+  get tabsMap() { return tabsMap; }
 }

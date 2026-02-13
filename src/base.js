@@ -24,28 +24,7 @@ let tabsOffset
 let tabStdWidth
 let dragMinWidth
 
-function navigator_layout_update() {
-  const windowWidth = window.innerWidth
-  const logoEl = document.getElementById('logo')
-  const logoWidth = parseInt(logoEl.style.width) | logoEl.offsetWidth
-  const tabsAreaEl = document.getElementById('tabs-area')
-  const tabAddBtnEl = document.getElementById('tab-add-btn')
-  const dragAreaEl = document.getElementById('drag-area')
-  const tabsMaxWidth = windowWidth - dragMinWidth - logoWidth - tabsOffset
-
-  const els = document.getElementsByClassName('chrome-tab')
-  let tabsAreaWidth = els.length * tabStdWidth
-  if (tabsAreaWidth > tabsMaxWidth) tabsAreaWidth = tabsMaxWidth
-
-  tabsAreaEl.style.width = tabsAreaWidth + 'px'
-  tabAddBtnEl.style.left = tabsOffset + tabsAreaWidth + 'px'
-  dragAreaEl.style.width =
-    windowWidth -
-    tabsAreaWidth -
-    tabsOffset -
-    (parseInt(tabAddBtnEl.style.width) | tabAddBtnEl.offsetWidth) +
-    'px'
-}
+const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js')
 
 window.onload = () => {
   mcss.AutoInit()
@@ -64,6 +43,9 @@ window.onload = () => {
   dragMinWidth = parseInt(cStyle.getPropertyValue('--drag-min-width'))
   barHeight = parseInt(cStyle.getPropertyValue('--bar-height'))
   menuInfo.height = parseInt(cStyle.getPropertyValue('--menu-height'))
+
+  // 1.1 init navi layout
+  navi_layout_init(tabsOffset, tabStdWidth, dragMinWidth)
 
   // 2: update editor height
   let nav = document.getElementById('nav-area')
@@ -172,7 +154,7 @@ window.onresize = () => {
   editorEl.style.height =
     window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
-  navigator_layout_update()
+  navi_layout_update()
 }
 
 // document.onkeydown = function (e) {
