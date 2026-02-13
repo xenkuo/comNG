@@ -1,7 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
+
+/// <reference path="./modules/monaco-esm.js" />
+
+// Monaco Editor Type Definitions for better IDE support
+/** @typedef {import('monaco-editor').editor.IStandaloneCodeEditor} IStandaloneCodeEditor */
+/** @typedef {import('monaco-editor').editor.IModel} IModel */
+/** @typedef {import('monaco-editor').editor.IRange} IRange */
+/** @typedef {import('monaco-editor').languages.IMonarchLanguage} IMonarchLanguage */
+/** @typedef {import('monaco-editor')} MonacoAPI */
+
 const path = require('path')
-const initMonaco = require('./modules/monaco.js').initMonaco
+// Use ESM-compatible Monaco loader for better IDE support
+const { initMonacoESMCompat } = require('./modules/monaco-esm.js')
 const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
@@ -17,8 +28,18 @@ const chokidar = require('chokidar')
 
 const { initIPCHandlers } = require('./modules/ipc-handler.js')
 
-let monacox = null
+/** @type {MonacoAPI} */
+let monacoInst = null
+/** @type {IStandaloneCodeEditor} */
 let editorInst
+
+// Monaco Editor Helper Types
+// monacoInst: Main Monaco API object (contains .editor, .languages, etc.)
+// editorInst: Actual editor instance (created by monaco.editor.create())
+// Use these in JSDoc comments for better IDE support:
+// @type {IModel} - for editor models
+// @type {IRange} - for editor ranges
+// @param {import('monaco-editor').editor.IStandaloneEditorConstructionOptions} options - Editor options
 let breakpointHit = false
 let breakpointAfterLines = 0
 let breakpointBuff = []
@@ -81,7 +102,7 @@ function openFile() {
         const model = editorInst.getModel()
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
-          monacox.editor.setModelLanguage(model, lang.toLowerCase())
+          monacoInst.editor.setModelLanguage(model, lang.toLowerCase())
         }
 
         // show text
@@ -117,7 +138,7 @@ function openFileInNewTab() {
 }
 
 function openBinFile() {
-  hexMode.openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox)
+  hexMode.openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst)
 }
 
 function saveFile() {
@@ -160,7 +181,7 @@ function saveFile() {
           // update theme accord to new file extension
           const lang = languageDetect.filename(filePath)
           if (undefined !== lang && 'Text' !== lang) {
-            monacox.editor.setModelLanguage(view.model, lang.toLowerCase())
+            monacoInst.editor.setModelLanguage(view.model, lang.toLowerCase())
           }
         }
       })
@@ -198,7 +219,7 @@ function saveAsFile() {
         // update theme accord to new file extension
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
-          monacox.editor.setModelLanguage(view.model, lang.toLowerCase())
+          monacoInst.editor.setModelLanguage(view.model, lang.toLowerCase())
         }
       }
     })
@@ -219,7 +240,7 @@ initIPCHandlers({
  */
 function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: 'twos' })
-  monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
+  monacoUtilities.applyEdit(monacoInst, editorInst, text, false, revealLine)
 }
 
 function _breakpointProcess(line) {
@@ -291,7 +312,7 @@ function stringModeProcess(inBuffer) {
       outputTmp = timestamp + line
     }
     monacoUtilities.applyEdit(
-      monacox,
+      monacoInst,
       editorInst,
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
@@ -320,7 +341,7 @@ function stringModeProcess(inBuffer) {
       half_line = true
     }
     monacoUtilities.applyEdit(
-      monacox,
+      monacoInst,
       editorInst,
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
@@ -348,182 +369,207 @@ function processSerialData(data) {
 
 serialInit(processSerialData)
 
-initMonaco()
-window.addEventListener('monacoloaded', (e) => {
-  monacox = e.detail.monaco
-  // Make monacox globally accessible
-  window.monacox = monacox
+/**
+ * Async editor setup function
+ * Initializes Monaco editor and returns the instance directly
+ * @returns {Promise<import('monaco-editor').editor.IStandaloneCodeEditor>} Editor instance
+ */
+async function setupEditor() {
+  try {
+    // Load Monaco editor and get instance directly
+    const monaco = await initMonacoESMCompat()
+    monacoInst = monaco
 
-  monacox.languages.register({
-    id: 'comNGLang',
-  })
-  monacox.languages.setMonarchTokensProvider('comNGLang', {
-    defaultToken: '',
+    // Make monacox globally accessible for backward compatibility
+    window.monacox = monacoInst
 
-    tokenizer: {
-      root: [
-        [/^\[?[f|F][a|A][t|T][a|A][l|L]\]?\s.*/, 'fatal'],
-        [/\s+\[?[f|F][a|A][t|T][a|A][l|L]\]?\s+/, 'fatal'],
-        [/^\[?F\]?\s.*/, 'fatal'],
-        [/\s+\[?F\]?\s+/, 'fatal'],
-        [/^\[?[e|E][r|R][r|R][o|O][r|R]\]?\s.*/, 'error'],
-        [/\s+\[?[e|E][r|R][r|R][o|O][r|R]\]?\s+/, 'error'],
-        [/^\[?E\]?\s.*/, 'error'],
-        [/\s+\[?E\]?\s+/, 'error'],
-        [/^\[?[w|W][a|A][r|R][n|N]\]?\s.*/, 'warn'],
-        [/\s+\[?[w|W][a|A][r|R][n|N]\]?\s+/, 'warn'],
-        [/^\[?W\]?\s.*/, 'warn'],
-        [/\s+\[?W\]?\s+/, 'warn'],
-        [/^\[?[i|I][n|N][f|F][o|O]\]?\s.*/, 'info'],
-        [/\s+\[?[i|I][n|N][f|F][o|O]\]?\s+/, 'info'],
-        [/^\[?I\]?\s.*/, 'info'],
-        [/\s+\[?I\]?\s+/, 'info'],
-        [/^\[?[t|T][r|R][a|A][c|C][e|E]\]?\s.*/, 'trace'],
-        [/\s+\[?[t|T][r|R][a|A][c|C][e|E]\]?\s+/, 'trace'],
-        [/^\[?T\]?\s.*/, 'trace'],
-        [/\s+\[?T\]?\s+/, 'trace'],
-        [/^\[?[d|D][e|E][b|B][u|U][g|G]\]?\s.*/, 'debug'],
-        [/\s+\[?[d|D][e|E][b|B][u|U][g|G]\]?\s+/, 'debug'],
-        [/^\[?D\]?\s.*/, 'debug'],
-        [/\s+\[?D\]?\s+/, 'debug'],
+    // Register custom language
+    monacoInst.languages.register({
+      id: 'comNGLang',
+    })
+    monacoInst.languages.setMonarchTokensProvider('comNGLang', {
+      defaultToken: '',
 
-        [/\[\d;\d{2}m/, 'useless'],
-        [/\[\dm/, 'useless'],
+      tokenizer: {
+        root: [
+          [/^\[?[f|F][a|A][t|T][a|A][l|L]\]?\s.*/, 'fatal'],
+          [/\s+\[?[f|F][a|A][t|T][a|A][l|L]\]?\s+/, 'fatal'],
+          [/^\[?F\]?\s.*/, 'fatal'],
+          [/\s+\[?F\]?\s+/, 'fatal'],
+          [/^\[?[e|E][r|R][r|R][o|O][r|R]\]?\s.*/, 'error'],
+          [/\s+\[?[e|E][r|R][r|R][o|O][r|R]\]?\s+/, 'error'],
+          [/^\[?E\]?\s.*/, 'error'],
+          [/\s+\[?E\]?\s+/, 'error'],
+          [/^\[?[w|W][a|A][r|R][n|N]\]?\s.*/, 'warn'],
+          [/\s+\[?[w|W][a|A][r|R][n|N]\]?\s+/, 'warn'],
+          [/^\[?W\]?\s.*/, 'warn'],
+          [/\s+\[?W\]?\s+/, 'warn'],
+          [/^\[?[i|I][n|N][f|F][o|O]\]?\s.*/, 'info'],
+          [/\s+\[?[i|I][n|N][f|F][o|O]\]?\s+/, 'info'],
+          [/^\[?I\]?\s.*/, 'info'],
+          [/\s+\[?I\]?\s+/, 'info'],
+          [/^\[?[t|T][r|R][a|A][c|C][e|E]\]?\s.*/, 'trace'],
+          [/\s+\[?[t|T][r|R][a|A][c|C][e|E]\]?\s+/, 'trace'],
+          [/^\[?T\]?\s.*/, 'trace'],
+          [/\s+\[?T\]?\s+/, 'trace'],
+          [/^\[?[d|D][e|E][b|B][u|U][g|G]\]?\s.*/, 'debug'],
+          [/\s+\[?[d|D][e|E][b|B][u|U][g|G]\]?\s+/, 'debug'],
+          [/^\[?D\]?\s.*/, 'debug'],
+          [/\s+\[?D\]?\s+/, 'debug'],
 
-        [/[{}()[\]]/, 'bracket'],
-        [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
-        [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
-        [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
-        [/\b(?:\d{1,3}\.){3}\d{1,3}\b/, 'ip'],
-        [/([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}/, 'mac'],
-        [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
-        [/0[xX][0-9a-fA-F]+/, 'number'],
-        [/[0-9a-fA-F]{4,}/, 'number'],
-        [/\d+/, 'number'],
+          [/\[\d;\d{2}m/, 'useless'],
+          [/\[\dm/, 'useless'],
+
+          [/[{}()[\]]/, 'bracket'],
+          [/^\d{1,2}:\d{2}:\d{2}:\d{1,3}/, 'timestamp'],
+          [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
+          [/\d{1,4}[-/.:]\d{1,2}\1\d{1,4}/, 'time'],
+          [/\b(?:\d{1,3}\.){3}\d{1,3}\b/, 'ip'],
+          [/([0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}|([0-9A-Fa-f]{4}\.){2}[0-9A-Fa-f]{4}/, 'mac'],
+          [/\d*\.\d+([eE][-+]?\d+)?/, 'number'],
+          [/0[xX][0-9a-fA-F]+/, 'number'],
+          [/[0-9a-fA-F]{4,}/, 'number'],
+          [/\d+/, 'number'],
+        ],
+      },
+    })
+
+    // Define a new theme that contains only rules that match this language
+    monacoInst.editor.defineTheme('comNGTheme', {
+      base: 'vs',
+      inherit: true,
+      rules: [
+        { token: 'number', foreground: '2e7d32' },
+        { token: 'bracket', foreground: 'ff9800' },
+        { token: 'timestamp', foreground: 'f5984a' },
+        { token: 'time', foreground: '2196f3' },
+        { token: 'ip', foreground: '03a9f4' },
+        { token: 'mac', foreground: '00bcd4' },
+        { token: 'fatal', foreground: 'e91e63' },
+        { token: 'error', foreground: 'f44336' },
+        { token: 'warn', foreground: 'ff9800' },
+        { token: 'info', foreground: '9e9e9e' },
+        { token: 'trace', foreground: '9e9d24' },
+        { token: 'debug', foreground: '2e7d32' },
+        { token: 'useless', foreground: 'cecece' },
       ],
-    },
-  })
+    })
 
-  // Define a new theme that contains only rules that match this language
-  monacox.editor.defineTheme('comNGTheme', {
-    base: 'vs',
-    inherit: true,
-    rules: [
-      { token: 'number', foreground: '2e7d32' },
-      { token: 'bracket', foreground: 'ff9800' },
-      { token: 'timestamp', foreground: 'f5984a' },
-      { token: 'time', foreground: '2196f3' },
-      { token: 'ip', foreground: '03a9f4' },
-      { token: 'mac', foreground: '00bcd4' },
-      { token: 'fatal', foreground: 'e91e63' },
-      { token: 'error', foreground: 'f44336' },
-      { token: 'warn', foreground: 'ff9800' },
-      { token: 'info', foreground: '9e9e9e' },
-      { token: 'trace', foreground: '9e9d24' },
-      { token: 'debug', foreground: '2e7d32' },
-      { token: 'useless', foreground: 'cecece' },
-    ],
-  })
+    let readOnlyEditor = false
+    if (true === store.get('general.hexmode')) {
+      readOnlyEditor = true
+    }
+    editorInst = monacoInst.editor.create(document.getElementById('editor-area'), {
+      model: null,
+      theme: 'comNGTheme',
+      language: 'comNGLang',
+      automaticLayout: true,
+      readOnly: readOnlyEditor,
+      folding: false,
+      fontFamily: store.get('general.fontFamily'),
+      fontSize: store.get('general.fontSize'),
+      overviewRulerBorder: false,
+      scrollBeyondLastLine: false,
+      smoothScrolling: true,
+      mouseWheelZoom: true, // combined with Ctrl
+      wordWrap: 'on',
+      wordWrapBreakAfterCharacters: '',
+      wordWrapBreakBeforeCharacters: '',
+      lineNumbersMinChars: 5,
+      // minimap: {
+      //   enabled: false,
+      // },
+      scrollbar: {
+        vertical: 'auto',
+        useShadows: false,
+        // verticalScrollbarSize: 10,
+      },
+    })
+    // Make editorInst globally accessible
+    window.editorInst = editorInst
 
-  let readOnlyEditor = false
-  if (true === store.get('general.hexmode')) {
-    readOnlyEditor = true
+    monacoInst.languages.setLanguageConfiguration('comNGLang', {
+      brackets: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')'],
+        ['"', '"'],
+        ["'", "'"],
+      ],
+      autoClosingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: "'", close: "'" },
+      ],
+      surroundingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: "'", close: "'" },
+      ],
+    })
+
+    editorInst.addAction({
+      id: 'highlight-toggle',
+      label: 'Highlight Toggle',
+      keybindings: [monacoInst.KeyMod.CtrlCmd + monacoInst.KeyCode.KEY_E],
+      precondition: null,
+      keybindingContext: null,
+      contextMenuGroupId: '9_cutcopypaste',
+      contextMenuOrder: 3.5,
+      run: hlt.toggle,
+    })
+
+    editorInst.addAction({
+      id: 'highlight-clear-all',
+      label: 'Highlight Clear All',
+      keybindings: [monacoInst.KeyMod.CtrlCmd + monacoInst.KeyMod.Shift + monacoInst.KeyCode.KEY_E],
+      precondition: null,
+      keybindingContext: null,
+      contextMenuGroupId: '9_cutcopypaste',
+      contextMenuOrder: 3.6,
+      run: hlt.clear,
+    })
+
+    editorInst.addCommand(monacoInst.KeyMod.CtrlCmd + monacoInst.KeyCode.KEY_W, () => {
+      // Do nothing but prevent default action: close window
+    })
+
+    // editor.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_X, () => {
+    //   // Do nothing but prevent default action: close window
+    // });
+
+    // Hex mode functions are now in the hex-mode module
+
+    // Initialize hex mode handlers with explicit store reference
+    hexMode.initHexModeHandlers(editorInst, monacoInst, hlt, store)
+
+    // Initialize ChromeTabs module
+    chromeTabsModule.initChromeTabs({
+      monacox: monacoInst,
+      editorInst: editorInst,
+      watcher: watcher
+    })
+
+    // Return the editor instance
+    return editorInst;
+
+  } catch (error) {
+    console.error('Failed to setup editor:', error);
+    throw error;
   }
-  editorInst = monacox.editor.create(document.getElementById('editor-area'), {
-    model: null,
-    theme: 'comNGTheme',
-    language: 'comNGLang',
-    automaticLayout: true,
-    readOnly: readOnlyEditor,
-    folding: false,
-    fontFamily: store.get('general.fontFamily'),
-    fontSize: store.get('general.fontSize'),
-    overviewRulerBorder: false,
-    scrollBeyondLastLine: false,
-    smoothScrolling: true,
-    mouseWheelZoom: true, // combined with Ctrl
-    wordWrap: 'on',
-    wordWrapBreakAfterCharacters: '',
-    wordWrapBreakBeforeCharacters: '',
-    lineNumbersMinChars: 5,
-    // minimap: {
-    //   enabled: false,
-    // },
-    scrollbar: {
-      vertical: 'auto',
-      useShadows: false,
-      // verticalScrollbarSize: 10,
-    },
-  })
-  // Make editorInst globally accessible
-  window.editorInst = editorInst
+}
 
-  monacox.languages.setLanguageConfiguration('comNGLang', {
-    brackets: [
-      ['{', '}'],
-      ['[', ']'],
-      ['(', ')'],
-      ['"', '"'],
-      ["'", "'"],
-    ],
-    autoClosingPairs: [
-      { open: '{', close: '}' },
-      { open: '[', close: ']' },
-      { open: '(', close: ')' },
-      { open: '"', close: '"' },
-      { open: "'", close: "'" },
-    ],
-    surroundingPairs: [
-      { open: '{', close: '}' },
-      { open: '[', close: ']' },
-      { open: '(', close: ')' },
-      { open: '"', close: '"' },
-      { open: "'", close: "'" },
-    ],
-  })
-
-  editorInst.addAction({
-    id: 'highlight-toggle',
-    label: 'Highlight Toggle',
-    keybindings: [monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_E],
-    precondition: null,
-    keybindingContext: null,
-    contextMenuGroupId: '9_cutcopypaste',
-    contextMenuOrder: 3.5,
-    run: hlt.toggle,
-  })
-
-  editorInst.addAction({
-    id: 'highlight-clear-all',
-    label: 'Highlight Clear All',
-    keybindings: [monacox.KeyMod.CtrlCmd + monacox.KeyMod.Shift + monacox.KeyCode.KEY_E],
-    precondition: null,
-    keybindingContext: null,
-    contextMenuGroupId: '9_cutcopypaste',
-    contextMenuOrder: 3.6,
-    run: hlt.clear,
-  })
-
-  editorInst.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_W, () => {
-    // Do nothing but prevent default action: close window
-  })
-
-  // editor.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_X, () => {
-  //   // Do nothing but prevent default action: close window
-  // });
-
-  // Hex mode functions are now in the hex-mode module
-
-  // Initialize hex mode handlers with explicit store reference
-  hexMode.initHexModeHandlers(editorInst, monacox, hlt, store)
-
-  // Initialize ChromeTabs module
-  chromeTabsModule.initChromeTabs({
-    monacox: monacox,
-    editorInst: editorInst,
-    watcher: watcher
-  })
-})
+// Initialize the editor asynchronously
+setupEditor().then(editor => {
+  console.log('Editor initialized successfully');
+  // Editor is ready and available as 'editor' parameter
+}).catch(error => {
+  console.error('Failed to initialize editor:', error);
+});
 
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
