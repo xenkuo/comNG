@@ -1,24 +1,17 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const ChromeTabs = require('chrome-tabs')
-const monacoUtilities = require('./monaco-utilities.js')
+const { generateFileName } = require('./utilities.js')
 const { navi_layout_update } = require('./utilities.js')
 
 // ChromeTabs instance
 let chromeTabs = new ChromeTabs()
 let tabsMap = new Map()
-let watcher
-let monacoInst
-let editorInst
 
 /**
  * Initialize ChromeTabs module with required dependencies
- * @param {object} deps - Dependencies object containing monacox, editorInst, and watcher
  */
-function initChromeTabs(deps) {
-  monacoInst = deps.monacox
-  editorInst = deps.editorInst
-  watcher = deps.watcher
+function initChromeTabs() {
 
   // Initialize ChromeTabs
   const tabsEl = document.getElementById('tabs-area')
@@ -33,12 +26,6 @@ function initChromeTabs(deps) {
   // Setup tab add button click handler
   document.getElementById('tab-add-btn').onclick = () => {
     chromeTabs.addTab()
-  }
-
-  // Return the instances for direct access
-  return {
-    chromeTabs: chromeTabs,
-    tabsMap: tabsMap
   }
 }
 
@@ -69,29 +56,14 @@ function _handleTabAdd(detail) {
 
   let el = detail.tabEl
   // setup the title with time
-  let title = monacoUtilities.generateFileName()
+  let title = generateFileName()
   let titleEl = el.querySelector('.chrome-tab-title')
   el.align = 'center'
   titleEl.innerHTML = title
 
-  // create a new model
-  let model = monacoInst.editor.createModel()
-  editorInst.setModel(model)
-  monacoInst.editor.setModelLanguage(model, 'comNGLang')
-
-  // setup content change listener for model
-  model.onDidChangeContent((e) => {
-    if (e.isFlush === true) return
-    el.children[2].children[1].style.color = '#26a69a'
-  })
-
-  // setup the map between tab and model/state
-  let view = {
-    model: model,
-    path: null,
-    state: null,
-  }
-  tabsMap.set(el, view)
+  // Dispatch custom event for tab addition
+  const event = new CustomEvent('tabAdded', { detail: { tabEl: el } });
+  document.dispatchEvent(event);
 }
 
 /**
@@ -101,18 +73,9 @@ function _handleTabAdd(detail) {
 function _handleActiveTabChange(detail) {
   let el = detail.tabEl
 
-  // Save before tab's state
-  let model = editorInst.getModel()
-  tabsMap.forEach((view, _) => {
-    if (model === view.model) {
-      view.state = editorInst.saveViewState()
-    }
-  })
-
-  // Restore new tab's state
-  let view = tabsMap.get(el)
-  editorInst.setModel(view.model)
-  editorInst.restoreViewState(view.state)
+  // Dispatch custom event for active tab changed
+  const event = new CustomEvent('activeTabChanged', { detail: { tabEl: el } });
+  document.dispatchEvent(event);
 }
 
 /**
@@ -122,15 +85,11 @@ function _handleActiveTabChange(detail) {
 function _handleTabRemove(detail) {
   navi_layout_update()
 
-  // delete from watcher
-  const view = tabsMap.get(detail.tabEl)
-  if (null !== view.path) {
-    watcher.unwatch(view.path)
-  }
+  // Dispatch custom event for tab removal
+  let el = detail.tabEl
 
-  // delete from tabsMap
-  tabsMap.delete(detail.tabEl)
-  if (0 === tabsMap.size) chromeTabs.addTab()
+  const event = new CustomEvent('tabRemoved', { detail: { tabEl: el } });
+  document.dispatchEvent(event);
 }
 
 /**

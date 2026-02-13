@@ -20,7 +20,7 @@ const chromeTabsModule = require('./modules/chrome-tabs.js')
 const hexy = require('hexy')
 const { chartFrameProcess } = require('./modules/chart.js')
 const { serialInit, serialClose } = require('./modules/serialport.js')
-
+const { generateFileName, getTimestamp } = require('./modules/utilities.js')
 const fs = require('fs')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
@@ -80,13 +80,27 @@ watcher.on('change', (filePath) => {
 
 watcher.on('unlink', (filePath) => {
   console.log(filePath + 'removed')
-  tabsMap.forEach((view, el) => {
+  chromeTabsModule.tabsMap.forEach((view, el) => {
     if (filePath === view.path) {
       view.path = null
       el.children[2].children[1].style.color = '#f54336'
     }
   })
 })
+
+document.addEventListener('tabRemoved', (event) => {
+  const el = event.detail.tabEl;
+  console.log('Tab removed:', el);
+
+  const view = chromeTabsModule.tabsMap.get(el)
+  if (null !== view.path) {
+    watcher.unwatch(view.path)
+  }
+
+  // delete from tabsMap
+  chromeTabsModule.tabsMap.delete(detail.tabEl)
+  if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.addTab()
+});
 
 // ------------------------editor section
 
@@ -309,7 +323,7 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (store.get('general.timestamp') === true) timestamp = monacoUtilities.getTimestamp()
+      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + line
     }
     monacoUtilities.applyEdit(
@@ -337,7 +351,7 @@ function stringModeProcess(inBuffer) {
     } else {
       let timestamp = ''
 
-      if (store.get('general.timestamp') === true) timestamp = monacoUtilities.getTimestamp()
+      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + buffer
       half_line = true
     }
@@ -487,6 +501,46 @@ async function setupEditor() {
       },
     })
 
+    document.addEventListener('tabAdded', (event) => {
+      const el = event.detail.tabEl;
+      console.log('Tab added:', el);
+      // create a new model
+      let model = monacoInst.editor.createModel();
+      editorInst.setModel(model);
+      monacoInst.editor.setModelLanguage(model, 'comNGLang');
+
+      // setup content change listener for model
+      model.onDidChangeContent((e) => {
+        if (e.isFlush === true) return;
+        el.children[2].children[1].style.color = '#ff8a80';
+        el.children[2].children[1].style.fontWeight = 'bold';
+      });
+      // setup the map between tab and model/state
+      let view = {
+        model: model,
+        path: null,
+        state: null,
+      };
+      chromeTabsModule.tabsMap.set(el, view);
+    });
+
+    document.addEventListener('activeTabChanged', (event) => {
+      const el = event.detail.tabEl;
+      console.log('Active tab changed:', el);
+
+      // Save before tab's state
+      let model = editorInst.getModel()
+      chromeTabsModule.tabsMap.forEach((view, _) => {
+        if (model === view.model) {
+          view.state = editorInst.saveViewState()
+        }
+      })
+
+      // Restore new tab's state
+      let view = chromeTabsModule.tabsMap.get(el)
+      editorInst.setModel(view.model)
+      editorInst.restoreViewState(view.state)
+    });
     monacoInst.languages.setLanguageConfiguration('comNGLang', {
       brackets: [
         ['{', '}'],
@@ -547,7 +601,7 @@ async function setupEditor() {
     hexMode.initHexModeHandlers(editorInst, monacoInst, hlt, store)
 
     // Initialize ChromeTabs module and get direct references
-    const { chromeTabs, tabsMap } = chromeTabsModule.initChromeTabs({
+    chromeTabsModule.initChromeTabs({
       monacox: monacoInst,
       editorInst: editorInst,
       watcher: watcher
@@ -627,7 +681,7 @@ document.getElementById('breakpoint-switch').onclick = (e) => {
 
 document.getElementById('capture-file-switch').onclick = (e) => {
   if (e.target.checked === true) {
-    let fileName = monacoUtilities.generateFileName()
+    let fileName = generateFileName()
 
     dialog
       .showSaveDialog({

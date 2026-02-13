@@ -38,8 +38,26 @@ function navi_layout_update() {
     'px'
 }
 
+function generateFileName() {
+  let date = new Date()
+  date = date.toString().split(' ')
+  let name = date[0] + '-' + date[4].replace(/[.|:]/g, '-') + '.log'
+
+  return name
+}
+
+function getTimestamp() {
+  const t = new Date()
+
+  return (
+    t.toLocaleTimeString().split(' ')[0] + ':' + t.getMilliseconds().toString().padStart(3, 0) + ' '
+  )
+}
+
 module.exports = {
   navi_layout_init,
   navi_layout_update,
+  generateFileName,
+  getTimestamp,
   toast
 }

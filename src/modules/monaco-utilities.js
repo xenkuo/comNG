@@ -1,25 +1,10 @@
 const { dialog } = require('electron').remote
 const store = require('./store.js').init()
 const fs = require('fs')
+const { generateFileName } = require('./utilities.js')
 
 let captureFileStream
 let textDownward = true
-
-function generateFileName() {
-  let date = new Date()
-  date = date.toString().split(' ')
-  let name = date[0] + '-' + date[4].replace(/[.|:]/g, '-') + '.log'
-
-  return name
-}
-
-function getTimestamp() {
-  const t = new Date()
-
-  return (
-    t.toLocaleTimeString().split(' ')[0] + ':' + t.getMilliseconds().toString().padStart(3, 0) + ' '
-  )
-}
 
 function applyEdit(monaco, editor, textString, appendLine, revealLine) {
   const model = editor.getModel()
@@ -108,6 +93,4 @@ document.getElementById('breakpoint-after-lines').onblur = (e) => {
 
 module.exports = {
   applyEdit,
-  generateFileName,
-  getTimestamp,
 }
