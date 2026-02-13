@@ -6,6 +6,9 @@ const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
 const chromeTabsModule = require('./modules/chrome-tabs.js')
+const hexy = require('hexy')
+const { chartFrameProcess } = require('./modules/chart.js')
+const { serialInit, serialClose } = require('./modules/serialport.js')
 
 const fs = require('fs')
 const { dialog } = require('electron').remote
@@ -197,9 +200,14 @@ function saveAsFile() {
     })
 }
 
-// Expose hexModeProcess globally for serialport.js to use
-window.hexModeProcess = (buffer, revealLine) => {
-  hexMode.hexModeProcess(buffer, revealLine, monacox, editorInst)
+/**
+ * Process buffer data in hex mode
+ * @param {Buffer} buffer - Input buffer
+ * @param {boolean} revealLine - Whether to reveal the line
+ */
+function hexModeProcess(buffer, revealLine) {
+  const text = hexy.hexy(buffer, { format: 'twos' })
+  monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
 }
 
 function _breakpointProcess(line) {
@@ -311,6 +319,22 @@ function stringModeProcess(inBuffer) {
     breakpointBuff = buffer
   }
 }
+
+/**
+ * Unified serial data processing function
+ * Handles both hex mode and string mode processing, including chart data
+ * @param {Buffer} data - Serial data buffer
+ */
+function processSerialData(data) {
+  if (store.get('general.hexmode') === true) {
+    hexModeProcess(data, true)
+  } else {
+    chartFrameProcess(data)
+    stringModeProcess(data)
+  }
+}
+
+serialInit(processSerialData)
 
 initMonaco()
 window.addEventListener('monacoloaded', (e) => {

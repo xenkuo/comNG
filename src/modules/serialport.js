@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const serial = require('serialport')
-const { chartFrameProcess } = require('./modules/chart.js')
+const { toast } = require('./utilities.js')
 
-let port, modemSignalTimer
+let port, modemSignalTimer, serialDataCallback
 let modemSignal = {
   cts: false,
   dsr: false,
@@ -72,6 +72,17 @@ function _modemSignalReset() {
   document.getElementById('dcd-btn').style.cssText = 'background-color: #dfdfdf !important'
 }
 
+function _serialWrite(data) {
+  if (port === undefined || port.isOpen === false) {
+    toast('Error: No port opened, cannot write')
+    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+    return false
+  }
+
+  port.write(data)
+  return true
+}
+
 function _serialGetOptions() {
   let openOptions = {}
 
@@ -108,10 +119,7 @@ function _serialGetOptions() {
   return openOptions
 }
 
-function toast(text) {
-  mcss.toast({ html: text, displayLength: 2000 })
-  // alert(text);
-}
+
 
 document.getElementById('port-switch').onclick = (e) => {
   if (e.target.checked === true) {
@@ -180,13 +188,7 @@ document.getElementById('port-switch').onclick = (e) => {
     })
 
     port.on('data', (data) => {
-      if (store.get('general.hexmode') === true) {
-        window.hexModeProcess(data, true)
-      } else {
-        chartFrameProcess(data)
-      // TODO: editor dependency
-        stringModeProcess(data)
-      }
+      if (serialDataCallback) serialDataCallback(data)
     })
   } else {
     if (port === undefined || port.isOpen === false) {
@@ -291,7 +293,7 @@ document.getElementById('trans-send-btn').onclick = () => {
     dataOut += eof
   }
 
-  if (serialWrite(dataOut) === false) return
+  if (_serialWrite(dataOut) === false) return
 
   logObj.value += '\n' + dataIn
   mcss.updateTextFields(logObj)
@@ -306,7 +308,7 @@ document.getElementById('trans-send-btn').onclick = () => {
     if (isNaN(interval) === true) interval = 1000
 
     transRepeatTimer = setInterval(() => {
-      serialWrite(dataOut)
+      _serialWrite(dataOut)
     }, interval)
   }
 
@@ -324,13 +326,11 @@ function serialClose() {
   port === undefined ? null : port.close()
 }
 
-function serialWrite(data) {
-  if (port === undefined || port.isOpen === false) {
-    toast('Error: No port opened, cannot write')
-    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
-    return false
-  }
+function serialInit(dataCallback) {
+  serialDataCallback = dataCallback
+}
 
-  port.write(data)
-  return true
+module.exports = {
+  serialInit,
+  serialClose,
 }

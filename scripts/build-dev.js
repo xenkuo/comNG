@@ -14,7 +14,6 @@ async function buildDev() {
     // Read files and concatenate them
     const baseContent = fs.readFileSync('./src/base.js', 'utf8');
     const editorContent = fs.readFileSync('./src/editor.js', 'utf8');
-    const serialportContent = fs.readFileSync('./src/serialport.js', 'utf8');
     
     const concatenatedContent = `
 // Generated bundle - do not edit directly
@@ -24,8 +23,6 @@ ${baseContent}
 // Editor.js
 ${editorContent}
 
-// Serialport.js
-${serialportContent}
 `;
     
     // Write concatenated file
@@ -35,8 +32,8 @@ ${serialportContent}
     const sourceMap = {
       version: 3,
       file: 'index.js',
-      sources: ['base.js', 'editor.js', 'serialport.js'],
-      sourcesContent: [baseContent, editorContent, serialportContent],
+      sources: ['base.js', 'editor.js'],
+      sourcesContent: [baseContent, editorContent],
       mappings: ''
     };
     
@@ -62,7 +59,7 @@ async function watchDev() {
   // Watch for file changes
   const chokidar = require('chokidar');
   
-  const watcher = chokidar.watch(['./src/base.js', './src/editor.js', './src/serialport.js'], {
+  const watcher = chokidar.watch(['./src/base.js', './src/editor.js'], {
     ignoreInitial: true
   });
   

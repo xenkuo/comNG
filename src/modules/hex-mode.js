@@ -7,6 +7,7 @@ const hexy = require('hexy')
 const monacoUtilities = require('./monaco-utilities.js')
 // Access global store object
 const store = require('./store.js').init()
+const { toast } = require('./utilities.js')
 
 // Hex mode layout constants
 const hmUnitCount = 16
@@ -71,7 +72,7 @@ function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
     console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
-      _showCursors(model, range, monacox)
+      showCursors(model, range, monacox)
     } else {
       let deco = hlt.decoGet()
       for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
@@ -90,7 +91,7 @@ function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
  * @param {object} monacox - Monaco editor instance
  * @param {object} editorInst - Editor instance
  */
-function hexModeProcess(buffer, revealLine, monacox, editorInst) {
+function _hexModeProcess(buffer, revealLine, monacox, editorInst) {
   const text = hexy.hexy(buffer, { format: 'twos' })
   monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
 }
@@ -280,7 +281,7 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
         editorInst.getModel().setValue('')
         fs.readFile(filePath, (e, data) => {
           if (e) throw err
-          module.exports.hexModeProcess(data, false, monacox, editorInst)
+          _hexModeProcess(data, false, monacox, editorInst)
         })
 
         // setup tab
@@ -304,11 +305,6 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
 
 // Export all functions
 module.exports = {
-  hexModeProcess,
-  getLinePairRange,
-  showCursors,
-  selectRanges,
-  extractLineRange,
   openBinFile,
   initHexModeHandlers,
   // Method to set store explicitly
