@@ -8,7 +8,7 @@ const { navi_layout_update } = require('./utilities.js')
 let chromeTabs = new ChromeTabs()
 let tabsMap = new Map()
 let watcher
-let monacox
+let monacoInst
 let editorInst
 
 /**
@@ -16,7 +16,7 @@ let editorInst
  * @param {object} deps - Dependencies object containing monacox, editorInst, and watcher
  */
 function initChromeTabs(deps) {
-  monacox = deps.monacox
+  monacoInst = deps.monacox
   editorInst = deps.editorInst
   watcher = deps.watcher
 
@@ -67,17 +67,17 @@ function _setupEventListeners(tabsEl) {
 function _handleTabAdd(detail) {
   navi_layout_update()
 
-  // create a new model
-  let model = monacox.editor.createModel()
-  editorInst.setModel(model)
-  monacox.editor.setModelLanguage(model, 'comNGLang')
-
   let el = detail.tabEl
   // setup the title with time
   let title = monacoUtilities.generateFileName()
   let titleEl = el.querySelector('.chrome-tab-title')
   el.align = 'center'
   titleEl.innerHTML = title
+
+  // create a new model
+  let model = monacoInst.editor.createModel()
+  editorInst.setModel(model)
+  monacoInst.editor.setModelLanguage(model, 'comNGLang')
 
   // setup content change listener for model
   model.onDidChangeContent((e) => {

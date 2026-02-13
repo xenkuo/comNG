@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const { ipcRenderer, clipboard } = require('electron')
+const { ipcRenderer } = require('electron')
 const chromeTabsModule = require('./chrome-tabs.js')
 
 let openFileHandler = null
@@ -75,7 +75,6 @@ function handleCommand(command) {
  * Handle ClearLog command
  */
 function _handleClearLog() {
-  clipboard.writeText(window.editorInst.getModel().getValue())
   document.getElementById('data-cleanup-btn').click()
 }
 
@@ -93,7 +92,6 @@ function _handleClearLogAndSwitchPort() {
   let portSwitch = document.getElementById('port-switch')
   portSwitch.click()
   if (portSwitch.checked) {
-    clipboard.writeText(window.editorInst.getModel().getValue())
     document.getElementById('data-cleanup-btn').click()
   }
 }

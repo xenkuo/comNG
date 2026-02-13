@@ -486,8 +486,6 @@ async function setupEditor() {
         // verticalScrollbarSize: 10,
       },
     })
-    // Make editorInst globally accessible
-    window.editorInst = editorInst
 
     monacoInst.languages.setLanguageConfiguration('comNGLang', {
       brackets: [
@@ -572,6 +570,8 @@ setupEditor().then(editor => {
   console.error('Failed to initialize editor:', error);
 });
 
+const { clipboard } = require('electron')
+
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
@@ -583,7 +583,10 @@ document.getElementById('data-cleanup-btn').onclick = () => {
     value += '\n'
   }
 
-  let hexmodeIndex = 0
+  // store current content to clipboard
+  clipboard.writeText(editorInst.getModel().getValue())
+
+  // Clear editor content
   editorInst.getModel().setValue(value)
 
   // generate serial data clear event
