@@ -4,7 +4,7 @@ const fs = require('fs')
 const { generateFileName } = require('./utilities.js')
 
 let captureFileStream
-let textDownward = true
+let autoScrollDown = true
 
 function applyEdit(monaco, editor, textString, appendLine, revealLine) {
   const model = editor.getModel()
@@ -28,7 +28,7 @@ function applyEdit(monaco, editor, textString, appendLine, revealLine) {
     captureFileStream.write(textString)
   }
 
-  if (true === revealLine && textDownward === true) editor.revealLine(model.getLineCount())
+  if (true === revealLine && autoScrollDown === true) editor.revealLine(model.getLineCount())
 }
 
 document.getElementById('capture-file-switch').onclick = (e) => {
@@ -70,12 +70,12 @@ document.getElementById('capture-file-switch').onclick = (e) => {
   }
 }
 
-document.getElementById('downward-btn').onclick = (e) => {
-  if (textDownward === true) {
-    textDownward = false
+document.getElementById('auto-scrolldown-btn').onclick = (e) => {
+  if (autoScrollDown === true) {
+    autoScrollDown = false
     e.target.classList.add('grey')
   } else {
-    textDownward = true
+    autoScrollDown = true
     e.target.classList.remove('grey')
   }
 }
