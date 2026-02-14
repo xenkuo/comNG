@@ -44,47 +44,6 @@ module.exports.constants = {
 let deferredStore = null;
 
 /**
- * Initialize hex mode event handlers
- * @param {object} editorInst - Editor instance
- * @param {object} monacox - Monaco editor instance
- * @param {object} hlt - Highlight module
- * @param {object} [storeInstance] - Optional store instance
- */
-function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
-  // Store the store instance for later use
-  if (storeInstance) {
-    deferredStore = storeInstance;
-  }
-  
-  editorInst.onMouseUp(() => {
-    // Use passed store instance, deferred store, or global store
-    const actualStore = deferredStore || storeInstance || store;
-    
-    // Add defensive check for store
-    if (!actualStore || typeof actualStore.get !== 'function') {
-      console.warn('hex-mode: store not available yet');
-      return;
-    }
-    if (false === actualStore.get('general.hexmode')) return
-
-    let model = editorInst.getModel()
-    let range = editorInst.getSelection()
-    console.log('In: ' + range)
-
-    if (range.isEmpty() === true) {
-      showCursors(model, range, monacox)
-    } else {
-      let deco = hlt.decoGet()
-      for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
-        let lineRange = extractLineRange(range, line, monacox)
-        let linePairRange = getLinePairRange(lineRange)
-        selectRanges(model, lineRange, linePairRange, deco, monacox)
-      }
-    }
-  })
-}
-
-/**
  * Process binary buffer data into hex format and display in editor
  * @param {Buffer} buffer - Binary data to process
  * @param {boolean} revealLine - Whether to reveal the line after processing
@@ -101,7 +60,7 @@ function _hexModeProcess(buffer, revealLine, monacox, editorInst) {
  * @param {object} range - Original range object
  * @returns {object} Paired range object
  */
-function getLinePairRange(range) {
+function _getLinePairRange(range) {
   let s = range.startColumn
   if (s <= hmSpanOffset) {
     // hex area
@@ -134,8 +93,8 @@ function getLinePairRange(range) {
  * @param {object} range - Selection range
  * @param {object} monacox - Monaco editor instance
  */
-function showCursors(model, range, monacox) {
-  let cordRange = getLinePairRange(range)
+function _showCursors(model, range, monacox) {
+  let cordRange = _getLinePairRange(range)
   if (undefined === cordRange) return
 
   // first remove old decos
@@ -179,7 +138,7 @@ function showCursors(model, range, monacox) {
  * @param {object} decoration - Decoration style
  * @param {object} monacox - Monaco editor instance
  */
-function selectRanges(model, range, pairRange, decoration, monacox) {
+function _selectRanges(model, range, pairRange, decoration) {
   // first remove old decos
   let decos = model.getLineDecorations(range.startLineNumber)
   let zIndex = 1
@@ -221,7 +180,7 @@ function selectRanges(model, range, pairRange, decoration, monacox) {
  * @param {number} line - Line number
  * @returns {object} Extracted range
  */
-function extractLineRange(range, line, monacox) {
+function _extractLineRange(range, line, monacox) {
   let s = 1
   let e = 1
 
@@ -301,6 +260,47 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
         titleEl.innerHTML = title
       }
     })
+}
+
+/**
+ * Initialize hex mode event handlers
+ * @param {object} editorInst - Editor instance
+ * @param {object} monacox - Monaco editor instance
+ * @param {object} hlt - Highlight module
+ * @param {object} [storeInstance] - Optional store instance
+ */
+function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
+  // Store the store instance for later use
+  if (storeInstance) {
+    deferredStore = storeInstance;
+  }
+
+  editorInst.onMouseUp(() => {
+    // Use passed store instance, deferred store, or global store
+    const actualStore = deferredStore || storeInstance || store;
+
+    // Add defensive check for store
+    if (!actualStore || typeof actualStore.get !== 'function') {
+      console.warn('hex-mode: store not available yet');
+      return;
+    }
+    if (false === actualStore.get('general.hexmode')) return
+
+    let model = editorInst.getModel()
+    let range = editorInst.getSelection()
+    console.log('In: ' + range)
+
+    if (range.isEmpty() === true) {
+      _showCursors(model, range, monacox)
+    } else {
+      let deco = hlt.decoGet()
+      for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
+        let lineRange = _extractLineRange(range, line, monacox)
+        let linePairRange = _getLinePairRange(lineRange)
+        _selectRanges(model, lineRange, linePairRange, deco)
+      }
+    }
+  })
 }
 
 // Export all functions
