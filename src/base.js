@@ -4,10 +4,9 @@ const { remote, shell } = require('electron')
 
 const mcss = require('materialize-css')
 const { applyLanguage } = require('./modules/i18n.js')
-const checkForUpdates = require('./modules/update.js').checkForUpdates
-const hexModeBase = require('./modules/hex-mode.js')
+const { checkForUpdates } = require('./modules/update.js')
 const store = require('./modules/store.js').init()
-
+const { autoScrolldownBtnInit } = require('./modules/dom-utilities.js')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
 
@@ -15,9 +14,6 @@ let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
 let tabsInst = null
 // let ctrlKeyPressed = false
-
-// Make hexMode globally accessible for IPC handler
-window.hexMode = hexModeBase
 
 let iconWidth
 let tabsOffset
@@ -140,8 +136,12 @@ window.onload = () => {
   )
   document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
 
+  autoScrolldownBtnInit()
+
   checkForUpdates()
 }
+
+
 
 window.onresize = () => {
   store.set('window.width', window.innerWidth)

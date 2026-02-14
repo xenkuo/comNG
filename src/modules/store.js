@@ -75,12 +75,15 @@ function initWithMigration(version) {
         db.delete('window.xBefore')
         db.delete('window.yBefore')
       },
+      '2.3.1': (db) => {
+        db.set('general.autoScrolldown', true)
+      },
     },
   })
 }
 
 function init() {
-  return new Store({})
+  return new Store()
 }
 
 module.exports = {
