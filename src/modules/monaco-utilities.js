@@ -5,30 +5,6 @@ const { generateFileName } = require('./utilities.js')
 
 let captureFileStream
 
-function applyEdit(monaco, editor, textString, appendLine, revealLine) {
-  const model = editor.getModel()
-  const lineCount = model.getLineCount()
-  let lastLineLength = 1
-  if (true === appendLine) {
-    lastLineLength = model.getLineMaxColumn(lineCount)
-  }
-
-  const range = new monaco.Range(lineCount, lastLineLength, lineCount, lastLineLength)
-
-  editor.getModel().applyEdits([
-    {
-      forceMoveMarkers: true,
-      range: range,
-      text: textString,
-    },
-  ])
-
-  if (undefined !== captureFileStream) {
-    captureFileStream.write(textString)
-  }
-
-  if (true === revealLine && store.get('general.autoScrolldown', true) === true) editor.revealLine(model.getLineCount())
-}
 
 document.getElementById('capture-file-switch').onclick = (e) => {
   if (e.target.checked === true) {
@@ -80,6 +56,4 @@ document.getElementById('breakpoint-after-lines').onblur = (e) => {
   store.set('advance.breakpoint.afterLines', lines)
 }
 
-module.exports = {
-  applyEdit,
-}
+module.exports = {}

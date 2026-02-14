@@ -22,6 +22,7 @@ const { chartFrameProcess } = require('./modules/chart.js')
 const { serialInit, serialClose } = require('./modules/serialport.js')
 const { generateFileName, getTimestamp } = require('./modules/utilities.js')
 const fs = require('fs')
+
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
 const chokidar = require('chokidar')
@@ -47,6 +48,37 @@ let half_line = false
 let ansiWait = false
 let captureFileStream
 let localSave = false
+
+/**
+ * Apply edits to the Monaco editor
+ * @param {string} textString - Text to insert
+ * @param {boolean} appendLine - Whether to append to current line
+ * @param {boolean} revealLine - Whether to scroll to the line
+ */
+function applyEdit(textString, appendLine, revealLine) {
+  const model = editorInst.getModel()
+  const lineCount = model.getLineCount()
+  let lastLineLength = 1
+  if (true === appendLine) {
+    lastLineLength = model.getLineMaxColumn(lineCount)
+  }
+
+  const range = new monacoInst.Range(lineCount, lastLineLength, lineCount, lastLineLength)
+
+  editorInst.getModel().applyEdits([
+    {
+      forceMoveMarkers: true,
+      range: range,
+      text: textString,
+    },
+  ])
+
+  if (undefined !== captureFileStream) {
+    captureFileStream.write(textString)
+  }
+
+  if (true === revealLine && store.get('general.autoScrolldown', true) === true) editorInst.revealLine(model.getLineCount())
+}
 
 // tabsMap functionality moved to chrome-tabs module
 
@@ -152,8 +184,63 @@ function openFileInNewTab() {
   openFile()
 }
 
-function openBinFile() {
-  hexMode.openBinFile(editorInst, chromeTabsModule.chromeTabs, chromeTabsModule.tabsMap, watcher, monacoInst)
+/**
+ * Open binary file in hex mode
+ * @param {object} editorInst - Editor instance
+ * @param {object} chromeTabs - Chrome tabs instance
+ * @param {Map} tabsMap - Tabs mapping
+ * @param {object} watcher - File watcher instance
+ * @param {object} monacoInst - Monaco editor instance
+ */
+/**
+ * Process binary buffer data into hex format and display in editor
+ * @param {Buffer} buffer - Binary data to process
+ * @param {boolean} revealLine - Whether to reveal the line after processing
+ * @param {object} monacoInst - Monaco editor instance
+ * @param {object} editorInst - Editor instance
+ */
+function hexModeProcess(buffer, revealLine, monacoInst, editorInst) {
+  const text = hexy.hexy(buffer, { format: 'twos' })
+  applyEdit(text, false, revealLine)
+}
+
+function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
+  if (true !== store.get('general.hexmode')) {
+    toast("Please first enable 'Hex Mode' in General tab.")
+    return
+  }
+
+  dialog
+    .showOpenDialog({
+      properties: ['openFile'],
+    })
+    .then((result) => {
+      if (result.canceled === false) {
+        const filePath = result.filePaths[0]
+        // show hex text
+        editorInst.getModel().setValue('')
+        fs.readFile(filePath, (e, data) => {
+          if (e) throw err
+          hexModeProcess(data, false, monacoInst, editorInst)
+        })
+
+        // setup tab
+        const title = path.basename(filePath)
+        const el = chromeTabs.activeTabEl
+        const view = tabsMap.get(el)
+        // 1. setup file watcher
+        if (null !== view.path) {
+          watcher.unwatch(view.path)
+        }
+        watcher.add(filePath)
+        // 2. setup filepath
+        tabsMap.get(el).path = filePath
+        // 3. setup title
+        let titleEl = el.querySelector('.chrome-tab-title')
+        el.align = 'center'
+        titleEl.innerHTML = title
+      }
+    })
 }
 
 function saveFile() {
@@ -243,20 +330,11 @@ function saveAsFile() {
 initIPCHandlers({
   openFileHandler: openFile,
   openFileInNewTabHandler: openFileInNewTab,
-  openBinFileHandler: openBinFile,
+  openBinFileHandler: () => openBinFile(editorInst, chromeTabsModule.chromeTabs, chromeTabsModule.tabsMap, watcher, monacoInst),
   saveFileHandler: saveFile,
   saveAsFileHandler: saveAsFile,
 })
 
-/**
- * Process buffer data in hex mode
- * @param {Buffer} buffer - Input buffer
- * @param {boolean} revealLine - Whether to reveal the line
- */
-function hexModeProcess(buffer, revealLine) {
-  const text = hexy.hexy(buffer, { format: 'twos' })
-  monacoUtilities.applyEdit(monacoInst, editorInst, text, false, revealLine)
-}
 
 function _breakpointProcess(line) {
   if (breakpointHit === false) {
@@ -326,9 +404,7 @@ function stringModeProcess(inBuffer) {
       if (store.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + line
     }
-    monacoUtilities.applyEdit(
-      monacoInst,
-      editorInst,
+    applyEdit(
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
       true
@@ -355,9 +431,7 @@ function stringModeProcess(inBuffer) {
       outputTmp = timestamp + buffer
       half_line = true
     }
-    monacoUtilities.applyEdit(
-      monacoInst,
-      editorInst,
+    applyEdit(
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
       true
@@ -375,7 +449,7 @@ function stringModeProcess(inBuffer) {
  */
 function processSerialData(data) {
   if (store.get('general.hexmode') === true) {
-    hexModeProcess(data, true)
+    hexModeProcess(data, true, monacoInst, editorInst)
   } else {
     chartFrameProcess(data)
     stringModeProcess(data)

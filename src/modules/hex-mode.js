@@ -1,13 +1,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 const path = require('path')
-const fs = require('fs')
-const { dialog } = require('electron').remote
-const hexy = require('hexy')
-const monacoUtilities = require('./monaco-utilities.js')
 // Access global store object
 const store = require('./store.js').init()
-const { toast } = require('./utilities.js')
 
 // Hex mode layout constants
 const hmUnitCount = 16
@@ -42,17 +37,6 @@ module.exports.constants = {
   hmEofOffset
 }
 
-/**
- * Process binary buffer data into hex format and display in editor
- * @param {Buffer} buffer - Binary data to process
- * @param {boolean} revealLine - Whether to reveal the line after processing
- * @param {object} monacoInst - Monaco editor instance
- * @param {object} editorInst - Editor instance
- */
-function _hexModeProcess(buffer, revealLine, monacoInst, editorInst) {
-  const text = hexy.hexy(buffer, { format: 'twos' })
-  monacoUtilities.applyEdit(monacoInst, editorInst, text, false, revealLine)
-}
 
 /**
  * Calculate the paired range position for hex/string area synchronization
@@ -212,52 +196,6 @@ function _extractLineRange(range, line, monacoInst) {
   return new monacoInst.Range(line, s, line, e)
 }
 
-/**
- * Open binary file in hex mode
- * @param {object} editorInst - Editor instance
- * @param {object} chromeTabs - Chrome tabs instance
- * @param {Map} tabsMap - Tabs mapping
- * @param {object} watcher - File watcher instance
- * @param {object} monacoInst - Monaco editor instance
- */
-function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
-  if (true !== store.get('general.hexmode')) {
-    toast("Please first enable 'Hex Mode' in General tab.")
-    return
-  }
-
-  dialog
-    .showOpenDialog({
-      properties: ['openFile'],
-    })
-    .then((result) => {
-      if (result.canceled === false) {
-        const filePath = result.filePaths[0]
-        // show hex text
-        editorInst.getModel().setValue('')
-        fs.readFile(filePath, (e, data) => {
-          if (e) throw err
-          _hexModeProcess(data, false, monacoInst, editorInst)
-        })
-
-        // setup tab
-        const title = path.basename(filePath)
-        const el = chromeTabs.activeTabEl
-        const view = tabsMap.get(el)
-        // 1. setup file watcher
-        if (null !== view.path) {
-          watcher.unwatch(view.path)
-        }
-        watcher.add(filePath)
-        // 2. setup filepath
-        tabsMap.get(el).path = filePath
-        // 3. setup title
-        let titleEl = el.querySelector('.chrome-tab-title')
-        el.align = 'center'
-        titleEl.innerHTML = title
-      }
-    })
-}
 
 /**
  * Initialize hex mode event handlers
@@ -294,7 +232,6 @@ function initHexModeHandlers(editorInst, monacoInst, hlt) {
 
 // Export all functions
 module.exports = {
-  openBinFile,
   initHexModeHandlers,
   constants: module.exports.constants
 }
