@@ -597,8 +597,8 @@ async function setupEditor() {
 
     // Hex mode functions are now in the hex-mode module
 
-    // Initialize hex mode handlers with explicit store reference
-    hexMode.initHexModeHandlers(editorInst, monacoInst, hlt, store)
+    // Initialize hex mode handler
+    hexMode.initHexModeHandlers(editorInst, monacoInst, hlt)
 
     // Initialize ChromeTabs module and get direct references
     chromeTabsModule.initChromeTabs({

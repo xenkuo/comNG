@@ -41,18 +41,17 @@ module.exports.constants = {
   hmStrLength,
   hmEofOffset
 }
-let deferredStore = null;
 
 /**
  * Process binary buffer data into hex format and display in editor
  * @param {Buffer} buffer - Binary data to process
  * @param {boolean} revealLine - Whether to reveal the line after processing
- * @param {object} monacox - Monaco editor instance
+ * @param {object} monacoInst - Monaco editor instance
  * @param {object} editorInst - Editor instance
  */
-function _hexModeProcess(buffer, revealLine, monacox, editorInst) {
+function _hexModeProcess(buffer, revealLine, monacoInst, editorInst) {
   const text = hexy.hexy(buffer, { format: 'twos' })
-  monacoUtilities.applyEdit(monacox, editorInst, text, false, revealLine)
+  monacoUtilities.applyEdit(monacoInst, editorInst, text, false, revealLine)
 }
 
 /**
@@ -91,9 +90,8 @@ function _getLinePairRange(range) {
  * Show hex mode cursors with synchronized highlighting
  * @param {object} model - Editor model
  * @param {object} range - Selection range
- * @param {object} monacox - Monaco editor instance
  */
-function _showCursors(model, range, monacox) {
+function _showCursors(model, range) {
   let cordRange = _getLinePairRange(range)
   if (undefined === cordRange) return
 
@@ -136,7 +134,6 @@ function _showCursors(model, range, monacox) {
  * @param {object} range - Selection range
  * @param {object} pairRange - Paired range
  * @param {object} decoration - Decoration style
- * @param {object} monacox - Monaco editor instance
  */
 function _selectRanges(model, range, pairRange, decoration) {
   // first remove old decos
@@ -180,7 +177,7 @@ function _selectRanges(model, range, pairRange, decoration) {
  * @param {number} line - Line number
  * @returns {object} Extracted range
  */
-function _extractLineRange(range, line, monacox) {
+function _extractLineRange(range, line, monacoInst) {
   let s = 1
   let e = 1
 
@@ -212,7 +209,7 @@ function _extractLineRange(range, line, monacox) {
     e = hmSpanOffset
   }
 
-  return new monacox.Range(line, s, line, e)
+  return new monacoInst.Range(line, s, line, e)
 }
 
 /**
@@ -221,9 +218,9 @@ function _extractLineRange(range, line, monacox) {
  * @param {object} chromeTabs - Chrome tabs instance
  * @param {Map} tabsMap - Tabs mapping
  * @param {object} watcher - File watcher instance
- * @param {object} monacox - Monaco editor instance
+ * @param {object} monacoInst - Monaco editor instance
  */
-function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
+function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
   if (true !== store.get('general.hexmode')) {
     toast("Please first enable 'Hex Mode' in General tab.")
     return
@@ -240,7 +237,7 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
         editorInst.getModel().setValue('')
         fs.readFile(filePath, (e, data) => {
           if (e) throw err
-          _hexModeProcess(data, false, monacox, editorInst)
+          _hexModeProcess(data, false, monacoInst, editorInst)
         })
 
         // setup tab
@@ -265,37 +262,29 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacox) {
 /**
  * Initialize hex mode event handlers
  * @param {object} editorInst - Editor instance
- * @param {object} monacox - Monaco editor instance
+ * @param {object} monacoInst - Monaco editor instance
  * @param {object} hlt - Highlight module
- * @param {object} [storeInstance] - Optional store instance
  */
-function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
-  // Store the store instance for later use
-  if (storeInstance) {
-    deferredStore = storeInstance;
-  }
+function initHexModeHandlers(editorInst, monacoInst, hlt) {
 
   editorInst.onMouseUp(() => {
-    // Use passed store instance, deferred store, or global store
-    const actualStore = deferredStore || storeInstance || store;
-
     // Add defensive check for store
-    if (!actualStore || typeof actualStore.get !== 'function') {
+    if (!store || typeof store.get !== 'function') {
       console.warn('hex-mode: store not available yet');
       return;
     }
-    if (false === actualStore.get('general.hexmode')) return
+    if (false === store.get('general.hexmode')) return
 
     let model = editorInst.getModel()
     let range = editorInst.getSelection()
     console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
-      _showCursors(model, range, monacox)
+      _showCursors(model, range)
     } else {
       let deco = hlt.decoGet()
       for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
-        let lineRange = _extractLineRange(range, line, monacox)
+        let lineRange = _extractLineRange(range, line, monacoInst)
         let linePairRange = _getLinePairRange(lineRange)
         _selectRanges(model, lineRange, linePairRange, deco)
       }
@@ -307,9 +296,5 @@ function initHexModeHandlers(editorInst, monacox, hlt, storeInstance) {
 module.exports = {
   openBinFile,
   initHexModeHandlers,
-  // Method to set store explicitly
-  setStore: (storeInstance) => {
-    deferredStore = storeInstance;
-  },
   constants: module.exports.constants
 }
