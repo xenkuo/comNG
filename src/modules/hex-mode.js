@@ -59,7 +59,7 @@ function _hexModeProcess(buffer, revealLine, monacoInst, editorInst) {
  * @param {object} range - Original range object
  * @returns {object} Paired range object
  */
-function _getLinePairRange(range) {
+function _getLinePairRange(range, monacoInst) {
   let s = range.startColumn
   if (s <= hmSpanOffset) {
     // hex area
@@ -83,7 +83,7 @@ function _getLinePairRange(range) {
     e = (e - hmStrOffset) * hmUnitLength + hmHexOffset
   }
 
-  return new monacox.Range(range.startLineNumber, s, range.startLineNumber, e)
+  return new monacoInst.Range(range.startLineNumber, s, range.startLineNumber, e)
 }
 
 /**
@@ -91,8 +91,8 @@ function _getLinePairRange(range) {
  * @param {object} model - Editor model
  * @param {object} range - Selection range
  */
-function _showCursors(model, range) {
-  let cordRange = _getLinePairRange(range)
+function _showCursors(model, range, monacoInst) {
+  let cordRange = _getLinePairRange(range, monacoInst)
   if (undefined === cordRange) return
 
   // first remove old decos
@@ -280,12 +280,12 @@ function initHexModeHandlers(editorInst, monacoInst, hlt) {
     console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
-      _showCursors(model, range)
+      _showCursors(model, range, monacoInst)
     } else {
       let deco = hlt.decoGet()
       for (let line = range.startLineNumber; line <= range.endLineNumber; line++) {
         let lineRange = _extractLineRange(range, line, monacoInst)
-        let linePairRange = _getLinePairRange(lineRange)
+        let linePairRange = _getLinePairRange(lineRange, monacoInst)
         _selectRanges(model, lineRange, linePairRange, deco)
       }
     }

@@ -395,9 +395,6 @@ async function setupEditor() {
     const monaco = await initMonacoESMCompat()
     monacoInst = monaco
 
-    // Make monacox globally accessible for backward compatibility
-    window.monacox = monacoInst
-
     // Register custom language
     monacoInst.languages.register({
       id: 'comNGLang',
@@ -591,7 +588,7 @@ async function setupEditor() {
       // Do nothing but prevent default action: close window
     })
 
-    // editor.addCommand(monacox.KeyMod.CtrlCmd + monacox.KeyCode.KEY_X, () => {
+    // editor.addCommand(monacoInst.KeyMod.CtrlCmd + monacoInst.KeyCode.KEY_X, () => {
     //   // Do nothing but prevent default action: close window
     // });
 
@@ -601,11 +598,7 @@ async function setupEditor() {
     hexMode.initHexModeHandlers(editorInst, monacoInst, hlt)
 
     // Initialize ChromeTabs module and get direct references
-    chromeTabsModule.initChromeTabs({
-      monacox: monacoInst,
-      editorInst: editorInst,
-      watcher: watcher
-    })
+    chromeTabsModule.initChromeTabs()
 
     // Return the editor instance
     return editorInst;
