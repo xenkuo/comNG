@@ -47,13 +47,23 @@ let half_line = false
 let ansiWait = false
 let captureFileStream
 
+function _editorStateReset() {
+  breakpointHit = false
+  breakpointAfterLines = 0
+  breakpointBuff = []
+  half_line = false
+  ansiWait = false
+
+  hlt.reset()
+}
+
 /**
  * Apply edits to the Monaco editor
  * @param {string} textString - Text to insert
  * @param {boolean} appendLine - Whether to append to current line
  * @param {boolean} revealLine - Whether to scroll to the line
  */
-function applyEdit(textString, appendLine, revealLine) {
+function _applyEdit(textString, appendLine, revealLine) {
   const model = editorInst.getModel()
   const lineCount = model.getLineCount()
   let lastLineLength = 1
@@ -78,31 +88,14 @@ function applyEdit(textString, appendLine, revealLine) {
   if (true === revealLine && store.get('general.autoScrolldown', true) === true) editorInst.revealLine(model.getLineCount())
 }
 
-// tabsMap functionality moved to chrome-tabs module
-
-// -----------------------file watcher section
 const { initWatcher } = require('./modules/watcher.js')
 const watcherModule = initWatcher(chromeTabsModule, store)
 /** @type {import('chokidar').FSWatcher} */
 const watcher = watcherModule.watcher
 
-document.addEventListener('tabRemoved', (event) => {
-  const el = event.detail.tabEl;
-  console.log('Tab removed:', el);
-
-  const view = chromeTabsModule.tabsMap.get(el)
-  if (null !== view.path) {
-    watcher.unwatch(view.path)
-  }
-
-  // delete from tabsMap
-  chromeTabsModule.tabsMap.delete(detail.tabEl)
-  if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.addTab()
-});
-
 // ------------------------editor section
 
-function openFile() {
+function _openFile() {
   dialog
     .showOpenDialog({
       properties: ['openFile'],
@@ -143,32 +136,10 @@ function openFile() {
       }
     })
 }
-
-// ----------------------editor function section
-function openFileInNewTab() {
-  chromeTabsModule.newTab()
-  openFile()
-}
-
 /**
  * Open binary file in hex mode
- * @param {object} editorInst - Editor instance
- * @param {object} chromeTabs - Chrome tabs instance
- * @param {Map} tabsMap - Tabs mapping
- * @param {object} watcher - File watcher instance
- * @param {object} monacoInst - Monaco editor instance
  */
-/**
- * Process binary buffer data into hex format and display in editor
- * @param {Buffer} buffer - Binary data to process
- * @param {boolean} revealLine - Whether to reveal the line after processing
- */
-function hexModeProcess(buffer, revealLine) {
-  const text = hexy.hexy(buffer, { format: 'twos' })
-  applyEdit(text, false, revealLine)
-}
-
-function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
+function _openBinFile() {
   if (true !== store.get('general.hexmode')) {
     toast("Please first enable 'Hex Mode' in General tab.")
     return
@@ -185,20 +156,20 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
         editorInst.getModel().setValue('')
         fs.readFile(filePath, (e, data) => {
           if (e) throw err
-          hexModeProcess(data, false)
+          _hexModeProcess(data, false)
         })
 
         // setup tab
         const title = path.basename(filePath)
-        const el = chromeTabs.activeTabEl
-        const view = tabsMap.get(el)
+        const el = chromeTabsModule.chromeTabs.activeTabEl
+        const view = chromeTabsModule.tabsMap.get(el)
         // 1. setup file watcher
         if (null !== view.path) {
           watcher.unwatch(view.path)
         }
         watcher.add(filePath)
         // 2. setup filepath
-        tabsMap.get(el).path = filePath
+        chromeTabsModule.tabsMap.get(el).path = filePath
         // 3. setup title
         let titleEl = el.querySelector('.chrome-tab-title')
         el.align = 'center'
@@ -206,6 +177,20 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
       }
     })
 }
+
+// ----------------------editor function section
+function openFileInNewTab() {
+  chromeTabsModule.newTab()
+  _openFile()
+}
+
+function openBinFileInNewTab() {
+  chromeTabsModule.newTab()
+  _openBinFile()
+}
+
+
+
 
 function saveFile() {
   const el = chromeTabsModule.chromeTabs.activeTabEl
@@ -292,13 +277,22 @@ function saveAsFile() {
 }
 
 initIPCHandlers({
-  openFileHandler: openFile,
-  openFileInNewTabHandler: openFileInNewTab,
-  openBinFileHandler: () => openBinFile(editorInst, chromeTabsModule.chromeTabs, chromeTabsModule.tabsMap, watcher, monacoInst),
+  openFileHandler: openFileInNewTab,
+  openBinFileHandler: openBinFileInNewTab,
   saveFileHandler: saveFile,
   saveAsFileHandler: saveAsFile,
 })
 
+
+/**
+ * Process binary buffer data into hex format and display in editor
+ * @param {Buffer} buffer - Binary data to process
+ * @param {boolean} revealLine - Whether to reveal the line after processing
+ */
+function _hexModeProcess(buffer, revealLine) {
+  const text = hexy.hexy(buffer, { format: 'twos' })
+  _applyEdit(text, false, revealLine)
+}
 
 function _breakpointProcess(line) {
   if (breakpointHit === false) {
@@ -368,7 +362,7 @@ function stringModeProcess(inBuffer) {
       if (store.get('general.timestamp') === true) timestamp = getTimestamp()
       outputTmp = timestamp + line
     }
-    applyEdit(
+    _applyEdit(
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
       true
@@ -395,7 +389,7 @@ function stringModeProcess(inBuffer) {
       outputTmp = timestamp + buffer
       half_line = true
     }
-    applyEdit(
+    _applyEdit(
       outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
       true,
       true
@@ -413,7 +407,7 @@ function stringModeProcess(inBuffer) {
  */
 function processSerialData(data) {
   if (store.get('general.hexmode') === true) {
-    hexModeProcess(data, true)
+    _hexModeProcess(data, true)
   } else {
     chartFrameProcess(data)
     stringModeProcess(data)
@@ -559,6 +553,20 @@ async function setupEditor() {
       chromeTabsModule.tabsMap.set(el, view);
     });
 
+    document.addEventListener('tabRemoved', (event) => {
+      const el = event.detail.tabEl;
+      console.log('Tab removed:', el);
+
+      const view = chromeTabsModule.tabsMap.get(el)
+      if (null !== view.path) {
+        watcher.unwatch(view.path)
+      }
+
+      // delete from tabsMap
+      chromeTabsModule.tabsMap.delete(detail.tabEl)
+      if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.addTab()
+    });
+
     document.addEventListener('activeTabChanged', (event) => {
       const el = event.detail.tabEl;
       console.log('Active tab changed:', el);
@@ -576,6 +584,12 @@ async function setupEditor() {
       editorInst.setModel(view.model)
       editorInst.restoreViewState(view.state)
     });
+
+    document.addEventListener('portClosed', (event) => {
+      console.log('Port closed:', event.detail.tabEl);
+      _editorStateReset()
+    });
+
     monacoInst.languages.setLanguageConfiguration('comNGLang', {
       brackets: [
         ['{', '}'],
@@ -780,12 +794,3 @@ document.getElementById('editor-area').ondrop = (e) => {
   return false
 }
 
-function editorStateReset() {
-  breakpointHit = false
-  breakpointAfterLines = 0
-  breakpointBuff = []
-  half_line = false
-  ansiWait = false
-
-  hlt.reset()
-}

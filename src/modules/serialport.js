@@ -179,10 +179,10 @@ document.getElementById('port-switch').onclick = (e) => {
       }
 
       _modemSignalReset()
-      // TODO: editor dependency
-      // NOTE: as this module is required by editor.js,
-      // seems here can directly call editor.js's functions...
-      editorStateReset()
+      // emit a event to editor.js to reset editor state
+      const event = new CustomEvent('portClosed', { detail: { tabEl: el } });
+      document.dispatchEvent(event);
+
     })
 
     port.on('drain', () => {

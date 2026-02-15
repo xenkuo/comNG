@@ -4,7 +4,6 @@ const { ipcRenderer } = require('electron')
 const chromeTabsModule = require('./chrome-tabs.js')
 
 let openFileHandler = null
-let openFileInNewTabHandler = null
 let openBinFileHandler = null
 let saveFileHandler = null
 let saveAsFileHandler = null
@@ -14,7 +13,6 @@ let saveAsFileHandler = null
  */
 function initIPCHandlers(handlers) {
   openFileHandler = handlers.openFileHandler
-  openFileInNewTabHandler = handlers.openFileInNewTabHandler
   openBinFileHandler = handlers.openBinFileHandler
   saveFileHandler = handlers.saveFileHandler
   saveAsFileHandler = handlers.saveAsFileHandler
@@ -41,19 +39,19 @@ function handleCommand(command) {
       _handleClearLogAndSwitchPort()
       break
     case 'OpenFile':
-      _handleOpenFile()
+      openFileHandler()
       break
     case 'OpenFileInNewTab':
-      _handleOpenFileInNewTab()
+      openFileHandler()
       break
     case 'OpenBinFile':
-      _handleOpenBinFile()
+      openBinFileHandler()
       break
     case 'SaveFile':
-      _handleSaveFile()
+      saveFileHandler()
       break
     case 'SaveAsFile':
-      _handleSaveAsFile()
+      saveAsFileHandler()
       break
     case 'NewTab':
       chromeTabsModule.newTab()
@@ -94,41 +92,6 @@ function _handleClearLogAndSwitchPort() {
   if (portSwitch.checked) {
     document.getElementById('data-cleanup-btn').click()
   }
-}
-
-/**
- * Handle OpenFile command
- */
-function _handleOpenFile() {
-  openFileHandler()
-}
-
-/**
- * Handle OpenFileInNewTab command
- */
-function _handleOpenFileInNewTab() {
-  openFileInNewTabHandler()
-}
-
-/**
- * Handle OpenBinFile command
- */
-function _handleOpenBinFile() {
-  openBinFileHandler()
-}
-
-/**
- * Handle SaveFile command
- */
-function _handleSaveFile() {
-  saveFileHandler()
-}
-
-/**
- * Handle SaveAsFile command
- */
-function _handleSaveAsFile() {
-  saveAsFileHandler()
 }
 
 // Export functions
