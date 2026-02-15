@@ -11,9 +11,8 @@
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
     "premake": "rm -f src/index.js.map",
-    "terser": "terser src/base.js src/editor.js src/serialport.js src/chart.js -o src/index.js -c -m",
-    "build:dev": "node scripts/build-dev.js",
-    "build:watch": "node scripts/build-dev.js --watch",
+    "build:dev": "taskkill /f /im electron.exe 2>nul && node scripts/build-dev.js",
+    "build:watch": "taskkill /f /im electron.exe 2>nul && node scripts/build-dev.js --watch",
     "dev": "npm run build:dev && electron-forge start",
     "dev:watch": "concurrently \"npm run build:watch\" \"electron-forge start\"",
     "make": "electron-forge make",
@@ -117,7 +116,6 @@
     "esbuild": "0.14.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "6.15.0",
-    "prettier": "^3.2.5",
-    "terser": "^4.6.13"
+    "prettier": "^3.2.5"
   }
 }
