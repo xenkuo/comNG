@@ -30,12 +30,12 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": false,
+        "asar": true,
         "ignore": [
           "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
           "node_modules/materialize-css/(extras|js|sass)",
           "node_modules/material-design-icons/(?!iconfont)",
-          "src/(base|editor|serialport).js"
+          "src/(base|editor).js"
         ],
         "icon": "image/logo"
       },
