@@ -45,7 +45,31 @@ let breakpointAfterLines = 0
 let breakpointBuff = []
 let half_line = false
 let ansiWait = false
+/** @type {import('fs').WriteStream | undefined} */
 let captureFileStream
+/** @type {string | null} */
+let captureFilePath = null
+
+// Listen for captureFileStream changes from dom-utilities.js
+document.addEventListener('captureFileChanged', (event) => {
+  const { filePath, isActive } = event.detail;
+
+  if (isActive && filePath) {
+    // Store file path for synchronous writes
+    captureFilePath = filePath;
+    // Create new capture file stream (keep for backward compatibility)
+    captureFileStream = fs.createWriteStream(filePath, { flags: 'w' });
+    console.log('Capture file activated:', filePath);
+  } else {
+    // Close existing stream if it exists
+    if (captureFileStream) {
+      captureFileStream.end();
+      captureFileStream = undefined;
+    }
+    captureFilePath = null;
+    console.log('Capture file deactivated');
+  }
+});
 
 function _editorStateReset() {
   breakpointHit = false
@@ -81,8 +105,8 @@ function _applyEdit(textString, appendLine, revealLine) {
     },
   ])
 
-  if (undefined !== captureFileStream) {
-    captureFileStream.write(textString)
+  if (null !== captureFilePath) {
+    fs.appendFileSync(captureFilePath, textString);
   }
 
   if (true === revealLine && store.get('general.autoScrolldown', true) === true) editorInst.revealLine(model.getLineCount())
@@ -473,45 +497,6 @@ document.getElementById('breakpoint-switch').onclick = (e) => {
   breakpointAfterLines = 0
 }
 
-document.getElementById('capture-file-switch').onclick = (e) => {
-  if (e.target.checked === true) {
-    let fileName = generateFileName()
-
-    dialog
-      .showSaveDialog({
-        properties: ['createDirectory'],
-        defaultPath: fileName,
-        filters: [{ extensions: ['log'] }],
-      })
-      .then((result) => {
-        let pathEle = document.getElementById('capture-file-path')
-        if (result.canceled === false) {
-          let filePath = result.filePath
-          pathEle.value = filePath
-          captureFileStream = fs.createWriteStream(filePath, { flags: 'w' })
-
-          store.set('fileops.capture.switch', true)
-          store.set('fileops.capture.filePath', filePath)
-        } else {
-          if (undefined !== captureFileStream) captureFileStream.end()
-          captureFileStream = undefined
-          pathEle.value = ''
-
-          store.set('fileops.capture.switch', false)
-          store.set('fileops.capture.filePath', '')
-
-          // restore check status
-          e.target.checked = false
-        }
-      })
-  } else {
-    if (undefined !== captureFileStream) captureFileStream.end()
-    captureFileStream = undefined
-
-    store.set('fileops.capture.switch', false)
-  }
-}
-
 document.getElementById('capture-file-path').ondblclick = (e) => {
   const file = e.target.value
   const text = fs.readFileSync(file).toString()
@@ -551,8 +536,7 @@ document.getElementById('editor-area').ondrop = (e) => {
 async function setupEditor() {
   try {
     // Load Monaco editor and get instance directly
-    const monaco = await initMonacoESMCompat()
-    monacoInst = monaco
+    monacoInst = await initMonacoESMCompat()
 
     // Register custom language
     monacoInst.languages.register({

@@ -6,7 +6,7 @@ const mcss = require('materialize-css')
 const { applyLanguage } = require('./modules/i18n.js')
 const { checkForUpdates } = require('./modules/update.js')
 const store = require('./modules/store.js').init()
-const { autoScrolldownBtnInit } = require('./modules/dom-utilities.js')
+const { initDomUtilities } = require('./modules/dom-utilities.js')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 initMenuHandle()
 
@@ -115,14 +115,6 @@ window.onload = () => {
   document.getElementById('sign-switch').checked = store.get('advance.sign.switch')
   document.getElementById('sign-name').value = store.get('advance.sign.name')
 
-  document.getElementById('capture-file-switch').checked = store.get('fileops.capture.switch')
-  document.getElementById('capture-file-path').value = store.get('fileops.capture.filePath')
-  if (true === store.get('fileops.capture.switch')) {
-    let captureFileStream = fs.createWriteStream(store.get('fileops.capture.filePath'), {
-      flags: 'a',
-    })
-  }
-
   document.getElementById('insider-preview').checked = store.get('about.insiderPreview')
 
   document.getElementById('bar-color-head').value = store.get('advance.barColor.head')
@@ -136,7 +128,7 @@ window.onload = () => {
   )
   document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
 
-  autoScrolldownBtnInit()
+  initDomUtilities()
 
   checkForUpdates()
 }

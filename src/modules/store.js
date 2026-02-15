@@ -75,8 +75,10 @@ function initWithMigration(version) {
         db.delete('window.xBefore')
         db.delete('window.yBefore')
       },
-      '2.3.1': (db) => {
+      '2.3.2': (db) => {
         db.set('general.autoScrolldown', true)
+        db.delete('fileops.capture.switch')
+        db.delete('fileops.capture.filePath')
       },
     },
   })
