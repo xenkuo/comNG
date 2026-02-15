@@ -180,7 +180,7 @@ document.getElementById('port-switch').onclick = (e) => {
 
       _modemSignalReset()
       // emit a event to editor.js to reset editor state
-      const event = new CustomEvent('portClosed', { detail: { tabEl: el } });
+      const event = new CustomEvent('portClosed');
       document.dispatchEvent(event);
 
     })

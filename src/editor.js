@@ -89,7 +89,7 @@ function _applyEdit(textString, appendLine, revealLine) {
 }
 
 const { initWatcher } = require('./modules/watcher.js')
-const watcherModule = initWatcher(chromeTabsModule, store)
+const watcherModule = initWatcher(store)
 /** @type {import('chokidar').FSWatcher} */
 const watcher = watcherModule.watcher
 
@@ -320,29 +320,29 @@ function _breakpointProcess(line) {
   return false
 }
 
-function _filterAnsiCode(inBuffer) {
-  let inArray = [...inBuffer]
-  let outArray = []
-  let arrayLen = inArray.length
+// function _filterAnsiCode(inBuffer) {
+//   let inArray = [...inBuffer]
+//   let outArray = []
+//   let arrayLen = inArray.length
 
-  for (let i = 0; i < arrayLen; i++) {
-    if (ansiWait === false) {
-      if (0x1b !== inArray[i]) {
-        // \u001b
-        outArray.push(inArray[i])
-      } else {
-        ansiWait = true
-      }
-    } else if (0x6d === inArray[i]) {
-      // m
-      ansiWait = false
-    }
-  }
+//   for (let i = 0; i < arrayLen; i++) {
+//     if (ansiWait === false) {
+//       if (0x1b !== inArray[i]) {
+//         // \u001b
+//         outArray.push(inArray[i])
+//       } else {
+//         ansiWait = true
+//       }
+//     } else if (0x6d === inArray[i]) {
+//       // m
+//       ansiWait = false
+//     }
+//   }
 
-  return Buffer.from(outArray)
-}
+//   return Buffer.from(outArray)
+// }
 
-function stringModeProcess(inBuffer) {
+function _stringModeProcess(inBuffer) {
   // 1. trim ansi escape codes
   // let buffer = _filterAnsiCode(inBuffer);
   let buffer = inBuffer
@@ -410,11 +410,138 @@ function processSerialData(data) {
     _hexModeProcess(data, true)
   } else {
     chartFrameProcess(data)
-    stringModeProcess(data)
+    _stringModeProcess(data)
   }
 }
 
 serialInit(processSerialData)
+
+
+
+const { clipboard } = require('electron')
+
+document.getElementById('data-cleanup-btn').onclick = () => {
+  let value = ''
+
+  if (store.get('advance.sign.switch') === true) {
+    value = '------This file captured at ' + new Date().toLocaleString() + ' with comNG'
+    if (store.get('advance.sign.name') !== '')
+      value += ' by ' + store.get('advance.sign.name') + '.------'
+    else value += '.------'
+    value += '\n'
+  }
+
+  // store current content to clipboard
+  clipboard.writeText(editorInst.getModel().getValue())
+
+  // Clear editor content
+  editorInst.getModel().setValue(value)
+
+  // generate serial data clear event
+  const event = new CustomEvent('serialDataCleanup')
+  let el = document.getElementById('chart-figure')
+  el.dispatchEvent(event)
+}
+
+document.getElementById('editor-font-family').onblur = (e) => {
+  let font = e.target.value.trim()
+
+  if (font === '') font = defaultFont
+  editorInst.updateOptions({ fontFamily: font })
+  store.set('general.fontFamily', font)
+}
+
+document.getElementById('editor-font-size').onblur = (e) => {
+  let size = e.target.value.trim()
+  if (size === '') size = 12
+
+  editorInst.updateOptions({ fontSize: size })
+  store.set('general.fontSize', size)
+}
+
+document.getElementById('breakpoint-switch').onclick = (e) => {
+  if (e.target.checked === true) {
+    if (store.get('advance.breakpoint.onText.length') === 0) {
+      toast('Error: Breakpoint on-text can not be empty')
+      e.target.checked = false
+      return
+    }
+  }
+
+  store.set('advance.breakpoint.switch', e.target.checked)
+  breakpointHit = false
+  breakpointAfterLines = 0
+}
+
+document.getElementById('capture-file-switch').onclick = (e) => {
+  if (e.target.checked === true) {
+    let fileName = generateFileName()
+
+    dialog
+      .showSaveDialog({
+        properties: ['createDirectory'],
+        defaultPath: fileName,
+        filters: [{ extensions: ['log'] }],
+      })
+      .then((result) => {
+        let pathEle = document.getElementById('capture-file-path')
+        if (result.canceled === false) {
+          let filePath = result.filePath
+          pathEle.value = filePath
+          captureFileStream = fs.createWriteStream(filePath, { flags: 'w' })
+
+          store.set('fileops.capture.switch', true)
+          store.set('fileops.capture.filePath', filePath)
+        } else {
+          if (undefined !== captureFileStream) captureFileStream.end()
+          captureFileStream = undefined
+          pathEle.value = ''
+
+          store.set('fileops.capture.switch', false)
+          store.set('fileops.capture.filePath', '')
+
+          // restore check status
+          e.target.checked = false
+        }
+      })
+  } else {
+    if (undefined !== captureFileStream) captureFileStream.end()
+    captureFileStream = undefined
+
+    store.set('fileops.capture.switch', false)
+  }
+}
+
+document.getElementById('capture-file-path').ondblclick = (e) => {
+  const file = e.target.value
+  const text = fs.readFileSync(file).toString()
+  editorInst.getModel().setValue(text)
+}
+
+document.getElementById('editor-area').ondragover = () => {
+  return false
+}
+
+document.getElementById('editor-area').ondragleave = () => {
+  return false
+}
+
+document.getElementById('editor-area').ondragend = () => {
+  return false
+}
+
+document.getElementById('editor-area').ondrop = (e) => {
+  console.log('ondrop')
+  e.preventDefault()
+
+  let f = e.dataTransfer.files[0]
+
+  f.text().then((text) => {
+    editorInst.getModel().setValue(text)
+  })
+
+  return false
+}
 
 /**
  * Async editor setup function
@@ -586,7 +713,6 @@ async function setupEditor() {
     });
 
     document.addEventListener('portClosed', (event) => {
-      console.log('Port closed:', event.detail.tabEl);
       _editorStateReset()
     });
 
@@ -668,129 +794,3 @@ setupEditor().then(editor => {
 }).catch(error => {
   console.error('Failed to initialize editor:', error);
 });
-
-const { clipboard } = require('electron')
-
-document.getElementById('data-cleanup-btn').onclick = () => {
-  let value = ''
-
-  if (store.get('advance.sign.switch') === true) {
-    value = '------This file captured at ' + new Date().toLocaleString() + ' with comNG'
-    if (store.get('advance.sign.name') !== '')
-      value += ' by ' + store.get('advance.sign.name') + '.------'
-    else value += '.------'
-    value += '\n'
-  }
-
-  // store current content to clipboard
-  clipboard.writeText(editorInst.getModel().getValue())
-
-  // Clear editor content
-  editorInst.getModel().setValue(value)
-
-  // generate serial data clear event
-  const event = new CustomEvent('serialDataCleanup')
-  let el = document.getElementById('chart-figure')
-  el.dispatchEvent(event)
-}
-
-document.getElementById('editor-font-family').onblur = (e) => {
-  let font = e.target.value.trim()
-
-  if (font === '') font = defaultFont
-  editorInst.updateOptions({ fontFamily: font })
-  store.set('general.fontFamily', font)
-}
-
-document.getElementById('editor-font-size').onblur = (e) => {
-  let size = e.target.value.trim()
-  if (size === '') size = 12
-
-  editorInst.updateOptions({ fontSize: size })
-  store.set('general.fontSize', size)
-}
-
-document.getElementById('breakpoint-switch').onclick = (e) => {
-  if (e.target.checked === true) {
-    if (store.get('advance.breakpoint.onText.length') === 0) {
-      toast('Error: Breakpoint on-text can not be empty')
-      e.target.checked = false
-      return
-    }
-  }
-
-  store.set('advance.breakpoint.switch', e.target.checked)
-  breakpointHit = false
-  breakpointAfterLines = 0
-}
-
-document.getElementById('capture-file-switch').onclick = (e) => {
-  if (e.target.checked === true) {
-    let fileName = generateFileName()
-
-    dialog
-      .showSaveDialog({
-        properties: ['createDirectory'],
-        defaultPath: fileName,
-        filters: [{ extensions: ['log'] }],
-      })
-      .then((result) => {
-        let pathEle = document.getElementById('capture-file-path')
-        if (result.canceled === false) {
-          let filePath = result.filePath
-          pathEle.value = filePath
-          captureFileStream = fs.createWriteStream(filePath, { flags: 'w' })
-
-          store.set('fileops.capture.switch', true)
-          store.set('fileops.capture.filePath', filePath)
-        } else {
-          if (undefined !== captureFileStream) captureFileStream.end()
-          captureFileStream = undefined
-          pathEle.value = ''
-
-          store.set('fileops.capture.switch', false)
-          store.set('fileops.capture.filePath', '')
-
-          // restore check status
-          e.target.checked = false
-        }
-      })
-  } else {
-    if (undefined !== captureFileStream) captureFileStream.end()
-    captureFileStream = undefined
-
-    store.set('fileops.capture.switch', false)
-  }
-}
-
-document.getElementById('capture-file-path').ondblclick = (e) => {
-  const file = e.target.value
-  const text = fs.readFileSync(file).toString()
-  editorInst.getModel().setValue(text)
-}
-
-document.getElementById('editor-area').ondragover = () => {
-  return false
-}
-
-document.getElementById('editor-area').ondragleave = () => {
-  return false
-}
-
-document.getElementById('editor-area').ondragend = () => {
-  return false
-}
-
-document.getElementById('editor-area').ondrop = (e) => {
-  console.log('ondrop')
-  e.preventDefault()
-
-  let f = e.dataTransfer.files[0]
-
-  f.text().then((text) => {
-    editorInst.getModel().setValue(text)
-  })
-
-  return false
-}
-

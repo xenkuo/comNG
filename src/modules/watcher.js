@@ -3,17 +3,16 @@
 
 // Type definitions for better IDE support
 /** @typedef {import('chokidar').FSWatcher} FSWatcher */
-
+const chromeTabsModule = require('./chrome-tabs.js')
 const chokidar = require('chokidar')
 const fs = require('fs')
 
 /**
  * Initialize file watcher with event handlers
- * @param {object} chromeTabsModule - Chrome tabs module with tabsMap
  * @param {object} store - Application store instance
  * @returns {{watcher: FSWatcher, setLocalSave: function(boolean): void, getLocalSave: function(): boolean}} Watcher instance with utilities
  */
-function initWatcher(chromeTabsModule, store) {
+function initWatcher(store) {
   // Initialize watcher
   const watcher = chokidar.watch('./a.bc', {
     ignored: /(^|[/\\])\../, // ignore dotfiles
