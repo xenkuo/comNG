@@ -690,8 +690,8 @@ async function setupEditor() {
       }
 
       // delete from tabsMap
-      chromeTabsModule.tabsMap.delete(detail.tabEl)
-      if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.addTab()
+      chromeTabsModule.tabsMap.delete(el)
+      if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.newTab()
     });
 
     document.addEventListener('activeTabChanged', (event) => {
