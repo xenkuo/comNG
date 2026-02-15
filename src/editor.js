@@ -25,7 +25,6 @@ const fs = require('fs')
 
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
-const chokidar = require('chokidar')
 
 const { initIPCHandlers } = require('./modules/ipc-handler.js')
 
@@ -47,7 +46,6 @@ let breakpointBuff = []
 let half_line = false
 let ansiWait = false
 let captureFileStream
-let localSave = false
 
 /**
  * Apply edits to the Monaco editor
@@ -82,43 +80,11 @@ function applyEdit(textString, appendLine, revealLine) {
 
 // tabsMap functionality moved to chrome-tabs module
 
-// -----------------------chokidar watch section
-const watcher = chokidar.watch('./a.bc', {
-  ignored: /(^|[/\\])\../, // ignore dotfiles
-  persistent: true,
-})
-// Make watcher globally accessible
-window.watcher = watcher
-
-watcher.on('change', (filePath) => {
-  // console.log(filePath + " content changed");
-  if (true === localSave) {
-    localSave = false
-    return
-  }
-  chromeTabsModule.tabsMap.forEach((view, el) => {
-    if (filePath === view.path) {
-      // Here we add a 100ms delay as external editor (or the watcher itself)
-      // seems like first trigger the change event then will keep lock the file
-      // for small amount time.
-      // This will sometimes cause readFileSync or readFile return empty content and no
-      // error watched.
-      setTimeout(() => {
-        view.model.setValue(fs.readFileSync(filePath, 'utf8'))
-      }, 100)
-    }
-  })
-})
-
-watcher.on('unlink', (filePath) => {
-  console.log(filePath + 'removed')
-  chromeTabsModule.tabsMap.forEach((view, el) => {
-    if (filePath === view.path) {
-      view.path = null
-      el.children[2].children[1].style.color = '#f54336'
-    }
-  })
-})
+// -----------------------file watcher section
+const { initWatcher } = require('./modules/watcher.js')
+const watcherModule = initWatcher(chromeTabsModule, store)
+/** @type {import('chokidar').FSWatcher} */
+const watcher = watcherModule.watcher
 
 document.addEventListener('tabRemoved', (event) => {
   const el = event.detail.tabEl;
@@ -196,10 +162,8 @@ function openFileInNewTab() {
  * Process binary buffer data into hex format and display in editor
  * @param {Buffer} buffer - Binary data to process
  * @param {boolean} revealLine - Whether to reveal the line after processing
- * @param {object} monacoInst - Monaco editor instance
- * @param {object} editorInst - Editor instance
  */
-function hexModeProcess(buffer, revealLine, monacoInst, editorInst) {
+function hexModeProcess(buffer, revealLine) {
   const text = hexy.hexy(buffer, { format: 'twos' })
   applyEdit(text, false, revealLine)
 }
@@ -221,7 +185,7 @@ function openBinFile(editorInst, chromeTabs, tabsMap, watcher, monacoInst) {
         editorInst.getModel().setValue('')
         fs.readFile(filePath, (e, data) => {
           if (e) throw err
-          hexModeProcess(data, false, monacoInst, editorInst)
+          hexModeProcess(data, false)
         })
 
         // setup tab
@@ -253,7 +217,7 @@ function saveFile() {
     el.children[2].children[1].style.color = '#000000'
 
     // update localSave state
-    localSave = true
+    watcherModule.setLocalSave(true)
   } else {
     // no path info
     const fileName = chromeTabsModule.chromeTabs.activeTabEl.innerText
@@ -449,7 +413,7 @@ function stringModeProcess(inBuffer) {
  */
 function processSerialData(data) {
   if (store.get('general.hexmode') === true) {
-    hexModeProcess(data, true, monacoInst, editorInst)
+    hexModeProcess(data, true)
   } else {
     chartFrameProcess(data)
     stringModeProcess(data)
