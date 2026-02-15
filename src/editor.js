@@ -58,7 +58,7 @@ document.addEventListener('captureFileChanged', (event) => {
     // Store file path for synchronous writes
     captureFilePath = filePath;
     // Create new capture file stream (keep for backward compatibility)
-    captureFileStream = fs.createWriteStream(filePath, { flags: 'w' });
+    captureFileStream = fs.createWriteStream(filePath, { flags: 'r+' });
     console.log('Capture file activated:', filePath);
   } else {
     // Close existing stream if it exists

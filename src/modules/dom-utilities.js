@@ -60,6 +60,9 @@ function initCaptureFileHandler() {
           }
         })
     } else {
+      let pathEl = document.getElementById('capture-file-path')
+      pathEl.placeholder = pathEl.value
+      pathEl.value = ''
       // Dispatch event to notify editor.js that capture is disabled
       const event = new CustomEvent('captureFileChanged', {
         detail: { filePath: null, isActive: false }
