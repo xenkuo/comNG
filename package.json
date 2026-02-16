@@ -11,8 +11,8 @@
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
     "premake": "rm -f src/index.js.map",
-    "build:dev": "taskkill /f /im electron.exe 2>nul && node scripts/build-dev.js",
-    "build:watch": "taskkill /f /im electron.exe 2>nul && node scripts/build-dev.js --watch",
+    "build:dev": "node scripts/build-dev.js",
+    "build:watch": "node scripts/build-dev.js --watch",
     "dev": "yarn run build:dev && electron-forge start",
     "dev:watch": "concurrently \"yarn run build:watch\" \"electron-forge start\"",
     "make": "electron-forge make",
@@ -29,12 +29,29 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": true,
+        "asar": false,
+        "prune": true,
+        "derefSymlinks": false,
+        "compression": "normal",
         "ignore": [
-          "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts)",
-          "node_modules/materialize-css/(extras|js|sass)",
+          "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts|website|samples)",
+          "node_modules/materialize-css/(extras|js|sass|templates)",
           "node_modules/material-design-icons/(?!iconfont)",
-          "src/(base|editor).js"
+          "node_modules/date-fns/(_lib|add|addBusinessDays|addDays|addHours|addISOWeekYears|addMilliseconds|addMinutes|addMonths|addQuarters|addSeconds|addWeeks|addYears|areIntervalsOverlapping|clamp|closestIndexTo|closestTo|compareAsc|compareDesc|daysToWeeks|differenceInBusinessDays|differenceInCalendarDays|differenceInCalendarISOWeeks|differenceInCalendarISOWeekYears|differenceInCalendarMonths|differenceInCalendarQuarters|differenceInCalendarWeeks|differenceInCalendarYears|differenceInDays|differenceInHours|differenceInISOWeekYears|differenceInMilliseconds|differenceInMinutes|differenceInMonths|differenceInQuarters|differenceInSeconds|differenceInWeeks|differenceInYears|eachDayOfInterval|eachHourOfInterval|eachMinuteOfInterval|eachMonthOfInterval|eachQuarterOfInterval|eachWeekOfInterval|eachWeekendOfInterval|eachWeekendOfMonth|eachWeekendOfYear|eachYearOfInterval|endOfDay|endOfDecade|endOfHour|endOfISOWeek|endOfISOWeekYear|endOfMinute|endOfMonth|endOfQuarter|endOfSecond|endOfToday|endOfTomorrow|endOfWeek|endOfYear|endOfYesterday|format|formatDistance|formatDistanceStrict|formatDistanceToNow|formatDistanceToNowStrict|formatDuration|formatISO|formatISO9075|formatISODuration|formatRFC3339|formatRFC7231|formatRelative|fromUnixTime|getDate|getDay|getDayOfYear|getDaysInMonth|getDaysInYear|getDecade|getDefaultOptions|getHours|getISODay|getISOWeek|getISOWeekYear|getISOWeeksInYear|getMilliseconds|getMinutes|getMonth|getOverlappingDaysInIntervals|getQuarter|getSeconds|getTime|getUnixTime|getWeek|getWeekOfMonth|getWeekYear|getWeeksInMonth|getYear|hoursToMilliseconds|hoursToMinutes|hoursToSeconds|intervalToDuration|intlFormat|intlFormatDistance|isAfter|isBefore|isDate|isEqual|isExists|isFirstDayOfMonth|isFriday|isFuture|isLastDayOfMonth|isLeapYear|isMatch|isMonday|isPast|isSameDay|isSameHour|isSameISOWeek|isSameISOWeekYear|isSameMinute|isSameMonth|isSameQuarter|isSameSecond|isSameWeek|isSameWeekYear|isSameYear|isSaturday|isSunday|isThisHour|isThisISOWeek|isThisMinute|isThisMonth|isThisQuarter|isThisSecond|isThisWeek|isThisYear|isThursday|isToday|isTomorrow|isTuesday|isUnixTime|isWednesday|isWeekend|isWithinInterval|isYesterday|lastDayOfDecade|lastDayOfISOWeek|lastDayOfISOWeekYear|lastDayOfMonth|lastDayOfQuarter|lastDayOfWeek|lastDayOfYear|lightFormat|max|milliseconds|millisecondsToHours|millisecondsToMinutes|millisecondsToSeconds|min|minutesToHours|minutesToMilliseconds|minutesToSeconds|monthsToQuarters|monthsToYears|nextDay|nextFriday|nextMonday|nextSaturday|nextSunday|nextThursday|nextTuesday|nextWednesday|parse|parseISO|parseJSON|previousDay|previousFriday|previousMonday|previousSaturday|previousSunday|previousThursday|previousTuesday|previousWednesday|quartersToMonths|quartersToYears|roundToNearestMinutes|secondsToHours|secondsToMilliseconds|secondsToMinutes|set|setDate|setDay|setDayOfYear|setDefaultOptions|setHours|setISODay|setISOWeek|setISOWeekYear|setMilliseconds|setMinutes|setMonth|setQuarter|setSeconds|setWeek|setWeekYear|setYear|startOfDay|startOfDecade|startOfHour|startOfISOWeek|startOfISOWeekYear|startOfMinute|startOfMonth|startOfQuarter|startOfSecond|startOfToday|startOfTomorrow|startOfWeek|startOfWeekYear|startOfYear|startOfYesterday|sub|subBusinessDays|subDays|subHours|subISOWeekYears|subMilliseconds|subMinutes|subMonths|subQuarters|subSeconds|subWeeks|subYears|toDate|weeksToDays|yearsToMonths|yearsToQuarters)",
+          "node_modules/prettier/(bin|internal|plugins)",
+          "node_modules/eslint/(bin|conf|lib|messages)",
+          "node_modules/.cache",
+          "node_modules/.bin",
+          "src/(base|editor).js",
+          "\\.map$",
+          "\\.(md|markdown)$",
+          "docs",
+          "test",
+          "tests",
+          "__tests__",
+          "\\.test\\.js$",
+          "\\.spec\\.js$",
+          "\\.log"
         ],
         "icon": "image/logo"
       },
