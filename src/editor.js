@@ -43,7 +43,7 @@ let editorInst
 let breakpointHit = false
 let breakpointAfterLines = 0
 let breakpointBuff = []
-let half_line = false
+let partial_line = false
 let ansiWait = false
 /** @type {import('fs').WriteStream | undefined} */
 let captureFileStream
@@ -75,7 +75,7 @@ function _editorStateReset() {
   breakpointHit = false
   breakpointAfterLines = 0
   breakpointBuff = []
-  half_line = false
+  partial_line = false
   ansiWait = false
 
   hlt.reset()
@@ -372,7 +372,7 @@ function _breakpointProcess(line) {
 //   return Buffer.from(outArray)
 // }
 
-function _stringModeProcess(inBuffer) {
+function _textProcess(inBuffer) {
   // 1. trim ansi escape codes
   // let buffer = _filterAnsiCode(inBuffer);
   let buffer = inBuffer
@@ -383,20 +383,32 @@ function _stringModeProcess(inBuffer) {
   while ((index = buffer.indexOf('\n')) !== -1) {
     let line = buffer.slice(0, index + 1)
 
-    if (half_line === true) {
+    if (partial_line === true) {
       outputTmp = line
-      half_line = false
+      partial_line = false
     } else {
       let timestamp = ''
 
       if (store.get('general.timestamp') === true) timestamp = getTimestamp()
-      outputTmp = timestamp + line
+      if (store.get('general.hexmode') === true) {
+        _applyEdit(timestamp + '\n', false, false)
+        outputTmp = line
+      } else {
+        outputTmp = timestamp + line
+      }
     }
-    _applyEdit(
-      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), // Replace non-printable characters with '.'
-      true,
-      true
-    )
+
+    if (store.get('general.hexmode') === true) {
+      outputTmp = hexy.hexy(outputTmp, { format: 'twos' })
+      _applyEdit(outputTmp, true, false)
+    } else {
+      _applyEdit(
+        outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), // Replace non-printable characters with '.'
+        true,
+        true
+      )
+    }
+
 
     buffer = buffer.slice(index + 1, buffer.length)
 
@@ -410,20 +422,31 @@ function _stringModeProcess(inBuffer) {
 
   // 3. output partial line
   if (buffer.length !== 0) {
-    if (half_line === true) {
+    if (partial_line === true) {
       outputTmp = buffer
     } else {
       let timestamp = ''
 
       if (store.get('general.timestamp') === true) timestamp = getTimestamp()
-      outputTmp = timestamp + buffer
-      half_line = true
+      if (store.get('general.hexmode') === true) {
+        _applyEdit(timestamp + '\n', false, false)
+        outputTmp = buffer
+      } else {
+        outputTmp = timestamp + buffer
+      }
+      partial_line = true
     }
-    _applyEdit(
-      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
-      true,
-      true
-    )
+    if (store.get('general.hexmode') === true) {
+      outputTmp = hexy.hexy(outputTmp, { format: 'twos' })
+      _applyEdit(outputTmp, true, false)
+    } else {
+      _applyEdit(
+        outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
+        true,
+        true
+      )
+    }
+
   }
   if (store.get('advance.breakpoint.switch') === true) {
     breakpointBuff = buffer
@@ -436,12 +459,9 @@ function _stringModeProcess(inBuffer) {
  * @param {Buffer} data - Serial data buffer
  */
 function processSerialData(data) {
-  if (store.get('general.hexmode') === true) {
-    _hexModeProcess(data, true)
-  } else {
-    chartFrameProcess(data)
-    _stringModeProcess(data)
-  }
+
+  chartFrameProcess(data)
+  _textProcess(data)
 }
 
 serialInit(processSerialData)
