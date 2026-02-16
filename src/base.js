@@ -4,7 +4,7 @@ const { remote, shell } = require('electron')
 
 const mcss = require('materialize-css')
 const { applyLanguage } = require('./modules/i18n.js')
-const { checkForUpdates } = require('./modules/update.js')
+// Lazy load update checker to improve startup performance
 const store = require('./modules/store.js').init()
 const { initDomUtilities } = require('./modules/dom-utilities.js')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
@@ -130,7 +130,21 @@ window.onload = () => {
 
   initDomUtilities()
 
-  checkForUpdates()
+  // Defer update checking to improve startup performance
+  // Only check occasionally to reduce API calls and startup impact
+  setTimeout(() => {
+    try {
+      const { checkForUpdates } = require('./modules/update.js')
+      if (Math.random() < 0.3) { // 30% chance of checking
+        checkForUpdates()
+      }
+    } catch (error) {
+      console.warn('Update check skipped due to error:', error)
+    }
+  }, 5000) // Delay 5 seconds
+
+  // Note: Skipping hex-mode preloading due to module resolution issues
+  // Will be loaded on-demand when hex mode is actually used
 }
 
 

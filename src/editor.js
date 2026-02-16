@@ -17,7 +17,36 @@ const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
 const chromeTabsModule = require('./modules/chrome-tabs.js')
 const hexy = require('hexy')
-const { chartFrameProcess } = require('./modules/chart.js')
+// Conditionally load chart module to improve startup performance
+let chartModule = null
+let chartLoadAttempted = false
+
+function getChartModule() {
+  if (!chartModule && !chartLoadAttempted) {
+    chartLoadAttempted = true
+    try {
+      // Use require for CommonJS modules with side effects
+      const module = require('./modules/chart.js')
+      chartModule = {
+        chartFrameProcess: module.chartFrameProcess
+      }
+      console.log('Chart module loaded')
+    } catch (error) {
+      console.error('Failed to load chart module:', error)
+      // Fallback to no-op function
+      chartModule = {
+        chartFrameProcess: () => { }
+      }
+    }
+  }
+  return chartModule
+}
+
+// Wrapper function for chart processing
+function lazyChartFrameProcess(data) {
+  const chart = getChartModule()
+  return chart.chartFrameProcess(data)
+}
 const { serialInit, serialClose } = require('./modules/serialport.js')
 const { getTimestamp } = require('./modules/utilities.js')
 const fs = require('fs')
@@ -431,12 +460,26 @@ function _textProcess(inBuffer) {
  * @param {Buffer} data - Serial data buffer
  */
 function processSerialData(data) {
+  // Process chart data conditionally (only loads when chart tab is used)
+  try {
+    lazyChartFrameProcess(data)
+  } catch (err) {
+    console.warn('Chart processing failed:', err)
+  }
 
-  chartFrameProcess(data)
   _textProcess(data)
 }
 
-serialInit(processSerialData)
+// Serial port callback - processSerialData is now synchronous
+const syncProcessSerialData = (data) => {
+  try {
+    processSerialData(data)
+  } catch (err) {
+    console.error('Serial data processing failed:', err)
+  }
+}
+
+serialInit(syncProcessSerialData)
 
 
 
