@@ -29,7 +29,7 @@
   "config": {
     "forge": {
       "packagerConfig": {
-        "asar": false,
+        "asar": true,
         "prune": true,
         "derefSymlinks": false,
         "compression": "maximum",

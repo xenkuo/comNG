@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const path = require('path')
-// Access global store object
 const store = require('./store.js').init()
 
 // Hex mode layout constants

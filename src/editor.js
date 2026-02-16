@@ -13,15 +13,15 @@
 const path = require('path')
 // Use ESM-compatible Monaco loader for better IDE support
 const { initMonacoESMCompat } = require('./modules/monaco-esm.js')
-const monacoUtilities = require('./modules/monaco-utilities.js')
 const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
 const chromeTabsModule = require('./modules/chrome-tabs.js')
 const hexy = require('hexy')
 const { chartFrameProcess } = require('./modules/chart.js')
 const { serialInit, serialClose } = require('./modules/serialport.js')
-const { generateFileName, getTimestamp } = require('./modules/utilities.js')
+const { getTimestamp } = require('./modules/utilities.js')
 const fs = require('fs')
+const { toast } = require('./modules/utilities.js')
 
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
