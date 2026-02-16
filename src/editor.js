@@ -633,24 +633,7 @@ async function setupEditor() {
     document.addEventListener('tabAdded', (event) => {
       const el = event.detail.tabEl;
       console.log('Tab added:', el);
-      // create a new model
-      let model = monacoInst.editor.createModel();
-      editorInst.setModel(model);
-      monacoInst.editor.setModelLanguage(model, 'comNGLang');
-
-      // setup content change listener for model
-      model.onDidChangeContent((e) => {
-        if (e.isFlush === true) return;
-        el.children[2].children[1].style.color = '#ff8a80';
-        el.children[2].children[1].style.fontWeight = 'bold';
-      });
-      // setup the map between tab and model/state
-      let view = {
-        model: model,
-        path: null,
-        state: null,
-      };
-      chromeTabsModule.tabsMap.set(el, view);
+      createAndLinkTabModel(el, chromeTabsModule);
     });
 
     document.addEventListener('tabRemoved', (event) => {
@@ -703,6 +686,29 @@ async function setupEditor() {
   }
 }
 
+// Helper function to create model and link tab to editor
+function createAndLinkTabModel(tabEl, chromeTabsModule) {
+  // Create model and link it
+  let model = monacoInst.editor.createModel();
+  editorInst.setModel(model);
+  monacoInst.editor.setModelLanguage(model, 'comNGLang');
+
+  // Setup content change listener
+  model.onDidChangeContent((e) => {
+    if (e.isFlush === true) return;
+    tabEl.children[2].children[1].style.color = '#ff8a80';
+    tabEl.children[2].children[1].style.fontWeight = 'bold';
+  });
+
+  // Setup the map between tab and model/state
+  let view = {
+    model: model,
+    path: null,
+    state: null,
+  };
+  chromeTabsModule.tabsMap.set(tabEl, view);
+}
+
 // Function to link existing tabs to editor model
 function linkExistingTabs() {
   console.log('Checking for existing tabs to link...');
@@ -728,27 +734,7 @@ function linkExistingTabs() {
     }
 
     console.log('Linking existing tab:', tabEl);
-
-    // Create model and link it (same as tabAdded handler)
-    let model = monacoInst.editor.createModel();
-    editorInst.setModel(model);
-    monacoInst.editor.setModelLanguage(model, 'comNGLang');
-
-    // Setup content change listener
-    model.onDidChangeContent((e) => {
-      if (e.isFlush === true) return;
-      tabEl.children[2].children[1].style.color = '#ff8a80';
-      tabEl.children[2].children[1].style.fontWeight = 'bold';
-    });
-
-    // Setup the map between tab and model/state
-    let view = {
-      model: model,
-      path: null,
-      state: null,
-    };
-    chromeTabsModule.tabsMap.set(tabEl, view);
-
+    createAndLinkTabModel(tabEl, chromeTabsModule);
     console.log('Successfully linked tab', index + 1);
   });
 }
@@ -765,5 +751,3 @@ setupEditor().then(editor => {
   console.error('Failed to initialize editor:', error);
 });
 
-// Make function globally available for external use if needed
-window.linkExistingTabs = linkExistingTabs;
