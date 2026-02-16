@@ -213,7 +213,6 @@ function initHexModeHandlers(editorInst, monacoInst, hlt) {
 
     let model = editorInst.getModel()
     let range = editorInst.getSelection()
-    console.log('In: ' + range)
 
     if (range.isEmpty() === true) {
       _showCursors(model, range, monacoInst)

@@ -146,10 +146,7 @@ window.onload = () => {
     } catch (error) {
       console.warn('Update check skipped due to error:', error)
     }
-  }, 5000) // Delay 5 seconds
-
-  require('./modules/dom-utilities.js')
-  console.log('Core modules loaded')
+  }, 2000) // Delay 2 seconds
 }
 
 

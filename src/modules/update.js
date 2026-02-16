@@ -1,10 +1,11 @@
 /* eslint-disable no-undef */
+const appVersion = remote.app.getVersion()
+
 function checkForUpdates() {
   const { remote, shell } = require('electron')
   const store = require('./store.js').init()
   const dialog = remote.dialog
 
-  const appVersion = remote.app.getVersion()
   const appUpdaterUrl = 'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 
   function platformUpdateCheck(assets) {
@@ -57,9 +58,11 @@ function checkForUpdates() {
 
   performUpdate()
 
-  document.getElementById('app-version').innerHTML = appVersion
-  console.log('comNG Version: ', appVersion)
+
 }
+
+document.getElementById('app-version').innerHTML = appVersion
+console.log('comNG Version: ', appVersion)
 
 module.exports = {
   checkForUpdates,
