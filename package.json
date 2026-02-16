@@ -32,7 +32,8 @@
         "asar": false,
         "prune": true,
         "derefSymlinks": false,
-        "compression": "normal",
+        "compression": "maximum",
+        "executableName": "comNG",
         "ignore": [
           "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts|website|samples)",
           "node_modules/materialize-css/(extras|js|sass|templates)",
@@ -46,30 +47,53 @@
           "\\.map$",
           "\\.(md|markdown)$",
           "docs",
-          "test",
-          "tests",
+          "test(s)?",
           "__tests__",
           "\\.test\\.js$",
           "\\.spec\\.js$",
-          "\\.log"
+          "\\.(log|tmp|temp)$",
+          "\\.(bak|backup)$",
+          "Thumbs.db",
+          "\\.DS_Store",
+          "coverage",
+          "\\.vscode",
+          "\\.idea"
         ],
+        "extraResource": [],
+        "win32metadata": {
+          "CompanyName": "comNG",
+          "FileDescription": "comNG Serial Tool",
+          "ProductName": "comNG",
+          "InternalName": "comNG.exe",
+          "OriginalFilename": "comNG.exe",
+          "LegalCopyright": "Copyright © 2024 Xen"
+        },
         "icon": "image/logo"
       },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
           "config": {
+            "name": "comNG",
             "authors": "Xen",
+            "exe": "comNG.exe",
             "setupIcon": "image/logo.ico",
-            "iconUrl": "https://raw.githubusercontent.com/xenkuo/image-host/master/logo.ico"
+            "iconUrl": "https://raw.githubusercontent.com/xenkuo/image-host/master/logo.ico",
+            "loadingGif": "image/install-loading.gif",
+            "certificateFile": "",
+            "certificatePassword": "",
+            "signWithParams": ""
           }
         },
         {
           "name": "@electron-forge/maker-dmg",
           "config": {
+            "name": "comNG",
             "icon": "./image/logo.icns",
             "background": "./image/dmg-background.png",
-            "format": "ULFO"
+            "format": "ULFO",
+            "overwrite": true,
+            "debug": false
           }
         },
         {

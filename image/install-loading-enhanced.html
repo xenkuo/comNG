@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>comNG Installer Loading Animation</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #2c3e50;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      .installer-container {
+        text-align: center;
+        color: #ecf0f1;
+      }
+
+      .logo {
+        font-size: 46px;
+        font-weight: bold;
+        color: #3498db;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .status {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .spinner {
+        position: relative;
+        width: 60px;
+        height: 60px;
+        margin: 0 auto;
+      }
+
+      .spinner-dot {
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        background-color: #3498db;
+        border-radius: 50%;
+        animation: spin 1.2s infinite ease-in-out;
+      }
+
+      .spinner-dot:nth-child(1) {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        animation-delay: 0s;
+      }
+      .spinner-dot:nth-child(2) {
+        top: 15px;
+        right: 15px;
+        animation-delay: 0.15s;
+      }
+      .spinner-dot:nth-child(3) {
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        animation-delay: 0.3s;
+      }
+      .spinner-dot:nth-child(4) {
+        bottom: 15px;
+        right: 15px;
+        animation-delay: 0.45s;
+      }
+      .spinner-dot:nth-child(5) {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        animation-delay: 0.6s;
+      }
+      .spinner-dot:nth-child(6) {
+        bottom: 15px;
+        left: 15px;
+        animation-delay: 0.75s;
+      }
+      .spinner-dot:nth-child(7) {
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        animation-delay: 0.9s;
+      }
+      .spinner-dot:nth-child(8) {
+        top: 15px;
+        left: 15px;
+        animation-delay: 1.05s;
+      }
+
+      @keyframes spin {
+        0%,
+        100% {
+          opacity: 0.2;
+          transform: scale(0.8);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.1);
+        }
+      }
+
+      /* Alternative pulse animation */
+      .pulse-loader {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: #3498db;
+        margin: 20px auto;
+        animation: pulse 1.5s infinite ease-in-out;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(0.8);
+          opacity: 0.7;
+        }
+        50% {
+          transform: scale(1.2);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(0.8);
+          opacity: 0.7;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="installer-container">
+      <div class="logo">comNG</div>
+      <div class="status">Installing...</div>
+      <div class="spinner">
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+        <div class="spinner-dot"></div>
+      </div>
+      <!-- Alternative: Uncomment for pulse animation -->
+      <!-- <div class="pulse-loader"></div> -->
+    </div>
+
+    <script>
+      // Auto-record functionality for creating GIF
+      console.log('comNG Installer Loading Screen Ready')
+      console.log('Dimensions: 400x300 pixels')
+      console.log('Background: #2c3e50 (Dark Blue)')
+      console.log('Accent Color: #3498db (ComNG Blue)')
+      console.log('Animation: 8-dot circular spinner, 1.2s cycle')
+
+      // Simulate installation progress
+      let progress = 0
+      const statusElement = document.querySelector('.status')
+      const statuses = [
+        'Preparing installation...',
+        'Setting up components...',
+        'Configuring system...',
+        'Finalizing setup...',
+      ]
+
+      const progressInterval = setInterval(() => {
+        progress++
+        if (progress < statuses.length) {
+          statusElement.textContent = statuses[progress]
+        } else {
+          statusElement.textContent = 'Installation Complete!'
+          clearInterval(progressInterval)
+        }
+      }, 2000)
+    </script>
+  </body>
+</html>
