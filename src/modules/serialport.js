@@ -83,7 +83,17 @@ function _serialWrite(data) {
   return true
 }
 
+/**
+ * SerialPort open options - Links to actual SerialPort library definitions
+ * @typedef {import('@serialport/stream').openOptions} SerialPortOpenOptions
+ */
+
+/**
+ * Get serial port opening options from UI controls
+ * @returns {SerialPortOpenOptions} Configuration object for opening serial port - links to SerialPort library definitions
+ */
 function _serialGetOptions() {
+  /** @type {SerialPortOpenOptions} */
   let openOptions = {}
 
   let baudRate = parseInt(

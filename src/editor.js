@@ -314,6 +314,12 @@ initIPCHandlers({
  * @param {boolean} revealLine - Whether to reveal the line after processing
  */
 function _hexModeProcess(buffer, revealLine) {
+  if (store.get('general.timestamp') === true && true === revealLine) {
+    let timestamp = ''
+    timestamp = getTimestamp()
+    _applyEdit(timestamp + '\n', false, true)
+  }
+
   const text = hexy.hexy(buffer, { format: 'twos' })
   _applyEdit(text, false, revealLine)
 }
@@ -387,7 +393,7 @@ function _stringModeProcess(inBuffer) {
       outputTmp = timestamp + line
     }
     _applyEdit(
-      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
+      outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), // Replace non-printable characters with '.'
       true,
       true
     )

@@ -43,7 +43,7 @@ const createWindow = () => {
     icon: path.join(__dirname, '../image/logo.png'),
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, './preload.js'),
+      // preload: path.join(__dirname, './preload.js'),
       // enableRemoteModule: true,
       // contextIsolation: false, // Keep disabled for compatibility with nodeIntegration
     },
