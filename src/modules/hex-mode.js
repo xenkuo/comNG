@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-const store = require('./store.js').init()
 
 // Hex mode layout constants
 const hmUnitCount = 16
@@ -202,6 +201,7 @@ function _extractLineRange(range, line, monacoInst) {
  * @param {object} hlt - Highlight module
  */
 function initHexModeHandlers(editorInst, monacoInst, hlt) {
+  const store = require('./store.js').init()
 
   editorInst.onMouseUp(() => {
     // Add defensive check for store

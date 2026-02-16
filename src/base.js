@@ -28,6 +28,7 @@ window.onload = () => {
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
 
   applyLanguage()
+
   // 0: update elements size and position
   const cStyle = getComputedStyle(document.documentElement)
 
@@ -53,6 +54,10 @@ window.onload = () => {
     window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
 
   mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
+
+  // Initialize ChromeTabs early for immediate tab visibility
+  const chromeTabsModule = require('./modules/chrome-tabs.js')
+  chromeTabsModule.initChromeTabs()
 
   let baudSelect = document.getElementById('baud-select')
   baudSelect.options[0].text = store.get('general.customized')
@@ -143,8 +148,8 @@ window.onload = () => {
     }
   }, 5000) // Delay 5 seconds
 
-  // Note: Skipping hex-mode preloading due to module resolution issues
-  // Will be loaded on-demand when hex mode is actually used
+  require('./modules/dom-utilities.js')
+  console.log('Core modules loaded')
 }
 
 

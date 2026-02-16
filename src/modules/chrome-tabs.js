@@ -20,7 +20,7 @@ function initChromeTabs() {
   // Setup event listeners
   _setupEventListeners(tabsEl)
 
-  // Add initial tab
+  // Add initial tab immediately for better UX
   chromeTabs.addTab()
 
   // Setup tab add button click handler
