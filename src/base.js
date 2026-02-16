@@ -146,7 +146,7 @@ window.onload = () => {
     } catch (error) {
       console.warn('Update check skipped due to error:', error)
     }
-  }, 2000) // Delay 2 seconds
+  }, 3000) // Delay 3 seconds
 }
 
 

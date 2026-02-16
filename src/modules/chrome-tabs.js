@@ -20,8 +20,8 @@ function initChromeTabs() {
   // Setup event listeners
   _setupEventListeners(tabsEl)
 
-  // Add initial tab immediately for better UX
-  chromeTabs.addTab()
+  // Add initial tab immediately for better UX (without animation)
+  chromeTabs.addTab(undefined, { animate: false })
 
   // Setup tab add button click handler
   document.getElementById('tab-add-btn').onclick = () => {
