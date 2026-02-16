@@ -42,9 +42,9 @@ let editorInst
 // @param {import('monaco-editor').editor.IStandaloneEditorConstructionOptions} options - Editor options
 let breakpointHit = false
 let breakpointAfterLines = 0
-let breakpointBuff = []
-let partial_line = false
 let ansiWait = false
+/** @type {Buffer | null} */
+let partialLineBuffer = null
 /** @type {import('fs').WriteStream | undefined} */
 let captureFileStream
 /** @type {string | null} */
@@ -74,9 +74,8 @@ document.addEventListener('captureFileChanged', (event) => {
 function _editorStateReset() {
   breakpointHit = false
   breakpointAfterLines = 0
-  breakpointBuff = []
-  partial_line = false
   ansiWait = false
+  partialLineBuffer = null
 
   hlt.reset()
 }
@@ -324,25 +323,24 @@ function _hexModeProcess(buffer, revealLine) {
   _applyEdit(text, false, revealLine)
 }
 
+/**
+ * Process breakpoint detection for complete lines
+ * @param {Buffer} line - Complete line buffer ending with newline
+ * @returns {boolean} True if breakpoint condition is met
+ */
 function _breakpointProcess(line) {
   if (breakpointHit === false) {
-    let bpLine = line
-
-    if (breakpointBuff.length !== 0) {
-      bpLine = Buffer.concat([breakpointBuff, line], line.length + breakpointBuff.length)
-      breakpointBuff = []
-    }
-
-    if (bpLine.includes(store.get('advance.breakpoint.onText')) === true) {
+    // Check if current line contains the breakpoint text
+    if (line.includes(store.get('advance.breakpoint.onText')) === true) {
       breakpointHit = true
       breakpointAfterLines = 0
     }
   } else {
+    // Count lines after breakpoint hit
     breakpointAfterLines++
     if (breakpointAfterLines >= store.get('advance.breakpoint.afterLines')) {
       breakpointHit = false
       breakpointAfterLines = 0
-
       return true
     }
   }
@@ -372,84 +370,58 @@ function _breakpointProcess(line) {
 //   return Buffer.from(outArray)
 // }
 
+/**
+ * Process text data with optimized buffering - only outputs complete lines
+ * @param {Buffer} inBuffer - Incoming data buffer
+ */
 function _textProcess(inBuffer) {
-  // 1. trim ansi escape codes
-  // let buffer = _filterAnsiCode(inBuffer);
-  let buffer = inBuffer
+  // Combine with existing partial buffer if it exists
+  let buffer = partialLineBuffer ? Buffer.concat([partialLineBuffer, inBuffer]) : inBuffer
 
-  // 2. output full line
+  // Reset the partial buffer as we're processing the combined data
+  partialLineBuffer = null
+
+  // Process complete lines only
   let index = -1
-  let outputTmp
   while ((index = buffer.indexOf('\n')) !== -1) {
     let line = buffer.slice(0, index + 1)
+    buffer = buffer.slice(index + 1)
 
-    if (partial_line === true) {
-      outputTmp = line
-      partial_line = false
-    } else {
-      let timestamp = ''
-
-      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
+    // Add timestamp if enabled
+    let outputLine = line
+    if (store.get('general.timestamp') === true) {
+      const timestamp = getTimestamp()
       if (store.get('general.hexmode') === true) {
+        // In hex mode, add timestamp as separate line
         _applyEdit(timestamp + '\n', false, false)
-        outputTmp = line
       } else {
-        outputTmp = timestamp + line
+        // In string mode, prepend timestamp to the line
+        outputLine = timestamp + line
       }
     }
 
+    // Process the complete line
     if (store.get('general.hexmode') === true) {
-      outputTmp = hexy.hexy(outputTmp, { format: 'twos' })
-      _applyEdit(outputTmp, true, false)
+      const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
+      _applyEdit(hexOutput, true, false)
     } else {
-      _applyEdit(
-        outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'), // Replace non-printable characters with '.'
-        true,
-        true
-      )
+      const cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
+      _applyEdit(cleanOutput, true, true)
     }
 
-
-    buffer = buffer.slice(index + 1, buffer.length)
-
+    // Handle breakpoints
     if (store.get('advance.breakpoint.switch') === true) {
       if (_breakpointProcess(line) === true) {
         buffer = Buffer.from('')
         serialClose()
+        break
       }
     }
   }
 
-  // 3. output partial line
-  if (buffer.length !== 0) {
-    if (partial_line === true) {
-      outputTmp = buffer
-    } else {
-      let timestamp = ''
-
-      if (store.get('general.timestamp') === true) timestamp = getTimestamp()
-      if (store.get('general.hexmode') === true) {
-        _applyEdit(timestamp + '\n', false, false)
-        outputTmp = buffer
-      } else {
-        outputTmp = timestamp + buffer
-      }
-      partial_line = true
-    }
-    if (store.get('general.hexmode') === true) {
-      outputTmp = hexy.hexy(outputTmp, { format: 'twos' })
-      _applyEdit(outputTmp, true, false)
-    } else {
-      _applyEdit(
-        outputTmp.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.'),
-        true,
-        true
-      )
-    }
-
-  }
-  if (store.get('advance.breakpoint.switch') === true) {
-    breakpointBuff = buffer
+  // Store remaining partial line for next processing
+  if (buffer.length > 0) {
+    partialLineBuffer = buffer
   }
 }
 
