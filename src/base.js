@@ -12,7 +12,7 @@ initMenuHandle()
 
 let barHeight
 const menuInfo = require('./modules/menu-handle.js').menuInfo
-let tabsInst = null
+// let tabsInst = null
 // let ctrlKeyPressed = false
 
 let iconWidth
@@ -23,8 +23,7 @@ let dragMinWidth
 const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js')
 
 window.onload = () => {
-  mcss.AutoInit()
-  tabsInst = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
+  // tabsInst = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
 
   applyLanguage()
@@ -44,6 +43,12 @@ window.onload = () => {
   // 1.1 init navi layout
   navi_layout_init(tabsOffset, tabStdWidth, dragMinWidth)
 
+  // Initialize ChromeTabs early for immediate tab visibility
+  const chromeTabsModule = require('./modules/chrome-tabs.js')
+  chromeTabsModule.initChromeTabs()
+
+  mcss.AutoInit()
+
   // 2: update editor height
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
@@ -55,9 +60,7 @@ window.onload = () => {
 
   mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
 
-  // Initialize ChromeTabs early for immediate tab visibility
-  const chromeTabsModule = require('./modules/chrome-tabs.js')
-  chromeTabsModule.initChromeTabs()
+
 
   let baudSelect = document.getElementById('baud-select')
   baudSelect.options[0].text = store.get('general.customized')

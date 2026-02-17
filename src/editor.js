@@ -422,7 +422,7 @@ function _textProcess(inBuffer) {
       const timestamp = getTimestamp()
       if (store.get('general.hexmode') === true) {
         // In hex mode, add timestamp as separate line
-        _applyEdit(timestamp + '\n', false, false)
+        _applyEdit(timestamp + '\n', false, true)
       } else {
         // In string mode, prepend timestamp to the line
         outputLine = timestamp + line
@@ -432,7 +432,7 @@ function _textProcess(inBuffer) {
     // Process the complete line
     if (store.get('general.hexmode') === true) {
       const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
-      _applyEdit(hexOutput, true, false)
+      _applyEdit(hexOutput, true, true)
     } else {
       const cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
       _applyEdit(cleanOutput, true, true)
