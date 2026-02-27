@@ -31,41 +31,11 @@ const fs = require('fs')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
 const { initIPCHandlers } = require('./modules/ipc-handler.js')
+const { chartFrameProcess } = require('./modules/chart.js')
 
 // =============================================================================
 // LAZY LOADING MODULES
 // =============================================================================
-
-// Conditionally load chart module to improve startup performance
-let chartModule = null
-let chartLoadAttempted = false
-
-function getChartModule() {
-  if (!chartModule && !chartLoadAttempted) {
-    chartLoadAttempted = true
-    try {
-      // Use require for CommonJS modules with side effects
-      const module = require('./modules/chart.js')
-      chartModule = {
-        chartFrameProcess: module.chartFrameProcess
-      }
-      console.log('Chart module loaded')
-    } catch (error) {
-      console.error('Failed to load chart module:', error)
-      // Fallback to no-op function
-      chartModule = {
-        chartFrameProcess: () => { }
-      }
-    }
-  }
-  return chartModule
-}
-
-// Wrapper function for chart processing
-function lazyChartFrameProcess(data) {
-  const chart = getChartModule()
-  return chart.chartFrameProcess(data)
-}
 
 // =============================================================================
 // GLOBAL STATE MANAGEMENT
@@ -449,9 +419,9 @@ function _textProcess(inBuffer) {
  * @param {Buffer} data - Serial data buffer
  */
 function processSerialData(data) {
-  // Process chart data conditionally (only loads when chart tab is used)
+  // Process chart data directly (now loaded upfront)
   try {
-    lazyChartFrameProcess(data)
+    chartFrameProcess(data)
   } catch (err) {
     console.warn('Chart processing failed:', err)
   }
