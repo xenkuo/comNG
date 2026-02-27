@@ -3,12 +3,20 @@
 
 /// <reference path="./modules/monaco-esm.js" />
 
+// =============================================================================
+// TYPE DEFINITIONS
+// =============================================================================
+
 // Monaco Editor Type Definitions for better IDE support
 /** @typedef {import('monaco-editor').editor.IStandaloneCodeEditor} IStandaloneCodeEditor */
 /** @typedef {import('monaco-editor').editor.IModel} IModel */
 /** @typedef {import('monaco-editor').editor.IRange} IRange */
 /** @typedef {import('monaco-editor').languages.IMonarchLanguage} IMonarchLanguage */
 /** @typedef {import('monaco-editor')} MonacoAPI */
+
+// =============================================================================
+// MODULE IMPORTS
+// =============================================================================
 
 const path = require('path')
 // Use ESM-compatible Monaco loader for better IDE support
@@ -17,6 +25,17 @@ const hlt = require('./modules/highlight.js')
 const hexMode = require('./modules/hex-mode.js')
 const chromeTabsModule = require('./modules/chrome-tabs.js')
 const hexy = require('hexy')
+const { serialInit, serialClose } = require('./modules/serialport.js')
+const { getTimestamp, toast } = require('./modules/utilities.js')
+const fs = require('fs')
+const { dialog } = require('electron').remote
+const languageDetect = require('language-detect')
+const { initIPCHandlers } = require('./modules/ipc-handler.js')
+
+// =============================================================================
+// LAZY LOADING MODULES
+// =============================================================================
+
 // Conditionally load chart module to improve startup performance
 let chartModule = null
 let chartLoadAttempted = false
@@ -47,31 +66,22 @@ function lazyChartFrameProcess(data) {
   const chart = getChartModule()
   return chart.chartFrameProcess(data)
 }
-const { serialInit, serialClose } = require('./modules/serialport.js')
-const { getTimestamp } = require('./modules/utilities.js')
-const fs = require('fs')
-const { toast } = require('./modules/utilities.js')
 
-const { dialog } = require('electron').remote
-const languageDetect = require('language-detect')
-
-const { initIPCHandlers } = require('./modules/ipc-handler.js')
+// =============================================================================
+// GLOBAL STATE MANAGEMENT
+// =============================================================================
 
 /** @type {MonacoAPI} */
 let monacoInst = null
 /** @type {IStandaloneCodeEditor} */
-let editorInst
+let editorInst = null
 
-// Monaco Editor Helper Types
-// monacoInst: Main Monaco API object (contains .editor, .languages, etc.)
-// editorInst: Actual editor instance (created by monaco.editor.create())
-// Use these in JSDoc comments for better IDE support:
-// @type {IModel} - for editor models
-// @type {IRange} - for editor ranges
-// @param {import('monaco-editor').editor.IStandaloneEditorConstructionOptions} options - Editor options
+// Editor state flags
 let breakpointHit = false
 let breakpointAfterLines = 0
 let ansiWait = false
+
+// Buffers and streams
 /** @type {Buffer | null} */
 let partialLineBuffer = null
 /** @type {import('fs').WriteStream | undefined} */
@@ -79,33 +89,24 @@ let captureFileStream
 /** @type {string | null} */
 let captureFilePath = null
 
-// Listen for captureFileStream changes from dom-utilities.js
-document.addEventListener('captureFileChanged', (event) => {
-  const { filePath, isActive } = event.detail;
+// Watcher module initialization
+const { initWatcher } = require('./modules/watcher.js')
+const watcherModule = initWatcher(store)
+/** @type {import('chokidar').FSWatcher} */
+const watcher = watcherModule.watcher
 
-  if (isActive && filePath) {
-    // Store file path for synchronous writes
-    captureFilePath = filePath;
-    // Create new capture file stream (keep for backward compatibility)
-    captureFileStream = fs.createWriteStream(filePath, { flags: 'r+' });
-    console.log('Capture file activated:', filePath);
-  } else {
-    // Close existing stream if it exists
-    if (captureFileStream) {
-      captureFileStream.end();
-      captureFileStream = undefined;
-    }
-    captureFilePath = null;
-    console.log('Capture file deactivated');
-  }
-});
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
 
+/**
+ * Reset editor state to initial values
+ */
 function _editorStateReset() {
   breakpointHit = false
   breakpointAfterLines = 0
   ansiWait = false
   partialLineBuffer = null
-
   hlt.reset()
 }
 
@@ -119,6 +120,7 @@ function _applyEdit(textString, appendLine, revealLine) {
   const model = editorInst.getModel()
   const lineCount = model.getLineCount()
   let lastLineLength = 1
+
   if (true === appendLine) {
     lastLineLength = model.getLineMaxColumn(lineCount)
   }
@@ -134,19 +136,21 @@ function _applyEdit(textString, appendLine, revealLine) {
   ])
 
   if (null !== captureFilePath) {
-    fs.appendFileSync(captureFilePath, textString);
+    fs.appendFileSync(captureFilePath, textString)
   }
 
-  if (true === revealLine && store.get('general.autoScrolldown', true) === true) editorInst.revealLine(model.getLineCount())
+  if (true === revealLine && store.get('general.autoScrolldown', true) === true) {
+    editorInst.revealLine(model.getLineCount())
+  }
 }
 
-const { initWatcher } = require('./modules/watcher.js')
-const watcherModule = initWatcher(store)
-/** @type {import('chokidar').FSWatcher} */
-const watcher = watcherModule.watcher
+// =============================================================================
+// FILE OPERATIONS
+// =============================================================================
 
-// ------------------------editor section
-
+/**
+ * Open a text file in the current editor tab
+ */
 function _openFile() {
   dialog
     .showOpenDialog({
@@ -182,12 +186,11 @@ function _openFile() {
         chromeTabsModule.tabsMap.get(el).path = filePath
         // 3. setup title
         let titleEl = el.querySelector('.chrome-tab-title')
-
-        // el.align = 'center'
         titleEl.innerHTML = title
       }
     })
 }
+
 /**
  * Open binary file in hex mode
  */
@@ -230,7 +233,7 @@ function _openBinFile() {
     })
 }
 
-// ----------------------editor function section
+// File operation wrappers for new tabs
 function openFileInNewTab() {
   chromeTabsModule.newTab()
   _openFile()
@@ -241,12 +244,13 @@ function openBinFileInNewTab() {
   _openBinFile()
 }
 
-
-
-
+/**
+ * Save current file
+ */
 function saveFile() {
   const el = chromeTabsModule.chromeTabs.activeTabEl
   const view = chromeTabsModule.tabsMap.get(el)
+
   if (view.path !== null) {
     // has path info
     const text = editorInst.getModel().getValue()
@@ -291,6 +295,9 @@ function saveFile() {
   }
 }
 
+/**
+ * Save file with new name
+ */
 function saveAsFile() {
   const el = chromeTabsModule.chromeTabs.activeTabEl
   const view = chromeTabsModule.tabsMap.get(el)
@@ -328,6 +335,7 @@ function saveAsFile() {
     })
 }
 
+// Initialize IPC handlers for file operations
 initIPCHandlers({
   openFileHandler: openFileInNewTab,
   openBinFileHandler: openBinFileInNewTab,
@@ -335,6 +343,9 @@ initIPCHandlers({
   saveAsFileHandler: saveAsFile,
 })
 
+// =============================================================================
+// DATA PROCESSING
+// =============================================================================
 
 /**
  * Process binary buffer data into hex format and display in editor
@@ -376,28 +387,6 @@ function _breakpointProcess(line) {
 
   return false
 }
-
-// function _filterAnsiCode(inBuffer) {
-//   let inArray = [...inBuffer]
-//   let outArray = []
-//   let arrayLen = inArray.length
-
-//   for (let i = 0; i < arrayLen; i++) {
-//     if (ansiWait === false) {
-//       if (0x1b !== inArray[i]) {
-//         // \u001b
-//         outArray.push(inArray[i])
-//       } else {
-//         ansiWait = true
-//       }
-//     } else if (0x6d === inArray[i]) {
-//       // m
-//       ansiWait = false
-//     }
-//   }
-
-//   return Buffer.from(outArray)
-// }
 
 /**
  * Process text data with optimized buffering - only outputs complete lines
@@ -479,12 +468,37 @@ const syncProcessSerialData = (data) => {
   }
 }
 
+// Initialize serial port with data processor
 serialInit(syncProcessSerialData)
 
+// =============================================================================
+// UI EVENT HANDLERS
+// =============================================================================
 
+// Capture file stream event listener
+document.addEventListener('captureFileChanged', (event) => {
+  const { filePath, isActive } = event.detail
+
+  if (isActive && filePath) {
+    // Store file path for synchronous writes
+    captureFilePath = filePath
+    // Create new capture file stream (keep for backward compatibility)
+    captureFileStream = fs.createWriteStream(filePath, { flags: 'r+' })
+    console.log('Capture file activated:', filePath)
+  } else {
+    // Close existing stream if it exists
+    if (captureFileStream) {
+      captureFileStream.end()
+      captureFileStream = undefined
+    }
+    captureFilePath = null
+    console.log('Capture file deactivated')
+  }
+})
 
 const { clipboard } = require('electron')
 
+// Clipboard and cleanup operations
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
@@ -508,6 +522,7 @@ document.getElementById('data-cleanup-btn').onclick = () => {
   el.dispatchEvent(event)
 }
 
+// Font settings handlers
 document.getElementById('editor-font-family').onblur = (e) => {
   let font = e.target.value.trim()
 
@@ -524,6 +539,7 @@ document.getElementById('editor-font-size').onblur = (e) => {
   store.set('general.fontSize', size)
 }
 
+// Breakpoint control
 document.getElementById('breakpoint-switch').onclick = (e) => {
   if (e.target.checked === true) {
     if (store.get('advance.breakpoint.onText.length') === 0) {
@@ -538,12 +554,14 @@ document.getElementById('breakpoint-switch').onclick = (e) => {
   breakpointAfterLines = 0
 }
 
+// Capture file path interaction
 document.getElementById('capture-file-path').ondblclick = (e) => {
   const file = e.target.value
   const text = fs.readFileSync(file).toString()
   editorInst.getModel().setValue(text)
 }
 
+// Drag and drop handlers
 document.getElementById('editor-area').ondragover = () => {
   return false
 }
