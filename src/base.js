@@ -22,16 +22,13 @@ let dragMinWidth
 
 const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js')
 
-window.onload = () => {
-  // tabsInst = mcss.Tabs.getInstance(document.getElementById('menu-tabs'))
+// Modular initialization functions
+function initializeUILayout() {
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
-
   applyLanguage()
 
-  // 0: update elements size and position
+  // Initialize layout dimensions
   const cStyle = getComputedStyle(document.documentElement)
-
-  // 1: update css variable
   iconWidth = parseInt(cStyle.getPropertyValue('--icon-width'))
   let logoLeft = parseInt(cStyle.getPropertyValue('--nav-margin'))
   tabsOffset = iconWidth + logoLeft
@@ -40,16 +37,23 @@ window.onload = () => {
   barHeight = parseInt(cStyle.getPropertyValue('--bar-height'))
   menuInfo.height = parseInt(cStyle.getPropertyValue('--menu-height'))
 
-  // 1.1 init navi layout
   navi_layout_init(tabsOffset, tabStdWidth, dragMinWidth)
+}
 
+function initializeModules() {
   // Initialize ChromeTabs early for immediate tab visibility
   const chromeTabsModule = require('./modules/chrome-tabs.js')
   chromeTabsModule.initChromeTabs()
 
   mcss.AutoInit()
 
-  // 2: update editor height
+  // Set initial editor height
+  updateEditorHeight()
+
+  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
+}
+
+function updateEditorHeight() {
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
   let menu = document.getElementById('menu-area')
@@ -57,11 +61,21 @@ window.onload = () => {
 
   editorEl.style.height =
     window.innerHeight - nav.offsetHeight - bar.offsetHeight - menu.offsetHeight + 'px'
+}
 
-  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
+window.onload = () => {
+  // Execute initialization in logical order
+  initializeUILayout()
+  initializeModules()
 
+  // Initialize form elements
+  initializeFormElements()
 
+  // Check for updates after everything else is initialized
+  checkForApplicationUpdates()
+}
 
+function initializeFormElements() {
   let baudSelect = document.getElementById('baud-select')
   baudSelect.options[0].text = store.get('general.customized')
   baudSelect.selectedIndex = store.get('baudIndex')
@@ -137,9 +151,10 @@ window.onload = () => {
   document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
 
   initDomUtilities()
+}
 
+function checkForApplicationUpdates() {
   // Defer update checking to improve startup performance
-  // Only check occasionally to reduce API calls and startup impact
   setTimeout(() => {
     try {
       const { checkForUpdates } = require('./modules/update.js')
@@ -151,8 +166,6 @@ window.onload = () => {
     }
   }, 3000) // Delay 3 seconds
 }
-
-
 
 window.onresize = () => {
   store.set('window.width', window.innerWidth)

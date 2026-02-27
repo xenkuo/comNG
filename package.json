@@ -137,6 +137,7 @@
     "electron-localshortcut": "^3.2.1",
     "electron-squirrel-startup": "1.0.1",
     "electron-store": "^5.1.0",
+    "gridjs": "^6.2.0",
     "hexy": "0.3.5",
     "language-detect": "^1.1.0",
     "material-design-icons": "^3.0.1",
