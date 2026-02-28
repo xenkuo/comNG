@@ -393,6 +393,7 @@ input {
   margin-left: 10px;
 }
 
+.custom-tx-btn,
 #trans-send-btn,
 #trans-log-btn {
   margin-top: 28px;
