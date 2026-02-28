@@ -153,6 +153,40 @@ function initializeFormElements() {
   initDomUtilities()
 }
 
+function createTxTable() {
+  const { Grid, h } = require('gridjs')
+  const grid = new Grid({
+    search: true,
+    sort: true,
+    resizable: true,
+    fixedHeader: true,
+    width: '100%',
+    style: {
+      table: {
+        'margin': '0 auto',
+        'width': '80%'
+      }
+    },
+    columns: ['Name', 'Email',
+      {
+        name: 'Actions',
+        formatter: (cell, row) => {
+          return h('button', {
+            className: 'py-2 mb-4 px-4 border rounded-md text-white bg-blue-600',
+            onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
+          }, 'Edit');
+        }
+      },],
+    data: [
+      ['John', 'john@example.com', null],
+      ['Mark', 'mark@gmail.com', null]
+    ]
+  });
+
+  grid.render(document.getElementById('tx-table'))
+}
+
+createTxTable()
 function checkForApplicationUpdates() {
   // Defer update checking to improve startup performance
   setTimeout(() => {

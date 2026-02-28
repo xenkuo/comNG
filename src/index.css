@@ -1,6 +1,7 @@
 @import url('../node_modules/material-design-icons/iconfont/material-icons.css');
 @import url('../node_modules/materialize-css/dist/css/materialize.css');
 @import url('../node_modules/chrome-tabs/css/chrome-tabs.css');
+@import url('../node_modules/gridjs/dist/theme/mermaid.css');
 
 :root {
   --nav-height: 36px;
@@ -441,6 +442,27 @@ input {
 #licence-key {
   height: 24px;
   margin-bottom: 0px;
+}
+
+/* Center tx-table container and Grid.js table */
+.tx-table-center {
+  text-align: center;
+  width: 100%;
+}
+
+.tx-table-center #tx-table {
+  display: inline-block;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.tx-table-center .gridjs-wrapper {
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.tx-table-center .gridjs-table {
+  margin: 0 auto;
 }
 
 #baud-input,
