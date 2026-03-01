@@ -403,6 +403,17 @@ input {
   border-radius: calc(var(--trans-btn-height) / 2);
 }
 
+.editable-content {
+  width: 90%;
+  font-size: 12px;
+}
+
+.editable-content:focus {
+  outline: none;
+  border-color: #26a69a;
+  box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.2);
+}
+
 #color-panel {
   height: 43px;
   line-height: 43px;

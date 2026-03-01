@@ -155,6 +155,16 @@ function initializeFormElements() {
 
 function createTxTable() {
   const { Grid, h } = require('gridjs')
+
+  // Sample data with explicit IDs for dynamic management
+  let tableData = [
+    { id: 1, content: 'reboot' },
+    { id: 2, content: 'updateFirmware{version: "v2.0"}' }
+  ];
+
+  // Convert to array format for Grid.js
+  const getDataArray = () => tableData.map(item => [item.id, item.content, null]);
+
   const grid = new Grid({
     search: true,
     sort: true,
@@ -167,25 +177,66 @@ function createTxTable() {
         'width': '80%'
       }
     },
-    columns: ['Name', 'Email',
-      {
-        name: 'Actions',
-        formatter: (cell, row) => {
-          return h('button', {
-            className: 'btn-small waves-effect custom-tx-btn',
-            onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
-          }, [
-            h('i', { className: 'material-icons' }, 'send')
-          ]);
-        }
-      },],
-    data: [
-      ['John', 'john@example.com', null],
-      ['Mark', 'mark@gmail.com', null]
-    ]
+    columns: [{
+      name: 'Index',
+      formatter: (cell, row) => {
+        // Return the explicit ID stored with each row
+        return cell;
+      }
+    }, {
+      name: 'Content',
+      formatter: (cell, row) => {
+        // Create editable input field
+        return h('input', {
+          type: 'text',
+          value: cell,
+          className: 'editable-content',
+          onInput: (e) => {
+            // Update the data when input changes
+            const rowIndex = row.index || tableData.findIndex(item => item.id === row.cells[0].data);
+            if (rowIndex >= 0) {
+              tableData[rowIndex].content = e.target.value;
+            }
+          },
+          style: {
+            // width: '100%',
+            // padding: '4px',
+            // border: '1px solid #ddd',
+            // borderRadius: '4px'
+          }
+        });
+      }
+    },
+    {
+      name: 'Actions',
+      formatter: (cell, row) => {
+        return h('button', {
+          className: 'btn-small waves-effect custom-tx-btn',
+          onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
+        }, [
+          h('i', { className: 'material-icons' }, 'send')
+        ]);
+      }
+    },],
+    data: getDataArray()
   });
 
   grid.render(document.getElementById('tx-table'))
+
+  // Helper functions for dynamic row management
+  function addRow(content = '') {
+    const newId = Math.max(...tableData.map(item => item.id), 0) + 1;
+    tableData.push({ id: newId, content: content });
+    grid.updateConfig({ data: getDataArray() }).forceRender();
+  }
+
+  function removeRow(id) {
+    tableData = tableData.filter(item => item.id !== id);
+    grid.updateConfig({ data: getDataArray() }).forceRender();
+  }
+
+  // Make these functions globally available for testing
+  window.txTableHelpers = { addRow, removeRow };
 }
 
 createTxTable()
