@@ -8,57 +8,59 @@
     </div>
   </div>
 
-  <div class="col s12 transmit-config-area">
-    <div class="row config-row">
-      <!-- EOF Selection -->
-      <div class="col s1 config-key">
-        <p i18n-label="eof"></p>
-      </div>
-      <div class="col s2">
-        <div class="input-field" id="trans-eof-row">
-          <select id="trans-eof-select">
-            <option value="1" selected>CRLF</option>
-            <option value="2">LF</option>
-            <option value="3">CR</option>
-          </select>
+  <div class="transmit-config-area">
+    <div class="col s12">
+      <div class="row config-row">
+        <!-- EOF Selection -->
+        <div class="col s1 config-key">
+          <p i18n-label="eof"></p>
         </div>
-      </div>
-
-      <!-- Hex Mode Switch -->
-      <div class="col s1.5 config-key">
-        <p i18n-label="txHexMode"></p>
-      </div>
-      <div class="col s1.5 config-item">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="trans-hexmode-switch" />
-            <span class="lever"></span>
-            On
-          </label>
+        <div class="col s2">
+          <div class="input-field" id="trans-eof-row">
+            <select id="trans-eof-select">
+              <option value="1" selected>CRLF</option>
+              <option value="2">LF</option>
+              <option value="3">CR</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Space -->
-      <div class="col s1"></div>
-      <!-- Auto Repeat Switch -->
-      <div class="col s1.5 config-key">
-        <p i18n-label="autoRepeat"></p>
-      </div>
-      <div class="col s1.5 config-item">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="trans-repeat-switch" />
-            <span class="lever"></span>
-            On
-          </label>
+        <!-- Hex Mode Switch -->
+        <div class="col s1.5 config-key">
+          <p i18n-label="txHexMode"></p>
         </div>
-      </div>
+        <div class="col s1.5 config-item">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="trans-hexmode-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
 
-      <!-- Repeat Interval -->
-      <div class="input-field col s1 config-item">
-        <input id="trans-repeat-interval" placeholder="ms" value="1000" type="text" />
+        <!-- Space -->
+        <div class="col s1"></div>
+        <!-- Auto Repeat Switch -->
+        <div class="col s1.5 config-key">
+          <p i18n-label="autoRepeat"></p>
+        </div>
+        <div class="col s1.5 config-item">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="trans-repeat-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+
+        <!-- Repeat Interval -->
+        <div class="input-field col s1 config-item">
+          <input id="trans-repeat-interval" placeholder="ms" value="1000" type="text" />
+        </div>
       </div>
     </div>
   </div>

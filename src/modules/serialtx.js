@@ -11,7 +11,7 @@ function createTxTable() {
     { id: 1, content: 'reboot' },
     { id: 2, content: 'updateFirmware{version: "v2.0"}' },
     { id: 3, content: 'factoryReset' },
-    { id: 4, content: 'factoryReset' },
+    { id: 4, content: 'upgrade' },
   ];
 
   // Convert to array format for Grid.js
@@ -27,6 +27,20 @@ function createTxTable() {
     pagination: {
       limit: 4,
       summary: false
+    },
+    style: {
+      th: {
+        'background-color': '#e2f2f1',
+        color: '#000',
+        'text-align': 'center',
+        'font-size': '12px',
+        margin: '3px',
+        padding: '4px 1px'
+      },
+      td: {
+        'text-align': 'center'
+      }
+
     },
     columns: [{
       name: 'Message',

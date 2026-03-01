@@ -389,8 +389,6 @@ input {
 }
 
 .editable-content {
-  width: 90%;
-  font-size: 14px;
   padding: 0px;
   margin: 0px !important;
   font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', monospace;
@@ -490,10 +488,7 @@ input {
   box-shadow: none;
   margin: 4px 0 0 0;
 }
-.gridjs-head {
-  padding: 4px 1px;
-  margin: 3px;
-}
+
 .gridjs-search {
   height: 32px;
 }
@@ -503,9 +498,10 @@ input {
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #f5f5f5;
+  width: 100%;
+  background-color: #e2f2f1;
   z-index: 10;
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); */
   max-height: 50px; /* Fixed height */
   height: 50px; /* Fixed height NOTE: needed*/
 }
