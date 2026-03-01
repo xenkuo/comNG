@@ -9,7 +9,9 @@ function createTxTable() {
   // Sample data with explicit IDs for dynamic management
   let tableData = [
     { id: 1, content: 'reboot' },
-    { id: 2, content: 'updateFirmware{version: "v2.0"}' }
+    { id: 2, content: 'updateFirmware{version: "v2.0"}' },
+    { id: 3, content: 'factoryReset' },
+    { id: 4, content: 'factoryReset' },
   ];
 
   // Convert to array format for Grid.js
@@ -27,7 +29,7 @@ function createTxTable() {
       summary: false
     },
     columns: [{
-      name: 'Content',
+      name: 'Message',
       sort: false,
       formatter: (cell, row) => {
         // Create editable input field

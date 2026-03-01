@@ -6,8 +6,8 @@ const Store = require('./modules/store.js')
 let mainStore = Store.initWithMigration(app.getVersion())
 // console.log(app.getPath('appData'))
 
-const widthDefault = 600
-const widthMin = 600
+const widthDefault = 760
+const widthMin = 760
 const widthMax = 1024
 const heightDefault = 640
 const heightMin = 600
