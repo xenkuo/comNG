@@ -3,7 +3,9 @@
 const serial = require('serialport')
 const { toast } = require('./utilities.js')
 
-let port, modemSignalTimer, serialDataCallback
+
+// TODO: is modemSignalTimer needed?
+let port, modemSignalTimer, _serialRxDataCallback
 let modemSignal = {
   cts: false,
   dsr: false,
@@ -200,7 +202,7 @@ document.getElementById('port-switch').onclick = (e) => {
     })
 
     port.on('data', (data) => {
-      if (serialDataCallback) serialDataCallback(data)
+      if (_serialRxDataCallback) _serialRxDataCallback(data)
     })
   } else {
     if (port === undefined || port.isOpen === false) {
@@ -293,7 +295,6 @@ document.getElementById('path-input').onmouseleave = (e) => {
 
 let transRepeatTimer
 document.getElementById('trans-send-btn').onclick = () => {
-  const logObj = document.getElementById('trans-log-area')
   const dataObj = document.getElementById('trans-data')
 
   let dataIn = dataObj.value
@@ -307,10 +308,8 @@ document.getElementById('trans-send-btn').onclick = () => {
 
   if (_serialWrite(dataOut) === false) return
 
-  logObj.value += '\n' + dataIn
-  mcss.updateTextFields(logObj)
-  mcss.textareaAutoResize(logObj)
-  logObj.scrollTop = logObj.scrollHeight
+  // Log functionality removed
+  console.log('Transmitted:', dataIn)
 
   if (document.getElementById('trans-repeat-switch').checked === true) {
     if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
@@ -338,8 +337,8 @@ function serialClose() {
   port === undefined ? null : port.close()
 }
 
-function serialInit(dataCallback) {
-  serialDataCallback = dataCallback
+function serialInit(rxDataCallback) {
+  _serialRxDataCallback = rxDataCallback
 }
 
 module.exports = {

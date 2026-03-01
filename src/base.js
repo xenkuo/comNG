@@ -117,7 +117,6 @@ function initializeFormElements() {
   document.getElementById('editor-font-size').value = store.get('general.fontSize')
 
   document.getElementById('trans-hexmode-switch').checked = store.get('transmit.hexmode')
-  document.getElementById('trans-clean-switch').checked = store.get('transmit.clean')
   let transEof = document.getElementById('trans-eof-select')
   let transEofIndex = 0
   if ('\n' === store.get('transmit.eof')) {
@@ -499,20 +498,6 @@ document.getElementById('trans-hexmode-switch').onchange = (e) => {
   let checked = e.target.checked
 
   store.set('transmit.hexmode', checked)
-}
-
-document.getElementById('trans-clean-switch').onchange = (e) => {
-  let checked = e.target.checked
-
-  store.set('transmit.clean', checked)
-}
-
-document.getElementById('trans-log-btn').onclick = () => {
-  let logEl = document.getElementById('trans-log-area')
-
-  logEl.value = ''
-  mcss.updateTextFields(logEl)
-  mcss.textareaAutoResize(logEl)
 }
 
 document.getElementById('insider-preview').onclick = (e) => {

@@ -380,22 +380,13 @@ input {
   font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace;
 }
 
-#trans-log-area {
-  font-size: 12px;
-  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace;
-  max-height: 146px;
-  padding: 4px;
-  overflow: auto;
-}
-
 #trans-eof-row {
   margin-top: 10px;
   margin-left: 10px;
 }
 
 .custom-tx-btn,
-#trans-send-btn,
-#trans-log-btn {
+#trans-send-btn {
   margin-top: 28px;
 
   height: var(--trans-btn-height) !important;

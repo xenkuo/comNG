@@ -41,7 +41,7 @@ const labelI18n = {
     protocolOptions: '协议配置',
     eof: '换行符',
     txHexMode: '十六进制',
-    autoClean: '自动清除',
+
     autoRepeat: '自动重发',
     signature: '签名',
     breakpoint: '文本断点',
@@ -73,7 +73,7 @@ const labelI18n = {
     protocolOptions: 'Protocol Options',
     eof: 'EOF',
     txHexMode: 'Hex Mode',
-    autoClean: 'Auto Clean',
+
     autoRepeat: 'Auto Repeat',
     signature: 'Signature',
     breakpoint: 'Break on Text',
