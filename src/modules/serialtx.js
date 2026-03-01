@@ -13,7 +13,7 @@ function createTxTable() {
   ];
 
   // Convert to array format for Grid.js
-  const getDataArray = () => tableData.map(item => [item.id, item.content, null]);
+  const getDataArray = () => tableData.map(item => [item.content, null]);
 
   const grid = new Grid({
     search: true,
@@ -23,25 +23,10 @@ function createTxTable() {
     autoWidth: true,
     // height: '100px',
     pagination: {
-      limit: 3,
+      limit: 4,
       summary: false
     },
     columns: [{
-      name: 'Index',
-      minWidth: '30px',
-      sort: false,
-      formatter: (cell) => {
-        // Return the explicit ID stored with each row, styled as bold and centered
-        return h('div', {
-          className: 'bold-centered-index',
-          style: {
-            fontWeight: 'bold',
-            textAlign: 'center',
-            width: '100%'
-          }
-        }, cell);
-      }
-    }, {
       name: 'Content',
       sort: false,
       formatter: (cell, row) => {
@@ -67,37 +52,55 @@ function createTxTable() {
       }
     },
     {
-      name: 'Actions',
-      minWidth: '100px',
+      name: 'Send',
+      width: '48px',
       sort: false,
       formatter: (cell, row) => {
         return h('div', {
           style: {
             display: 'flex',
-            width: '100%',
-            position: 'relative'
+            justifyContent: 'center',
+            width: '100%'
           }
         }, [
           h('button', {
             className: 'btn-small waves-effect custom-tx-btn centered-action-btn',
             style: {
-              position: 'absolute',
-              left: '30%',
-              transform: 'translateX(-50%)',
               margin: '0'
             },
-            onClick: () => transmitData(row.cells[1].data)
+            onClick: () => transmitData(row.cells[0].data)
           }, [
             h('i', { className: 'material-icons' }, 'send')
-          ]),
+          ])
+        ]);
+      }
+    },
+    {
+      name: 'Delete',
+      width: '48px',
+      sort: false,
+      formatter: (cell, row) => {
+        return h('div', {
+          style: {
+            display: 'flex',
+            justifyContent: 'center',
+            width: '100%'
+          }
+        }, [
           h('button', {
             className: 'btn-small waves-effect custom-tx-btn centered-action-btn red',
             style: {
-              position: 'absolute',
-              right: '0',
               margin: '0'
             },
-            onClick: () => removeRow(row.cells[0].data)
+            onClick: () => {
+              // Get the content from the same row to identify which item to remove
+              const contentToDelete = row.cells[0].data;
+              const indexToRemove = tableData.findIndex(item => item.content === contentToDelete);
+
+              if (indexToRemove !== -1) {
+                removeRowByIndex(indexToRemove);
+              }
+            }
           }, [
             h('i', { className: 'material-icons' }, 'delete')
           ])
@@ -124,15 +127,17 @@ function createTxTable() {
     grid.updateConfig({ data: getDataArray() }).forceRender();
   }
 
-  function removeRow(id) {
-    tableData = tableData.filter(item => item.id !== id);
-    grid.updateConfig({ data: getDataArray() }).forceRender();
+  function removeRowByIndex(index) {
+    if (index >= 0 && index < tableData.length) {
+      tableData.splice(index, 1);
+      grid.updateConfig({ data: getDataArray() }).forceRender();
+    }
   }
 
   // Make these functions globally available for testing
-  window.txTableHelpers = { addRow, removeRow };
+  window.txTableHelpers = { addRow, removeRowByIndex };
 
-  return { addRow, removeRow, grid };
+  return { addRow, removeRow: removeRowByIndex, grid };
 }
 
 module.exports = { createTxTable }
