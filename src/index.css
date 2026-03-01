@@ -15,7 +15,7 @@
   --menu-height: 350px;
   --menu-handle-height: 4px;
   --bar-height: 53px;
-  --trans-btn-height: 20px;
+  --tx-btn-height: 24px;
   --modem-btn-height: 10px;
   --bar-color-head: #ffba3a;
   --bar-color-middle: #ffba3a;
@@ -383,16 +383,17 @@ input {
 }
 
 .custom-tx-btn {
-  margin-top: 28px;
-
-  height: var(--trans-btn-height) !important;
-  line-height: var(--trans-btn-height) !important;
-  border-radius: calc(var(--trans-btn-height) / 2);
+  height: var(--tx-btn-height) !important;
+  line-height: var(--tx-btn-height) !important;
+  border-radius: calc(var(--tx-btn-height) / 2);
 }
 
 .editable-content {
   width: 90%;
   font-size: 12px;
+  padding: 0px;
+  margin: 0px !important;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', monospace;
 }
 
 .editable-content:focus {
@@ -410,8 +411,8 @@ input {
 
 .tx-table-floating-btn {
   position: absolute;
-  top: 10px;
-  right: calc(5% + 10px);
+  top: 18px;
+  left: 180px;
   z-index: 1000;
   margin: 0;
 }
@@ -481,6 +482,16 @@ input {
   right: 0;
   bottom: 50px; /* Space for config area */
   overflow: auto;
+}
+
+.gridjs-footer {
+  padding: 0;
+}
+.gridjs-header {
+  padding: 0;
+}
+.gridjs-search {
+  height: 32px;
 }
 
 .transmit-config-area {
