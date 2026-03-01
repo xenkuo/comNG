@@ -299,7 +299,26 @@ function transmitData(dataIn) {
   let dataOut = dataIn
   let eof = store.get('transmit.eof')
   if (true === store.get('transmit.hexmode')) {
-    dataOut = Buffer.from(dataIn, 'hex')
+    // Validate hex format before conversion
+    if (!/^[0-9a-fA-F]*$/.test(dataIn)) {
+      console.error('Invalid hex data: contains non-hex characters')
+      toast('Error: Invalid hex data format - only 0-9, a-f, A-F allowed')
+      return false
+    }
+
+    try {
+      dataOut = Buffer.from(dataIn, 'hex')
+      // Check if conversion resulted in empty buffer (invalid hex pairs)
+      if (dataOut.length === 0 && dataIn.length > 0) {
+        console.error('Invalid hex data: incomplete hex pairs')
+        toast('Error: Invalid hex data format - incomplete hex pairs')
+        return false
+      }
+    } catch (error) {
+      console.error('Hex conversion error:', error.message)
+      toast('Error: Invalid hex data format')
+      return false
+    }
   } else {
     dataOut += eof
   }

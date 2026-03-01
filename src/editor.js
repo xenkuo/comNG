@@ -427,11 +427,9 @@ function _textProcess(inBuffer) {
   // Store remaining partial line for next processing
   if (buffer.length > 0) {
     let currentTs = Date.now()
-    console.log('Remaining partial line:', buffer.length, currentTs)
 
     if (currentTs - _lastTextProcessTs > 1000) {
       _printTextLine(buffer, true)
-      console.log(currentTs, Date.now(), _lastTextProcessTs)
       _lastTextProcessTs = currentTs
     } else {
       partialLineBuffer = buffer

@@ -527,6 +527,7 @@ input {
 .tx-table-center .gridjs-wrapper {
   margin: 0 auto;
   border-radius: 0px;
+  box-shadow: none;
 }
 
 .tx-table-center .gridjs-table {

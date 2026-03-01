@@ -8,14 +8,14 @@ const { transmitData } = require('./serialport.js')
 function createTxTable() {
   // Sample data with explicit IDs for dynamic management
   let tableData = [
-    { id: 1, content: 'reboot' },
-    { id: 2, content: 'updateFirmware{version: "v2.0"}' },
-    { id: 3, content: 'factoryReset' },
-    { id: 4, content: 'upgrade' },
+    { content: 'reboot' },
+    { content: 'updateFirmware{version: "v2.0"}' },
+    { content: 'factoryReset' },
+    { content: 'upgrade' },
   ];
 
   // Convert to array format for Grid.js
-  const getDataArray = () => tableData.map(item => [item.content, null]);
+  const getDataArray = () => tableData.map(item => [null, item.content, null]);
 
   const grid = new Grid({
     search: true,
@@ -23,7 +23,6 @@ function createTxTable() {
     resizable: true,
     fixedHeader: true,
     autoWidth: true,
-    // height: '100px',
     pagination: {
       limit: 4,
       summary: false
@@ -31,7 +30,7 @@ function createTxTable() {
     style: {
       th: {
         'background-color': '#e2f2f1',
-        color: '#000',
+        color: '#26a69a',
         'text-align': 'center',
         'font-size': '12px',
         margin: '3px',
@@ -43,6 +42,10 @@ function createTxTable() {
 
     },
     columns: [{
+      name: '#', // Hidden index column
+      hidden: true,
+      formatter: (_, row) => row._index // Store the Grid.js row index
+    }, {
       name: 'Message',
       sort: true,
       formatter: (cell, row) => {
@@ -52,9 +55,9 @@ function createTxTable() {
           value: cell,
           className: 'editable-content',
           onInput: (e) => {
-            // Update the data when input changes
-            const rowIndex = row.index || tableData.findIndex(item => item.id === row.cells[0].data);
-            if (rowIndex >= 0) {
+            // Use the Grid.js row index from the hidden column
+            const rowIndex = row.cells[0].data; // _index column is at index 0
+            if (rowIndex >= 0 && rowIndex < tableData.length) {
               tableData[rowIndex].content = e.target.value;
             }
           },
@@ -84,7 +87,13 @@ function createTxTable() {
             style: {
               margin: '0'
             },
-            onClick: () => transmitData(row.cells[0].data)
+            onClick: () => {
+              // Use the Grid.js row index from the hidden column
+              const rowIndex = row.cells[0].data; // _index column is at index 0
+              const currentContent = rowIndex >= 0 && rowIndex < tableData.length ?
+                tableData[rowIndex].content : cell;
+              transmitData(currentContent);
+            }
           }, [
             h('i', { className: 'material-icons' }, 'send')
           ])
@@ -109,12 +118,10 @@ function createTxTable() {
               margin: '0'
             },
             onClick: () => {
-              // Get the content from the same row to identify which item to remove
-              const contentToDelete = row.cells[0].data;
-              const indexToRemove = tableData.findIndex(item => item.content === contentToDelete);
-
-              if (indexToRemove !== -1) {
-                removeRowByIndex(indexToRemove);
+              // Use the Grid.js row index from the hidden column
+              const rowIndex = row.cells[0].data; // _index column is at index 0
+              if (rowIndex >= 0 && rowIndex < tableData.length) {
+                removeRowByIndex(rowIndex);
               }
             }
           }, [
