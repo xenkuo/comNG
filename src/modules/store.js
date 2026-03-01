@@ -80,6 +80,9 @@ function initWithMigration(version) {
         db.delete('fileops.capture.switch')
         db.delete('fileops.capture.filePath')
       },
+      '4.0.0': (db) => {
+        db.delete('transmit.clean')
+      },
     },
   })
 }

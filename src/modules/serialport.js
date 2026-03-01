@@ -77,7 +77,6 @@ function _modemSignalReset() {
 function _serialWrite(data) {
   if (port === undefined || port.isOpen === false) {
     toast('Error: No port opened, cannot write')
-    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
     return false
   }
 
@@ -140,11 +139,6 @@ document.getElementById('port-switch').onclick = (e) => {
 
     port = new serial(portPath, _serialGetOptions())
 
-    port.addListener("txData", (data) => {
-      console.log("txData", data);
-      port.serialWrite(data);
-    });
-
     port.addListener("ctlClose", () => {
       console.log("close the port")
       port.close();
@@ -176,7 +170,7 @@ document.getElementById('port-switch').onclick = (e) => {
     port.on('error', (e) => {
       toast(e.message)
       document.getElementById('port-switch').checked = false
-      if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+      if (_autoRepeatTimeout !== undefined) clearInterval(_autoRepeatTimeout)
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
     })
 
@@ -185,10 +179,9 @@ document.getElementById('port-switch').onclick = (e) => {
 
       if (e !== null) console.error(e)
       document.getElementById('port-switch').checked = false
-      if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
-      if (modemSignalTimer !== undefined) {
-        clearInterval(modemSignalTimer)
-      }
+      if (_autoRepeatTimeout !== undefined) clearInterval(_autoRepeatTimeout)
+      if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
+
 
       _modemSignalReset()
       // emit a event to editor.js to reset editor state
@@ -293,11 +286,13 @@ document.getElementById('path-input').onmouseleave = (e) => {
   pathUpdated = false
 }
 
-let transRepeatTimer
-document.getElementById('trans-send-btn').onclick = () => {
-  const dataObj = document.getElementById('trans-data')
-
-  let dataIn = dataObj.value
+let _autoRepeatTimeout
+/**
+ * Transmit data through serial port with proper formatting
+ * @param {string} dataIn - Raw input data to transmit
+ * @returns {boolean} Success status
+ */
+function transmitData(dataIn) {
   let dataOut = dataIn
   let eof = store.get('transmit.eof')
   if (true === store.get('transmit.hexmode')) {
@@ -306,31 +301,42 @@ document.getElementById('trans-send-btn').onclick = () => {
     dataOut += eof
   }
 
-  if (_serialWrite(dataOut) === false) return
+  if (_serialWrite(dataOut) === false) return false
 
-  // Log functionality removed
   console.log('Transmitted:', dataIn)
 
+  // Handle auto-repeat functionality
   if (document.getElementById('trans-repeat-switch').checked === true) {
-    if (transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+    // release the previous timer
+    if (_autoRepeatTimeout !== undefined) clearInterval(_autoRepeatTimeout)
 
     let interval = document.getElementById('trans-repeat-interval').value
     interval = parseInt(interval)
     if (isNaN(interval) === true) interval = 1000
 
-    transRepeatTimer = setInterval(() => {
+    // start the new timer
+    _autoRepeatTimeout = setInterval(() => {
       _serialWrite(dataOut)
     }, interval)
   }
 
-  // clear data element
-  if (true === store.get('transmit.clean')) dataObj.value = ''
+  return true
+}
+
+document.getElementById('trans-send-btn').onclick = () => {
+  const dataObj = document.getElementById('trans-data')
+  const dataIn = dataObj.value
+
+  transmitData(dataIn)
 }
 
 document.getElementById('trans-repeat-switch').onchange = (e) => {
   let checked = e.target.checked
 
-  if (checked === false && transRepeatTimer !== undefined) clearInterval(transRepeatTimer)
+  if (checked === false && _autoRepeatTimeout !== undefined) {
+    // cancel the timer
+    clearInterval(_autoRepeatTimeout)
+  }
 }
 
 function serialClose() {
@@ -343,5 +349,6 @@ function serialInit(rxDataCallback) {
 
 module.exports = {
   serialInit,
+  transmitData,
   serialClose,
 }
