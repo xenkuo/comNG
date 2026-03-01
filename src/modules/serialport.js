@@ -323,13 +323,6 @@ function transmitData(dataIn) {
   return true
 }
 
-document.getElementById('trans-send-btn').onclick = () => {
-  const dataObj = document.getElementById('trans-data')
-  const dataIn = dataObj.value
-
-  transmitData(dataIn)
-}
-
 document.getElementById('trans-repeat-switch').onchange = (e) => {
   let checked = e.target.checked
 

@@ -21,9 +21,13 @@ function createTxTable() {
     resizable: true,
     fixedHeader: true,
     autoWidth: true,
+    // height: '100px',
+    pagination: {
+      limit: 2,
+      summary: false
+    },
     columns: [{
       name: 'Index',
-      width: '30px',
       minWidth: '30px',
       sort: false,
       formatter: (cell) => {
@@ -64,7 +68,6 @@ function createTxTable() {
     },
     {
       name: 'Actions',
-      width: '100px',
       minWidth: '100px',
       sort: false,
       formatter: (cell, row) => {

@@ -291,6 +291,13 @@ input {
   padding-left: 2px;
 }
 
+#menu-area {
+  height: var(--menu-height);
+  width: calc(100%);
+  /* width: 100%; */
+  background-color: #fafafa;
+}
+
 #menu-handle {
   background-color: #fafafa;
   width: 100%;
@@ -301,16 +308,11 @@ input {
   /* -webkit-app-region: drag; */
 }
 
-#menu-area {
-  height: var(--menu-height);
-  width: calc(100%);
-  /* width: 100%; */
-  background-color: #fafafa;
-}
-
 #menu-tabs-body {
-  height: 100%;
+  height: calc(100% - var(--menu-handle-height));
   overflow: auto;
+  margin-bottom: 0px;
+
   position: relative;
 }
 #menu-tabs-row {
@@ -375,18 +377,12 @@ input {
   border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
 }
 
-#trans-data {
-  font-size: 12px;
-  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', 'Lucida Console', monospace;
-}
-
 #trans-eof-row {
   margin-top: 10px;
   margin-left: 10px;
 }
 
-.custom-tx-btn,
-#trans-send-btn {
+.custom-tx-btn {
   margin-top: 28px;
 
   height: var(--trans-btn-height) !important;
@@ -418,21 +414,6 @@ input {
   right: calc(5% + 10px);
   z-index: 1000;
   margin: 0;
-}
-
-.tx-table-center {
-  position: relative;
-}
-
-.red {
-  background-color: #f44336 !important;
-  color: white !important;
-}
-
-.tx-table-center #tx-table {
-  display: inline-block;
-  width: 90%;
-  margin: 0 auto;
 }
 
 .bold-centered-index {
@@ -487,15 +468,39 @@ input {
   margin-bottom: 0px;
 }
 
+/* Transmit Tab Layout - Flexbox approach */
+.transmit-tab-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 26px);
+}
+
+.transmit-content-area {
+  flex: 1;
+  overflow: auto;
+  min-height: 0; /* Allow shrinking below content size */
+}
+
+.transmit-config-area {
+  flex-shrink: 0; /* Prevent shrinking */
+  background-color: #f5f5f5;
+}
+
 /* Center tx-table container and Grid.js table */
 .tx-table-center {
   text-align: center;
   width: 100%;
+  position: relative;
+}
+
+.red {
+  background-color: #f44336 !important;
+  color: white !important;
 }
 
 .tx-table-center #tx-table {
   display: inline-block;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
 }
 

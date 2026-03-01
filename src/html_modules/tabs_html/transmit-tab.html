@@ -1,69 +1,65 @@
-<div id="transmit-tab" class="col s12">
-  <div class="col s12">
-    <div class="row config-row">
-      <div class="col s1"></div>
-      <div class="input-field col s9">
-        <input placeholder="Data" id="trans-data" type="text" />
-      </div>
-      <div class="col s2">
-        <a class="btn-small waves-effect" id="trans-send-btn">
-          <i class="material-icons">send</i>
-        </a>
-      </div>
-    </div>
-    <div class="row config-row">
-      <div class="col s1"></div>
-      <div class="col s1 config-key">
-        <p i18n-label="eof"></p>
-      </div>
-      <div class="col s2">
-        <div class="input-field" id="trans-eof-row">
-          <select id="trans-eof-select">
-            <option value="1" selected>CRLF</option>
-            <option value="2">LF</option>
-            <option value="3">CR</option>
-          </select>
-        </div>
-      </div>
-      <div class="col s1"></div>
-      <div class="col s1 config-key">
-        <p i18n-label="txHexMode"></p>
-      </div>
-      <div class="col s3 config-item">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="trans-hexmode-switch" />
-            <span class="lever"></span>
-            On
-          </label>
-        </div>
-      </div>
-    </div>
-    <div class="row config-row">
-      <div class="col s1"></div>
-      <div class="col s1 config-key">
-        <p i18n-label="autoRepeat"></p>
-      </div>
-      <div class="col s3 config-item">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="trans-repeat-switch" />
-            <span class="lever"></span>
-            On
-          </label>
-        </div>
-      </div>
-      <div class="input-field col s2 config-item">
-        <input id="trans-repeat-interval" placeholder="interval: ms" value="1000" type="text" />
-      </div>
+<div id="transmit-tab" class="col s12 transmit-tab-container">
+  <div class="transmit-content-area">
+    <div class="col s12 tx-table-center">
+      <div id="tx-table"></div>
+      <button id="add-row-btn" class="btn-small waves-effect custom-tx-btn tx-table-floating-btn">
+        <i class="material-icons">add</i>
+      </button>
     </div>
   </div>
-  <div class="col s12 tx-table-center">
-    <div id="tx-table"></div>
-    <button id="add-row-btn" class="btn-small waves-effect custom-tx-btn tx-table-floating-btn">
-      <i class="material-icons">add</i>
-    </button>
+
+  <div class="transmit-config-area">
+    <div class="col s12">
+      <div class="row config-row">
+        <!-- EOF Selection -->
+        <div class="col s1 config-key">
+          <p i18n-label="eof"></p>
+        </div>
+        <div class="col s2">
+          <div class="input-field" id="trans-eof-row">
+            <select id="trans-eof-select">
+              <option value="1" selected>CRLF</option>
+              <option value="2">LF</option>
+              <option value="3">CR</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Hex Mode Switch -->
+        <div class="col s1 config-key">
+          <p i18n-label="txHexMode"></p>
+        </div>
+        <div class="col s2 config-item">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="trans-hexmode-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+
+        <!-- Auto Repeat Switch -->
+        <div class="col s1 config-key">
+          <p i18n-label="autoRepeat"></p>
+        </div>
+        <div class="col s2 config-item">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="trans-repeat-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+
+        <!-- Repeat Interval -->
+        <div class="input-field col s2 config-item">
+          <input id="trans-repeat-interval" placeholder="ms" value="1000" type="text" />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
