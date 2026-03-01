@@ -83,8 +83,9 @@ function _editorStateReset() {
 /**
  * Print text to the editor with timestamp and hex mode handling
  * @param {Buffer|string} line - The original line to process
+ * @param {boolean} forceNewline - Whether to force a newline, only apply to text mode
  */
-function _printTextLine(line) {
+function _printTextLine(line, forceNewline) {
   let ret = true
   let outputLine = line
   if (store.get('general.timestamp') === true) {
@@ -103,7 +104,8 @@ function _printTextLine(line) {
     const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
     _applyEdit(hexOutput, true, true)
   } else {
-    const cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
+    let cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
+    if (true === forceNewline) cleanOutput += '\n'
     _applyEdit(cleanOutput, true, true)
   }
 
@@ -415,7 +417,7 @@ function _textProcess(inBuffer) {
     let line = buffer.slice(0, index + 1)
     buffer = buffer.slice(index + 1)
 
-    if (false === _printTextLine(line)) {
+    if (false === _printTextLine(line, false)) {
       break
     }
 
@@ -428,7 +430,7 @@ function _textProcess(inBuffer) {
     console.log('Remaining partial line:', buffer.length, currentTs)
 
     if (currentTs - _lastTextProcessTs > 1000) {
-      _printTextLine(buffer)
+      _printTextLine(buffer, true)
       console.log(currentTs, Date.now(), _lastTextProcessTs)
       _lastTextProcessTs = currentTs
     } else {
