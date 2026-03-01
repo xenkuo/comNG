@@ -30,7 +30,7 @@ function createTxTable() {
     },
     columns: [{
       name: 'Message',
-      sort: false,
+      sort: true,
       formatter: (cell, row) => {
         // Create editable input field
         return h('input', {

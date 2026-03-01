@@ -486,6 +486,9 @@ input {
 
 .gridjs-footer {
   padding: 0;
+  border: none;
+  box-shadow: none;
+  margin: 4px 0 0 0;
 }
 .gridjs-head {
   padding: 4px 1px;
@@ -527,7 +530,7 @@ input {
 
 .tx-table-center .gridjs-wrapper {
   margin: 0 auto;
-  display: inline-block;
+  border-radius: 0px;
 }
 
 .tx-table-center .gridjs-table {
