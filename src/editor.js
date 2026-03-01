@@ -26,7 +26,7 @@ const hexMode = require('./modules/hex-mode.js')
 const chromeTabsModule = require('./modules/chrome-tabs.js')
 const hexy = require('hexy')
 const { serialInit, serialClose } = require('./modules/serialport.js')
-const { getTimestamp, toast } = require('./modules/utilities.js')
+const { getFormattedTimestamp, toast } = require('./modules/utilities.js')
 const fs = require('fs')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
@@ -78,6 +78,45 @@ function _editorStateReset() {
   ansiWait = false
   partialLineBuffer = null
   hlt.reset()
+}
+
+/**
+ * Print text to the editor with timestamp and hex mode handling
+ * @param {Buffer|string} line - The original line to process
+ */
+function _printTextLine(line) {
+  let ret = true
+  let outputLine = line
+  if (store.get('general.timestamp') === true) {
+    const timestamp = getFormattedTimestamp()
+    if (store.get('general.hexmode') === true) {
+      // In hex mode, add timestamp as separate line
+      _applyEdit(timestamp + '\n', false, true)
+    } else {
+      // In string mode, prepend timestamp to the line
+      outputLine = timestamp + line
+    }
+  }
+
+  // Process the complete line
+  if (store.get('general.hexmode') === true) {
+    const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
+    _applyEdit(hexOutput, true, true)
+  } else {
+    const cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
+    _applyEdit(cleanOutput, true, true)
+  }
+
+  // Handle breakpoints
+  if (store.get('advance.breakpoint.switch') === true) {
+    if (_breakpointProcess(outputLine) === true) {
+      buffer = Buffer.from('')
+      serialClose()
+      ret = false
+    }
+  }
+
+  return ret
 }
 
 /**
@@ -325,7 +364,7 @@ initIPCHandlers({
 function _hexModeProcess(buffer, revealLine) {
   if (store.get('general.timestamp') === true && true === revealLine) {
     let timestamp = ''
-    timestamp = getTimestamp()
+    timestamp = getFormattedTimestamp()
     _applyEdit(timestamp + '\n', false, true)
   }
 
@@ -358,6 +397,7 @@ function _breakpointProcess(line) {
   return false
 }
 
+let _lastTextProcessTs = 0
 /**
  * Process text data with optimized buffering - only outputs complete lines
  * @param {Buffer} inBuffer - Incoming data buffer
@@ -375,41 +415,25 @@ function _textProcess(inBuffer) {
     let line = buffer.slice(0, index + 1)
     buffer = buffer.slice(index + 1)
 
-    // Add timestamp if enabled
-    let outputLine = line
-    if (store.get('general.timestamp') === true) {
-      const timestamp = getTimestamp()
-      if (store.get('general.hexmode') === true) {
-        // In hex mode, add timestamp as separate line
-        _applyEdit(timestamp + '\n', false, true)
-      } else {
-        // In string mode, prepend timestamp to the line
-        outputLine = timestamp + line
-      }
+    if (false === _printTextLine(line)) {
+      break
     }
 
-    // Process the complete line
-    if (store.get('general.hexmode') === true) {
-      const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
-      _applyEdit(hexOutput, true, true)
-    } else {
-      const cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
-      _applyEdit(cleanOutput, true, true)
-    }
-
-    // Handle breakpoints
-    if (store.get('advance.breakpoint.switch') === true) {
-      if (_breakpointProcess(line) === true) {
-        buffer = Buffer.from('')
-        serialClose()
-        break
-      }
-    }
+    _lastTextProcessTs = Date.now() // Update last process timestamp in ms
   }
 
   // Store remaining partial line for next processing
   if (buffer.length > 0) {
-    partialLineBuffer = buffer
+    let currentTs = Date.now()
+    console.log('Remaining partial line:', buffer.length, currentTs)
+
+    if (currentTs - _lastTextProcessTs > 1000) {
+      _printTextLine(buffer)
+      console.log(currentTs, Date.now(), _lastTextProcessTs)
+      _lastTextProcessTs = currentTs
+    } else {
+      partialLineBuffer = buffer
+    }
   }
 }
 

@@ -3,8 +3,11 @@
 const serial = require('serialport')
 const { toast } = require('./utilities.js')
 
+/** @typedef {InstanceType<typeof import('serialport')>} SerialPortInstance */
+
 
 // TODO: is modemSignalTimer needed?
+/** @type {SerialPortInstance} */
 let port, modemSignalTimer, _serialRxDataCallback
 let modemSignal = {
   cts: false,
@@ -123,7 +126,7 @@ function _serialGetOptions() {
   let flowcontrol = document
     .getElementById('flowcontrol-select')
     .options[store.get('general.flowcontrolIndex')].text.toLowerCase()
-  openOptions[flowcontrol] = true
+  if (flowcontrol !== 'none') openOptions[flowcontrol] = true
 
   openOptions.autoOpen = true
 

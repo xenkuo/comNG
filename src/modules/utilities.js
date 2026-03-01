@@ -46,7 +46,7 @@ function generateFileName() {
   return name
 }
 
-function getTimestamp() {
+function getFormattedTimestamp() {
   const t = new Date()
 
   return (
@@ -58,6 +58,6 @@ module.exports = {
   navi_layout_init,
   navi_layout_update,
   generateFileName,
-  getTimestamp,
+  getFormattedTimestamp,
   toast
 }
