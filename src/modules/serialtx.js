@@ -24,6 +24,7 @@ function createTxTable() {
     columns: [{
       name: 'Index',
       width: '30px',
+      minWidth: '30px',
       sort: false,
       formatter: (cell) => {
         // Return the explicit ID stored with each row, styled as bold and centered
@@ -63,21 +64,55 @@ function createTxTable() {
     },
     {
       name: 'Actions',
-      width: '64px',
+      width: '100px',
+      minWidth: '100px',
       sort: false,
       formatter: (cell, row) => {
-        return h('button', {
-          className: 'btn-small waves-effect custom-tx-btn centered-action-btn',
-          onClick: () => transmitData(row.cells[1].data)
+        return h('div', {
+          style: {
+            display: 'flex',
+            width: '100%',
+            position: 'relative'
+          }
         }, [
-          h('i', { className: 'material-icons' }, 'send')
+          h('button', {
+            className: 'btn-small waves-effect custom-tx-btn centered-action-btn',
+            style: {
+              position: 'absolute',
+              left: '30%',
+              transform: 'translateX(-50%)',
+              margin: '0'
+            },
+            onClick: () => transmitData(row.cells[1].data)
+          }, [
+            h('i', { className: 'material-icons' }, 'send')
+          ]),
+          h('button', {
+            className: 'btn-small waves-effect custom-tx-btn centered-action-btn red',
+            style: {
+              position: 'absolute',
+              right: '0',
+              margin: '0'
+            },
+            onClick: () => removeRow(row.cells[0].data)
+          }, [
+            h('i', { className: 'material-icons' }, 'delete')
+          ])
         ]);
       }
     },],
     data: getDataArray()
   });
 
-  grid.render(document.getElementById('tx-table'))
+  // Render the grid
+  const tableElement = document.getElementById('tx-table')
+  grid.render(tableElement)
+
+  // Attach event handler to the static add button
+  const addButton = document.getElementById('add-row-btn')
+  if (addButton) {
+    addButton.onclick = () => addRow('')
+  }
 
   // Helper functions for dynamic row management
   function addRow(content = '') {

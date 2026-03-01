@@ -412,6 +412,29 @@ input {
   margin: 0 auto;
 }
 
+.tx-table-floating-btn {
+  position: absolute;
+  top: 10px;
+  right: calc(5% + 10px);
+  z-index: 1000;
+  margin: 0;
+}
+
+.tx-table-center {
+  position: relative;
+}
+
+.red {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.tx-table-center #tx-table {
+  display: inline-block;
+  width: 90%;
+  margin: 0 auto;
+}
+
 .bold-centered-index {
   font-weight: bold;
   text-align: center;
