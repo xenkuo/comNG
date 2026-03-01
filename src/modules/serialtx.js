@@ -23,7 +23,7 @@ function createTxTable() {
     autoWidth: true,
     // height: '100px',
     pagination: {
-      limit: 2,
+      limit: 4,
       summary: false
     },
     columns: [{

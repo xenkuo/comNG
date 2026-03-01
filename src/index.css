@@ -470,20 +470,28 @@ input {
 
 /* Transmit Tab Layout - Flexbox approach */
 .transmit-tab-container {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   height: calc(100% - 26px);
 }
 
 .transmit-content-area {
-  flex: 1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* Space for config area */
   overflow: auto;
-  min-height: 0; /* Allow shrinking below content size */
 }
 
 .transmit-config-area {
-  flex-shrink: 0; /* Prevent shrinking */
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background-color: #f5f5f5;
+  z-index: 10;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  height: 50px; /* Fixed height */
 }
 
 /* Center tx-table container and Grid.js table */
