@@ -170,21 +170,31 @@ function createTxTable() {
     sort: true,
     resizable: true,
     fixedHeader: true,
-    width: '100%',
-    style: {
-      table: {
-        'margin': '0 auto',
-        'width': '80%'
-      }
-    },
+    autoWidth: true,
+    // style: {
+    //   table: {
+    //     'margin': '0 auto',
+    //     'width': '100%'
+    //   }
+    // },
     columns: [{
       name: 'Index',
+      width: '30px',
+      sort: false,
       formatter: (cell, row) => {
-        // Return the explicit ID stored with each row
-        return cell;
+        // Return the explicit ID stored with each row, styled as bold and centered
+        return h('div', {
+          className: 'bold-centered-index',
+          style: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+            width: '100%'
+          }
+        }, cell);
       }
     }, {
       name: 'Content',
+      sort: false,
       formatter: (cell, row) => {
         // Create editable input field
         return h('input', {
@@ -209,9 +219,11 @@ function createTxTable() {
     },
     {
       name: 'Actions',
+      width: '64px',
+      sort: false,
       formatter: (cell, row) => {
         return h('button', {
-          className: 'btn-small waves-effect custom-tx-btn',
+          className: 'btn-small waves-effect custom-tx-btn centered-action-btn',
           onClick: () => alert(`Editing "${row.cells[0].data}" "${row.cells[1].data}"`)
         }, [
           h('i', { className: 'material-icons' }, 'send')

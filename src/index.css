@@ -414,6 +414,23 @@ input {
   box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.2);
 }
 
+.centered-action-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.bold-centered-index {
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 #color-panel {
   height: 43px;
   line-height: 43px;
