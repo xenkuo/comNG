@@ -493,6 +493,10 @@ input {
   height: 32px;
 }
 
+td.gridjs-td,
+th.gridjs-th {
+  border: none !important;
+}
 .transmit-config-area {
   position: absolute;
   bottom: 0;

@@ -6,7 +6,7 @@ const { transmitData } = require('./serialport.js')
  * @returns {Object} Table helper functions
  */
 function createTxTable() {
-  // Sample data with explicit IDs for dynamic management
+  // Sample data - Grid.js handles row indexing via # column
   let tableData = [
     { content: 'reboot' },
     { content: 'updateFirmware{version: "v2.0"}' },
@@ -14,12 +14,11 @@ function createTxTable() {
     { content: 'upgrade' },
   ];
 
-  // Convert to array format for Grid.js
-  const getDataArray = () => tableData.map(item => [null, item.content, null]);
+  // Convert to array format for Grid.js (includes index column)
+  const getDataArray = () => tableData.map((item, index) => [index, item.content, null]);
 
   const grid = new Grid({
     search: true,
-    sort: true,
     resizable: true,
     fixedHeader: true,
     autoWidth: true,
@@ -30,7 +29,7 @@ function createTxTable() {
     style: {
       th: {
         'background-color': '#e2f2f1',
-        color: '#26a69a',
+        color: '#000',
         'text-align': 'center',
         'font-size': '12px',
         margin: '3px',
@@ -73,7 +72,6 @@ function createTxTable() {
     {
       name: 'Send',
       width: '48px',
-      sort: false,
       formatter: (cell, row) => {
         return h('div', {
           style: {
@@ -103,7 +101,6 @@ function createTxTable() {
     {
       name: 'Delete',
       width: '48px',
-      sort: false,
       formatter: (cell, row) => {
         return h('div', {
           style: {
