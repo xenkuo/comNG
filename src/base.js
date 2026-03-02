@@ -292,7 +292,10 @@ document.getElementById('menu-tabs').onclick = (e) => {
 
 document.getElementById('hexmode-switch').onclick = (e) => {
   store.set('general.hexmode', e.target.checked)
-  editorInst.updateOptions({ readOnly: e.target.checked })
+
+  // Sync to transmit hexmode switch
+  document.getElementById('trans-hexmode-switch').checked = e.target.checked
+  store.set('transmit.hexmode', e.target.checked)
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {
@@ -367,6 +370,10 @@ document.getElementById('trans-hexmode-switch').onchange = (e) => {
   let checked = e.target.checked
 
   store.set('transmit.hexmode', checked)
+
+  // Sync to general hexmode switch
+  document.getElementById('hexmode-switch').checked = checked
+  store.set('general.hexmode', checked)
 }
 
 document.getElementById('insider-preview').onclick = (e) => {

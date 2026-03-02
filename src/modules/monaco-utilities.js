@@ -22,6 +22,7 @@ function configureComNGLanguageTokens(monacoInst) {
         [/\s+\[?[w|W][a|A][r|R][n|N]\]?\s+/, 'warn'],
         [/^\[?W\]?\s.*/, 'warn'],
         [/\s+\[?W\]?\s+/, 'warn'],
+        [/\s*->\s*/, 'warn'], // for tx message indicator
         [/^\[?[i|I][n|N][f|F][o|O]\]?\s.*/, 'info'],
         [/\s+\[?[i|I][n|N][f|F][o|O]\]?\s+/, 'info'],
         [/^\[?I\]?\s.*/, 'info'],
