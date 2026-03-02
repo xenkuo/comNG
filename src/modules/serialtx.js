@@ -11,7 +11,7 @@ function createTxTable() {
     { content: 'reboot' },
     { content: 'updateFirmware{version: "v2.0"}' },
     { content: 'factoryReset' },
-    { content: 'upgrade' },
+    { content: '100300000001874B' },
   ];
 
   // Convert to array format for Grid.js (includes index column)

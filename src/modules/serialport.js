@@ -8,7 +8,7 @@ const { toast } = require('./utilities.js')
 
 // TODO: is modemSignalTimer needed?
 /** @type {SerialPortInstance} */
-let port, modemSignalTimer, _serialRxDataCallback
+let port, modemSignalTimer, _rcvdSerialDataCB, _echoSerialDataCB
 let modemSignal = {
   cts: false,
   dsr: false,
@@ -77,13 +77,13 @@ function _modemSignalReset() {
   document.getElementById('dcd-btn').style.cssText = 'background-color: #dfdfdf !important'
 }
 
-function _serialWrite(data) {
+function _serialWrite(data, hexMode) {
   if (port === undefined || port.isOpen === false) {
     toast('Error: No port opened, cannot write')
     return false
   }
 
-  port.write(data)
+  port.write(data, _echoSerialDataCB(data, hexMode))
   return true
 }
 
@@ -198,7 +198,7 @@ document.getElementById('port-switch').onclick = (e) => {
     })
 
     port.on('data', (data) => {
-      if (_serialRxDataCallback) _serialRxDataCallback(data)
+      if (_rcvdSerialDataCB) _rcvdSerialDataCB(data)
     })
   } else {
     if (port === undefined || port.isOpen === false) {
@@ -298,10 +298,11 @@ let _autoRepeatTimeout
 function transmitData(dataIn) {
   let dataOut = dataIn
   let eof = store.get('transmit.eof')
-  if (true === store.get('transmit.hexmode')) {
+  let hexMode = store.get('transmit.hexmode')
+
+  if (true === hexMode) {
     // Validate hex format before conversion
     if (!/^[0-9a-fA-F]*$/.test(dataIn)) {
-      console.error('Invalid hex data: contains non-hex characters')
       toast('Error: Invalid hex data format - only 0-9, a-f, A-F allowed')
       return false
     }
@@ -310,12 +311,10 @@ function transmitData(dataIn) {
       dataOut = Buffer.from(dataIn, 'hex')
       // Check if conversion resulted in empty buffer (invalid hex pairs)
       if (dataOut.length === 0 && dataIn.length > 0) {
-        console.error('Invalid hex data: incomplete hex pairs')
         toast('Error: Invalid hex data format - incomplete hex pairs')
         return false
       }
     } catch (error) {
-      console.error('Hex conversion error:', error.message)
       toast('Error: Invalid hex data format')
       return false
     }
@@ -323,7 +322,7 @@ function transmitData(dataIn) {
     dataOut += eof
   }
 
-  if (_serialWrite(dataOut) === false) return false
+  if (_serialWrite(dataOut, hexMode) === false) return false
 
   console.log('Transmitted:', dataIn)
 
@@ -338,7 +337,7 @@ function transmitData(dataIn) {
 
     // start the new timer
     _autoRepeatTimeout = setInterval(() => {
-      _serialWrite(dataOut)
+      _serialWrite(dataOut, hexMode)
     }, interval)
   }
 
@@ -358,8 +357,9 @@ function serialClose() {
   port === undefined ? null : port.close()
 }
 
-function serialInit(rxDataCallback) {
-  _serialRxDataCallback = rxDataCallback
+function serialInit(rcvdDataCB, echoDataCB) {
+  _rcvdSerialDataCB = rcvdDataCB
+  _echoSerialDataCB = echoDataCB
 }
 
 module.exports = {

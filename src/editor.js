@@ -84,23 +84,29 @@ function _editorStateReset() {
  * Print text to the editor with timestamp and hex mode handling
  * @param {Buffer|string} line - The original line to process
  * @param {boolean} forceNewline - Whether to force a newline, only apply to text mode
+ * @param {boolean} hexMode - Whether to use hex mode display
  */
-function _printTextLine(line, forceNewline) {
+function _printTextLine(line, forceNewline, hexMode, echo) {
   let ret = true
   let outputLine = line
-  if (store.get('general.timestamp') === true) {
-    const timestamp = getFormattedTimestamp()
-    if (store.get('general.hexmode') === true) {
+  const useTimestamp = store.get('general.timestamp') === true
+  const useHexMode = hexMode !== undefined ? hexMode : store.get('general.hexmode') === true
+
+  if (useTimestamp) {
+    let timestamp = getFormattedTimestamp()
+    if (useHexMode) {
+      if (echo) timestamp += ' ->'
       // In hex mode, add timestamp as separate line
       _applyEdit(timestamp + '\n', false, true)
     } else {
       // In string mode, prepend timestamp to the line
+      if (echo) timestamp += ' -> '
       outputLine = timestamp + line
     }
   }
 
   // Process the complete line
-  if (store.get('general.hexmode') === true) {
+  if (useHexMode) {
     const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
     _applyEdit(hexOutput, true, true)
   } else {
@@ -411,13 +417,16 @@ function _textProcess(inBuffer) {
   // Reset the partial buffer as we're processing the combined data
   partialLineBuffer = null
 
+  // Get hexMode once to avoid multiple store reads
+  const hexMode = store.get('general.hexmode')
+
   // Process complete lines only
   let index = -1
   while ((index = buffer.indexOf('\n')) !== -1) {
     let line = buffer.slice(0, index + 1)
     buffer = buffer.slice(index + 1)
 
-    if (false === _printTextLine(line, false)) {
+    if (false === _printTextLine(line, false, hexMode, false)) {
       break
     }
 
@@ -429,7 +438,7 @@ function _textProcess(inBuffer) {
     let currentTs = Date.now()
 
     if (currentTs - _lastTextProcessTs > 1000) {
-      _printTextLine(buffer, true)
+      _printTextLine(buffer, true, hexMode, false)
       _lastTextProcessTs = currentTs
     } else {
       partialLineBuffer = buffer
@@ -438,11 +447,11 @@ function _textProcess(inBuffer) {
 }
 
 /**
- * Unified serial data processing function
+ * Unified received serial data processing function
  * Handles both hex mode and string mode processing, including chart data
  * @param {Buffer} data - Serial data buffer
  */
-function processSerialData(data) {
+function _processRcvdlData(data) {
   // Process chart data directly (now loaded upfront)
   try {
     chartFrameProcess(data)
@@ -453,17 +462,13 @@ function processSerialData(data) {
   _textProcess(data)
 }
 
-// Serial port callback - processSerialData is now synchronous
-const syncProcessSerialData = (data) => {
-  try {
-    processSerialData(data)
-  } catch (err) {
-    console.error('Serial data processing failed:', err)
-  }
+
+function _processEchoData(data, hexMode) {
+  _printTextLine(data, true, hexMode, true)
 }
 
 // Initialize serial port with data processor
-serialInit(syncProcessSerialData)
+serialInit(_processRcvdlData, _processEchoData)
 
 // =============================================================================
 // UI EVENT HANDLERS
