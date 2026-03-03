@@ -584,6 +584,56 @@ th.gridjs-th {
   margin: 0 auto;
 }
 
+/* Grid.js dark theme support */
+[data-theme='dark'] .gridjs-wrapper {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-table {
+  background-color: var(--bg-primary);
+}
+
+[data-theme='dark'] .gridjs-th {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-td {
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+[data-theme='dark'] .gridjs-search input {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .gridjs-footer {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border-top: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .gridjs-pagination button {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-pagination button:hover {
+  background-color: var(--hover-bg);
+}
+
+[data-theme='dark'] .editable-content {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
 #baud-input,
 #path-input {
   margin: 15px 0px;

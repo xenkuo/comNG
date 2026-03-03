@@ -18,6 +18,9 @@ function createTxTable() {
   // Convert to array format for Grid.js (includes index column)
   const getDataArray = () => tableData.map((item, index) => [index, item.content, null]);
 
+  // Determine if dark theme is enabled
+  const isDarkTheme = store.get('general.darkTheme');
+
   const grid = new Grid({
     search: true,
     resizable: true,
@@ -29,15 +32,16 @@ function createTxTable() {
     },
     style: {
       th: {
-        'background-color': '#e2f2f1',
-        color: '#000',
+        'background-color': isDarkTheme ? '#3c3c3c' : '#e2f2f1',
+        color: isDarkTheme ? '#e8eaed' : '#000',
         'text-align': 'center',
         'font-size': '12px',
         margin: '3px',
         padding: '4px 1px'
       },
       td: {
-        'text-align': 'center'
+        'text-align': 'center',
+        color: isDarkTheme ? '#cccccc' : '#000'
       }
 
     },
@@ -168,4 +172,18 @@ function createTxTable() {
   return { addRow, removeRow: removeRowByIndex, grid };
 }
 
-module.exports = { createTxTable }
+/**
+ * Update Grid.js table theme based on dark theme setting
+ * This function re-renders the table with updated styles
+ */
+function updateTxTableTheme() {
+  // Get the grid instance if it exists
+  const tableElement = document.getElementById('tx-table');
+  if (!tableElement || !tableElement._grid) return;
+  
+  // Re-create the table with new theme
+  // Note: Grid.js doesn't support dynamic theme switching, so we need to re-render
+  createTxTable();
+}
+
+module.exports = { createTxTable, updateTxTableTheme }

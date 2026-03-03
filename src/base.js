@@ -343,6 +343,16 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
   } catch (error) {
     console.warn('Failed to update editor theme:', error)
   }
+  
+  // Update Grid.js table theme (Transmit tab)
+  try {
+    const { updateTxTableTheme } = require('./modules/serialtx.js')
+    if (typeof updateTxTableTheme === 'function') {
+      updateTxTableTheme()
+    }
+  } catch (error) {
+    console.warn('Failed to update Grid.js table theme:', error)
+  }
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {
