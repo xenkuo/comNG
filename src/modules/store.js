@@ -91,6 +91,9 @@ function initWithMigration(version) {
           { content: '100300000001874B' },
         ])
       },
+      '4.0.2': (db) => {
+        db.set('general.darkTheme', false)
+      },
     },
   })
 }

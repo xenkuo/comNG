@@ -3,6 +3,7 @@
 const ChromeTabs = require('chrome-tabs')
 const { generateFileName } = require('./utilities.js')
 const { navi_layout_update } = require('./utilities.js')
+const store = require('./store.js').init()
 
 // ChromeTabs instance
 let chromeTabs = new ChromeTabs()
@@ -16,6 +17,11 @@ function initChromeTabs() {
   // Initialize ChromeTabs
   const tabsEl = document.getElementById('tabs-area')
   chromeTabs.init(tabsEl)
+
+  // Apply dark theme if enabled
+  if (store.get('general.darkTheme')) {
+    tabsEl.classList.add('chrome-tabs-dark-theme')
+  }
 
   // Setup event listeners
   _setupEventListeners(tabsEl)
@@ -111,11 +117,27 @@ function switchTab(tabIndex) {
   chromeTabs.setCurrentTab(el)
 }
 
+/**
+ * Update chrome-tabs theme based on dark theme setting
+ * @param {boolean} isDark - Whether dark theme is enabled
+ */
+function updateChromeTabsTheme(isDark) {
+  const tabsEl = document.getElementById('tabs-area')
+  if (!tabsEl) return
+
+  if (isDark) {
+    tabsEl.classList.add('chrome-tabs-dark-theme')
+  } else {
+    tabsEl.classList.remove('chrome-tabs-dark-theme')
+  }
+}
+
 // Export all functions and getters
 module.exports = {
   initChromeTabs,
   newTab,
   switchTab,
+  updateChromeTabsTheme,
   // Direct access to instances
   get chromeTabs() { return chromeTabs; },
   get tabsMap() { return tabsMap; }

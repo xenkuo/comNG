@@ -59,6 +59,7 @@ function configureComNGLanguageTokens(monacoInst) {
  * @param {import('monaco-editor')} monacoInst - Monaco editor instance
  */
 function defineComNGTheme(monacoInst) {
+  // Light theme (default)
   monacoInst.editor.defineTheme('comNGTheme', {
     base: 'vs',
     inherit: true,
@@ -78,6 +79,27 @@ function defineComNGTheme(monacoInst) {
       { token: 'useless', foreground: 'cecece' },
     ],
   });
+
+  // Dark theme variant
+  monacoInst.editor.defineTheme('comNGThemeDark', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      { token: 'number', foreground: 'b5cea8' },
+      { token: 'bracket', foreground: 'dcdcaa' },
+      { token: 'timestamp', foreground: 'ce9178' },
+      { token: 'time', foreground: '569cd6' },
+      { token: 'ip', foreground: '9cdcfe' },
+      { token: 'mac', foreground: '4ec9b0' },
+      { token: 'fatal', foreground: 'f14c4c' },
+      { token: 'error', foreground: 'f48771' },
+      { token: 'warn', foreground: 'cca700' },
+      { token: 'info', foreground: '808080' },
+      { token: 'trace', foreground: 'dcdcaa' },
+      { token: 'debug', foreground: '6a9955' },
+      { token: 'useless', foreground: '808080' },
+    ],
+  });
 }
 
 /**
@@ -92,9 +114,12 @@ function createComNGEditor(monacoInst, store) {
     readOnlyEditor = true
   }
 
+  // Determine theme based on dark theme setting
+  const theme = store.get('general.darkTheme') ? 'comNGThemeDark' : 'comNGTheme'
+
   return monacoInst.editor.create(document.getElementById('editor-area'), {
     model: null,
-    theme: 'comNGTheme',
+    theme: theme,
     language: 'comNGLang',
     automaticLayout: true,
     readOnly: readOnlyEditor,
@@ -146,9 +171,22 @@ function configureComNGLanguage(monacoInst) {
   });
 }
 
+/**
+ * Update editor theme based on dark theme setting
+ * @param {import('monaco-editor').editor.IStandaloneCodeEditor} editor - Monaco editor instance
+ * @param {object} store - Application store instance
+ */
+function updateEditorTheme(editor, monaco, store) {
+  if (!editor || !monaco) return;
+
+  const theme = store.get('general.darkTheme') ? 'comNGThemeDark' : 'comNGTheme';
+  monaco.editor.setTheme(theme);
+}
+
 module.exports = {
   configureComNGLanguageTokens,
   defineComNGTheme,
   createComNGEditor,
-  configureComNGLanguage
-}
+  configureComNGLanguage,
+  updateEditorTheme,
+};

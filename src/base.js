@@ -84,6 +84,12 @@ function initializeFormElements() {
 
   document.getElementById('hexmode-switch').checked = store.get('general.hexmode')
 
+  // Initialize dark theme setting
+  if (store.get('general.darkTheme')) {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  }
+  document.getElementById('dark-theme-switch').checked = store.get('general.darkTheme') || false
+
   document.getElementById('timestamp-switch').checked = store.get('general.timestamp')
   if (true === store.get('general.modemSignal.rts')) {
     let e = document.getElementById('rts-btn')
@@ -299,6 +305,44 @@ document.getElementById('hexmode-switch').onclick = (e) => {
   // Sync to transmit hexmode switch
   document.getElementById('trans-hexmode-switch').checked = e.target.checked
   store.set('transmit.hexmode', e.target.checked)
+}
+
+document.getElementById('dark-theme-switch').onclick = (e) => {
+  const isDark = e.target.checked
+
+  if (isDark) {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  } else {
+    document.documentElement.removeAttribute('data-theme')
+  }
+
+  store.set('general.darkTheme', isDark)
+
+  // Update Chrome tabs theme
+  try {
+    const { updateChromeTabsTheme } = require('./modules/chrome-tabs.js')
+    if (typeof updateChromeTabsTheme === 'function') {
+      updateChromeTabsTheme(isDark)
+    }
+  } catch (error) {
+    console.warn('Failed to update chrome-tabs theme:', error)
+  }
+
+  // Update Monaco editor theme
+  try {
+    const monaco = require('./modules/monaco-esm.js').monaco
+    const { updateEditorTheme } = require('./modules/monaco-utilities.js')
+    if (monaco && typeof updateEditorTheme === 'function') {
+      // Get the active editor instance from chromeTabs
+      const chromeTabsModule = require('./modules/chrome-tabs.js')
+      const view = chromeTabsModule.tabsMap.get(chromeTabsModule.chromeTabs.activeTabEl)
+      if (view && view.editor) {
+        updateEditorTheme(view.editor, monaco, store)
+      }
+    }
+  } catch (error) {
+    console.warn('Failed to update editor theme:', error)
+  }
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {

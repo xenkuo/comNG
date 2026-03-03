@@ -1,6 +1,7 @@
 @import url('../node_modules/material-design-icons/iconfont/material-icons.css');
 @import url('../node_modules/materialize-css/dist/css/materialize.css');
 @import url('../node_modules/chrome-tabs/css/chrome-tabs.css');
+@import url('../node_modules/chrome-tabs/css/chrome-tabs-dark-theme.css');
 @import url('../node_modules/gridjs/dist/theme/mermaid.css');
 
 :root {
@@ -20,6 +21,32 @@
   --bar-color-head: #ffba3a;
   --bar-color-middle: #ffba3a;
   --bar-color-tail: #ffba3a;
+
+  /* Light theme colors (default) */
+  --bg-primary: #fafafa;
+  --bg-secondary: #dee1e6;
+  --bg-tertiary: #e0f2f1;
+  --bg-input: #e2f2f1;
+  --text-primary: #000000;
+  --text-secondary: #26a69a;
+  --border-color: #bdbdbd;
+  --hover-bg: #fafafa;
+  --indicator-bg: #fafafa;
+  --toast-bg: #fafafa;
+}
+
+/* Dark theme colors */
+[data-theme='dark'] {
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d30;
+  --bg-tertiary: #252526;
+  --bg-input: #3c3c3c;
+  --text-primary: #cccccc;
+  --text-secondary: #4ec9b0;
+  --border-color: #3e3e42;
+  --hover-bg: #2d2d30;
+  --indicator-bg: #2d2d30;
+  --toast-bg: #2d2d30;
 }
 
 html {
@@ -31,7 +58,8 @@ body {
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: #fafafa;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   /* setting bar area as transparent */
   /* background-color: rgba(250, 250, 250, 0.7); */
 }
@@ -45,7 +73,7 @@ nav {
   /* background-color: #fafafa; */
   height: var(--nav-height);
   line-height: 24px;
-  background-color: #dee1e6;
+  background-color: var(--bg-secondary);
 }
 
 td,
@@ -62,6 +90,84 @@ th {
   height: var(--nav-height);
 }
 
+/* Dark theme for chrome-tabs */
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme {
+  background: var(--bg-secondary);
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-dividers::before,
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-dividers::after {
+  background: var(--border-color);
+}
+
+[data-theme='dark']
+  .chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab
+  .chrome-tab-background
+  > svg
+  .chrome-tab-geometry {
+  fill: var(--bg-tertiary);
+}
+
+[data-theme='dark']
+  .chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab[active]
+  .chrome-tab-background
+  > svg
+  .chrome-tab-geometry {
+  fill: var(--bg-secondary);
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab[active] .chrome-tab-title {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close:hover {
+  background-color: var(--border-color);
+}
+
+/* Fix hover visual effects in dark theme */
+[data-theme='dark']
+  .chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab:not([active]):hover
+  .chrome-tab-background
+  > svg
+  .chrome-tab-geometry {
+  fill: var(--bg-tertiary);
+  opacity: 1;
+}
+
+[data-theme='dark']
+  .chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab:not([active])
+  .chrome-tab-background {
+  opacity: 0;
+}
+
+[data-theme='dark']
+  .chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab:not([active]):hover
+  .chrome-tab-background {
+  opacity: 1;
+}
+
+/* Ensure smooth transitions for dark theme */
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-background {
+  transition: opacity 0.2s ease;
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close {
+  opacity: 0.7;
+}
+
+[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab:hover .chrome-tab-close {
+  opacity: 1;
+}
+
 .chrome-tabs .chrome-tab .chrome-tab-content {
   padding: 5px 8px;
 }
@@ -72,7 +178,7 @@ th {
   user-select: none;
   top: var(--nav-icon-top);
   left: var(--icon-init-left);
-  color: #26a69a;
+  color: var(--text-secondary);
   width: 24px;
   height: 24px;
   font-size: 16px;
@@ -90,34 +196,34 @@ th {
   left: var(--nav-margin);
   top: var(--nav-icon-top);
   line-height: 24px !important;
-  color: #26a69a;
+  color: var(--text-secondary);
   border-radius: 50%;
 }
 
 @media (hover: hover) {
   #tab-add-btn:hover {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
 
   #tab-add-btn:hover:active {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
 
   #logo:hover {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
   #logo:hover:active {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
 }
 
 @media not all and (hover: hover) {
   #tab-add-btn:active {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
 
   #logo:active {
-    background-color: #fafafa;
+    background-color: var(--hover-bg);
   }
 }
 /* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
@@ -136,7 +242,8 @@ blockquote {
   margin-bottom: 6px;
   font-size: 12px;
   font-weight: bold;
-  border-left: 4px solid #26a69a;
+  border-left: 4px solid var(--text-secondary);
+  color: var(--text-primary);
 }
 
 .image {
@@ -188,12 +295,16 @@ blockquote {
   height: 24px;
   font-size: 12px;
   /* z-index: inherit; */
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .dropdown-content {
   border-radius: 12px;
   width: fit-content;
   min-width: 0px !important;
+  background-color: var(--bg-primary);
 }
 
 .dropdown-content li {
@@ -207,6 +318,11 @@ blockquote {
   line-height: 28px;
   padding-top: 0px;
   padding-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.dropdown-content li:hover {
+  background-color: var(--hover-bg);
 }
 
 .tabs {
@@ -227,14 +343,14 @@ blockquote {
 }
 
 .tabs .indicator {
-  background-color: #fafafa;
+  background-color: var(--indicator-bg);
 }
 
 .tabs .tab a:hover,
 .tabs .tab a.active,
 .tabs .tab a:focus.active {
-  color: #26a69a;
-  background-color: #fafafa;
+  color: var(--text-secondary);
+  background-color: var(--hover-bg);
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-title {
@@ -243,11 +359,21 @@ blockquote {
 
 input {
   font-size: 12px !important;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .input-field {
   /* margin-top: 0px; */
   margin-bottom: -5px;
+}
+
+.input-field input,
+.input-field select {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
 }
 
 .config-row {
@@ -277,8 +403,8 @@ input {
 }
 
 .toast {
-  background-color: #fafafa;
-  color: #26a69a;
+  background-color: var(--toast-bg);
+  color: var(--text-secondary);
   margin-bottom: 254px;
   margin-left: 150px;
   max-width: 300px;
@@ -295,11 +421,11 @@ input {
   height: var(--menu-height);
   width: calc(100%);
   /* width: 100%; */
-  background-color: #fafafa;
+  background-color: var(--bg-primary);
 }
 
 #menu-handle {
-  background-color: #fafafa;
+  background-color: var(--bg-primary);
   width: 100%;
   height: var(--menu-handle-height);
   border-radius: 2%;
@@ -322,7 +448,7 @@ input {
 }
 
 #menu-tabs {
-  background-color: #e0f2f1;
+  background-color: var(--bg-tertiary);
   padding-left: 0px;
   padding-right: 0px;
 }
@@ -431,7 +557,7 @@ input {
 }
 
 #chart-tab {
-  background-color: #fafafa;
+  background-color: var(--bg-primary);
   height: inherit;
 }
 
@@ -503,7 +629,7 @@ th.gridjs-th {
   left: 0;
   right: 0;
   width: 100%;
-  background-color: #e2f2f1;
+  background-color: var(--bg-input);
   z-index: 10;
   /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); */
   max-height: 50px; /* Fixed height */
