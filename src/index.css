@@ -23,8 +23,8 @@
   --bar-color-tail: #ffba3a;
 
   /* Light theme colors (default) */
-  --bg-primary: #fafafa;
-  --bg-secondary: #dee1e6;
+  --bg-primary: #dee1e6;
+  --bg-secondary: #fafafa;
   --bg-tertiary: #e0f2f1;
   --bg-input: #e2f2f1;
   --text-primary: #000000;
@@ -37,7 +37,7 @@
 
 /* Dark theme colors */
 [data-theme='dark'] {
-  --bg-primary: #1e1e1e;
+  --bg-primary: #202124;
   --bg-secondary: #2d2d30;
   --bg-tertiary: #252526;
   --bg-input: #3c3c3c;
@@ -58,10 +58,8 @@ body {
   position: fixed;
   height: 100%;
   width: 100%;
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   color: var(--text-primary);
-  /* setting bar area as transparent */
-  /* background-color: rgba(250, 250, 250, 0.7); */
 }
 
 ::-webkit-scrollbar {
@@ -73,7 +71,7 @@ nav {
   /* background-color: #fafafa; */
   height: var(--nav-height);
   line-height: 24px;
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-primary);
 }
 
 td,
@@ -88,84 +86,6 @@ th {
   /* width: calc(100% - var(--drag-width) - (var(--icon-width) / 2)); */
   width: 0px;
   height: var(--nav-height);
-}
-
-/* Dark theme for chrome-tabs */
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme {
-  background: var(--bg-secondary);
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-dividers::before,
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-dividers::after {
-  background: var(--border-color);
-}
-
-[data-theme='dark']
-  .chrome-tabs.chrome-tabs-dark-theme
-  .chrome-tab
-  .chrome-tab-background
-  > svg
-  .chrome-tab-geometry {
-  fill: var(--bg-tertiary);
-}
-
-[data-theme='dark']
-  .chrome-tabs.chrome-tabs-dark-theme
-  .chrome-tab[active]
-  .chrome-tab-background
-  > svg
-  .chrome-tab-geometry {
-  fill: var(--bg-secondary);
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-title {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab[active] .chrome-tab-title {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close:hover {
-  background-color: var(--border-color);
-}
-
-/* Fix hover visual effects in dark theme */
-[data-theme='dark']
-  .chrome-tabs.chrome-tabs-dark-theme
-  .chrome-tab:not([active]):hover
-  .chrome-tab-background
-  > svg
-  .chrome-tab-geometry {
-  fill: var(--bg-tertiary);
-  opacity: 1;
-}
-
-[data-theme='dark']
-  .chrome-tabs.chrome-tabs-dark-theme
-  .chrome-tab:not([active])
-  .chrome-tab-background {
-  opacity: 0;
-}
-
-[data-theme='dark']
-  .chrome-tabs.chrome-tabs-dark-theme
-  .chrome-tab:not([active]):hover
-  .chrome-tab-background {
-  opacity: 1;
-}
-
-/* Ensure smooth transitions for dark theme */
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-background {
-  transition: opacity 0.2s ease;
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab .chrome-tab-close {
-  opacity: 0.7;
-}
-
-[data-theme='dark'] .chrome-tabs.chrome-tabs-dark-theme .chrome-tab:hover .chrome-tab-close {
-  opacity: 1;
 }
 
 .chrome-tabs .chrome-tab .chrome-tab-content {
@@ -421,11 +341,11 @@ input {
   height: var(--menu-height);
   width: calc(100%);
   /* width: 100%; */
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
 }
 
 #menu-handle {
-  background-color: var(--bg-primary);
+  background-color: var(--bg-secondary);
   width: 100%;
   height: var(--menu-handle-height);
   border-radius: 2%;

@@ -99,6 +99,10 @@ function defineComNGTheme(monacoInst) {
       { token: 'debug', foreground: '6a9955' },
       { token: 'useless', foreground: '808080' },
     ],
+    colors: {
+      'editor.background': '#323639',
+      'editor.foreground': '#e8eaed',
+    },
   });
 }
 
