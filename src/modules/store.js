@@ -83,6 +83,14 @@ function initWithMigration(version) {
       '4.0.0': (db) => {
         db.delete('transmit.clean')
       },
+      '4.0.1': (db) => {
+        db.set('transmit.messages', [
+          { content: 'reboot' },
+          { content: 'updateFirmware{version: "v2.0"}' },
+          { content: 'factoryReset' },
+          { content: '100300000001874B' },
+        ])
+      },
     },
   })
 }

@@ -1,13 +1,14 @@
 const { Grid, h } = require('gridjs')
 const { transmitData } = require('./serialport.js')
+const store = require('./store.js').init()
 
 /**
  * Creates and manages the serial transmission table
  * @returns {Object} Table helper functions
  */
 function createTxTable() {
-  // Sample data - Grid.js handles row indexing via # column
-  let tableData = [
+  // Load table data from store or use default
+  let tableData = store.get('transmit.messages') || [
     { content: 'reboot' },
     { content: 'updateFirmware{version: "v2.0"}' },
     { content: 'factoryReset' },
@@ -53,11 +54,14 @@ function createTxTable() {
           type: 'text',
           value: cell,
           className: 'editable-content',
-          onInput: (e) => {
+          onBlur: (e) => {
             // Use the Grid.js row index from the hidden column
             const rowIndex = row.cells[0].data; // _index column is at index 0
             if (rowIndex >= 0 && rowIndex < tableData.length) {
               tableData[rowIndex].content = e.target.value;
+              // Sync to store only when user finishes editing
+              store.set('transmit.messages', tableData);
+              console.log('Table data updated:', tableData);
             }
           },
           style: {
@@ -144,12 +148,16 @@ function createTxTable() {
   function addRow(content = '') {
     const newId = Math.max(...tableData.map(item => item.id), 0) + 1;
     tableData.push({ id: newId, content: content });
+    // Sync to store
+    store.set('transmit.messages', tableData);
     grid.updateConfig({ data: getDataArray() }).forceRender();
   }
 
   function removeRowByIndex(index) {
     if (index >= 0 && index < tableData.length) {
       tableData.splice(index, 1);
+      // Sync to store
+      store.set('transmit.messages', tableData);
       grid.updateConfig({ data: getDataArray() }).forceRender();
     }
   }
