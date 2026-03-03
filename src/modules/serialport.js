@@ -296,17 +296,18 @@ let _autoRepeatTimeout
  * @returns {boolean} Success status
  */
 function transmitData(dataIn) {
-  let dataOut = dataIn
-  let eof = store.get('transmit.eof')
+  // Pre-process data
+  dataIn = dataIn.trim()
+  if (dataIn === '') return false
+  const eof = store.get('transmit.eof')
+
+  // Convert data to buffer
+  let dataOut = null
   let hexMode = store.get('transmit.hexmode')
 
   if (true === hexMode) {
-    // Validate hex format before conversion
-    if (!/^[0-9a-fA-F]*$/.test(dataIn)) {
-      toast('Error: Invalid hex data format - only 0-9, a-f, A-F allowed')
-      return false
-    }
-
+    // Remove the space characters
+    dataIn = dataIn.replace(/ /g, '')
     try {
       dataOut = Buffer.from(dataIn, 'hex')
       // Check if conversion resulted in empty buffer (invalid hex pairs)
@@ -314,17 +315,19 @@ function transmitData(dataIn) {
         toast('Error: Invalid hex data format - incomplete hex pairs')
         return false
       }
+      dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf-8')])
     } catch (error) {
       toast('Error: Invalid hex data format')
       return false
     }
   } else {
-    dataOut += eof
+    dataOut = Buffer.from(dataIn, 'utf-8')
+    dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf-8')])
   }
 
   if (_serialWrite(dataOut, hexMode) === false) return false
 
-  console.log('Transmitted:', dataIn)
+  console.log('Transmitted:', dataOut)
 
   // Handle auto-repeat functionality
   if (document.getElementById('trans-repeat-switch').checked === true) {

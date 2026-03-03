@@ -124,6 +124,8 @@ function initializeFormElements() {
     transEofIndex = 1
   } else if ('\r' === store.get('transmit.eof')) {
     transEofIndex = 2
+  } else if ('\r\n' === store.get('transmit.eof')) {
+    transEofIndex = 3
   }
   transEof.selectedIndex = transEofIndex
   mcss.FormSelect.init(transEof)
@@ -352,13 +354,19 @@ document.getElementById('sign-name').onblur = (e) => {
 
 document.getElementById('trans-eof-select').onchange = (e) => {
   let index = e.target.selectedIndex
-  let eof = '\r\n'
+  let eof = ''
   switch (index) {
+    case 0:
+      eof = ''
+      break
     case 1:
       eof = '\n'
       break
     case 2:
       eof = '\r'
+      break
+    case 3:
+      eof = '\r\n'
       break
     default:
       break

@@ -377,10 +377,10 @@ input {
   border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
 }
 
-#trans-eof-row {
+/* #trans-eof-row {
   margin-top: 10px;
   margin-left: 10px;
-}
+} */
 
 .custom-tx-btn {
   height: var(--tx-btn-height) !important;
