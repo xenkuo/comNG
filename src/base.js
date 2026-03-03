@@ -343,7 +343,7 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
   } catch (error) {
     console.warn('Failed to update editor theme:', error)
   }
-  
+
   // Update Grid.js table theme (Transmit tab)
   try {
     const { updateTxTableTheme } = require('./modules/serialtx.js')
@@ -352,6 +352,16 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
     }
   } catch (error) {
     console.warn('Failed to update Grid.js table theme:', error)
+  }
+
+  // Update Chart theme (Chart tab)
+  try {
+    const { relayoutChart } = require('./modules/chart.js')
+    if (typeof relayoutChart === 'function') {
+      relayoutChart()
+    }
+  } catch (error) {
+    console.warn('Failed to update chart theme:', error)
   }
 }
 

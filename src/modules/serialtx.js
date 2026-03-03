@@ -180,7 +180,7 @@ function updateTxTableTheme() {
   // Get the grid instance if it exists
   const tableElement = document.getElementById('tx-table');
   if (!tableElement || !tableElement._grid) return;
-  
+
   // Re-create the table with new theme
   // Note: Grid.js doesn't support dynamic theme switching, so we need to re-render
   createTxTable();

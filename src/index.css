@@ -485,6 +485,7 @@ input {
   align-content: center;
   height: inherit;
   padding: 0px;
+  background-color: var(--bg-primary);
 }
 
 #chart-switch-div {
