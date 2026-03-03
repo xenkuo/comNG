@@ -24,7 +24,17 @@ let dragMinWidth
 const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js')
 
 // Modular initialization functions
+function initializeTheme() {
+  // Apply dark theme BEFORE any UI rendering to prevent flash of light theme
+  if (store.get('general.darkTheme')) {
+    document.documentElement.setAttribute('data-theme', 'dark')
+  }
+}
+
 function initializeUILayout() {
+  // Initialize theme first
+  initializeTheme()
+
   document.getElementById('menu-area').hidden = store.get('menu.hidden')
   applyLanguage()
 
@@ -84,10 +94,7 @@ function initializeFormElements() {
 
   document.getElementById('hexmode-switch').checked = store.get('general.hexmode')
 
-  // Initialize dark theme setting
-  if (store.get('general.darkTheme')) {
-    document.documentElement.setAttribute('data-theme', 'dark')
-  }
+  // Set dark theme switch state (theme already applied in initializeTheme)
   document.getElementById('dark-theme-switch').checked = store.get('general.darkTheme') || false
 
   document.getElementById('timestamp-switch').checked = store.get('general.timestamp')

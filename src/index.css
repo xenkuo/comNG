@@ -18,9 +18,6 @@
   --bar-height: 53px;
   --tx-btn-height: 20px;
   --modem-btn-height: 10px;
-  --bar-color-head: #ffba3a;
-  --bar-color-middle: #ffba3a;
-  --bar-color-tail: #ffba3a;
 
   /* Light theme colors (default) */
   --bg-primary: #dee1e6;
@@ -33,6 +30,9 @@
   --hover-bg: #fafafa;
   --indicator-bg: #fafafa;
   --toast-bg: #fafafa;
+  /* --bar-color-head: #ffba3a;
+  --bar-color-middle: #ffba3a;
+  --bar-color-tail: #ffba3a; */
 }
 
 /* Dark theme colors */
@@ -47,6 +47,9 @@
   --hover-bg: #2d2d30;
   --indicator-bg: #2d2d30;
   --toast-bg: #2d2d30;
+  /* --bar-color-head: #d4a017;
+  --bar-color-middle: #c99613;
+  --bar-color-tail: #be8d0f; */
 }
 
 html {

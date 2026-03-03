@@ -5,6 +5,17 @@
     <title>comNG</title>
     <link rel="stylesheet" href="index.css" />
     <meta />
+    <script>
+      // Apply theme immediately before CSS parsing to prevent flash of wrong theme
+      try {
+        const store = require('./modules/store.js').init()
+        if (store.get('general.darkTheme')) {
+          document.documentElement.setAttribute('data-theme', 'dark')
+        }
+      } catch (e) {
+        // Silent fail during early load
+      }
+    </script>
   </head>
 
   <body>
