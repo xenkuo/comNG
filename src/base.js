@@ -8,6 +8,7 @@ const { applyLanguage } = require('./modules/i18n.js')
 const store = require('./modules/store.js').init()
 const { initDomUtilities } = require('./modules/dom-utilities.js')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
+const shortcutsDataModule = require('./modules/shortcuts-data.js')
 initMenuHandle()
 
 let barHeight
@@ -419,6 +420,34 @@ document.getElementById('github-star').onclick = (e) => {
 document.getElementById('documents').onclick = (e) => {
   e.preventDefault()
   shell.openExternal(e.target.href)
+}
+
+// Load shortcuts data dynamically
+function loadShortcutsData() {
+  const shortcuts = shortcutsDataModule.getShortcutsData()
+
+  // Load fileops shortcuts
+  const fileopsTable = document.querySelector('#shortcuts-fileops-table tbody')
+  if (fileopsTable && shortcuts.fileops) {
+    fileopsTable.innerHTML = shortcuts.fileops.map(item =>
+      `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`
+    ).join('')
+  }
+
+  // Load general shortcuts
+  const generalTable = document.querySelector('#shortcuts-general-table tbody')
+  if (generalTable && shortcuts.general) {
+    generalTable.innerHTML = shortcuts.general.map(item =>
+      `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`
+    ).join('')
+  }
+}
+
+// Load shortcuts after DOM is ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadShortcutsData)
+} else {
+  loadShortcutsData()
 }
 
 

@@ -1,6 +1,4 @@
-const { remote } = require('electron')
-
-const locale = remote.app.getLocale()
+const locale = require('./locale.js').getLocale()
 console.log('Locale:', locale)
 
 const titleI18n = {
