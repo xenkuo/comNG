@@ -1,7 +1,7 @@
 {
   "name": "comng",
   "productName": "comNG",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "mode": "dev",
   "description": "A powerful serial tool with modern UI",
   "repository": "https://github.com/xenkuo/comNG",
@@ -139,6 +139,7 @@
     "electron-store": "^5.1.0",
     "gridjs": "^6.2.0",
     "hexy": "0.3.5",
+    "jschardet": "^3.1.4",
     "language-detect": "^1.1.0",
     "material-design-icons": "^3.0.1",
     "materialize-css": "1.0.0",
