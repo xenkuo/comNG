@@ -315,14 +315,14 @@ function transmitData(dataIn) {
         toast('Error: Invalid hex data format - incomplete hex pairs')
         return false
       }
-      dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf-8')])
+      dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf8')])
     } catch (error) {
       toast('Error: Invalid hex data format')
       return false
     }
   } else {
-    dataOut = Buffer.from(dataIn, 'utf-8')
-    dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf-8')])
+    dataOut = Buffer.from(dataIn, 'utf8')
+    dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf8')])
   }
 
   if (_serialWrite(dataOut, hexMode) === false) return false

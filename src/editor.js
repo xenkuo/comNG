@@ -110,8 +110,8 @@ function _printTextLine(line, forceNewline, hexMode, echo) {
     const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
     _applyEdit(hexOutput, true, true)
   } else {
-    let cleanOutput = outputLine.toString().replace(/[^\x20-\x7E\n\r\t]/g, '.')
-    if (true === forceNewline) cleanOutput += '\n'
+    if (true === forceNewline) outputLine += '\n'
+    let cleanOutput = outputLine.toString('utf8')
     _applyEdit(cleanOutput, true, true)
   }
 
@@ -411,6 +411,8 @@ let _lastTextProcessTs = 0
  * @param {Buffer} inBuffer - Incoming data buffer
  */
 function _textProcess(inBuffer) {
+  // inBuffer = Buffer.from([0x33, 0x30, 0x20, 0xb0, 0xb4, 0xcf, 0xc2]) // gb2312: 33 按下
+  // inBuffer = Buffer.from([0x33, 0x30, 0x20, 0xe6, 0x8c, 0x89, 0xe4, 0xb8, 0x8b]) // utf8: 33 按下
   // Combine with existing partial buffer if it exists
   let buffer = partialLineBuffer ? Buffer.concat([partialLineBuffer, inBuffer]) : inBuffer
 
