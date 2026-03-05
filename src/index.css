@@ -121,6 +121,7 @@ th {
   line-height: 24px !important;
   color: var(--text-secondary);
   border-radius: 50%;
+  cursor: cell;
 }
 
 @media (hover: hover) {

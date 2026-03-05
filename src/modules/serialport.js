@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 const serial = require('serialport')
 const { toast } = require('./utilities.js')
-const jschardet = require('jschardet')
 
 /** @typedef {InstanceType<typeof import('serialport')>} SerialPortInstance */
 
@@ -24,8 +23,9 @@ function _portUpdate() {
     .list()
     .then((ports) => {
       ports.forEach((item, index) => {
-        let encoding = jschardet.detect(item.manufacturer).encoding
-        pSelect.options.add(new Option(item.path + ' ' + item.manufacturer.toString(encoding), index))
+        // if item.productId is undefined, set its manufacturer to ''
+        if (item.productId === undefined) item.manufacturer = ''
+        pSelect.options.add(new Option(item.path + ' ' + item.manufacturer, index))
         if (index === store.get('pathIndex')) pSelect.selectedIndex = index
       })
       mcss.FormSelect.init(pSelect)

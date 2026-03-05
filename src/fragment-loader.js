@@ -25,4 +25,9 @@ window.addEventListener('DOMContentLoaded', function () {
     loadFragment(tab.id, tab.file)
   })
   loadFragment('bar-area-placeholder', 'html_modules/bar-area.html')
+
+  // Initialize Grid.js table after transmit tab is loaded
+  if (typeof window.initializeTxTable === 'function') {
+    window.initializeTxTable()
+  }
 })

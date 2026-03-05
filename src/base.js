@@ -174,7 +174,8 @@ function createTxTable() {
   return createTable();
 }
 
-createTxTable()
+// Expose as global function for fragment-loader to call after DOM is ready
+window.initializeTxTable = createTxTable;
 function checkForApplicationUpdates() {
   // Defer update checking to improve startup performance
   setTimeout(() => {
