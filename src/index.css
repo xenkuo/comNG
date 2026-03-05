@@ -535,6 +535,7 @@ input {
   right: 0;
   bottom: 50px; /* Space for config area */
   overflow: auto;
+  width: 100%;
 }
 
 .gridjs-footer {
@@ -587,10 +588,17 @@ th.gridjs-th {
   margin: 0 auto;
   border-radius: 0px;
   box-shadow: none;
+  width: 100% !important;
 }
 
 .tx-table-center .gridjs-table {
   margin: 0 auto;
+  width: 100% !important;
+}
+
+.tx-table-center .gridjs-header,
+.tx-table-center .gridjs-footer {
+  width: 100% !important;
 }
 
 /* Grid.js dark theme support */

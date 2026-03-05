@@ -25,7 +25,8 @@ function createTxTable() {
     search: true,
     resizable: true,
     fixedHeader: true,
-    autoWidth: true,
+    autoWidth: false,
+    width: '100%',
     pagination: {
       limit: 4,
       summary: false
@@ -141,6 +142,26 @@ function createTxTable() {
   // Render the grid
   const tableElement = document.getElementById('tx-table')
   grid.render(tableElement)
+
+  // Store grid reference on the element for later access
+  tableElement._grid = grid
+
+  // Handle window resize to adjust grid width
+  let resizeTimeout
+  window.addEventListener('resize', () => {
+    // Debounce resize events
+    clearTimeout(resizeTimeout)
+    resizeTimeout = setTimeout(() => {
+      // Force grid to recalculate its width using Grid.js API
+      if (tableElement && tableElement._grid) {
+        const gridInstance = tableElement._grid
+        // Update the config to ensure 100% width
+        gridInstance.updateConfig({ width: '100%' })
+        // Force a re-render
+        gridInstance.forceRender()
+      }
+    }, 250)
+  })
 
   // Attach event handler to the static add button
   const addButton = document.getElementById('add-row-btn')
