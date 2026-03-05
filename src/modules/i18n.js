@@ -54,6 +54,11 @@ const labelI18n = {
     documents: '文档',
     userManual: '用户手册',
     tryPreviewVersion: '尝鲜版本',
+    toastEnableHexMode: '请先在通用标签页中启用"十六进制模式"。',
+    toastBreakpointNotEmpty: '错误：文本断点不能为空',
+    toastNoPortOpened: '错误：没有打开串口，无法写入',
+    toastWriteFailed: '错误：写入失败，请重试',
+    toastInvalidHexData: '错误：请确保发送的数据是有效的十六进制数据',
   },
   en: {
     general: 'General',
@@ -86,6 +91,11 @@ const labelI18n = {
     documents: 'Documents',
     userManual: 'User Manual',
     tryPreviewVersion: 'Try Preview Version',
+    toastEnableHexMode: "Please first enable 'Hex Mode' in General tab.",
+    toastBreakpointNotEmpty: 'Error: Breakpoint on-text can not be empty',
+    toastNoPortOpened: 'Error: No port opened, cannot write',
+    toastWriteFailed: 'Error: Write failed, please try again',
+    toastInvalidHexData: 'Error: Please ensure the tx data is valid hex data',
   },
 }
 
@@ -107,4 +117,16 @@ function applyLanguage() {
 
 module.exports = {
   applyLanguage,
+  getToastMessage,
+}
+
+/**
+ * Get translated toast message
+ * @param {string} key - The translation key
+ * @returns {string} Translated message or fallback to English/key
+ */
+function getToastMessage(key) {
+  const lang = locale.split('-')[0]
+  const messages = labelI18n[lang] || labelI18n.en
+  return messages[key] || labelI18n.en[key] || key
 }

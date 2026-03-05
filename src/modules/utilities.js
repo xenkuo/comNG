@@ -1,7 +1,7 @@
 const mcss = require('materialize-css')
 
 function toast(text) {
-  mcss.toast({ html: text, displayLength: 2000 })
+  mcss.toast({ html: text, displayLength: 3000 })
   // alert(text);
 }
 

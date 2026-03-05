@@ -28,6 +28,7 @@ const hexy = require('hexy')
 const { serialInit, serialClose } = require('./modules/serialport.js')
 const { getFormattedTimestamp, toast } = require('./modules/utilities.js')
 const fs = require('fs')
+const { getToastMessage } = require('./modules/i18n.js')
 const { dialog } = require('electron').remote
 const languageDetect = require('language-detect')
 const { initIPCHandlers } = require('./modules/ipc-handler.js')
@@ -213,7 +214,7 @@ function _openFile() {
  */
 function _openBinFile() {
   if (true !== store.get('general.hexmode')) {
-    toast("Please first enable 'Hex Mode' in General tab.")
+    toast(getToastMessage('toastEnableHexMode'))
     return
   }
 
@@ -545,7 +546,7 @@ document.getElementById('editor-font-size').onblur = (e) => {
 document.getElementById('breakpoint-switch').onclick = (e) => {
   if (e.target.checked === true) {
     if (store.get('advance.breakpoint.onText.length') === 0) {
-      toast('Error: Breakpoint on-text can not be empty')
+      toast(getToastMessage('toastBreakpointNotEmpty'))
       e.target.checked = false
       return
     }

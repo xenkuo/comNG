@@ -327,13 +327,17 @@ input {
 }
 
 .toast {
-  background-color: var(--toast-bg);
-  color: var(--text-secondary);
-  margin-bottom: 254px;
-  margin-left: 150px;
-  max-width: 300px;
-  font-weight: bold;
-  text-align: center;
+  background-color: var(--toast-bg) !important;
+  color: var(--text-secondary) !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-width: 300px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  z-index: 10000 !important;
 }
 
 #editor-area {

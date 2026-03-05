@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 const serial = require('serialport')
 const { toast } = require('./utilities.js')
+const { getToastMessage } = require('./i18n.js')
 
 /** @typedef {InstanceType<typeof import('serialport')>} SerialPortInstance */
 
@@ -80,7 +81,7 @@ function _modemSignalReset() {
 
 function _serialWrite(data, hexMode) {
   if (port === undefined || port.isOpen === false) {
-    toast('Error: No port opened, cannot write')
+    toast(getToastMessage('toastNoPortOpened'))
     return false
   }
 
@@ -195,7 +196,7 @@ document.getElementById('port-switch').onclick = (e) => {
     })
 
     port.on('drain', () => {
-      toast('Error: Write failed, please try again')
+      toast(getToastMessage('toastWriteFailed'))
     })
 
     port.on('data', (data) => {
@@ -313,12 +314,12 @@ function transmitData(dataIn) {
       dataOut = Buffer.from(dataIn, 'hex')
       // Check if conversion resulted in empty buffer (invalid hex pairs)
       if (dataOut.length === 0 && dataIn.length > 0) {
-        toast('Error: Invalid hex data format - incomplete hex pairs')
+        toast(getToastMessage('toastInvalidHexData'))
         return false
       }
       dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf8')])
     } catch (error) {
-      toast('Error: Invalid hex data format')
+      console.log('Error: Invalid hex data format')
       return false
     }
   } else {
