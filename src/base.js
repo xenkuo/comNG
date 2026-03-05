@@ -84,7 +84,11 @@ window.onload = () => {
 
   // Check for updates after everything else is initialized
   checkForApplicationUpdates()
+
+  // Create serialtx table
+  createTxTabTable()
 }
+
 
 function initializeFormElements() {
   let baudSelect = document.getElementById('baud-select')
@@ -168,14 +172,8 @@ function initializeFormElements() {
   initDomUtilities()
 }
 
-function createTxTable() {
-  // Import and use the serialtx module
-  const { createTxTable: createTable } = require('./modules/serialtx.js');
-  return createTable();
-}
 
-// Expose as global function for fragment-loader to call after DOM is ready
-window.initializeTxTable = createTxTable;
+
 function checkForApplicationUpdates() {
   // Defer update checking to improve startup performance
   setTimeout(() => {
@@ -188,6 +186,14 @@ function checkForApplicationUpdates() {
       console.warn('Update check skipped due to error:', error)
     }
   }, 3000) // Delay 3 seconds
+}
+
+function createTxTabTable() {
+  // Defer table creation to improve startup performance
+  setTimeout(() => {
+    const { createTxTable } = require('./modules/serialtx.js')
+    createTxTable()
+  }, 500)
 }
 
 window.onresize = () => {

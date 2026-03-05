@@ -11,7 +11,7 @@ function loadFragment(placeholderId, fragmentFile) {
 }
 
 // Load fragments on DOMContentLoaded
-window.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
   loadFragment('nav-area-placeholder', 'html_modules/nav-area.html')
   const tabFragments = [
     { id: 'general-tab-placeholder', file: 'html_modules/tabs_html/general-tab.html' },
@@ -25,9 +25,4 @@ window.addEventListener('DOMContentLoaded', function () {
     loadFragment(tab.id, tab.file)
   })
   loadFragment('bar-area-placeholder', 'html_modules/bar-area.html')
-
-  // Initialize Grid.js table after transmit tab is loaded
-  if (typeof window.initializeTxTable === 'function') {
-    window.initializeTxTable()
-  }
 })
