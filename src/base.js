@@ -360,21 +360,9 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
     console.warn('Failed to update chrome-tabs theme:', error)
   }
 
-  // Update Monaco editor theme
-  try {
-    const monaco = require('./modules/monaco-esm.js').monaco
-    const { updateEditorTheme } = require('./modules/monaco-utilities.js')
-    if (monaco && typeof updateEditorTheme === 'function') {
-      // Get the active editor instance from chromeTabs
-      const chromeTabsModule = require('./modules/chrome-tabs.js')
-      const view = chromeTabsModule.tabsMap.get(chromeTabsModule.chromeTabs.activeTabEl)
-      if (view && view.editor) {
-        updateEditorTheme(view.editor, monaco, store)
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to update editor theme:', error)
-  }
+  // Emit theme switch event for editor to handle
+  const event = new CustomEvent('themeSwitched', { detail: { isDark } });
+  document.dispatchEvent(event);
 
   // Update Grid.js table theme (Transmit tab)
   try {

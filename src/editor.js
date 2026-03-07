@@ -694,6 +694,17 @@ async function setupEditor() {
       _editorStateReset()
     });
 
+    // Listen for theme switch events
+    document.addEventListener('themeSwitched', (event) => {
+      const { isDark } = event.detail;
+      console.log('Theme switched to:', isDark ? 'dark' : 'light');
+
+      // Update editor theme
+      const { updateEditorTheme } = require('./modules/monaco-utilities.js')
+      if (monacoInst && typeof updateEditorTheme === 'function') {
+        updateEditorTheme(editorInst, monacoInst, store)
+      }
+    });
 
     hexMode.initHexModeHandlers(editorInst, monacoInst, hlt);
 
