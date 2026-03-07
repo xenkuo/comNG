@@ -202,9 +202,22 @@ function updateTxTableTheme() {
   const tableElement = document.getElementById('tx-table');
   if (!tableElement || !tableElement._grid) return;
 
-  // Re-create the table with new theme
-  // Note: Grid.js doesn't support dynamic theme switching, so we need to re-render
-  createTxTable();
+  // Destroy the existing grid to ensure clean re-render
+  const oldGrid = tableElement._grid;
+  if (oldGrid && typeof oldGrid.destroy === 'function') {
+    oldGrid.destroy();
+  }
+
+  // Clear the table element content
+  tableElement.innerHTML = '';
+  tableElement._grid = null;
+
+  // Small delay to ensure DOM is ready
+  setTimeout(() => {
+    // Re-create the table with new theme
+    // Note: Grid.js doesn't support dynamic theme switching, so we need to re-render
+    createTxTable();
+  }, 50);
 }
 
 module.exports = { createTxTable, updateTxTableTheme }

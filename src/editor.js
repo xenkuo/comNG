@@ -767,7 +767,6 @@ setupEditor().then(editor => {
 
   // Link any existing tabs that were created before editor was ready
   linkExistingTabs();
-
 }).catch(error => {
   console.error('Failed to initialize editor:', error);
 });
