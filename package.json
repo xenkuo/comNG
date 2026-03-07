@@ -10,7 +10,7 @@
     "start": "electron-forge start",
     "rebuild": "electron-rebuild -f -w serialport",
     "package": "electron-forge package",
-    "premake": "rm -f src/index.js.map",
+    "premake": "rm -f src/index.js.map && yarn run build:dev",
     "build:dev": "node scripts/build-dev.js",
     "build:watch": "node scripts/build-dev.js --watch",
     "dev": "yarn run build:dev && electron-forge start",
