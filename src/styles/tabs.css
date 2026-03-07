@@ -1,0 +1,70 @@
+.select-wrapper input.select-dropdown {
+  padding-left: 14px;
+  padding-right: 20px;
+  box-sizing: border-box;
+  text-overflow: ellipsis;
+  border-radius: 12px;
+  height: 24px;
+  font-size: 12px;
+  /* z-index: inherit; */
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.dropdown-content {
+  border-radius: 12px;
+  width: fit-content;
+  min-width: 0px !important;
+  background-color: var(--bg-primary);
+}
+
+.dropdown-content li {
+  min-height: 28px;
+  line-height: 28px !important;
+}
+
+.dropdown-content li > a,
+.dropdown-content li > span {
+  font-size: 12px;
+  line-height: 28px;
+  padding-top: 0px;
+  padding-bottom: 4px;
+  color: var(--text-primary);
+}
+
+.dropdown-content li:hover {
+  background-color: var(--hover-bg);
+}
+
+.tabs {
+  height: 26px;
+}
+
+.tabs .tab {
+  height: 26px;
+}
+
+.tabs .tab a {
+  color: #26a69a;
+  height: 26px;
+  line-height: 26px;
+  font-size: 12px;
+  font-weight: bold;
+  /* border-radius: 6px 6px 6px 6px; */
+}
+
+.tabs .indicator {
+  background-color: var(--indicator-bg);
+}
+
+.tabs .tab a:hover,
+.tabs .tab a.active,
+.tabs .tab a:focus.active {
+  color: var(--text-secondary);
+  background-color: var(--hover-bg);
+}
+
+.chrome-tabs .chrome-tab .chrome-tab-title {
+  margin-top: -4px;
+}

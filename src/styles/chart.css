@@ -1,0 +1,39 @@
+#chart-tab {
+  background-color: var(--bg-primary);
+  height: inherit;
+}
+
+#chart-figure {
+  align-content: center;
+  height: inherit;
+  padding: 0px;
+  background-color: var(--bg-primary);
+}
+
+#chart-switch-div {
+  position: absolute;
+  right: 280px;
+  z-index: 999;
+}
+
+#chart-switch-label {
+  position: absolute;
+  right: 350px;
+  z-index: 999;
+  font-weight: bold;
+  line-height: 2;
+}
+
+#auto-scrolldown-btn {
+  transform: scale(0.64);
+}
+
+#licence-row {
+  margin-top: 6px;
+}
+#licence-key {
+  height: 24px;
+  margin-bottom: 0px;
+}
+
+/* Transmit Tab Layout - Flexbox approach */

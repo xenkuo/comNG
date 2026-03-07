@@ -1,0 +1,105 @@
+#bar-area {
+  width: 100%;
+  height: var(--bar-height);
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: 0px;
+  left: 0px;
+  line-height: var(--bar-height);
+  background: -webkit-linear-gradient(
+    60deg,
+    var(--bar-color-head),
+    var(--bar-color-middle),
+    var(--bar-color-tail)
+  );
+
+  /* setting bar area as transparent */
+  /* background-color: rgba(255, 255, 128, 0.5); */
+}
+
+#modem-signal-bar {
+  height: var(--modem-btn-height);
+  /* background-color: aqua; */
+  position: sticky;
+  bottom: var(--bar-height) - var(--modem-btn-height);
+  margin-bottom: calc(-1 * var(--modem-btn-height));
+}
+
+.modem-btn {
+  position: sticky;
+  bottom: var(--bar-height) - var(--modem-btn-height);
+  font-size: var(--modem-btn-height);
+  height: var(--modem-btn-height) !important;
+  line-height: var(--modem-btn-height) !important;
+  border-radius: 0px 0px var(--modem-btn-height) var(--modem-btn-height);
+}
+
+/* #trans-eof-row {
+  margin-top: 10px;
+  margin-left: 10px;
+} */
+
+.custom-tx-btn {
+  height: var(--tx-btn-height) !important;
+  line-height: var(--tx-btn-height) !important;
+  border-radius: calc(var(--tx-btn-height) / 2);
+}
+
+.editable-content {
+  padding: 0px;
+  margin: 0px !important;
+  font-family: 'Cascadia Mono', Consolas, 'SF Mono', 'Ubuntu Mono', monospace;
+}
+
+.editable-content:focus {
+  outline: none;
+  border-color: #26a69a;
+  box-shadow: 0 0 0 2px rgba(38, 166, 154, 0.2);
+}
+
+.centered-action-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.tx-table-floating-btn {
+  position: absolute;
+  top: 18px;
+  left: 180px;
+  z-index: 1000;
+  margin: 0;
+}
+
+.bold-centered-index {
+  font-weight: bold;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+#color-panel {
+  height: 43px;
+  line-height: 43px;
+}
+
+#light-theme-color-panel,
+#dark-theme-color-panel {
+  height: 43px;
+  line-height: 43px;
+}
+
+#light-theme-color-panel input[type='color'],
+#dark-theme-color-panel input[type='color'] {
+  width: 60px;
+  height: 36px;
+  margin: 0 4px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}

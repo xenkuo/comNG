@@ -1,0 +1,47 @@
+@import url('../../node_modules/material-design-icons/iconfont/material-icons.css');
+@import url('../../node_modules/materialize-css/dist/css/materialize.css');
+@import url('../../node_modules/chrome-tabs/css/chrome-tabs.css');
+@import url('../../node_modules/chrome-tabs/css/chrome-tabs-dark-theme.css');
+@import url('../../node_modules/gridjs/dist/theme/mermaid.css');
+
+:root {
+  --nav-height: 36px;
+  --nav-icon-top: 8px;
+  --icon-width: 24px;
+  --nav-margin: 10px;
+  --icon-init-left: 240px;
+  --drag-min-width: 120px;
+  --tab-std-width: 240px;
+  --tabs-offset: calc(var(--icon-width) + var(--nav-margin));
+  --menu-height: 410px;
+  --menu-handle-height: 4px;
+  --bar-height: 53px;
+  --tx-btn-height: 20px;
+  --modem-btn-height: 10px;
+
+  /* Light theme colors (default) */
+  --bg-primary: #dee1e6;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #e0f2f1;
+  --bg-input: #e2f2f1;
+  --text-primary: #000000;
+  --text-secondary: #26a69a;
+  --border-color: #bdbdbd;
+  --hover-bg: #fafafa;
+  --indicator-bg: #fafafa;
+  --toast-bg: #fafafa;
+}
+
+/* Dark theme colors */
+[data-theme='dark'] {
+  --bg-primary: #202124;
+  --bg-secondary: #2d2d30;
+  --bg-tertiary: #252526;
+  --bg-input: #3c3c3c;
+  --text-primary: #cccccc;
+  --text-secondary: #4ec9b0;
+  --border-color: #3e3e42;
+  --hover-bg: #2d2d30;
+  --indicator-bg: #2d2d30;
+  --toast-bg: #2d2d30;
+}

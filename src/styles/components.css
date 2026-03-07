@@ -1,0 +1,40 @@
+
+.config-row {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.config-key {
+  font-weight: bold;
+}
+
+.config-list {
+  margin-top: 10px;
+}
+.config-item {
+  line-height: 42px;
+  margin-top: 0px;
+}
+
+.label-row {
+  margin-bottom: 0px;
+  padding-left: 10px;
+}
+
+.label-key {
+  font-weight: bold;
+}
+
+.toast {
+  background-color: var(--toast-bg) !important;
+  color: var(--text-secondary) !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+  max-width: 300px !important;
+  font-weight: bold !important;
+  text-align: center !important;
+  z-index: 10000 !important;
+}

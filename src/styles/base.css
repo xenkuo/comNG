@@ -1,0 +1,29 @@
+html {
+  height: 100%;
+  font-size: 12px;
+}
+
+body {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+nav {
+  /* -webkit-app-region: drag; */
+  /* background-color: #fafafa; */
+  height: var(--nav-height);
+  line-height: 24px;
+  background-color: var(--bg-primary);
+}
+
+td,
+th {
+  padding: 5px !important;
+}

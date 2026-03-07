@@ -1,0 +1,54 @@
+#editor-area {
+  height: calc(100% - var(--nav-height) - var(--bar-height));
+  padding-left: 2px;
+}
+
+#menu-area {
+  height: var(--menu-height);
+  width: calc(100%);
+  /* width: 100%; */
+  background-color: var(--bg-secondary);
+}
+
+#menu-handle {
+  background-color: var(--bg-secondary);
+  width: 100%;
+  height: var(--menu-handle-height);
+  border-radius: 2%;
+  margin-bottom: 0px;
+  cursor: n-resize;
+  /* -webkit-app-region: drag; */
+}
+
+#menu-tabs-body {
+  height: calc(100% - var(--menu-handle-height));
+  overflow: auto;
+  margin-bottom: 0px;
+
+  position: relative;
+}
+#menu-tabs-row {
+  padding-left: 0px;
+  padding-right: 0px;
+  margin-bottom: 0px;
+}
+
+#menu-tabs {
+  background-color: var(--bg-tertiary);
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+/* Neumorphism button UI, need bar background set to: #55b9f3 */
+/* #menu-btn,
+#data-cleanup-btn {
+  background: linear-gradient(145deg, #4da7db, #5bc6ff) !important;
+  box-shadow:
+    9px 9px 19px #489dcf,
+    -9px -9px 19px #62d5ff !important;
+} */
+
+#menu-btn {
+  position: relative;
+  left: 20px;
+}

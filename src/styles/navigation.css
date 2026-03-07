@@ -1,0 +1,127 @@
+.chrome-tabs {
+  position: absolute;
+  top: 0px;
+  left: var(--tabs-offset);
+  /* width: calc(100% - var(--drag-width) - (var(--icon-width) / 2)); */
+  width: 0px;
+  height: var(--nav-height);
+}
+
+.chrome-tabs .chrome-tab .chrome-tab-content {
+  padding: 5px 8px;
+}
+
+#tab-add-btn {
+  position: absolute;
+  -webkit-user-select: none;
+  user-select: none;
+  top: var(--nav-icon-top);
+  left: var(--icon-init-left);
+  color: var(--text-secondary);
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  text-align: center;
+  border-radius: 50%;
+}
+
+#logo {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  height: 24px;
+  font-size: 16px;
+  text-align: center;
+  width: var(--icon-width);
+  left: var(--nav-margin);
+  top: var(--nav-icon-top);
+  line-height: 24px !important;
+  color: var(--text-secondary);
+  border-radius: 50%;
+  cursor: cell;
+}
+
+@media (hover: hover) {
+  #tab-add-btn:hover {
+    background-color: var(--hover-bg);
+  }
+
+  #tab-add-btn:hover:active {
+    background-color: var(--hover-bg);
+  }
+
+  #logo:hover {
+    background-color: var(--hover-bg);
+  }
+  #logo:hover:active {
+    background-color: var(--hover-bg);
+  }
+}
+
+@media not all and (hover: hover) {
+  #tab-add-btn:active {
+    background-color: var(--hover-bg);
+  }
+
+  #logo:active {
+    background-color: var(--hover-bg);
+  }
+}
+/* refer: https://github.com/electron/electron/issues/3022#issuecomment-543146976 */
+#drag-area {
+  top: 6px;
+  right: 0px;
+  position: absolute;
+  /* width: var(--drag-width); */
+  height: var(--nav-height);
+  z-index: 9;
+  -webkit-app-region: drag;
+}
+
+blockquote {
+  margin-top: 10px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  border-left: 4px solid var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.image {
+  width: 100%;
+  height: 300px;
+  align-content: center;
+  /* display: flex;
+  align-items: center; */
+}
+.nav-wrapper {
+  height: 24px;
+  line-height: 24px;
+}
+
+.head-li {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+}
+
+.tiny-btn {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: calc(var(--nav-icon-top) - 4px);
+  width: 12px;
+  height: 12px;
+  margin: 6px !important;
+}
+
+#traffic-lights {
+  position: absolute;
+  right: var(--nav-margin);
+  top: 0px;
+  z-index: 99; /* higher than drag area */
+  height: var(--nav-height);
+  width: calc(var(--icon-width) * 3);
+}
+.no-head {
+  margin-top: 12px;
+  padding: 0px !important;
+}

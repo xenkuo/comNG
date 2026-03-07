@@ -1,0 +1,18 @@
+input {
+  font-size: 12px !important;
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+.input-field {
+  /* margin-top: 0px; */
+  margin-bottom: -5px;
+}
+
+.input-field input,
+.input-field select {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}

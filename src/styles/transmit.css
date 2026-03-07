@@ -1,0 +1,178 @@
+.transmit-tab-container {
+  position: relative;
+  height: calc(100% - 26px);
+}
+
+.transmit-content-area {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 50px; /* Space for config area */
+  overflow: auto;
+  width: 100%;
+}
+
+.gridjs-footer {
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  margin: 4px 0 0 0;
+}
+
+.gridjs-search {
+  height: 32px;
+}
+
+td.gridjs-td,
+th.gridjs-th {
+  border: none !important;
+}
+.transmit-config-area {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: var(--bg-input);
+  z-index: 10;
+  /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); */
+  max-height: 50px; /* Fixed height */
+  height: 50px; /* Fixed height NOTE: needed*/
+}
+
+/* Center tx-table container and Grid.js table */
+.tx-table-center {
+  text-align: center;
+  width: 100%;
+  position: relative;
+}
+
+.red {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
+.tx-table-center #tx-table {
+  display: inline-block;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.tx-table-center .gridjs-wrapper {
+  margin: 0 auto;
+  border-radius: 0px;
+  box-shadow: none;
+  width: 100% !important;
+}
+
+.tx-table-center .gridjs-table {
+  margin: 0 auto;
+  width: 100% !important;
+}
+
+.tx-table-center .gridjs-header,
+.tx-table-center .gridjs-footer {
+  width: 100% !important;
+}
+
+.gridjs-tbody {
+  background-color: var(--bg-secondary) !important;
+}
+/* Grid.js dark theme support */
+[data-theme='dark'] .gridjs-wrapper {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-table {
+  background-color: var(--bg-secondary) !important;
+}
+
+[data-theme='dark'] .gridjs-th {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-td {
+  color: var(--text-primary);
+  background-color: var(--bg-secondary) !important;
+}
+
+[data-theme='dark'] .gridjs-search {
+  background-color: var(--bg-secondary) !important;
+}
+
+[data-theme='dark'] .gridjs-search input {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-search input::placeholder {
+  color: var(--text-secondary);
+}
+
+[data-theme='dark'] .gridjs-footer {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary);
+}
+
+.gridjs-pagination .gridjs-pages button:focus {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.gridjs-pagination .gridjs-pages button:last-child {
+  border-right: 1px solid var(--border-color) !important;
+}
+[data-theme='dark'] .gridjs-pagination button {
+  color: var(--text-primary);
+  background-color: transparent;
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .gridjs-pagination button:hover {
+  background-color: var(--hover-bg);
+}
+
+[data-theme='dark'] .gridjs-pagination button:disabled,
+[data-theme='dark'] .gridjs-pagination button[disabled],
+[data-theme='dark'] .gridjs-pagination button:hover:disabled {
+  cursor: default;
+  background-color: transparent;
+  color: var(--text-secondary);
+  opacity: 0.5;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme='dark'] .gridjs-pagination button.gridjs-spread {
+  cursor: default;
+  box-shadow: none;
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-pagination button.gridjs-currentPage {
+  background-color: var(--bg-input);
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .gridjs-pagination .gridjs-summary {
+  color: var(--text-primary);
+}
+
+[data-theme='dark'] .editable-content {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+}
+
+#baud-input,
+#path-input {
+  margin: 15px 0px;
+}
