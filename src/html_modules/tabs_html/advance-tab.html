@@ -1,69 +1,102 @@
 <div id="advance-tab" class="col s12">
-  <div class="col s4">
-    <blockquote i18n-label="signature"></blockquote>
-    <div class="divider"></div>
-    <div class="row config-row">
-      <div class="col s12 config-item center">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="sign-switch" />
-            <span class="lever"></span>
-            On
-          </label>
+  <!-- Top Row: Theme Controls -->
+  <div class="row">
+    <div class="col s4">
+      <blockquote i18n-label="darkTheme"></blockquote>
+      <div class="divider"></div>
+      <div class="row config-row">
+        <div class="col s12 config-item center">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="dark-theme-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
         </div>
       </div>
     </div>
-    <div class="row config-row">
-      <div class="input-field col s12">
-        <input placeholder="Name" type="text" id="sign-name" />
+    <div class="col s4">
+      <blockquote i18n-label="darkThemeBarColor"></blockquote>
+      <div class="divider"></div>
+      <div class="center" id="dark-theme-color-panel">
+        <input value="#d4a017" id="bar-color-head-dark" type="color" />
+        <input value="#c99613" id="bar-color-middle-dark" type="color" />
+        <input value="#be8d0f" id="bar-color-tail-dark" type="color" />
+      </div>
+    </div>
+    <div class="col s4">
+      <blockquote i18n-label="lightThemeBarColor"></blockquote>
+      <div class="divider"></div>
+      <div class="center" id="light-theme-color-panel">
+        <input value="#ffba3a" id="bar-color-head" type="color" />
+        <input value="#ffba3a" id="bar-color-middle" type="color" />
+        <input value="#ffba3a" id="bar-color-tail" type="color" />
       </div>
     </div>
   </div>
-  <div class="col s4">
-    <blockquote i18n-label="breakpoint"></blockquote>
-    <div class="divider"></div>
-    <div class="row config-row">
-      <div class="col s12 config-item center">
-        <div class="switch">
-          <label>
-            Off
-            <input type="checkbox" id="breakpoint-switch" />
-            <span class="lever"></span>
-            On
-          </label>
+
+  <div class="divider"></div>
+  <!-- Bottom Row: Signature and Breakpoint -->
+  <div class="row" style="margin-top: 60px">
+    <div class="col s4">
+      <blockquote i18n-label="signature"></blockquote>
+      <div class="divider"></div>
+      <div class="row config-row">
+        <div class="col s12 config-item center">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="sign-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="row config-row">
+        <div class="input-field col s12">
+          <input placeholder="Name" type="text" id="sign-name" />
         </div>
       </div>
     </div>
-    <div class="row config-row">
-      <div class="input-field col s12">
-        <input
-          placeholder="Auto switch off port on the Text"
-          value="Error"
-          id="breakpoint-on-text"
-          type="text"
-          maxlength="16"
-        />
+    <div class="col s4 offset-s4">
+      <blockquote i18n-label="breakpoint"></blockquote>
+      <div class="divider"></div>
+      <div class="row config-row">
+        <div class="col s12 config-item center">
+          <div class="switch">
+            <label>
+              Off
+              <input type="checkbox" id="breakpoint-switch" />
+              <span class="lever"></span>
+              On
+            </label>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="row config-row">
-      <div class="input-field col s12">
-        <input
-          placeholder="After lines, such as '5'"
-          value="5"
-          id="breakpoint-after-lines"
-          type="text"
-        />
+      <div class="row config-row">
+        <div class="input-field col s12">
+          <input
+            placeholder="Auto switch off port on the Text"
+            value="Error"
+            id="breakpoint-on-text"
+            type="text"
+            maxlength="16"
+          />
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="col s4">
-    <blockquote i18n-label="barColor"></blockquote>
-    <div class="divider"></div>
-    <div class="center" id="color-panel">
-      <input value="#ffba3a" id="bar-color-head" type="color" />
-      <input value="#ff8a80" id="bar-color-middle" type="color" />
-      <input value="#80d8ff" id="bar-color-tail" type="color" />
+      <div class="row config-row">
+        <div class="input-field col s12">
+          <input
+            placeholder="After lines, such as '5'"
+            value="5"
+            id="breakpoint-after-lines"
+            type="text"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </div>

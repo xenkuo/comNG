@@ -484,6 +484,23 @@ input {
   line-height: 43px;
 }
 
+#light-theme-color-panel,
+#dark-theme-color-panel {
+  height: 43px;
+  line-height: 43px;
+}
+
+#light-theme-color-panel input[type='color'],
+#dark-theme-color-panel input[type='color'] {
+  width: 60px;
+  height: 36px;
+  margin: 0 4px;
+  padding: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 #chart-tab {
   background-color: var(--bg-primary);
   height: inherit;

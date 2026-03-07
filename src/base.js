@@ -162,12 +162,22 @@ function initializeFormElements() {
   document.getElementById('bar-color-middle').value = store.get('advance.barColor.middle')
   document.getElementById('bar-color-tail').value = store.get('advance.barColor.tail')
 
-  document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
-  document.documentElement.style.setProperty(
-    '--bar-color-middle',
-    store.get('advance.barColor.middle')
-  )
-  document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
+  // Dark theme bar colors
+  document.getElementById('bar-color-head-dark').value = store.get('advance.barColor.headDark') || '#d4a017'
+  document.getElementById('bar-color-middle-dark').value = store.get('advance.barColor.middleDark') || '#c99613'
+  document.getElementById('bar-color-tail-dark').value = store.get('advance.barColor.tailDark') || '#be8d0f'
+
+  // Apply bar colors based on current theme
+  const isDarkTheme = store.get('general.darkTheme')
+  if (isDarkTheme) {
+    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.headDark') || '#d4a017')
+    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middleDark') || '#c99613')
+    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tailDark') || '#be8d0f')
+  } else {
+    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
+    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middle'))
+    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
+  }
 
   initDomUtilities()
 }
@@ -326,8 +336,16 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
 
   if (isDark) {
     document.documentElement.setAttribute('data-theme', 'dark')
+    // Apply dark theme bar colors
+    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.headDark') || '#d4a017')
+    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middleDark') || '#c99613')
+    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tailDark') || '#be8d0f')
   } else {
     document.documentElement.removeAttribute('data-theme')
+    // Apply light theme bar colors
+    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
+    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middle'))
+    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
   }
 
   store.set('general.darkTheme', isDark)
@@ -469,23 +487,63 @@ document.getElementById('insider-preview').onclick = (e) => {
 
 document.getElementById('bar-color-head').oninput = (e) => {
   let color = e.target.value
+  const isDark = store.get('general.darkTheme')
 
-  document.documentElement.style.setProperty('--bar-color-head', color)
+  if (!isDark) {
+    document.documentElement.style.setProperty('--bar-color-head', color)
+  }
   store.set('advance.barColor.head', color)
 }
 
 document.getElementById('bar-color-middle').oninput = (e) => {
   let color = e.target.value
+  const isDark = store.get('general.darkTheme')
 
-  document.documentElement.style.setProperty('--bar-color-middle', color)
+  if (!isDark) {
+    document.documentElement.style.setProperty('--bar-color-middle', color)
+  }
   store.set('advance.barColor.middle', color)
 }
 
 document.getElementById('bar-color-tail').oninput = (e) => {
   let color = e.target.value
+  const isDark = store.get('general.darkTheme')
 
-  document.documentElement.style.setProperty('--bar-color-tail', color)
+  if (!isDark) {
+    document.documentElement.style.setProperty('--bar-color-tail', color)
+  }
   store.set('advance.barColor.tail', color)
+}
+
+// Dark theme bar color handlers
+document.getElementById('bar-color-head-dark').oninput = (e) => {
+  let color = e.target.value
+  const isDark = store.get('general.darkTheme')
+
+  if (isDark) {
+    document.documentElement.style.setProperty('--bar-color-head', color)
+  }
+  store.set('advance.barColor.headDark', color)
+}
+
+document.getElementById('bar-color-middle-dark').oninput = (e) => {
+  let color = e.target.value
+  const isDark = store.get('general.darkTheme')
+
+  if (isDark) {
+    document.documentElement.style.setProperty('--bar-color-middle', color)
+  }
+  store.set('advance.barColor.middleDark', color)
+}
+
+document.getElementById('bar-color-tail-dark').oninput = (e) => {
+  let color = e.target.value
+  const isDark = store.get('general.darkTheme')
+
+  if (isDark) {
+    document.documentElement.style.setProperty('--bar-color-tail', color)
+  }
+  store.set('advance.barColor.tailDark', color)
 }
 
 document.getElementById('issue').onclick = (e) => {
