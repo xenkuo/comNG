@@ -24,6 +24,22 @@
   line-height: 2;
 }
 
+#chart-example {
+  position: absolute;
+  left: 50px;
+  z-index: 999;
+  line-height: 2;
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+/* #chart-example-text {
+  position: absolute;
+  left: 66px;
+  z-index: 999;
+  line-height: 2;
+} */
+
 #auto-scrolldown-btn {
   transform: scale(0.64);
 }
