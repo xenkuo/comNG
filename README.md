@@ -39,9 +39,9 @@ For more details please refer to [comNG Introduction](doc/Introduction-en.md)。
 
 ## Screenshot
 
-<img src="image/preview-dark.png" alt="Dark Mode" style="width:756px;"/>
+<img src="image/preview-dark.png" alt="Dark Mode" style="width:750px;"/>
 
-<img src="image/preview.png" alt="Light Mode" style="width: 756px;"/>
+<img src="image/preview.png" alt="Light Mode" style="width: 750px;"/>
 
 ## 使用方法
 
