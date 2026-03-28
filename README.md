@@ -39,7 +39,9 @@ For more details please refer to [comNG Introduction](doc/Introduction-en.md)。
 
 ## Screenshot
 
-<img src="image/home-zh.png" alt="Hex mode" style="width: 640px;"/>
+<img src="image/preview-dark.png" alt="Dark Mode" style="width:756px;"/>
+
+<img src="image/preview.png" alt="Light Mode" style="width: 756px;"/>
 
 ## 使用方法
 
@@ -76,7 +78,6 @@ For more details please refer to [comNG Introduction](doc/Introduction-en.md)。
 
 ## 更多截图
 
-<img src="image/preview.png" alt="Preview" style="width: 640px;"/>
 <img src="image/hex-mode-2.png" alt="Hex mode" style="width: 640px;"/>
 <img src="image/home.png" alt="Home" style="width: 640px;"/>
 
