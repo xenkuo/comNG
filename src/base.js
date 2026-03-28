@@ -89,7 +89,6 @@ window.onload = () => {
   createTxTabTable()
 }
 
-
 function initializeFormElements() {
   let baudSelect = document.getElementById('baud-select')
   baudSelect.options[0].text = store.get('general.customized')
@@ -163,35 +162,54 @@ function initializeFormElements() {
   document.getElementById('bar-color-tail').value = store.get('advance.barColor.tail')
 
   // Dark theme bar colors
-  document.getElementById('bar-color-head-dark').value = store.get('advance.barColor.headDark') || '#d4a017'
-  document.getElementById('bar-color-middle-dark').value = store.get('advance.barColor.middleDark') || '#c99613'
-  document.getElementById('bar-color-tail-dark').value = store.get('advance.barColor.tailDark') || '#be8d0f'
+  document.getElementById('bar-color-head-dark').value =
+    store.get('advance.barColor.headDark') || '#d4a017'
+  document.getElementById('bar-color-middle-dark').value =
+    store.get('advance.barColor.middleDark') || '#c99613'
+  document.getElementById('bar-color-tail-dark').value =
+    store.get('advance.barColor.tailDark') || '#be8d0f'
 
   // Apply bar colors based on current theme
   const isDarkTheme = store.get('general.darkTheme')
   if (isDarkTheme) {
-    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.headDark') || '#d4a017')
-    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middleDark') || '#c99613')
-    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tailDark') || '#be8d0f')
+    document.documentElement.style.setProperty(
+      '--bar-color-head',
+      store.get('advance.barColor.headDark') || '#d4a017'
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-middle',
+      store.get('advance.barColor.middleDark') || '#c99613'
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-tail',
+      store.get('advance.barColor.tailDark') || '#be8d0f'
+    )
   } else {
-    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
-    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middle'))
-    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
+    document.documentElement.style.setProperty(
+      '--bar-color-head',
+      store.get('advance.barColor.head')
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-middle',
+      store.get('advance.barColor.middle')
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-tail',
+      store.get('advance.barColor.tail')
+    )
   }
 
   initDomUtilities()
 }
-
-
 
 function checkForApplicationUpdates() {
   // Defer update checking to improve startup performance
   setTimeout(() => {
     try {
       const { checkForUpdates } = require('./modules/update.js')
-      if (Math.random() < 0.3) { // 30% chance of checking
-        checkForUpdates()
-      }
+      // if (Math.random() < 0.3) { // 30% chance of checking
+      checkForUpdates()
+      // }
     } catch (error) {
       console.warn('Update check skipped due to error:', error)
     }
@@ -337,15 +355,33 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
   if (isDark) {
     document.documentElement.setAttribute('data-theme', 'dark')
     // Apply dark theme bar colors
-    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.headDark') || '#d4a017')
-    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middleDark') || '#c99613')
-    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tailDark') || '#be8d0f')
+    document.documentElement.style.setProperty(
+      '--bar-color-head',
+      store.get('advance.barColor.headDark') || '#d4a017'
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-middle',
+      store.get('advance.barColor.middleDark') || '#c99613'
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-tail',
+      store.get('advance.barColor.tailDark') || '#be8d0f'
+    )
   } else {
     document.documentElement.removeAttribute('data-theme')
     // Apply light theme bar colors
-    document.documentElement.style.setProperty('--bar-color-head', store.get('advance.barColor.head'))
-    document.documentElement.style.setProperty('--bar-color-middle', store.get('advance.barColor.middle'))
-    document.documentElement.style.setProperty('--bar-color-tail', store.get('advance.barColor.tail'))
+    document.documentElement.style.setProperty(
+      '--bar-color-head',
+      store.get('advance.barColor.head')
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-middle',
+      store.get('advance.barColor.middle')
+    )
+    document.documentElement.style.setProperty(
+      '--bar-color-tail',
+      store.get('advance.barColor.tail')
+    )
   }
 
   store.set('general.darkTheme', isDark)
@@ -361,8 +397,8 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
   }
 
   // Emit theme switch event for editor to handle
-  const event = new CustomEvent('themeSwitched', { detail: { isDark } });
-  document.dispatchEvent(event);
+  const event = new CustomEvent('themeSwitched', { detail: { isDark } })
+  document.dispatchEvent(event)
 
   // Update Grid.js table theme (Transmit tab)
   try {
@@ -561,17 +597,17 @@ function loadShortcutsData() {
   // Load fileops shortcuts
   const fileopsTable = document.querySelector('#shortcuts-fileops-table tbody')
   if (fileopsTable && shortcuts.fileops) {
-    fileopsTable.innerHTML = shortcuts.fileops.map(item =>
-      `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`
-    ).join('')
+    fileopsTable.innerHTML = shortcuts.fileops
+      .map((item) => `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`)
+      .join('')
   }
 
   // Load general shortcuts
   const generalTable = document.querySelector('#shortcuts-general-table tbody')
   if (generalTable && shortcuts.general) {
-    generalTable.innerHTML = shortcuts.general.map(item =>
-      `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`
-    ).join('')
+    generalTable.innerHTML = shortcuts.general
+      .map((item) => `<tr><td>${item.action}</td><td>${item.shortcut}</td></tr>`)
+      .join('')
   }
 }
 
@@ -581,7 +617,3 @@ if (document.readyState === 'loading') {
 } else {
   loadShortcutsData()
 }
-
-
-
-

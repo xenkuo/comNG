@@ -6,8 +6,8 @@ const store = require('./store.js').init()
 function getThemeColors() {
   const isDark = store.get('general.darkTheme');
   return {
-    background: isDark ? '#202124' : '#ffffff',
-    paperBg: isDark ? '#202124' : '#ffffff',
+    background: isDark ? '#282a36' : '#ffffff',
+    paperBg: isDark ? '#282a36' : '#ffffff',
     fontColor: isDark ? '#cccccc' : '#000000',
     gridColor: isDark ? '#3e3e42' : '#bdbdbd',
     zeroLineColor: isDark ? '#5e5e62' : '#757575',

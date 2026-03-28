@@ -9,7 +9,7 @@ function checkForUpdates() {
   const appUpdaterUrl = 'https://gitee.com/api/v5/repos/xenkuo/comNG/releases/latest'
 
   function platformUpdateCheck(assets) {
-    const os = require('os')
+    const os = require('node:os')
     let platform = os.platform()
     let suffix = 'exe'
 
@@ -57,8 +57,6 @@ function checkForUpdates() {
   }
 
   performUpdate()
-
-
 }
 
 document.getElementById('app-version').innerHTML = appVersion

@@ -1,7 +1,7 @@
 {
   "name": "comng",
   "productName": "comNG",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "mode": "dev",
   "description": "A powerful serial tool with modern UI",
   "repository": "https://github.com/xenkuo/comNG",
@@ -44,6 +44,7 @@
           "node_modules/.cache",
           "node_modules/.bin",
           "src/(base|editor).js",
+          "image/(?!(logo\\.png|logo\\.ico|logo\\.icns|friends\\.png)$).*\\.(png|jpg|jpeg|gif|webp)$",
           "\\.map$",
           "\\.(md|markdown)$",
           "docs",

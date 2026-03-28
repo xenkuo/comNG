@@ -6,7 +6,7 @@ let locale = remote.app.getLocale()
 locale = locale || 'zh'
 
 // For test
-locale = 'zh'
+// locale = 'zh'
 
 module.exports = {
   getLocale() {
