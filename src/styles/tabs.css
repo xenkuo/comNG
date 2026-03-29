@@ -65,14 +65,21 @@
   background-color: var(--hover-bg);
 }
 
+.chrome-tabs {
+  background-color: inherit;
+}
 .chrome-tabs .chrome-tab .chrome-tab-title {
   margin-top: -4px;
 }
 
-.chrome-tabs.chrome-tabs-dark-theme .chrome-tab[active] .chrome-tab-background > svg .chrome-tab-geometry {
-  fill: #282A36;
+.chrome-tabs.chrome-tabs-dark-theme
+  .chrome-tab[active]
+  .chrome-tab-background
+  > svg
+  .chrome-tab-geometry {
+  fill: #282a36;
 }
 
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tabs-bottom-bar {
-  background: #282A36;
+  background: #282a36;
 }

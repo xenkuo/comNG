@@ -27,7 +27,7 @@ const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js
 function initializeTheme() {
   // Apply dark theme BEFORE any UI rendering to prevent flash of light theme
   if (store.get('general.darkTheme')) {
-    document.documentElement.setAttribute('data-theme', 'dark')
+    document.documentElement.dataset.theme = 'dark'
   }
 }
 
@@ -353,7 +353,7 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
   const isDark = e.target.checked
 
   if (isDark) {
-    document.documentElement.setAttribute('data-theme', 'dark')
+    document.documentElement.dataset.theme = 'dark'
     // Apply dark theme bar colors
     document.documentElement.style.setProperty(
       '--bar-color-head',
@@ -368,7 +368,7 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
       store.get('advance.barColor.tailDark') || '#be8d0f'
     )
   } else {
-    document.documentElement.removeAttribute('data-theme')
+    delete document.documentElement.dataset.theme
     // Apply light theme bar colors
     document.documentElement.style.setProperty(
       '--bar-color-head',

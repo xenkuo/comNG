@@ -34,6 +34,7 @@
   width: var(--icon-width);
   left: var(--nav-margin);
   top: var(--nav-icon-top);
+  margin-right: 0px !important;
   line-height: 24px !important;
   color: var(--text-secondary);
   border-radius: 50%;

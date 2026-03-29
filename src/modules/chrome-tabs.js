@@ -13,7 +13,6 @@ let tabsMap = new Map()
  * Initialize ChromeTabs module with required dependencies
  */
 function initChromeTabs() {
-
   // Initialize ChromeTabs
   const tabsEl = document.getElementById('tabs-area')
   chromeTabs.init(tabsEl)
@@ -68,8 +67,8 @@ function _handleTabAdd(detail) {
   titleEl.innerHTML = title
 
   // Dispatch custom event for tab addition
-  const event = new CustomEvent('tabAdded', { detail: { tabEl: el } });
-  document.dispatchEvent(event);
+  const event = new CustomEvent('tabAdded', { detail: { tabEl: el } })
+  document.dispatchEvent(event)
 }
 
 /**
@@ -80,8 +79,8 @@ function _handleActiveTabChange(detail) {
   let el = detail.tabEl
 
   // Dispatch custom event for active tab changed
-  const event = new CustomEvent('activeTabChanged', { detail: { tabEl: el } });
-  document.dispatchEvent(event);
+  const event = new CustomEvent('activeTabChanged', { detail: { tabEl: el } })
+  document.dispatchEvent(event)
 }
 
 /**
@@ -94,8 +93,8 @@ function _handleTabRemove(detail) {
   // Dispatch custom event for tab removal
   let el = detail.tabEl
 
-  const event = new CustomEvent('tabRemoved', { detail: { tabEl: el } });
-  document.dispatchEvent(event);
+  const event = new CustomEvent('tabRemoved', { detail: { tabEl: el } })
+  document.dispatchEvent(event)
 }
 
 /**
@@ -139,6 +138,10 @@ module.exports = {
   switchTab,
   updateChromeTabsTheme,
   // Direct access to instances
-  get chromeTabs() { return chromeTabs; },
-  get tabsMap() { return tabsMap; }
+  get chromeTabs() {
+    return chromeTabs
+  },
+  get tabsMap() {
+    return tabsMap
+  },
 }
