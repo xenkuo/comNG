@@ -59,5 +59,5 @@ module.exports = {
   navi_layout_update,
   generateFileName,
   getFormattedTimestamp,
-  toast
+  toast,
 }

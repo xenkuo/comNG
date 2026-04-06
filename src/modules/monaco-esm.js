@@ -15,32 +15,32 @@
  */
 async function initMonacoESM() {
   try {
-    console.log('Loading Monaco editor via ESM...');
+    console.log('Loading Monaco editor via ESM...')
 
     // Dynamically import Monaco ESM module
-    const monaco = await import('monaco-editor/esm/vs/editor/editor.api');
+    const monaco = await import('monaco-editor/esm/vs/editor/editor.api')
 
     // Configure Monaco environment for web workers
     self.MonacoEnvironment = {
       getWorkerUrl: function (moduleId, label) {
         // Worker paths - adjust based on your build output structure
         if (label === 'json') {
-          return './vs/language/json/json.worker.js';
+          return './vs/language/json/json.worker.js'
         }
         if (label === 'css' || label === 'scss' || label === 'less') {
-          return './vs/language/css/css.worker.js';
+          return './vs/language/css/css.worker.js'
         }
         if (label === 'html' || label === 'handlebars' || label === 'razor') {
-          return './vs/language/html/html.worker.js';
+          return './vs/language/html/html.worker.js'
         }
         if (label === 'typescript' || label === 'javascript') {
-          return './vs/language/typescript/ts.worker.js';
+          return './vs/language/typescript/ts.worker.js'
         }
-        return './vs/editor/editor.worker.js';
-      }
-    };
+        return './vs/editor/editor.worker.js'
+      },
+    }
 
-    console.log('Monaco ESM loaded successfully');
+    console.log('Monaco ESM loaded successfully')
 
     // Dispatch custom event for compatibility with existing code
     const event = new CustomEvent('monacoloaded', {
@@ -48,15 +48,14 @@ async function initMonacoESM() {
         /** @type {import('monaco-editor')} */
         monaco: monaco,
       },
-    });
-    window.dispatchEvent(event);
+    })
+    window.dispatchEvent(event)
 
     // Return the monaco instance directly
-    return monaco;
-
+    return monaco
   } catch (error) {
-    console.error('Failed to load Monaco ESM:', error);
-    throw error;
+    console.error('Failed to load Monaco ESM:', error)
+    throw error
   }
 }
 
@@ -68,56 +67,60 @@ async function initMonacoESM() {
 function initMonacoESMCompat() {
   return new Promise((resolve, reject) => {
     // Fallback to AMD approach for compatibility
-    console.log('Using ESM-compatible AMD approach');
+    console.log('Using ESM-compatible AMD approach')
 
-    const path = require('path');
-    const amdLoader = require('../../node_modules/monaco-editor/min/vs/loader.js');
-    const amdRequire = amdLoader.require;
+    const path = require('path')
+    const amdLoader = require('../../node_modules/monaco-editor/min/vs/loader.js')
+    const amdRequire = amdLoader.require
 
     function _uriFromPath(_path) {
-      let pathName = path.resolve(_path).replace(/\\/g, '/');
+      let pathName = path.resolve(_path).replace(/\\/g, '/')
       if (pathName.length > 0 && !pathName.startsWith('/')) {
-        pathName = '/' + pathName;
+        pathName = '/' + pathName
       }
-      return encodeURI('file://' + pathName);
+      return encodeURI('file://' + pathName)
     }
 
     amdRequire.config({
       baseUrl: _uriFromPath(path.join(__dirname, '../../node_modules/monaco-editor/min')),
-    });
+    })
 
     // Workaround for monaco-css environment issues
-    self.module = undefined;
+    self.module = undefined
 
-    amdRequire(['vs/editor/editor.main'], function () {
-      try {
-        // Enhanced type information for IDE
-        /** @type {import('monaco-editor')} */
-        const monacoInstance = monaco;
+    amdRequire(
+      ['vs/editor/editor.main'],
+      function () {
+        try {
+          // Enhanced type information for IDE
+          /** @type {import('monaco-editor')} */
+          const monacoInstance = monaco
 
-        console.log('Monaco editor loaded with ESM-style type definitions');
+          console.log('Monaco editor loaded with ESM-style type definitions')
 
-        const event = new CustomEvent('monacoloaded', {
-          detail: {
-            /** @type {import('monaco-editor')} */
-            monaco: monacoInstance,
-          },
-        });
-        window.dispatchEvent(event);
+          const event = new CustomEvent('monacoloaded', {
+            detail: {
+              /** @type {import('monaco-editor')} */
+              monaco: monacoInstance,
+            },
+          })
+          window.dispatchEvent(event)
 
-        // Resolve with the monaco instance
-        resolve(monacoInstance);
-      } catch (error) {
-        reject(error);
+          // Resolve with the monaco instance
+          resolve(monacoInstance)
+        } catch (error) {
+          reject(error)
+        }
+      },
+      function (error) {
+        reject(error)
       }
-    }, function (error) {
-      reject(error);
-    });
-  });
+    )
+  })
 }
 
 // Export both approaches
 module.exports = {
   initMonacoESM,
-  initMonacoESMCompat
-};
+  initMonacoESMCompat,
+}

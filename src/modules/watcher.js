@@ -56,11 +56,13 @@ function initWatcher(store) {
   // Return watcher instance and utilities
   return {
     watcher: watcher,
-    setLocalSave: (value) => { localSave = value; },
-    getLocalSave: () => localSave
+    setLocalSave: (value) => {
+      localSave = value
+    },
+    getLocalSave: () => localSave,
   }
 }
 
 module.exports = {
-  initWatcher
+  initWatcher,
 }

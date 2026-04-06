@@ -107,10 +107,7 @@ function hltToggle(editor) {
   let targetzIndex = 0
   let decos = model.getDecorationsInRange(range)
   for (let deco of decos) {
-    if (
-      deco.options.className !== null &&
-      deco.options.className.indexOf('hl-') !== -1
-    ) {
+    if (deco.options.className !== null && deco.options.className.indexOf('hl-') !== -1) {
       applyDeco = 0
       if (targetzIndex === 0) {
         targetzIndex = deco.options.zIndex
@@ -139,10 +136,7 @@ function hltClear(editor) {
 
   for (let deco of decos) {
     if (deco.options.className === null) continue
-    if (
-      deco.options.className.indexOf('hl-') !== -1 ||
-      deco.options.className === 'hex-cursor'
-    ) {
+    if (deco.options.className.indexOf('hl-') !== -1 || deco.options.className === 'hex-cursor') {
       model.deltaDecorations([deco.id], [])
     }
   }

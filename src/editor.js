@@ -466,7 +466,6 @@ function _processRcvdlData(data) {
   _textProcess(data)
 }
 
-
 function _processEchoData(data, hexMode) {
   _printTextLine(data, true, hexMode, true)
 }
@@ -606,7 +605,12 @@ async function setupEditor() {
     })
 
     // Configure Monaco utilities
-    const { configureComNGLanguageTokens, defineComNGTheme, createComNGEditor, configureComNGLanguage } = require('./modules/monaco-utilities.js')
+    const {
+      configureComNGLanguageTokens,
+      defineComNGTheme,
+      createComNGEditor,
+      configureComNGLanguage,
+    } = require('./modules/monaco-utilities.js')
 
     // Configure language tokens
     configureComNGLanguageTokens(monacoInst)
@@ -650,16 +654,15 @@ async function setupEditor() {
     //   // Do nothing but prevent default action: close window
     // });
 
-
     document.addEventListener('tabAdded', (event) => {
-      const el = event.detail.tabEl;
-      console.log('Tab added:', el);
-      createAndLinkTabModel(el, chromeTabsModule);
-    });
+      const el = event.detail.tabEl
+      console.log('Tab added:', el)
+      createAndLinkTabModel(el, chromeTabsModule)
+    })
 
     document.addEventListener('tabRemoved', (event) => {
-      const el = event.detail.tabEl;
-      console.log('Tab removed:', el);
+      const el = event.detail.tabEl
+      console.log('Tab removed:', el)
 
       const view = chromeTabsModule.tabsMap.get(el)
       if (null !== view.path) {
@@ -669,11 +672,11 @@ async function setupEditor() {
       // delete from tabsMap
       chromeTabsModule.tabsMap.delete(el)
       if (0 === chromeTabsModule.tabsMap.size) chromeTabsModule.newTab()
-    });
+    })
 
     document.addEventListener('activeTabChanged', (event) => {
-      const el = event.detail.tabEl;
-      console.log('Active tab changed:', el);
+      const el = event.detail.tabEl
+      console.log('Active tab changed:', el)
 
       // Save before tab's state
       let model = editorInst.getModel()
@@ -687,98 +690,96 @@ async function setupEditor() {
       let view = chromeTabsModule.tabsMap.get(el)
       editorInst.setModel(view.model)
       editorInst.restoreViewState(view.state)
-    });
-
+    })
 
     document.addEventListener('portClosed', (event) => {
       _editorStateReset()
-    });
+    })
 
     // Listen for theme switch events
     document.addEventListener('themeSwitched', (event) => {
-      const { isDark } = event.detail;
-      console.log('Theme switched to:', isDark ? 'dark' : 'light');
+      const { isDark } = event.detail
+      console.log('Theme switched to:', isDark ? 'dark' : 'light')
 
       // Update editor theme
       const { updateEditorTheme } = require('./modules/monaco-utilities.js')
       if (monacoInst && typeof updateEditorTheme === 'function') {
         updateEditorTheme(editorInst, monacoInst, store)
       }
-    });
+    })
 
-    hexMode.initHexModeHandlers(editorInst, monacoInst, hlt);
-
+    hexMode.initHexModeHandlers(editorInst, monacoInst, hlt)
 
     // Return the editor instance
-    return editorInst;
-
+    return editorInst
   } catch (error) {
-    console.error('Failed to setup editor:', error);
-    throw error;
+    console.error('Failed to setup editor:', error)
+    throw error
   }
 }
 
 // Helper function to create model and link tab to editor
 function createAndLinkTabModel(tabEl, chromeTabsModule) {
   // Create model and link it
-  let model = monacoInst.editor.createModel();
-  editorInst.setModel(model);
-  monacoInst.editor.setModelLanguage(model, 'comNGLang');
+  let model = monacoInst.editor.createModel()
+  editorInst.setModel(model)
+  monacoInst.editor.setModelLanguage(model, 'comNGLang')
 
   // Setup content change listener
   model.onDidChangeContent((e) => {
-    if (e.isFlush === true) return;
-    tabEl.children[2].children[1].style.color = '#ff8a80';
-    tabEl.children[2].children[1].style.fontWeight = 'bold';
-  });
+    if (e.isFlush === true) return
+    tabEl.children[2].children[1].style.color = '#ff8a80'
+    tabEl.children[2].children[1].style.fontWeight = 'bold'
+  })
 
   // Setup the map between tab and model/state
   let view = {
     model: model,
     path: null,
     state: null,
-  };
-  chromeTabsModule.tabsMap.set(tabEl, view);
+  }
+  chromeTabsModule.tabsMap.set(tabEl, view)
 }
 
 // Function to link existing tabs to editor model
 function linkExistingTabs() {
-  console.log('Checking for existing tabs to link...');
+  console.log('Checking for existing tabs to link...')
 
   // Get ChromeTabs module and check for existing tabs
-  const chromeTabsModule = require('./modules/chrome-tabs.js');
-  const tabsContainer = document.querySelector('.chrome-tabs');
+  const chromeTabsModule = require('./modules/chrome-tabs.js')
+  const tabsContainer = document.querySelector('.chrome-tabs')
 
   if (!tabsContainer) {
-    console.log('No tabs container found');
-    return;
+    console.log('No tabs container found')
+    return
   }
 
   // Find all existing tab elements
-  const existingTabs = tabsContainer.querySelectorAll('.chrome-tab');
-  console.log('Found', existingTabs.length, 'existing tabs');
+  const existingTabs = tabsContainer.querySelectorAll('.chrome-tab')
+  console.log('Found', existingTabs.length, 'existing tabs')
 
   existingTabs.forEach((tabEl, index) => {
     // Check if this tab already has a model linked
     if (chromeTabsModule.tabsMap.has(tabEl)) {
-      console.log('Tab already linked:', tabEl);
-      return;
+      console.log('Tab already linked:', tabEl)
+      return
     }
 
-    console.log('Linking existing tab:', tabEl);
-    createAndLinkTabModel(tabEl, chromeTabsModule);
-    console.log('Successfully linked tab', index + 1);
-  });
+    console.log('Linking existing tab:', tabEl)
+    createAndLinkTabModel(tabEl, chromeTabsModule)
+    console.log('Successfully linked tab', index + 1)
+  })
 }
 
 // Initialize the editor asynchronously
-setupEditor().then(editor => {
-  console.log('Editor initialized successfully');
-  // Editor is ready and available as 'editor' parameter
+setupEditor()
+  .then((editor) => {
+    console.log('Editor initialized successfully')
+    // Editor is ready and available as 'editor' parameter
 
-  // Link any existing tabs that were created before editor was ready
-  linkExistingTabs();
-}).catch(error => {
-  console.error('Failed to initialize editor:', error);
-});
-
+    // Link any existing tabs that were created before editor was ready
+    linkExistingTabs()
+  })
+  .catch((error) => {
+    console.error('Failed to initialize editor:', error)
+  })

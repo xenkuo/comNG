@@ -51,7 +51,7 @@ function configureComNGLanguageTokens(monacoInst) {
         [/\d+/, 'number'],
       ],
     },
-  });
+  })
 }
 
 /**
@@ -78,7 +78,7 @@ function defineComNGTheme(monacoInst) {
       { token: 'debug', foreground: '2e7d32' },
       { token: 'useless', foreground: 'cecece' },
     ],
-  });
+  })
 
   // Dark theme variant
   monacoInst.editor.defineTheme('comNGThemeDark', {
@@ -106,7 +106,7 @@ function defineComNGTheme(monacoInst) {
       'editor.selectionBackground': '#5FEA7740',
       'editorCursor.foreground': '#FF79C6',
     },
-  });
+  })
 }
 
 /**
@@ -145,7 +145,7 @@ function createComNGEditor(monacoInst, store) {
       vertical: 'auto',
       useShadows: false,
     },
-  });
+  })
 }
 
 /**
@@ -175,7 +175,7 @@ function configureComNGLanguage(monacoInst) {
       { open: '"', close: '"' },
       { open: "'", close: "'" },
     ],
-  });
+  })
 }
 
 /**
@@ -184,10 +184,10 @@ function configureComNGLanguage(monacoInst) {
  * @param {object} store - Application store instance
  */
 function updateEditorTheme(editor, monaco, store) {
-  if (!editor || !monaco) return;
+  if (!editor || !monaco) return
 
-  const theme = store.get('general.darkTheme') ? 'comNGThemeDark' : 'comNGTheme';
-  monaco.editor.setTheme(theme);
+  const theme = store.get('general.darkTheme') ? 'comNGThemeDark' : 'comNGTheme'
+  monaco.editor.setTheme(theme)
 }
 
 module.exports = {
@@ -196,4 +196,4 @@ module.exports = {
   createComNGEditor,
   configureComNGLanguage,
   updateEditorTheme,
-};
+}

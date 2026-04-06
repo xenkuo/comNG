@@ -31,9 +31,8 @@ module.exports.constants = {
   hmSpanLength,
   hmStrOffset,
   hmStrLength,
-  hmEofOffset
+  hmEofOffset,
 }
-
 
 /**
  * Calculate the paired range position for hex/string area synchronization
@@ -193,7 +192,6 @@ function _extractLineRange(range, line, monacoInst) {
   return new monacoInst.Range(line, s, line, e)
 }
 
-
 /**
  * Initialize hex mode event handlers
  * @param {object} editorInst - Editor instance
@@ -206,8 +204,8 @@ function initHexModeHandlers(editorInst, monacoInst, hlt) {
   editorInst.onMouseUp(() => {
     // Add defensive check for store
     if (!store || typeof store.get !== 'function') {
-      console.warn('hex-mode: store not available yet');
-      return;
+      console.warn('hex-mode: store not available yet')
+      return
     }
     if (false === store.get('general.hexmode')) return
 
@@ -230,5 +228,5 @@ function initHexModeHandlers(editorInst, monacoInst, hlt) {
 // Export all functions
 module.exports = {
   initHexModeHandlers,
-  constants: module.exports.constants
+  constants: module.exports.constants,
 }

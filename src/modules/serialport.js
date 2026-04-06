@@ -6,7 +6,6 @@ const { getToastMessage } = require('./i18n.js')
 
 /** @typedef {InstanceType<typeof import('serialport')>} SerialPortInstance */
 
-
 // TODO: is modemSignalTimer needed?
 /** @type {SerialPortInstance} */
 let port, modemSignalTimer, _rcvdSerialDataCB, _echoSerialDataCB
@@ -135,8 +134,6 @@ function _serialGetOptions() {
   return openOptions
 }
 
-
-
 document.getElementById('port-switch').onclick = (e) => {
   if (e.target.checked === true) {
     let pathSelect = document.getElementById('path-select')
@@ -144,10 +141,10 @@ document.getElementById('port-switch').onclick = (e) => {
 
     port = new serial(portPath, _serialGetOptions())
 
-    port.addListener("ctlClose", () => {
-      console.log("close the port")
-      port.close();
-    });
+    port.addListener('ctlClose', () => {
+      console.log('close the port')
+      port.close()
+    })
 
     port.on('open', () => {
       console.log('port open event')
@@ -187,12 +184,10 @@ document.getElementById('port-switch').onclick = (e) => {
       if (_autoRepeatTimeout !== undefined) clearInterval(_autoRepeatTimeout)
       if (modemSignalTimer !== undefined) clearInterval(modemSignalTimer)
 
-
       _modemSignalReset()
       // emit a event to editor.js to reset editor state
-      const event = new CustomEvent('portClosed');
-      document.dispatchEvent(event);
-
+      const event = new CustomEvent('portClosed')
+      document.dispatchEvent(event)
     })
 
     port.on('drain', () => {

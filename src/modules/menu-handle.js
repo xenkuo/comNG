@@ -36,7 +36,10 @@ function dragElement(elmnt) {
     let menuEl = document.getElementById('menu-area')
     let editorEl = document.getElementById('editor-area')
 
-    if (menuEl.offsetHeight + offsetY < parseInt(getComputedStyle(document.documentElement).getPropertyValue('--menu-height'))) {
+    if (
+      menuEl.offsetHeight + offsetY <
+      parseInt(getComputedStyle(document.documentElement).getPropertyValue('--menu-height'))
+    ) {
       offsetY = 0
     } else if (editorEl.offsetHeight - offsetY < 200) {
       offsetY = 0

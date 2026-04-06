@@ -41,19 +41,17 @@ function initCaptureFileHandler() {
             pathEl.value = filePath
             // Dispatch event to notify editor.js that capture file is ready
             const event = new CustomEvent('captureFileChanged', {
-              detail: { filePath: filePath, isActive: true }
-            });
-            document.dispatchEvent(event);
-
+              detail: { filePath: filePath, isActive: true },
+            })
+            document.dispatchEvent(event)
           } else {
             pathEl.value = ''
 
             // Dispatch event to notify editor.js that capture is disabled
             const event = new CustomEvent('captureFileChanged', {
-              detail: { filePath: null, isActive: false }
-            });
-            document.dispatchEvent(event);
-
+              detail: { filePath: null, isActive: false },
+            })
+            document.dispatchEvent(event)
 
             // restore check status
             e.target.checked = false
@@ -65,9 +63,9 @@ function initCaptureFileHandler() {
       pathEl.value = ''
       // Dispatch event to notify editor.js that capture is disabled
       const event = new CustomEvent('captureFileChanged', {
-        detail: { filePath: null, isActive: false }
-      });
-      document.dispatchEvent(event);
+        detail: { filePath: null, isActive: false },
+      })
+      document.dispatchEvent(event)
     }
   }
 }
@@ -97,5 +95,5 @@ module.exports = {
   autoScrolldownBtnInit,
   initCaptureFileHandler,
   initBreakpointHandlers,
-  initDomUtilities
+  initDomUtilities,
 }
