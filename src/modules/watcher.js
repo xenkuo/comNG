@@ -9,26 +9,18 @@ const fs = require('fs')
 
 /**
  * Initialize file watcher with event handlers
- * @param {object} store - Application store instance
- * @returns {{watcher: FSWatcher, setLocalSave: function(boolean): void, getLocalSave: function(): boolean}} Watcher instance with utilities
+ * @returns {{watcher: FSWatcher}} Watcher instance
  */
-function initWatcher(store) {
+function initWatcher() {
   // Initialize watcher
   const watcher = chokidar.watch('./a.bc', {
     ignored: /(^|[/\\])\../, // ignore dotfiles
     persistent: true,
   })
 
-  // Local state for save operations
-  let localSave = false
-
   // Watcher event handlers
   watcher.on('change', (filePath) => {
     // console.log(filePath + " content changed");
-    if (true === localSave) {
-      localSave = false
-      return
-    }
     chromeTabsModule.tabsMap.forEach((view, el) => {
       if (filePath === view.path) {
         // Here we add a 100ms delay as external editor (or the watcher itself)
@@ -53,13 +45,9 @@ function initWatcher(store) {
     })
   })
 
-  // Return watcher instance and utilities
+  // Return watcher instance
   return {
     watcher: watcher,
-    setLocalSave: (value) => {
-      localSave = value
-    },
-    getLocalSave: () => localSave,
   }
 }
 

@@ -273,7 +273,7 @@ document.getElementById('min-btn').onclick = () => {
 }
 
 document.getElementById('max-btn').onclick = () => {
-  win = remote.getCurrentWindow()
+  let win = remote.getCurrentWindow()
 
   if (win.isMaximized()) {
     win.unmaximize()
@@ -333,7 +333,7 @@ document.getElementById('menu-tabs').onclick = (e) => {
     // don't store chart tab index to prevent error chart rendering
     setTimeout(() => {
       const event = new CustomEvent('chartTabActivated')
-      el = document.getElementById('chart-figure')
+      let el = document.getElementById('chart-figure')
       el.dispatchEvent(event)
     }, 100)
   } else {
@@ -474,18 +474,22 @@ document.getElementById('sign-name').onblur = (e) => {
 
 document.getElementById('trans-eof-select').onchange = (e) => {
   let index = e.target.selectedIndex
-  let eof = ''
+  let eof
   switch (index) {
     case 0:
+      // No EOF
       eof = ''
       break
     case 1:
+      // LF
       eof = '\n'
       break
     case 2:
+      // CR
       eof = '\r'
       break
     case 3:
+      // CRLF
       eof = '\r\n'
       break
     default:

@@ -62,7 +62,7 @@ let captureFilePath = null
 
 // Watcher module initialization
 const { initWatcher } = require('./modules/watcher.js')
-const watcherModule = initWatcher(store)
+const watcherModule = initWatcher()
 /** @type {import('chokidar').FSWatcher} */
 const watcher = watcherModule.watcher
 
@@ -91,11 +91,10 @@ function _printTextLine(line, forceNewline, hexMode, echo) {
   let ret = true
   let outputLine = line
   const useTimestamp = store.get('general.timestamp') === true
-  const useHexMode = hexMode !== undefined ? hexMode : store.get('general.hexmode') === true
 
   if (useTimestamp) {
     let timestamp = getFormattedTimestamp()
-    if (useHexMode) {
+    if (hexMode) {
       if (echo) timestamp += ' ->'
       // In hex mode, add timestamp as separate line
       _applyEdit(timestamp + '\n', false, true)
@@ -107,11 +106,11 @@ function _printTextLine(line, forceNewline, hexMode, echo) {
   }
 
   // Process the complete line
-  if (useHexMode) {
+  if (hexMode) {
     const hexOutput = hexy.hexy(outputLine, { format: 'twos' })
     _applyEdit(hexOutput, true, true)
   } else {
-    if (true === forceNewline) outputLine += '\n'
+    if (forceNewline) outputLine += '\n'
     let cleanOutput = outputLine.toString('utf8')
     _applyEdit(cleanOutput, true, true)
   }
@@ -119,7 +118,6 @@ function _printTextLine(line, forceNewline, hexMode, echo) {
   // Handle breakpoints
   if (store.get('advance.breakpoint.switch') === true) {
     if (_breakpointProcess(outputLine) === true) {
-      buffer = Buffer.from('')
       serialClose()
       ret = false
     }
@@ -139,7 +137,7 @@ function _applyEdit(textString, appendLine, revealLine) {
   const lineCount = model.getLineCount()
   let lastLineLength = 1
 
-  if (true === appendLine) {
+  if (appendLine) {
     lastLineLength = model.getLineMaxColumn(lineCount)
   }
 
@@ -157,7 +155,7 @@ function _applyEdit(textString, appendLine, revealLine) {
     fs.appendFileSync(captureFilePath, textString)
   }
 
-  if (true === revealLine && store.get('general.autoScrolldown', true) === true) {
+  if (revealLine && store.get('general.autoScrolldown', true) === true) {
     editorInst.revealLine(model.getLineCount())
   }
 }
@@ -213,7 +211,7 @@ function _openFile() {
  * Open binary file in hex mode
  */
 function _openBinFile() {
-  if (true !== store.get('general.hexmode')) {
+  if (!store.get('general.hexmode')) {
     toast(getToastMessage('toastEnableHexMode'))
     return
   }
@@ -269,15 +267,7 @@ function saveFile() {
   const el = chromeTabsModule.chromeTabs.activeTabEl
   const view = chromeTabsModule.tabsMap.get(el)
 
-  if (view.path !== null) {
-    // has path info
-    const text = editorInst.getModel().getValue()
-    fs.writeFileSync(view.path, text)
-    el.children[2].children[1].style.color = '#000000'
-
-    // update localSave state
-    watcherModule.setLocalSave(true)
-  } else {
+  if (view.path === null) {
     // no path info
     const fileName = chromeTabsModule.chromeTabs.activeTabEl.innerText
 
@@ -301,8 +291,6 @@ function saveFile() {
           titleEl.innerHTML = path.basename(filePath)
           // add to watcher
           watcher.add(filePath)
-          // update localSave state
-          localSave = true
           // update theme accord to new file extension
           const lang = languageDetect.filename(filePath)
           if (undefined !== lang && 'Text' !== lang) {
@@ -310,6 +298,13 @@ function saveFile() {
           }
         }
       })
+  } else {
+    // has path info
+    const text = editorInst.getModel().getValue()
+    fs.writeFileSync(view.path, text)
+
+    // TODO: adopt the color with dark/light theme according to system settings
+    el.children[2].children[1].style.color = '#000000'
   }
 }
 
@@ -342,8 +337,6 @@ function saveAsFile() {
         titleEl.innerHTML = path.basename(filePath)
         // add to watcher
         watcher.add(filePath)
-        // update localSave state
-        localSave = true
         // update theme accord to new file extension
         const lang = languageDetect.filename(filePath)
         if (undefined !== lang && 'Text' !== lang) {
@@ -371,7 +364,7 @@ initIPCHandlers({
  * @param {boolean} revealLine - Whether to reveal the line after processing
  */
 function _hexModeProcess(buffer, revealLine) {
-  if (store.get('general.timestamp') === true && true === revealLine) {
+  if (store.get('general.timestamp') === true && revealLine) {
     let timestamp = ''
     timestamp = getFormattedTimestamp()
     _applyEdit(timestamp + '\n', false, true)
@@ -430,7 +423,7 @@ function _textProcess(inBuffer) {
     let line = buffer.slice(0, index + 1)
     buffer = buffer.slice(index + 1)
 
-    if (false === _printTextLine(line, false, hexMode, false)) {
+    if (!_printTextLine(line, false, hexMode, false)) {
       break
     }
 
@@ -506,8 +499,8 @@ document.getElementById('data-cleanup-btn').onclick = () => {
 
   if (store.get('advance.sign.switch') === true) {
     value = '------This file captured at ' + new Date().toLocaleString() + ' with comNG'
-    if (store.get('advance.sign.name') !== '')
-      value += ' by ' + store.get('advance.sign.name') + '.------'
+    const signName = store.get('advance.sign.name')
+    if (signName.length > 0) value += ' by ' + store.get('advance.sign.name') + '.------'
     else value += '.------'
     value += '\n'
   }
