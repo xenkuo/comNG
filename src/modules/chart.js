@@ -4,15 +4,17 @@ const store = require('./store.js').init()
 
 // Get theme colors based on dark theme setting
 function getThemeColors() {
-  const isDark = store.get('general.darkTheme');
+  const isDark = store.get('general.darkTheme')
   return {
     background: isDark ? '#282a36' : '#ffffff',
     paperBg: isDark ? '#282a36' : '#ffffff',
     fontColor: isDark ? '#cccccc' : '#000000',
     gridColor: isDark ? '#3e3e42' : '#bdbdbd',
     zeroLineColor: isDark ? '#5e5e62' : '#757575',
-    lineColors: isDark ? ['#4ec9b0', '#569cd6', '#ce9178', '#dcdcaa'] : ['#26a69a', '#2196f3', '#f44336', '#ff9800']
-  };
+    lineColors: isDark
+      ? ['#4ec9b0', '#569cd6', '#ce9178', '#dcdcaa']
+      : ['#26a69a', '#2196f3', '#f44336', '#ff9800'],
+  }
 }
 
 chartEl.addEventListener('menuResized', () => {
@@ -29,21 +31,27 @@ chartEl.addEventListener('serialDataCleanup', () => {
 })
 
 const frameShiftThreshold = 100
-var chartEnable = false
-var frameCount = 0
-var frameBuffer = []
+let chartEnable = false
+let frameCount = 0
+let frameBuffer = []
+let relayoutScheduled = false // Debounce flag for relayout operations
+let pendingFrameData = null // Batch multiple frames into single update
 
-var channelCount = 2
-var channelData = [{}]
+let channelCount = 2
+let channelData = [{}]
 const plotConfig = {
   responsive: true,
-  displayModeBar: true,
+  displayModeBar: true, // Hide toolbar to reduce rendering overhead
   scrollZoom: true,
   displaylogo: false,
+  doubleClick: false, // Disable double-click interaction
+  showTips: false, // Disable tips for better performance
+  staticPlot: false,
+  animate: false, // Disable animations for real-time data
 }
 
 // Initialize layout with theme colors
-const colors = getThemeColors();
+const colors = getThemeColors()
 const plotLayout = {
   // showlegend: false,
   paper_bgcolor: colors.paperBg,
@@ -75,7 +83,7 @@ const plotLayout = {
 function channelDataReset() {
   frameBuffer = []
   channelData = [channelCount]
-  const colors = getThemeColors();
+  const colors = getThemeColors()
 
   for (let i = 0; i < channelCount; i++) {
     channelData[i] = {
@@ -83,7 +91,7 @@ function channelDataReset() {
       mode: 'lines',
       line: {
         width: 1.5,
-        color: colors.lineColors[i % colors.lineColors.length]
+        color: colors.lineColors[i % colors.lineColors.length],
       },
       hoverlabel: {
         font: {
@@ -96,11 +104,11 @@ function channelDataReset() {
 }
 
 function array2frame(array, length) {
-  var frame = []
-  var indices = []
+  let frame = []
+  let indices = []
 
   for (let i = 0; i < channelCount && i < length; i++) {
-    frame.push([array[i]])
+    frame.push([array[i]]) // Create array wrapper for each channel
     indices.push(i)
   }
 
@@ -108,20 +116,40 @@ function array2frame(array, length) {
 }
 
 function frameAppend(frame, indices) {
-  Plotly.extendTraces(
-    chartEl,
-    {
-      y: frame,
-    },
-    indices
-  )
+  // Batch frame data instead of immediate Plotly update
+  if (!pendingFrameData) {
+    pendingFrameData = {
+      y: frame.map((channelData) => [...channelData]),
+      indices: indices,
+    }
+  } else {
+    // Accumulate frames for batch update
+    pendingFrameData.y.forEach((channel, idx) => {
+      channel.push(...frame[idx])
+    })
+  }
 
   frameCount++
-  if (frameCount > frameShiftThreshold) {
-    Plotly.relayout(chartEl, {
-      xaxis: {
-        range: [frameCount - frameShiftThreshold, frameCount],
-      },
+
+  // Schedule batched update with debouncing
+  if (!relayoutScheduled) {
+    relayoutScheduled = true
+    requestAnimationFrame(() => {
+      // Apply all accumulated frames at once
+      if (pendingFrameData) {
+        Plotly.extendTraces(chartEl, { y: pendingFrameData.y }, pendingFrameData.indices)
+        pendingFrameData = null
+      }
+
+      // Update x-axis range only when needed
+      if (frameCount > frameShiftThreshold) {
+        const xAxisRange = [frameCount - frameShiftThreshold, frameCount]
+        Plotly.relayout(chartEl, {
+          'xaxis.range': xAxisRange,
+        })
+      }
+
+      relayoutScheduled = false
     })
   }
 }
@@ -130,15 +158,15 @@ function relayoutChart() {
   Plotly.purge(chartEl)
 
   // Update colors based on current theme
-  const colors = getThemeColors();
-  plotLayout.paper_bgcolor = colors.paperBg;
-  plotLayout.plot_bgcolor = colors.background;
-  plotLayout.font.color = colors.fontColor;
-  plotLayout.xaxis.gridcolor = colors.gridColor;
-  plotLayout.xaxis.zerolinecolor = colors.zeroLineColor;
-  plotLayout.yaxis = plotLayout.yaxis || {};
-  plotLayout.yaxis.gridcolor = colors.gridColor;
-  plotLayout.yaxis.zerolinecolor = colors.zeroLineColor;
+  const colors = getThemeColors()
+  plotLayout.paper_bgcolor = colors.paperBg
+  plotLayout.plot_bgcolor = colors.background
+  plotLayout.font.color = colors.fontColor
+  plotLayout.xaxis.gridcolor = colors.gridColor
+  plotLayout.xaxis.zerolinecolor = colors.zeroLineColor
+  plotLayout.yaxis = plotLayout.yaxis || {}
+  plotLayout.yaxis.gridcolor = colors.gridColor
+  plotLayout.yaxis.zerolinecolor = colors.zeroLineColor
 
   // update plot
   Plotly.react(chartEl, channelData, plotLayout, plotConfig)
@@ -152,15 +180,15 @@ function resetChart() {
   channelDataReset()
 
   // Update colors based on current theme
-  const colors = getThemeColors();
-  plotLayout.paper_bgcolor = colors.paperBg;
-  plotLayout.plot_bgcolor = colors.background;
-  plotLayout.font.color = colors.fontColor;
-  plotLayout.xaxis.gridcolor = colors.gridColor;
-  plotLayout.xaxis.zerolinecolor = colors.zeroLineColor;
-  plotLayout.yaxis = plotLayout.yaxis || {};
-  plotLayout.yaxis.gridcolor = colors.gridColor;
-  plotLayout.yaxis.zerolinecolor = colors.zeroLineColor;
+  const colors = getThemeColors()
+  plotLayout.paper_bgcolor = colors.paperBg
+  plotLayout.plot_bgcolor = colors.background
+  plotLayout.font.color = colors.fontColor
+  plotLayout.xaxis.gridcolor = colors.gridColor
+  plotLayout.xaxis.zerolinecolor = colors.zeroLineColor
+  plotLayout.yaxis = plotLayout.yaxis || {}
+  plotLayout.yaxis.gridcolor = colors.gridColor
+  plotLayout.yaxis.zerolinecolor = colors.zeroLineColor
 
   // create new plot
   Plotly.react(chartEl, channelData, plotLayout, plotConfig)
@@ -185,6 +213,8 @@ function chartFrameProcess(buffer) {
   frameBuffer += buffer
 
   let index = -1
+  let hasNewFrame = false
+
   while ((index = frameBuffer.indexOf('\n')) !== -1) {
     let frame = frameBuffer.slice(0, index + 1)
     let frameArray = frame.toString().trim().split(' ')
@@ -197,9 +227,15 @@ function chartFrameProcess(buffer) {
         Plotly.react(chartEl, channelData, plotLayout, plotConfig)
       }
       arrayAppend(frameArray, frameArray.length)
+      hasNewFrame = true
     }
 
     frameBuffer = frameBuffer.slice(index + 1, frameBuffer.length)
+  }
+
+  // Throttle processing - yield to main thread if processing too many frames
+  if (hasNewFrame && frameBuffer.length > 0) {
+    setTimeout(() => chartFrameProcess(Buffer.from([])), 0)
   }
 }
 
