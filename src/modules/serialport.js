@@ -3,6 +3,7 @@
 const serial = require('serialport')
 const { toast } = require('./utilities.js')
 const { getToastMessage } = require('./i18n.js')
+const store = require('./store.js').init()
 
 /** @typedef {InstanceType<typeof import('serialport')>} SerialPortInstance */
 
@@ -314,7 +315,7 @@ function transmitData(dataIn) {
       }
       dataOut = Buffer.concat([dataOut, Buffer.from(eof, 'utf8')])
     } catch (error) {
-      console.log('Error: Invalid hex data format')
+      console.log('Error: Invalid hex data format', error)
       return false
     }
   } else {
@@ -354,7 +355,9 @@ document.getElementById('trans-repeat-switch').onchange = (e) => {
 }
 
 function serialClose() {
-  port === undefined ? null : port.close()
+  if (port !== undefined) {
+    port.close()
+  }
 }
 
 function serialInit(rcvdDataCB, echoDataCB) {

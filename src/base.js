@@ -5,7 +5,7 @@ const { remote, shell } = require('electron')
 const mcss = require('materialize-css')
 const { applyLanguage } = require('./modules/i18n.js')
 // Lazy load update checker to improve startup performance
-const store = require('./modules/store.js').init()
+const storeB = require('./modules/store.js').init()
 const { initDomUtilities } = require('./modules/dom-utilities.js')
 const initMenuHandle = require('./modules/menu-handle.js').initMenuHandle
 const shortcutsDataModule = require('./modules/shortcuts-data.js')
@@ -26,7 +26,7 @@ const { navi_layout_init, navi_layout_update } = require('./modules/utilities.js
 // Modular initialization functions
 function initializeTheme() {
   // Apply dark theme BEFORE any UI rendering to prevent flash of light theme
-  if (store.get('general.darkTheme')) {
+  if (storeB.get('general.darkTheme')) {
     document.documentElement.dataset.theme = 'dark'
   }
 }
@@ -35,7 +35,7 @@ function initializeUILayout() {
   // Initialize theme first
   initializeTheme()
 
-  document.getElementById('menu-area').hidden = store.get('menu.hidden')
+  document.getElementById('menu-area').hidden = storeB.get('menu.hidden')
   applyLanguage()
 
   // Initialize layout dimensions
@@ -61,7 +61,7 @@ function initializeModules() {
   // Set initial editor height
   updateEditorHeight()
 
-  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(store.get('menu.tab'))
+  mcss.Tabs.getInstance(document.getElementById('menu-tabs')).select(storeB.get('menu.tab'))
 }
 
 function updateEditorHeight() {
@@ -91,111 +91,111 @@ window.onload = () => {
 
 function initializeFormElements() {
   let baudSelect = document.getElementById('baud-select')
-  baudSelect.options[0].text = store.get('general.customized')
-  baudSelect.selectedIndex = store.get('baudIndex')
+  baudSelect.options[0].text = storeB.get('general.customized')
+  baudSelect.selectedIndex = storeB.get('baudIndex')
   mcss.FormSelect.init(baudSelect)
 
-  document.getElementById('hexmode-switch').checked = store.get('general.hexmode')
+  document.getElementById('hexmode-switch').checked = storeB.get('general.hexmode')
 
   // Set dark theme switch state (theme already applied in initializeTheme)
-  document.getElementById('dark-theme-switch').checked = store.get('general.darkTheme') || false
+  document.getElementById('dark-theme-switch').checked = storeB.get('general.darkTheme') || false
 
-  document.getElementById('timestamp-switch').checked = store.get('general.timestamp')
-  if (true === store.get('general.modemSignal.rts')) {
+  document.getElementById('timestamp-switch').checked = storeB.get('general.timestamp')
+  if (true === storeB.get('general.modemSignal.rts')) {
     let e = document.getElementById('rts-btn')
     e.classList.remove('grey')
   }
-  if (true === store.get('general.modemSignal.dtr')) {
+  if (true === storeB.get('general.modemSignal.dtr')) {
     let e = document.getElementById('dtr-btn')
     e.classList.remove('grey')
   }
-  document.getElementById('modem-signal-switch').checked = store.get('general.modemSignal.switch')
-  if (store.get('general.modemSignal.switch') === true) {
+  document.getElementById('modem-signal-switch').checked = storeB.get('general.modemSignal.switch')
+  if (storeB.get('general.modemSignal.switch') === true) {
     document.getElementById('modem-signal-bar').hidden = false
   } else {
     document.getElementById('modem-signal-bar').hidden = true
   }
-  document.getElementById('customized').value = store.get('general.customized')
+  document.getElementById('customized').value = storeB.get('general.customized')
 
   let databits = document.getElementById('databits-select')
-  databits.selectedIndex = store.get('general.databitsIndex')
+  databits.selectedIndex = storeB.get('general.databitsIndex')
   mcss.FormSelect.init(databits)
   let parity = document.getElementById('parity-select')
-  parity.selectedIndex = store.get('general.parityIndex')
+  parity.selectedIndex = storeB.get('general.parityIndex')
   mcss.FormSelect.init(parity)
   let stopbits = document.getElementById('stopbits-select')
-  stopbits.selectedIndex = store.get('general.stopbitsIndex')
+  stopbits.selectedIndex = storeB.get('general.stopbitsIndex')
   mcss.FormSelect.init(stopbits)
   let flowcontrol = document.getElementById('flowcontrol-select')
-  flowcontrol.selectedIndex = store.get('general.flowcontrolIndex')
+  flowcontrol.selectedIndex = storeB.get('general.flowcontrolIndex')
   mcss.FormSelect.init(flowcontrol)
 
-  document.getElementById('editor-font-family').value = store.get('general.fontFamily')
-  document.getElementById('editor-font-size').value = store.get('general.fontSize')
+  document.getElementById('editor-font-family').value = storeB.get('general.fontFamily')
+  document.getElementById('editor-font-size').value = storeB.get('general.fontSize')
 
-  document.getElementById('trans-hexmode-switch').checked = store.get('transmit.hexmode')
+  document.getElementById('trans-hexmode-switch').checked = storeB.get('transmit.hexmode')
   let transEof = document.getElementById('trans-eof-select')
   let transEofIndex = 0
-  if ('\n' === store.get('transmit.eof')) {
+  if ('\n' === storeB.get('transmit.eof')) {
     transEofIndex = 1
-  } else if ('\r' === store.get('transmit.eof')) {
+  } else if ('\r' === storeB.get('transmit.eof')) {
     transEofIndex = 2
-  } else if ('\r\n' === store.get('transmit.eof')) {
+  } else if ('\r\n' === storeB.get('transmit.eof')) {
     transEofIndex = 3
   }
   transEof.selectedIndex = transEofIndex
   mcss.FormSelect.init(transEof)
 
-  document.getElementById('breakpoint-switch').checked = store.get('advance.breakpoint.switch')
-  document.getElementById('breakpoint-on-text').value = store.get('advance.breakpoint.onText')
-  document.getElementById('breakpoint-after-lines').value = store.get(
+  document.getElementById('breakpoint-switch').checked = storeB.get('advance.breakpoint.switch')
+  document.getElementById('breakpoint-on-text').value = storeB.get('advance.breakpoint.onText')
+  document.getElementById('breakpoint-after-lines').value = storeB.get(
     'advance.breakpoint.afterLines'
   )
 
-  document.getElementById('sign-switch').checked = store.get('advance.sign.switch')
-  document.getElementById('sign-name').value = store.get('advance.sign.name')
+  document.getElementById('sign-switch').checked = storeB.get('advance.sign.switch')
+  document.getElementById('sign-name').value = storeB.get('advance.sign.name')
 
-  document.getElementById('insider-preview').checked = store.get('about.insiderPreview')
+  document.getElementById('insider-preview').checked = storeB.get('about.insiderPreview')
 
-  document.getElementById('bar-color-head').value = store.get('advance.barColor.head')
-  document.getElementById('bar-color-middle').value = store.get('advance.barColor.middle')
-  document.getElementById('bar-color-tail').value = store.get('advance.barColor.tail')
+  document.getElementById('bar-color-head').value = storeB.get('advance.barColor.head')
+  document.getElementById('bar-color-middle').value = storeB.get('advance.barColor.middle')
+  document.getElementById('bar-color-tail').value = storeB.get('advance.barColor.tail')
 
   // Dark theme bar colors
   document.getElementById('bar-color-head-dark').value =
-    store.get('advance.barColor.headDark') || '#d4a017'
+    storeB.get('advance.barColor.headDark') || '#d4a017'
   document.getElementById('bar-color-middle-dark').value =
-    store.get('advance.barColor.middleDark') || '#c99613'
+    storeB.get('advance.barColor.middleDark') || '#c99613'
   document.getElementById('bar-color-tail-dark').value =
-    store.get('advance.barColor.tailDark') || '#be8d0f'
+    storeB.get('advance.barColor.tailDark') || '#be8d0f'
 
   // Apply bar colors based on current theme
-  const isDarkTheme = store.get('general.darkTheme')
+  const isDarkTheme = storeB.get('general.darkTheme')
   if (isDarkTheme) {
     document.documentElement.style.setProperty(
       '--bar-color-head',
-      store.get('advance.barColor.headDark') || '#d4a017'
+      storeB.get('advance.barColor.headDark') || '#d4a017'
     )
     document.documentElement.style.setProperty(
       '--bar-color-middle',
-      store.get('advance.barColor.middleDark') || '#c99613'
+      storeB.get('advance.barColor.middleDark') || '#c99613'
     )
     document.documentElement.style.setProperty(
       '--bar-color-tail',
-      store.get('advance.barColor.tailDark') || '#be8d0f'
+      storeB.get('advance.barColor.tailDark') || '#be8d0f'
     )
   } else {
     document.documentElement.style.setProperty(
       '--bar-color-head',
-      store.get('advance.barColor.head')
+      storeB.get('advance.barColor.head')
     )
     document.documentElement.style.setProperty(
       '--bar-color-middle',
-      store.get('advance.barColor.middle')
+      storeB.get('advance.barColor.middle')
     )
     document.documentElement.style.setProperty(
       '--bar-color-tail',
-      store.get('advance.barColor.tail')
+      storeB.get('advance.barColor.tail')
     )
   }
 
@@ -225,8 +225,8 @@ function createTxTabTable() {
 }
 
 window.onresize = () => {
-  store.set('window.width', window.innerWidth)
-  store.set('window.height', window.innerHeight)
+  storeB.set('window.width', window.innerWidth)
+  storeB.set('window.height', window.innerHeight)
 
   let nav = document.getElementById('nav-area')
   let bar = document.getElementById('bar-area')
@@ -294,12 +294,12 @@ document.getElementById('menu-btn').onclick = () => {
     editorEl.style.height = editorEl.offsetHeight - menuInfo.height + 'px'
     menu.hidden = false
 
-    store.set('menu.hidden', false)
+    storeB.set('menu.hidden', false)
   } else {
     editorEl.style.height = editorEl.offsetHeight + menuInfo.height + 'px'
     menu.hidden = true
 
-    store.set('menu.hidden', true)
+    storeB.set('menu.hidden', true)
   }
 }
 
@@ -323,7 +323,7 @@ document.body.onclick = (e) => {
       editorEl.style.height = editorEl.offsetHeight + menuInfo.height + 'px'
       menu.hidden = true
 
-      store.set('menu.hidden', true)
+      storeB.set('menu.hidden', true)
     }
   }
 }
@@ -337,16 +337,16 @@ document.getElementById('menu-tabs').onclick = (e) => {
       el.dispatchEvent(event)
     }, 100)
   } else {
-    store.set('menu.tab', e.target.hash.replace('#', ''))
+    storeB.set('menu.tab', e.target.hash.replace('#', ''))
   }
 }
 
 document.getElementById('hexmode-switch').onclick = (e) => {
-  store.set('general.hexmode', e.target.checked)
+  storeB.set('general.hexmode', e.target.checked)
 
   // Sync to transmit hexmode switch
   document.getElementById('trans-hexmode-switch').checked = e.target.checked
-  store.set('transmit.hexmode', e.target.checked)
+  storeB.set('transmit.hexmode', e.target.checked)
 }
 
 document.getElementById('dark-theme-switch').onclick = (e) => {
@@ -357,34 +357,34 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
     // Apply dark theme bar colors
     document.documentElement.style.setProperty(
       '--bar-color-head',
-      store.get('advance.barColor.headDark') || '#d4a017'
+      storeB.get('advance.barColor.headDark') || '#d4a017'
     )
     document.documentElement.style.setProperty(
       '--bar-color-middle',
-      store.get('advance.barColor.middleDark') || '#c99613'
+      storeB.get('advance.barColor.middleDark') || '#c99613'
     )
     document.documentElement.style.setProperty(
       '--bar-color-tail',
-      store.get('advance.barColor.tailDark') || '#be8d0f'
+      storeB.get('advance.barColor.tailDark') || '#be8d0f'
     )
   } else {
     delete document.documentElement.dataset.theme
     // Apply light theme bar colors
     document.documentElement.style.setProperty(
       '--bar-color-head',
-      store.get('advance.barColor.head')
+      storeB.get('advance.barColor.head')
     )
     document.documentElement.style.setProperty(
       '--bar-color-middle',
-      store.get('advance.barColor.middle')
+      storeB.get('advance.barColor.middle')
     )
     document.documentElement.style.setProperty(
       '--bar-color-tail',
-      store.get('advance.barColor.tail')
+      storeB.get('advance.barColor.tail')
     )
   }
 
-  store.set('general.darkTheme', isDark)
+  storeB.set('general.darkTheme', isDark)
 
   // Update Chrome tabs theme
   try {
@@ -422,13 +422,13 @@ document.getElementById('dark-theme-switch').onclick = (e) => {
 }
 
 document.getElementById('timestamp-switch').onclick = (e) => {
-  store.set('general.timestamp', e.target.checked)
+  storeB.set('general.timestamp', e.target.checked)
 }
 
 document.getElementById('modem-signal-switch').onclick = (e) => {
   let state = e.target.checked
 
-  store.set('general.modemSignal.switch', state)
+  storeB.set('general.modemSignal.switch', state)
   if (state === true) {
     document.getElementById('modem-signal-bar').hidden = false
   } else {
@@ -440,7 +440,7 @@ document.getElementById('customized').onblur = (e) => {
   let customized = parseInt(e.target.value)
 
   if (isNaN(customized) === true) customized = 4800
-  store.set('general.customized', customized)
+  storeB.set('general.customized', customized)
 
   let baudSelect = document.getElementById('baud-select')
 
@@ -449,27 +449,27 @@ document.getElementById('customized').onblur = (e) => {
 }
 
 document.getElementById('databits-select').onchange = (e) => {
-  store.set('general.databitsIndex', e.target.selectedIndex)
+  storeB.set('general.databitsIndex', e.target.selectedIndex)
 }
 
 document.getElementById('parity-select').onchange = (e) => {
-  store.set('general.parityIndex', e.target.selectedIndex)
+  storeB.set('general.parityIndex', e.target.selectedIndex)
 }
 
 document.getElementById('stopbits-select').onchange = (e) => {
-  store.set('general.stopbitsIndex', e.target.selectedIndex)
+  storeB.set('general.stopbitsIndex', e.target.selectedIndex)
 }
 
 document.getElementById('flowcontrol-select').onchange = (e) => {
-  store.set('general.flowcontrolIndex', e.target.selectedIndex)
+  storeB.set('general.flowcontrolIndex', e.target.selectedIndex)
 }
 
 document.getElementById('sign-switch').onclick = (e) => {
-  store.set('advance.sign.switch', e.target.checked)
+  storeB.set('advance.sign.switch', e.target.checked)
 }
 
 document.getElementById('sign-name').onblur = (e) => {
-  store.set('advance.sign.name', e.target.value)
+  storeB.set('advance.sign.name', e.target.value)
 }
 
 document.getElementById('trans-eof-select').onchange = (e) => {
@@ -496,82 +496,82 @@ document.getElementById('trans-eof-select').onchange = (e) => {
       break
   }
 
-  store.set('transmit.eof', eof)
+  storeB.set('transmit.eof', eof)
 }
 
 document.getElementById('trans-hexmode-switch').onchange = (e) => {
   let checked = e.target.checked
 
-  store.set('transmit.hexmode', checked)
+  storeB.set('transmit.hexmode', checked)
 
   // Sync to general hexmode switch
   document.getElementById('hexmode-switch').checked = checked
-  store.set('general.hexmode', checked)
+  storeB.set('general.hexmode', checked)
 }
 
 document.getElementById('insider-preview').onclick = (e) => {
-  store.set('about.insiderPreview', e.target.checked)
+  storeB.set('about.insiderPreview', e.target.checked)
 }
 
 document.getElementById('bar-color-head').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (!isDark) {
     document.documentElement.style.setProperty('--bar-color-head', color)
   }
-  store.set('advance.barColor.head', color)
+  storeB.set('advance.barColor.head', color)
 }
 
 document.getElementById('bar-color-middle').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (!isDark) {
     document.documentElement.style.setProperty('--bar-color-middle', color)
   }
-  store.set('advance.barColor.middle', color)
+  storeB.set('advance.barColor.middle', color)
 }
 
 document.getElementById('bar-color-tail').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (!isDark) {
     document.documentElement.style.setProperty('--bar-color-tail', color)
   }
-  store.set('advance.barColor.tail', color)
+  storeB.set('advance.barColor.tail', color)
 }
 
 // Dark theme bar color handlers
 document.getElementById('bar-color-head-dark').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (isDark) {
     document.documentElement.style.setProperty('--bar-color-head', color)
   }
-  store.set('advance.barColor.headDark', color)
+  storeB.set('advance.barColor.headDark', color)
 }
 
 document.getElementById('bar-color-middle-dark').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (isDark) {
     document.documentElement.style.setProperty('--bar-color-middle', color)
   }
-  store.set('advance.barColor.middleDark', color)
+  storeB.set('advance.barColor.middleDark', color)
 }
 
 document.getElementById('bar-color-tail-dark').oninput = (e) => {
   let color = e.target.value
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeB.get('general.darkTheme')
 
   if (isDark) {
     document.documentElement.style.setProperty('--bar-color-tail', color)
   }
-  store.set('advance.barColor.tailDark', color)
+  storeB.set('advance.barColor.tailDark', color)
 }
 
 document.getElementById('issue').onclick = (e) => {

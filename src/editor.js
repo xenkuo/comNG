@@ -67,13 +67,13 @@ const watcherModule = initWatcher()
 const watcher = watcherModule.watcher
 
 // Note: 'store' is already declared in base.js and available in the bundled index.js
-
+const storeE = require('./modules/store.js').init()
 /**
  * Get theme-appropriate text color
  * @returns {string} Color value based on current theme
  */
 function getThemeTextColor() {
-  const isDark = store.get('general.darkTheme')
+  const isDark = storeE.get('general.darkTheme')
   return isDark ? '#cccccc' : '#000000'
 }
 
@@ -101,7 +101,7 @@ function _editorStateReset() {
 function _printTextLine(line, forceNewline, hexMode, echo) {
   let ret = true
   let outputLine = line
-  const useTimestamp = store.get('general.timestamp') === true
+  const useTimestamp = storeE.get('general.timestamp') === true
 
   if (useTimestamp) {
     let timestamp = getFormattedTimestamp()
@@ -127,7 +127,7 @@ function _printTextLine(line, forceNewline, hexMode, echo) {
   }
 
   // Handle breakpoints
-  if (store.get('advance.breakpoint.switch') === true) {
+  if (storeE.get('advance.breakpoint.switch') === true) {
     if (_breakpointProcess(outputLine) === true) {
       serialClose()
       ret = false
@@ -166,7 +166,7 @@ function _applyEdit(textString, appendLine, revealLine) {
     fs.appendFileSync(captureFilePath, textString)
   }
 
-  if (revealLine && store.get('general.autoScrolldown', true) === true) {
+  if (revealLine && storeE.get('general.autoScrolldown', true) === true) {
     editorInst.revealLine(model.getLineCount())
   }
 }
@@ -222,7 +222,7 @@ function _openFile() {
  * Open binary file in hex mode
  */
 function _openBinFile() {
-  if (!store.get('general.hexmode')) {
+  if (!storeE.get('general.hexmode')) {
     toast(getToastMessage('toastEnableHexMode'))
     return
   }
@@ -375,7 +375,7 @@ initIPCHandlers({
  * @param {boolean} revealLine - Whether to reveal the line after processing
  */
 function _hexModeProcess(buffer, revealLine) {
-  if (store.get('general.timestamp') === true && revealLine) {
+  if (storeE.get('general.timestamp') === true && revealLine) {
     let timestamp = ''
     timestamp = getFormattedTimestamp()
     _applyEdit(timestamp + '\n', false, true)
@@ -393,14 +393,14 @@ function _hexModeProcess(buffer, revealLine) {
 function _breakpointProcess(line) {
   if (breakpointHit === false) {
     // Check if current line contains the breakpoint text
-    if (line.includes(store.get('advance.breakpoint.onText')) === true) {
+    if (line.includes(storeE.get('advance.breakpoint.onText')) === true) {
       breakpointHit = true
       breakpointAfterLines = 0
     }
   } else {
     // Count lines after breakpoint hit
     breakpointAfterLines++
-    if (breakpointAfterLines >= store.get('advance.breakpoint.afterLines')) {
+    if (breakpointAfterLines >= storeE.get('advance.breakpoint.afterLines')) {
       breakpointHit = false
       breakpointAfterLines = 0
       return true
@@ -426,7 +426,7 @@ function _textProcess(inBuffer) {
   partialLineBuffer = null
 
   // Get hexMode once to avoid multiple store reads
-  const hexMode = store.get('general.hexmode')
+  const hexMode = storeE.get('general.hexmode')
 
   // Process complete lines only
   let index = -1
@@ -508,10 +508,10 @@ const { clipboard } = require('electron')
 document.getElementById('data-cleanup-btn').onclick = () => {
   let value = ''
 
-  if (store.get('advance.sign.switch') === true) {
+  if (storeE.get('advance.sign.switch') === true) {
     value = '------This file captured at ' + new Date().toLocaleString() + ' with comNG'
-    const signName = store.get('advance.sign.name')
-    if (signName.length > 0) value += ' by ' + store.get('advance.sign.name') + '.------'
+    const signName = storeE.get('advance.sign.name')
+    if (signName.length > 0) value += ' by ' + storeE.get('advance.sign.name') + '.------'
     else value += '.------'
     value += '\n'
   }
@@ -534,7 +534,7 @@ document.getElementById('editor-font-family').onblur = (e) => {
 
   if (font === '') font = defaultFont
   editorInst.updateOptions({ fontFamily: font })
-  store.set('general.fontFamily', font)
+  storeE.set('general.fontFamily', font)
 }
 
 document.getElementById('editor-font-size').onblur = (e) => {
@@ -542,20 +542,20 @@ document.getElementById('editor-font-size').onblur = (e) => {
   if (size === '') size = 12
 
   editorInst.updateOptions({ fontSize: size })
-  store.set('general.fontSize', size)
+  storeE.set('general.fontSize', size)
 }
 
 // Breakpoint control
 document.getElementById('breakpoint-switch').onclick = (e) => {
   if (e.target.checked === true) {
-    if (store.get('advance.breakpoint.onText.length') === 0) {
+    if (storeE.get('advance.breakpoint.onText.length') === 0) {
       toast(getToastMessage('toastBreakpointNotEmpty'))
       e.target.checked = false
       return
     }
   }
 
-  store.set('advance.breakpoint.switch', e.target.checked)
+  storeE.set('advance.breakpoint.switch', e.target.checked)
   breakpointHit = false
   breakpointAfterLines = 0
 }
@@ -623,7 +623,7 @@ async function setupEditor() {
     defineComNGTheme(monacoInst)
 
     // Create editor instance
-    editorInst = createComNGEditor(monacoInst, store)
+    editorInst = createComNGEditor(monacoInst, storeE)
 
     // Configure language settings
     configureComNGLanguage(monacoInst)
@@ -708,7 +708,7 @@ async function setupEditor() {
       // Update editor theme
       const { updateEditorTheme } = require('./modules/monaco-utilities.js')
       if (monacoInst && typeof updateEditorTheme === 'function') {
-        updateEditorTheme(editorInst, monacoInst, store)
+        updateEditorTheme(editorInst, monacoInst, storeE)
       }
 
       // Update all tab indicator colors based on new theme
