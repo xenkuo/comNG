@@ -66,6 +66,17 @@ const watcherModule = initWatcher()
 /** @type {import('chokidar').FSWatcher} */
 const watcher = watcherModule.watcher
 
+// Note: 'store' is already declared in base.js and available in the bundled index.js
+
+/**
+ * Get theme-appropriate text color
+ * @returns {string} Color value based on current theme
+ */
+function getThemeTextColor() {
+  const isDark = store.get('general.darkTheme')
+  return isDark ? '#cccccc' : '#000000'
+}
+
 // =============================================================================
 // UTILITY FUNCTIONS
 // =============================================================================
@@ -285,7 +296,7 @@ function saveFile() {
           fs.writeFileSync(filePath, text)
           // update tab's path
           view.path = filePath
-          el.children[2].children[1].style.color = '#000000'
+          el.children[2].children[1].style.color = getThemeTextColor()
           // update tab title
           let titleEl = el.querySelector('.chrome-tab-title')
           titleEl.innerHTML = path.basename(filePath)
@@ -303,8 +314,8 @@ function saveFile() {
     const text = editorInst.getModel().getValue()
     fs.writeFileSync(view.path, text)
 
-    // TODO: adopt the color with dark/light theme according to system settings
-    el.children[2].children[1].style.color = '#000000'
+    // Update tab indicator color based on theme
+    el.children[2].children[1].style.color = getThemeTextColor()
   }
 }
 
@@ -331,7 +342,7 @@ function saveAsFile() {
         fs.writeFileSync(filePath, text)
         // update tab's path
         view.path = filePath
-        el.children[2].children[1].style.color = '#000000'
+        el.children[2].children[1].style.color = getThemeTextColor()
         // update tab title
         let titleEl = el.querySelector('.chrome-tab-title')
         titleEl.innerHTML = path.basename(filePath)
@@ -699,6 +710,17 @@ async function setupEditor() {
       if (monacoInst && typeof updateEditorTheme === 'function') {
         updateEditorTheme(editorInst, monacoInst, store)
       }
+
+      // Update all tab indicator colors based on new theme
+      chromeTabsModule.tabsMap.forEach((view, el) => {
+        if (view.path) {
+          // File is saved - use theme text color
+          el.children[2].children[1].style.color = getThemeTextColor()
+        } else {
+          // File is removed/unlinked - keep red color
+          el.children[2].children[1].style.color = '#f54336'
+        }
+      })
     })
 
     hexMode.initHexModeHandlers(editorInst, monacoInst, hlt)
