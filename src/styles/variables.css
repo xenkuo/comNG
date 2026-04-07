@@ -34,9 +34,9 @@
 
 /* Dark theme colors */
 [data-theme='dark'] {
-  --bg-primary: #202124;
+  --bg-primary: #191a21;
   --bg-secondary: #282a36;
-  --bg-tertiary: #252526;
+  --bg-tertiary: #191a21;
   --bg-input: #3c3c3c;
   --text-primary: #cccccc;
   --text-secondary: #4ec9b0;

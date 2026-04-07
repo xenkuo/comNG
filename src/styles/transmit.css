@@ -36,9 +36,10 @@ th.gridjs-th {
   width: 100%;
   background-color: var(--bg-input);
   z-index: 10;
-  /* box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1); */
   max-height: 50px; /* Fixed height */
   height: 50px; /* Fixed height NOTE: needed*/
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 }
 
 /* Center tx-table container and Grid.js table */
