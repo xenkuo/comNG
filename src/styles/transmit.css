@@ -33,13 +33,13 @@ th.gridjs-th {
   bottom: 0;
   left: 0;
   right: 0;
-  width: 100%;
+  width: calc(100% - 20px);
   background-color: var(--bg-input);
   z-index: 10;
   max-height: 50px; /* Fixed height */
   height: 50px; /* Fixed height NOTE: needed*/
-  border-top-left-radius: 30px;
-  border-top-right-radius: 30px;
+  border-radius: 30px;
+  margin: 10px;
 }
 
 /* Center tx-table container and Grid.js table */
@@ -47,11 +47,6 @@ th.gridjs-th {
   text-align: center;
   width: 100%;
   position: relative;
-}
-
-.red {
-  background-color: #f44336 !important;
-  color: white !important;
 }
 
 .tx-table-center #tx-table {

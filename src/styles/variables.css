@@ -35,13 +35,13 @@
 /* Dark theme colors */
 [data-theme='dark'] {
   --bg-primary: #191a21;
-  --bg-secondary: #282a36;
+  --bg-secondary: #2d2f3e;
   --bg-tertiary: #191a21;
   --bg-input: #3c3c3c;
   --text-primary: #cccccc;
   --text-secondary: #4ec9b0;
   --border-color: #3e3e42;
-  --hover-bg: #282a36;
-  --indicator-bg: #282a36;
-  --toast-bg: #282a36;
+  --hover-bg: #2d2f3e;
+  --indicator-bg: #2d2f3e;
+  --toast-bg: #2d2f3e;
 }

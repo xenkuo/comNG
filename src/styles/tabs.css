@@ -77,9 +77,13 @@
   .chrome-tab-background
   > svg
   .chrome-tab-geometry {
-  fill: #282a36;
+  fill: var(--bg-secondary);
 }
 
 .chrome-tabs.chrome-tabs-dark-theme .chrome-tabs-bottom-bar {
-  background: #282a36;
+  background: var(--bg-primary);
+}
+
+.chrome-tabs.chrome-tabs-dark-theme {
+  background: var(--bg-primary);
 }

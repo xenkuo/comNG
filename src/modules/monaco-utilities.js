@@ -77,6 +77,7 @@ function defineComNGTheme(monacoInst) {
       { token: 'trace', foreground: '9e9d24' },
       { token: 'debug', foreground: '2e7d32' },
       { token: 'useless', foreground: 'cecece' },
+      { token: '', background: 'dee1e6' },
     ],
   })
 
@@ -98,13 +99,14 @@ function defineComNGTheme(monacoInst) {
       { token: 'trace', foreground: 'D6ACFF' },
       { token: 'debug', foreground: '69FF94' },
       { token: 'useless', foreground: '6272A4' },
+      { token: '', background: '191a21' },
     ],
     colors: {
-      'editor.background': '#282A36',
+      'editor.background': '#2d2f3e',
       'editor.foreground': '#F5F5EF',
       'editorLineNumber.foreground': '#6272A4',
       'editor.selectionBackground': '#5FEA7740',
-      'editorCursor.foreground': '#FF79C6',
+      'editorCursor.foreground': '#F5F5EF',
     },
   })
 }
