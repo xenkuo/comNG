@@ -99,7 +99,11 @@
   height: 36px;
   margin: 0;
   padding: 0;
-  border: 0px;
-  /* border-radius: 4px; */
+  border: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
   cursor: pointer;
 }
