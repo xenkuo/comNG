@@ -53,6 +53,7 @@ th.gridjs-th {
   display: inline-block;
   width: 100%;
   margin: 0 auto;
+  min-height: 200px; /* Ensure table has minimum height */
 }
 
 .tx-table-center .gridjs-wrapper {
@@ -74,6 +75,44 @@ th.gridjs-th {
 
 .gridjs-tbody {
   background-color: var(--bg-secondary) !important;
+}
+
+/* Tabulator table styles */
+.tabulator {
+  border: none !important;
+  background-color: transparent !important;
+  font-size: 12px !important;
+}
+
+.tabulator-header {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+}
+
+.tabulator-col {
+  background-color: var(--bg-input) !important;
+  color: var(--text-primary) !important;
+  border-right: 1px solid var(--border-color) !important;
+}
+
+.tabulator-cell {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.tabulator-row:hover {
+  background-color: var(--hover-bg) !important;
+}
+
+.tabulator-tableholder {
+  background-color: var(--bg-secondary) !important;
+}
+
+.tabulator-footer {
+  background-color: var(--bg-secondary) !important;
+  border-top: 1px solid var(--border-color) !important;
 }
 /* Grid.js dark theme support */
 [data-theme='dark'] .gridjs-wrapper {

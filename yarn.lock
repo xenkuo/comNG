@@ -4757,6 +4757,11 @@ table@^5.2.3:
     slice-ansi "^2.1.0"
     string-width "^3.0.0"
 
+tabulator-tables@5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/tabulator-tables/-/tabulator-tables-5.5.0.tgz#37934f12d7e195a0e49ae75f63b50fbbc070749e"
+  integrity sha512-UVe26QIaGqFfaP5wfN51zF4Vy23MNTWyvM95bF7EWGsDRQm6b2MV0wiBzakVGFj28YAgz5PvEyfqLZF415PWxw==
+
 tar-fs@^2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/tar-fs/download/tar-fs-2.0.1.tgz#e44086c1c60d31a4f0cf893b1c4e155dabfae9e2"
