@@ -107,6 +107,7 @@ function defineComNGTheme(monacoInst) {
       'editorLineNumber.foreground': '#6272A4',
       'editor.selectionBackground': '#5FEA7740',
       'editorCursor.foreground': '#F5F5EF',
+      'editor.lineHighlightBackground': '#44475a',
     },
   })
 }

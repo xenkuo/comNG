@@ -1,18 +1,75 @@
 var decoIndex = 0
 
-const decoMod = 7
-const decoTable = [
-  { style: 'hl-red', color: '#ff8a80' },
-  { style: 'hl-orange', color: '#ffd180' },
-  { style: 'hl-yellow', color: '#ffff8d' },
-  { style: 'hl-green', color: '#b9f6ca' },
-  { style: 'hl-blue', color: '#8dd8ff' },
-  { style: 'hl-indigo', color: '#8c9eff' },
-  { style: 'hl-purple', color: '#ea80fc' },
-]
+const decoTable = {
+  light: [
+    { style: 'hl-red', color: '#ff8a80' },
+    { style: 'hl-orange', color: '#ffd180' },
+    { style: 'hl-yellow', color: '#ffff8d' },
+    { style: 'hl-green', color: '#b9f6ca' },
+    { style: 'hl-blue', color: '#80d8ff' },
+    { style: 'hl-indigo', color: '#8c9eff' },
+    { style: 'hl-purple', color: '#ea80fc' },
+  ],
+  dark: [
+    { style: 'hl-red', color: '#ff5555' },
+    { style: 'hl-orange', color: '#ffb86c' },
+    { style: 'hl-yellow', color: '#f1fa8c' },
+    { style: 'hl-green', color: '#50fa7b' },
+    { style: 'hl-blue', color: '#8be9fd' },
+    { style: 'hl-indigo', color: '#bd93f9' },
+    { style: 'hl-purple', color: '#ff79c6' },
+  ],
+}
+
+function isDarkTheme() {
+  if (typeof document === 'undefined' || !document.documentElement) return false
+  return document.documentElement.dataset.theme === 'dark'
+}
+
+function getThemeDecoTable() {
+  return isDarkTheme() ? decoTable.dark : decoTable.light
+}
 
 function decoGet() {
-  return decoTable[decoIndex++ % decoMod]
+  const table = getThemeDecoTable()
+  return table[decoIndex++ % table.length]
+}
+
+function getDecoColor(className) {
+  const table = getThemeDecoTable()
+  const entry = table.find((item) => item.style === className)
+  return entry ? entry.color : table[0].color
+}
+
+function updateTheme(editor) {
+  const model = editor && editor.getModel()
+  if (!model) return
+
+  const decorations = model.getAllDecorations()
+  const updates = decorations
+    .filter((deco) => deco.options.className && deco.options.className.indexOf('hl-') !== -1)
+    .map((deco) => {
+      const color = getDecoColor(deco.options.className)
+      return {
+        id: deco.id,
+        range: deco.range,
+        options: {
+          ...deco.options,
+          overviewRuler: {
+            ...(deco.options.overviewRuler || {}),
+            color,
+            position: 4,
+          },
+        },
+      }
+    })
+
+  if (updates.length > 0) {
+    model.deltaDecorations(
+      updates.map((item) => item.id),
+      updates
+    )
+  }
 }
 
 function _apply(model, text) {
@@ -146,4 +203,5 @@ module.exports = {
   decoGet,
   toggle: hltToggle,
   clear: hltClear,
+  updateTheme,
 }

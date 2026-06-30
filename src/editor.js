@@ -711,6 +711,11 @@ async function setupEditor() {
         updateEditorTheme(editorInst, monacoInst, storeE)
       }
 
+      // Update highlight decorations to match the active theme
+      if (typeof hlt.updateTheme === 'function') {
+        hlt.updateTheme(editorInst)
+      }
+
       // Update all tab indicator colors based on new theme
       chromeTabsModule.tabsMap.forEach((view, el) => {
         if (view.path) {
