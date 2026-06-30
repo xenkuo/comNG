@@ -631,7 +631,7 @@ async function setupEditor() {
     editorInst.addAction({
       id: 'highlight-toggle',
       label: 'Highlight Toggle',
-      keybindings: [monacoInst.KeyMod.CtrlCmd + monacoInst.KeyCode.KEY_E],
+      keybindings: [monacoInst.KeyMod.Alt + monacoInst.KeyCode.KEY_E],
       precondition: null,
       keybindingContext: null,
       contextMenuGroupId: '9_cutcopypaste',
@@ -642,7 +642,7 @@ async function setupEditor() {
     editorInst.addAction({
       id: 'highlight-clear-all',
       label: 'Highlight Clear All',
-      keybindings: [monacoInst.KeyMod.CtrlCmd + monacoInst.KeyMod.Shift + monacoInst.KeyCode.KEY_E],
+      keybindings: [monacoInst.KeyMod.Alt + monacoInst.KeyMod.Shift + monacoInst.KeyCode.KEY_E],
       precondition: null,
       keybindingContext: null,
       contextMenuGroupId: '9_cutcopypaste',

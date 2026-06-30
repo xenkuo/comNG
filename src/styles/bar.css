@@ -91,19 +91,45 @@
 #dark-theme-color-panel {
   height: 43px;
   line-height: 43px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 }
 
 #light-theme-color-panel input[type='color'],
 #dark-theme-color-panel input[type='color'] {
   width: 60px;
-  height: 36px;
+  height: 24px;
   margin: 0;
   padding: 0;
-  border: none;
+  border: none !important;
   outline: none;
+  box-shadow: none !important;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   background: none;
   cursor: pointer;
+  vertical-align: middle;
+  border-radius: 12px;
+}
+
+#light-theme-color-panel input[type='color']::-webkit-color-swatch-wrapper,
+#dark-theme-color-panel input[type='color']::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border: none !important;
+}
+
+#light-theme-color-panel input[type='color']::-webkit-color-swatch,
+#dark-theme-color-panel input[type='color']::-webkit-color-swatch {
+  border: none !important;
+  border-radius: 12px;
+}
+
+.divider-vertical {
+  width: 1px;
+  height: 20px;
+  background-color: var(--border-color);
+  margin: 0 4px;
 }
