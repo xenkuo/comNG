@@ -7,6 +7,8 @@ const shortcutsData = {
       { action: '打开二进制文件', shortcut: 'Cmd/Ctrl + B' },
       { action: '保存文件', shortcut: 'Cmd/Ctrl + S' },
       { action: '另存为文件', shortcut: 'Cmd/Ctrl + Shift + S' },
+      { action: '命令面板', shortcut: 'F1' },
+      { action: '高亮切换', shortcut: 'Cmd/Ctrl + H' },
     ],
     general: [
       { action: '切换串口', shortcut: 'Cmd/Ctrl + D' },
@@ -22,6 +24,8 @@ const shortcutsData = {
       { action: 'Open Binary File', shortcut: 'Cmd/Ctrl + B' },
       { action: 'Save File', shortcut: 'Cmd/Ctrl + S' },
       { action: 'Save as File', shortcut: 'Cmd/Ctrl + Shift + S' },
+      { action: 'Command Palette', shortcut: 'F1' },
+      { action: 'Toggle Highlight', shortcut: 'Cmd/Ctrl + H' },
     ],
     general: [
       { action: 'Switch Port', shortcut: 'Cmd/Ctrl + D' },
