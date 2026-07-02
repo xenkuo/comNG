@@ -44,6 +44,7 @@
 /* Tabulator layout helpers */
 .tabulator {
   font-size: 12px !important;
+  background-color: var(--bg-input) !important;
 }
 
 .tabulator .tabulator-header {
@@ -72,6 +73,15 @@
   border-bottom: none !important;
 }
 
+.tabulator .tabulator-footer {
+  border-top: none !important;
+  background-color: transparent !important;
+}
+
+.tx-table-center #tx-table {
+  border-radius: 10px;
+  border: 2px solid var(--border-color);
+}
 #baud-input,
 #path-input {
   margin: 15px 0px;
