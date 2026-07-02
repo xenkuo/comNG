@@ -21,7 +21,7 @@ function createTxTable() {
 
   // Ensure all items have unique IDs
   let maxId = Math.max(...tableData.map((item) => item.id || 0), 0)
-  tableData = tableData.map((item, idx) => ({
+  tableData = tableData.map((item) => ({
     id: item.id || ++maxId,
     content: item.content || '',
   }))
@@ -43,9 +43,6 @@ function createTxTable() {
   // Ensure the table element has proper dimensions
   console.log('Table element dimensions:', tableElement.offsetWidth, 'x', tableElement.offsetHeight)
 
-  // Determine if dark theme is enabled
-  const isDarkTheme = store.get('general.darkTheme')
-
   // Create Tabulator instance
   console.log('Initializing Tabulator...')
   let table
@@ -62,14 +59,7 @@ function createTxTable() {
       progressiveRenderSize: 50,
       clipboard: false,
       placeholder: 'No messages yet',
-      options: {
-        rowHeight: 34,
-      },
-      rowFormatter: (row) => {
-        const element = row.getElement()
-        element.style.border = 'none'
-        element.style.boxShadow = 'none'
-      },
+      theme: 'midnight',
       headerSortTristate: false,
       columns: [
         {
@@ -93,7 +83,7 @@ function createTxTable() {
           title: 'Send',
           width: 80,
           hozAlign: 'center',
-          formatter: (cell, formatterParams, onRendered) => {
+          formatter: (cell) => {
             const container = document.createElement('div')
             container.style.textAlign = 'center'
 
@@ -115,7 +105,7 @@ function createTxTable() {
           title: 'Delete',
           width: 80,
           hozAlign: 'center',
-          formatter: (cell, formatterParams, onRendered) => {
+          formatter: (cell) => {
             const container = document.createElement('div')
             container.style.textAlign = 'center'
 
@@ -148,38 +138,14 @@ function createTxTable() {
   // Setup search functionality
   const searchContainer = document.createElement('div')
   searchContainer.style.cssText = 'display: flex; justify-content: flex-start;'
-
-  // Apply a consistent, borderless appearance to the Tabulator table after it renders
-  setTimeout(() => {
-    const tableWrapper = document.querySelector('#tx-table .tabulator')
-    if (tableWrapper) {
-      tableWrapper.style.border = 'none'
-      tableWrapper.style.boxShadow = 'none'
-      const header = tableWrapper.querySelector('.tabulator-header')
-      if (header) {
-        header.style.border = 'none'
-        header.style.boxShadow = 'none'
-      }
-      const rows = tableWrapper.querySelectorAll('.tabulator-row')
-      rows.forEach((row) => {
-        row.style.border = 'none'
-        row.style.boxShadow = 'none'
-      })
-      const cells = tableWrapper.querySelectorAll('.tabulator-cell')
-      cells.forEach((cell) => {
-        cell.style.border = 'none'
-      })
-    }
-  }, 0)
   searchContainer.innerHTML = `
-    <input type="text" 
+    <input type="text"
            id="tx-search-input"
-           placeholder="Search messages..." 
-           style="width: 50%; margin: 10px 0 10px 0; padding-left: 4px; border: 1px solid ${isDarkTheme ? '#3e3e42' : '#ddd'}; border-radius: 4px; background: ${isDarkTheme ? '#3c3c3c' : '#fff'}; color: ${isDarkTheme ? '#cccccc' : '#000'};"
+           placeholder="Search messages..."
+           style="width: 50%; margin: 10px 0 10px 0; padding: 6px 8px; border-radius: 4px;"
     />
   `
 
-  // Insert search box before table
   tableElement.parentElement.insertBefore(searchContainer, tableElement)
 
   const searchInput = document.getElementById('tx-search-input')

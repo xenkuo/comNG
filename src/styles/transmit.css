@@ -13,21 +13,6 @@
   width: 100%;
 }
 
-.gridjs-footer {
-  padding: 0;
-  border: none;
-  box-shadow: none;
-  margin: 4px 0 0 0;
-}
-
-.gridjs-search {
-  height: 32px;
-}
-
-td.gridjs-td,
-th.gridjs-th {
-  border: none !important;
-}
 .transmit-config-area {
   position: absolute;
   bottom: 0;
@@ -42,7 +27,7 @@ th.gridjs-th {
   margin: 10px;
 }
 
-/* Center tx-table container and Grid.js table */
+/* Center tx-table container */
 .tx-table-center {
   text-align: center;
   width: 100%;
@@ -56,164 +41,38 @@ th.gridjs-th {
   min-height: 200px; /* Ensure table has minimum height */
 }
 
-.tx-table-center .gridjs-wrapper {
-  margin: 0 auto;
-  border-radius: 0px;
-  box-shadow: none;
-  width: 100% !important;
-}
-
-.tx-table-center .gridjs-table {
-  margin: 0 auto;
-  width: 100% !important;
-}
-
-.tx-table-center .gridjs-header,
-.tx-table-center .gridjs-footer {
-  width: 100% !important;
-}
-
-.gridjs-tbody {
-  background-color: var(--bg-secondary) !important;
-}
-
-/* Tabulator table styles */
+/* Tabulator layout helpers */
 .tabulator {
-  border: none !important;
-  background-color: transparent !important;
   font-size: 12px !important;
-}
-
-.tabulator-header {
-  background-color: var(--bg-input) !important;
-  color: var(--text-primary) !important;
-  border: none !important;
-}
-
-.tabulator-col {
-  background-color: var(--bg-input) !important;
-  color: var(--text-primary) !important;
-  border-right: 1px solid var(--border-color) !important;
-}
-
-.tabulator-cell {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary) !important;
-  border-bottom: 1px solid var(--border-color) !important;
-}
-
-.tabulator-row:hover {
-  background-color: var(--hover-bg) !important;
-}
-
-.tabulator-tableholder {
-  background-color: var(--bg-secondary) !important;
-}
-
-.tabulator-footer {
-  background-color: var(--bg-secondary) !important;
-  border-top: 1px solid var(--border-color) !important;
-}
-/* Grid.js dark theme support */
-[data-theme='dark'] .gridjs-wrapper {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs-table {
-  background-color: var(--bg-secondary) !important;
-}
-
-[data-theme='dark'] .gridjs-th {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs-td {
-  color: var(--text-primary);
-  background-color: var(--bg-secondary) !important;
-}
-
-[data-theme='dark'] .gridjs-search {
-  background-color: var(--bg-secondary) !important;
-}
-
-[data-theme='dark'] .gridjs-search input {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs-search input::placeholder {
-  color: var(--text-secondary);
-}
-
-[data-theme='dark'] .gridjs-footer {
-  background-color: var(--bg-secondary) !important;
-  color: var(--text-primary);
-}
-
-.gridjs-pagination .gridjs-pages button:focus {
-  box-shadow: none !important;
-  border: none !important;
-}
-
-.gridjs-pagination .gridjs-pages button:last-child {
-  border-right: 1px solid var(--border-color) !important;
-}
-[data-theme='dark'] .gridjs-pagination button {
-  color: var(--text-primary);
-  background-color: transparent;
-  border-color: var(--border-color);
-}
-
-[data-theme='dark'] .gridjs-pagination button:hover {
-  background-color: var(--hover-bg);
-}
-
-[data-theme='dark'] .gridjs-pagination button:disabled,
-[data-theme='dark'] .gridjs-pagination button[disabled],
-[data-theme='dark'] .gridjs-pagination button:hover:disabled {
-  cursor: default;
-  background-color: transparent;
-  color: var(--text-secondary);
-  opacity: 0.5;
-  border-color: var(--border-color) !important;
-}
-
-[data-theme='dark'] .gridjs-pagination button.gridjs-spread {
-  cursor: default;
-  box-shadow: none;
-  background-color: transparent;
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs-pagination button.gridjs-currentPage {
-  background-color: var(--bg-input);
-  font-weight: bold;
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .gridjs-pagination .gridjs-summary {
-  color: var(--text-primary);
-}
-
-[data-theme='dark'] .editable-content {
-  background-color: var(--bg-input);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-}
-
-#baud-input,
-#path-input {
-  margin: 15px 0px;
 }
 
 .tabulator .tabulator-header {
   height: 36px;
   line-height: 2;
   font-weight: bold !important;
+  border-bottom: none !important;
+}
+
+.tabulator .tabulator-header .tabulator-col {
+  border-right: none !important;
+}
+
+.tabulator .tabulator-row .tabulator-cell {
+  padding: 6px 8px;
+}
+
+.tabulator .tabulator-row {
+  border: none !important;
+}
+
+.tabulator .tabulator-row .tabulator-cell {
+  border-right: none !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+#baud-input,
+#path-input {
+  margin: 15px 0px;
 }
