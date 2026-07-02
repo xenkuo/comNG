@@ -211,3 +211,9 @@ th.gridjs-th {
 #path-input {
   margin: 15px 0px;
 }
+
+.tabulator .tabulator-header {
+  height: 36px;
+  line-height: 2;
+  font-weight: bold !important;
+}

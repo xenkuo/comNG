@@ -66,8 +66,8 @@
 
 .tx-table-floating-btn {
   position: absolute;
-  top: 18px;
-  left: 180px;
+  top: 24px;
+  left: calc(50% + 20px);
   z-index: 1000;
   margin: 0;
 }
