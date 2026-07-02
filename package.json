@@ -1,7 +1,7 @@
 {
   "name": "comng",
   "productName": "comNG",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "mode": "dev",
   "description": "A powerful serial tool with modern UI",
   "repository": "https://github.com/xenkuo/comNG",
@@ -145,21 +145,22 @@
     "materialize-css": "1.0.0",
     "monaco-editor": "0.20.0",
     "plotly.js-basic-dist-min": "1.58.5",
-    "serialport": "^8.0.7",
-    "tabulator-tables": "5.5.0"
+    "serialport": "^8.0.7"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.4.2",
     "@electron-forge/maker-deb": "6.4.2",
     "@electron-forge/maker-dmg": "6.4.2",
-    "@electron-forge/maker-squirrel": "6.4.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
     "@electron-forge/publisher-github": "6.4.2",
     "concurrently": "7.0.0",
     "electron": "7.3.3",
     "electron-rebuild": "^1.10.0",
+    "electron-winstaller": "^5.4.4",
     "esbuild": "0.14.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "6.15.0",
-    "prettier": "^3.2.5"
+    "prettier": "^3.2.5",
+    "tabulator-tables": "5.5.0"
   }
 }
