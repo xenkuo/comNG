@@ -4,6 +4,27 @@ const store = require('./store.js').init()
 
 console.log('Tabulator loaded:', typeof Tabulator)
 
+function setTheme(tableElement, themeClass) {
+  if (!tableElement) {
+    return
+  }
+
+  tableElement.classList.remove('tabulator', 'tabulator-simple', 'tabulator-midnight')
+  tableElement.classList.add(themeClass)
+}
+
+function refreshTabulatorTheme(table, tableElement) {
+  if (!table || !tableElement) {
+    return
+  }
+
+  setTheme(tableElement, 'tabulator-midnight')
+  table.redraw(true)
+  setTimeout(() => {
+    table.redraw(true)
+  }, 0)
+}
+
 /**
  * Creates and manages the serial transmission table using Tabulator
  * @returns {Object} Table helper functions
@@ -128,6 +149,8 @@ function createTxTable() {
       ],
     })
 
+    refreshTabulatorTheme(table, tableElement)
+
     console.log('Tabulator initialized successfully')
     console.log('Table element after init:', tableElement.innerHTML.substring(0, 100))
   } catch (error) {
@@ -136,27 +159,18 @@ function createTxTable() {
   }
 
   // Setup search functionality
-  const searchContainer = document.createElement('div')
-  searchContainer.style.cssText = 'display: flex; justify-content: flex-start;'
-  searchContainer.innerHTML = `
-    <input type="text"
-           id="tx-search-input"
-           placeholder="Search messages..."
-           style="width: 50%; margin: 10px 0 10px 0; padding: 6px 8px; border-radius: 4px;"
-    />
-  `
-
-  tableElement.parentElement.insertBefore(searchContainer, tableElement)
-
   const searchInput = document.getElementById('tx-search-input')
-  searchInput.addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase()
-    if (term) {
-      table.setFilter('content', 'like', term)
-    } else {
-      table.clearFilter()
-    }
-  })
+  if (searchInput && !searchInput.dataset.txBound) {
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase()
+      if (term) {
+        table.setFilter('content', 'like', term)
+      } else {
+        table.clearFilter()
+      }
+    })
+    searchInput.dataset.txBound = 'true'
+  }
 
   // Helper functions
   function addRow(content = '') {
@@ -197,8 +211,18 @@ function createTxTable() {
  * Update table theme based on dark theme setting
  */
 function updateTxTableTheme() {
-  // Simply re-create the table with new theme
-  createTxTable()
+  const tableElement = document.getElementById('tx-table')
+  if (!tableElement) {
+    return
+  }
+
+  const currentTheme = store.get('general.darkTheme') ? 'tabulator-midnight' : 'tabulator'
+  setTheme(tableElement, currentTheme)
+
+  const table = tableElement.__tabulator
+  if (table && typeof table.redraw === 'function') {
+    table.redraw(true)
+  }
 }
 
 module.exports = { createTxTable, updateTxTableTheme }
