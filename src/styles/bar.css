@@ -64,14 +64,6 @@
   margin: 0 auto;
 }
 
-.tx-table-floating-btn {
-  position: absolute;
-  top: 24px;
-  left: calc(50% + 20px);
-  z-index: 1000;
-  margin: 0;
-}
-
 .bold-centered-index {
   font-weight: bold;
   text-align: center;

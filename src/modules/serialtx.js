@@ -70,17 +70,16 @@ function createTxTable() {
     table = new Tabulator('#tx-table', {
       data: tableData,
       layout: 'fitColumns',
-      height: '240px',
-      pagination: true, // Enables pagination
-      paginationSize: 50, // Default page size
+      height: '260px',
+      // pagination: true, // Enables pagination
+      // paginationSize: 50, // Default page size
       // progressiveRenderSize: 50, // <-- CRITICAL FIX: REMOVED (Conflicts with pagination)
-      movableRows: false,
-      selectable: false,
-      headerSort: false,
-      resizableColumns: false,
-      clipboard: false,
+      // selectable: false,
+      // headerSort: false,
+      // resizableColumns: false,
+      // clipboard: false,
       placeholder: 'No messages yet',
-      headerSortTristate: false,
+      // headerSortTristate: false,
       columns: [
         {
           title: 'Message',
@@ -133,13 +132,6 @@ function createTxTable() {
 
     // Store the active instance to the DOM element for external layout tracking
     tableElement.__tabulator = table
-
-    // Force a swift internal redraw to settle virtual height metrics against the applied DOM skin
-    requestAnimationFrame(() => {
-      if (table && typeof table.redraw === 'function') {
-        table.redraw(true)
-      }
-    })
 
     console.log('Tabulator initialized successfully')
   } catch (error) {
@@ -202,12 +194,6 @@ function updateTxTableTheme() {
   if (!tableElement) return
 
   syncTableTheme(tableElement)
-
-  const table = tableElement.__tabulator
-  if (table) {
-    // Forcing a sort on the hidden ID column rebuilds the row DOM
-    table.setSort('id', 'asc')
-  }
 }
 
 module.exports = { createTxTable, updateTxTableTheme }

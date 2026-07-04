@@ -37,8 +37,8 @@
 .tx-search-container {
   display: flex;
   justify-content: flex-start;
-  width: 100%;
-  margin: 0 0 10px;
+  width: 60%;
+  margin: 6px 2px;
 }
 
 .tx-search-container #tx-search-input {
@@ -51,6 +51,14 @@
   background-color: var(--bg-input);
   color: var(--text-color);
   box-sizing: border-box;
+}
+
+.tx-table-floating-btn {
+  position: absolute;
+  top: 20px;
+  left: calc(60% + 10px);
+  z-index: 1000;
+  margin: 0;
 }
 
 .tx-table-center #tx-table {
@@ -97,17 +105,6 @@
   background-color: transparent !important;
 }
 
-/* tabulator-row {
-  border-bottom: 1px solid var(--border-color) !important;
-}
-tabulator-row tabulator-row-odd {
-  background-color: var(--bg-input) !important;
-}
-
-tabulator-row tabulator-row-even {
-  background-color: var(--bg-input) !important;
-} */
-
 .tx-table-center #tx-table {
   border-radius: 10px;
   border: 2px solid var(--border-color);
@@ -148,22 +145,28 @@ tabulator-row tabulator-row-even {
 }
 
 /* Header: Light Gray */
-.tabulator.light-mode-override .tabulator-header {
+.tabulator.light-mode-override .tabulator-header,
+.tabulator.light-mode-override .tabulator-header .tabulator-col,
+.tabulator.light-mode-override .tabulator-header .tabulator-col.tabulator-moving,
+.tabulator.light-mode-override .tabulator-header .tabulator-col .tabulator-col-content {
   background-color: #f8f9fa !important;
   color: #333333 !important;
-  border-bottom: 2px solid #dee2e6 !important;
+}
+
+.tabulator.light-mode-override .tabulator-header .tabulator-col {
+  border-right: 1px solid #dee2e6 !important;
+}
+
+.tabulator.light-mode-override .tabulator-header .tabulator-col.tabulator-moving {
+  background-color: #f8f9fa !important;
+}
+
+.tabulator.light-mode-override .tabulator-header .tabulator-col .tabulator-col-content {
+  background-color: transparent !important;
 }
 
 /* Footer */
 .tabulator.light-mode-override .tabulator-footer {
   background-color: #f8f9fa !important;
   color: #333333 !important;
-}
-
-/* Buttons inside the table (Send/Delete) */
-.tabulator.light-mode-override button.custom-tx-btn {
-  color: #333333 !important; /* Ensure icons are visible */
-}
-.tabulator.light-mode-override button.custom-tx-btn.red {
-  color: #f44336 !important; /* Keep delete button red */
 }
