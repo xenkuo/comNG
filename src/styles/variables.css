@@ -30,6 +30,10 @@
   --hover-bg: #fafafa;
   --indicator-bg: #fafafa;
   --toast-bg: #fafafa;
+  --scrollbar-track: #e8eaed;
+  --scrollbar-thumb: #b0b0b0;
+  --scrollbar-thumb-hover: #8a8a8a;
+  --scrollbar-width: 10px;
 }
 
 /* Dark theme colors */
@@ -44,4 +48,8 @@
   --hover-bg: #2d2f3e;
   --indicator-bg: #2d2f3e;
   --toast-bg: #2d2f3e;
+  --scrollbar-track: #232635;
+  --scrollbar-thumb: #5a5f73;
+  --scrollbar-thumb-hover: #8089aa;
+  --scrollbar-width: 10px;
 }

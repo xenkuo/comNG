@@ -19,7 +19,7 @@
   left: 0;
   right: 0;
   width: calc(100% - 20px);
-  background-color: var(--bg-input);
+  background-color: var(--bg-tertiary);
   z-index: 10;
   max-height: 50px; /* Fixed height */
   height: 50px; /* Fixed height NOTE: needed*/
@@ -48,7 +48,7 @@
   padding: 6px 10px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
-  background-color: var(--bg-input);
+  background-color: var(--bg-tertiary);
   color: var(--text-color);
   box-sizing: border-box;
 }
@@ -62,7 +62,7 @@
 }
 
 .tx-table-center #tx-table {
-  display: inline-block;
+  display: block;
   width: 100%;
   margin: 0 auto;
   min-height: 200px; /* Ensure table has minimum height */
@@ -74,8 +74,13 @@
   background-color: #2e2f3e !important;
 }
 
+.tabulator .tabulator-tableholder {
+  overflow-y: auto !important;
+  max-height: 100% !important;
+}
+
 /* Force Table Body & Holder to be white */
-.tabulator .tabulator-tableHolder,
+.tabulator .tabulator-tableholder,
 .tabulator .tabulator-table,
 .tabulator-row.tabulator-row-even,
 .tabulator-row.tabulator-row-odd {
@@ -130,7 +135,7 @@
 }
 
 /* Force Table Body & Holder to be white */
-.tabulator.light-mode-override .tabulator-tableHolder,
+.tabulator.light-mode-override .tabulator-tableholder,
 .tabulator.light-mode-override .tabulator-table {
   background-color: var(--bg-secondary) !important;
   color: #333333 !important;

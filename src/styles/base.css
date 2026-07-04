@@ -13,8 +13,30 @@ body {
   color: var(--text-primary);
 }
 
-::-webkit-scrollbar {
+body::-webkit-scrollbar {
   display: none;
+}
+
+.tabulator .tabulator-tableholder::-webkit-scrollbar,
+.tabulator .tabulator-tableholder::-webkit-scrollbar-corner {
+  width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
+}
+
+.tabulator .tabulator-tableholder::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 10px;
+}
+
+.tabulator .tabulator-tableholder::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.tabulator .tabulator-tableholder::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover);
 }
 
 nav {

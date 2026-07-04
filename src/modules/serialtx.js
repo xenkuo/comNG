@@ -55,8 +55,8 @@ function createTxTable() {
   // Clear any existing content
   tableElement.innerHTML = ''
 
-  // Enforce container height explicitly to prevent Virtual DOM collapse
-  tableElement.style.height = '240px'
+  // Enforce container height consistently with Tabulator config
+  tableElement.style.height = '260px'
 
   // 1. SYNC THEME BEFORE INITIALIZATION
   // This prevents row layout collapses or flashing colors during first bootup
