@@ -71,14 +71,21 @@
 /* Tabulator layout helpers */
 .tabulator {
   font-size: 12px !important;
-  background-color: var(--bg-input) !important;
+  background-color: #2e2f3e !important;
+}
+
+/* Force Table Body & Holder to be white */
+.tabulator .tabulator-tableHolder,
+.tabulator .tabulator-table,
+.tabulator-row.tabulator-row-even,
+.tabulator-row.tabulator-row-odd {
+  background-color: #2e2f3e !important;
 }
 
 .tabulator .tabulator-header {
   height: 36px;
   line-height: 2;
   font-weight: bold !important;
-  /* border-bottom: none !important; */
 }
 
 .tabulator .tabulator-header .tabulator-col {
@@ -86,28 +93,18 @@
 }
 
 .tabulator .tabulator-row .tabulator-cell {
-  padding: 6px 8px;
-}
-
-/* .tabulator .tabulator-row {
-  border: none !important;
-} */
-
-.tabulator .tabulator-row .tabulator-cell {
   border-right: none !important;
   border-left: none !important;
   border-top: none !important;
-  /* border-bottom: none !important; */
+  border-bottom: none !important;
 }
 
-.tabulator .tabulator-footer {
-  border-top: none !important;
-  background-color: transparent !important;
+.tabulator .tabulator-row {
+  border-bottom: 1px solid var(--text-secondary) !important;
 }
-
 .tx-table-center #tx-table {
   border-radius: 10px;
-  border: 2px solid var(--border-color);
+  border: none !important;
 }
 #baud-input,
 #path-input {
@@ -116,22 +113,23 @@
 
 /* LIGHT MODE OVERRIDE - Forces Midnight to look like Bootstrap/Light */
 .tabulator.light-mode-override {
-  background-color: #ffffff !important;
-  border: 1px solid #dee2e6 !important;
+  background-color: var(--bg-secondary) !important;
+  border: none !important;
 }
 
 /* Force Table Body & Holder to be white */
 .tabulator.light-mode-override .tabulator-tableHolder,
 .tabulator.light-mode-override .tabulator-table {
-  background-color: #ffffff !important;
+  background-color: var(--bg-secondary) !important;
   color: #333333 !important;
 }
 
 /* Rows: White background, Dark text */
 .tabulator.light-mode-override .tabulator-row {
-  background-color: #ffffff !important;
+  background-color: var(--bg-secondary) !important;
   color: #333333 !important;
-  border-bottom: 1px solid #dee2e6 !important;
+  /* border-bottom: none !important; */
+  border-bottom: 1px solid var(--text-secondary) !important;
 }
 
 /* Cells: Ensure text is dark */
@@ -154,7 +152,7 @@
 }
 
 .tabulator.light-mode-override .tabulator-header .tabulator-col {
-  border-right: 1px solid #dee2e6 !important;
+  border: none !important;
 }
 
 .tabulator.light-mode-override .tabulator-header .tabulator-col.tabulator-moving {
@@ -163,10 +161,4 @@
 
 .tabulator.light-mode-override .tabulator-header .tabulator-col .tabulator-col-content {
   background-color: transparent !important;
-}
-
-/* Footer */
-.tabulator.light-mode-override .tabulator-footer {
-  background-color: #f8f9fa !important;
-  color: #333333 !important;
 }
