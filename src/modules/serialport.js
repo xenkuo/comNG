@@ -25,7 +25,7 @@ function _portUpdate() {
     .then((ports) => {
       ports.forEach((item, index) => {
         // if item.productId is undefined, set its manufacturer to ''
-        if (item.productId === undefined) item.manufacturer = ''
+        // if (item.productId === undefined) item.manufacturer = ''
         pSelect.options.add(new Option(item.path + ' ' + item.manufacturer, index))
         if (index === store.get('pathIndex')) pSelect.selectedIndex = index
       })
