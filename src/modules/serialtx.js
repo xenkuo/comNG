@@ -7,7 +7,6 @@ console.log('Tabulator loaded:', typeof Tabulator)
 /**
  * @typedef {{
  *   redraw: (force?: boolean) => void,
- *   setTheme: (theme: string) => void,
  *   getData: () => Array<Record<string, any>>,
  *   addRow: (data: Record<string, any>, addAtBottom?: boolean | number) => void,
  *   clearFilter: () => void,
@@ -16,30 +15,12 @@ console.log('Tabulator loaded:', typeof Tabulator)
  * }} TabulatorInstance
  */
 
-/** @param {HTMLElement | null} tableElement @param {string} themeClass */
-function setTheme(tableElement, themeClass) {
-  if (!tableElement) {
-    return
-  }
-
-  tableElement.classList.remove('tabulator', 'tabulator-simple', 'tabulator-midnight')
-  tableElement.classList.add(themeClass)
+// Helper to sync theme classes
+function syncTableTheme(tableElement) {
+  if (!tableElement) return
+  const isDark = store.get('general.darkTheme')
+  tableElement.classList.toggle('light-mode-override', !isDark)
 }
-
-/* eslint-disable no-unused-vars */
-/** @param {TabulatorInstance | null} table @param {HTMLElement | null} tableElement */
-function refreshTabulatorTheme(table, tableElement) {
-  if (!table || !tableElement) {
-    return
-  }
-
-  setTheme(tableElement, 'tabulator-midnight')
-  table.redraw(true)
-  setTimeout(() => {
-    table.redraw(true)
-  }, 0)
-}
-/* eslint-enable no-unused-vars */
 
 /**
  * Creates and manages the serial transmission table using Tabulator
@@ -66,13 +47,20 @@ function createTxTable() {
   console.log('Table data loaded:', tableData.length, 'rows')
 
   const tableElement = document.getElementById('tx-table')
-  console.log('Table element found:', !!tableElement)
+  if (!tableElement) {
+    console.error('Table element "#tx-table" not found.')
+    return { addRow: () => {}, removeRow: () => {} }
+  }
 
   // Clear any existing content
   tableElement.innerHTML = ''
 
-  // Ensure the table element has proper dimensions
-  console.log('Table element dimensions:', tableElement.offsetWidth, 'x', tableElement.offsetHeight)
+  // Enforce container height explicitly to prevent Virtual DOM collapse
+  tableElement.style.height = '240px'
+
+  // 1. SYNC THEME BEFORE INITIALIZATION
+  // This prevents row layout collapses or flashing colors during first bootup
+  syncTableTheme(tableElement)
 
   // Create Tabulator instance
   console.log('Initializing Tabulator...')
@@ -82,16 +70,16 @@ function createTxTable() {
     table = new Tabulator('#tx-table', {
       data: tableData,
       layout: 'fitColumns',
-      height: '240px', // Use auto height instead of 100%
-      pagination: true,
+      height: '240px',
+      pagination: true, // Enables pagination
+      paginationSize: 50, // Default page size
+      // progressiveRenderSize: 50, // <-- CRITICAL FIX: REMOVED (Conflicts with pagination)
       movableRows: false,
       selectable: false,
       headerSort: false,
       resizableColumns: false,
-      progressiveRenderSize: 50,
       clipboard: false,
       placeholder: 'No messages yet',
-      theme: 'midnight', // Use midnight theme for dark mode
       headerSortTristate: false,
       columns: [
         {
@@ -115,52 +103,43 @@ function createTxTable() {
           title: 'Send',
           width: 80,
           hozAlign: 'center',
-          formatter: (cell) => {
-            const container = document.createElement('div')
-            container.style.textAlign = 'center'
-
-            const btn = document.createElement('button')
-            btn.className = 'btn-small waves-effect custom-tx-btn centered-action-btn'
-            btn.style.margin = '0'
-            btn.innerHTML = '<i class="material-icons">send</i>'
-
-            btn.onclick = () => {
-              const rowData = cell.getRow().getData()
-              transmitData(rowData.content)
-            }
-
-            container.appendChild(btn)
-            return container
+          headerSort: false,
+          // Use string formatter for performance
+          formatter: () =>
+            '<button class="btn-small waves-effect custom-tx-btn centered-action-btn" style="margin:0;"><i class="material-icons">send</i></button>',
+          cellClick: (e, cell) => {
+            e.stopPropagation() // Prevent row selection if enabled
+            const rowData = cell.getRow().getData()
+            transmitData(rowData.content)
           },
         },
         {
           title: 'Delete',
           width: 80,
           hozAlign: 'center',
-          formatter: (cell) => {
-            const container = document.createElement('div')
-            container.style.textAlign = 'center'
-
-            const btn = document.createElement('button')
-            btn.className = 'btn-small waves-effect custom-tx-btn centered-action-btn red'
-            btn.style.margin = '0'
-            btn.innerHTML = '<i class="material-icons">delete</i>'
-
-            btn.onclick = () => {
-              const row = cell.getRow()
-              row.delete()
-              const data = table.getData()
-              store.set('transmit.messages', data)
-            }
-
-            container.appendChild(btn)
-            return container
+          headerSort: false,
+          // Use string formatter for performance
+          formatter: () =>
+            '<button class="btn-small waves-effect custom-tx-btn centered-action-btn red" style="margin:0;"><i class="material-icons">delete</i></button>',
+          cellClick: (e, cell) => {
+            e.stopPropagation()
+            cell.getRow().delete()
+            const data = table.getData()
+            store.set('transmit.messages', data)
           },
         },
       ],
     })
 
-    // refreshTabulatorTheme(table, tableElement)
+    // Store the active instance to the DOM element for external layout tracking
+    tableElement.__tabulator = table
+
+    // Force a swift internal redraw to settle virtual height metrics against the applied DOM skin
+    requestAnimationFrame(() => {
+      if (table && typeof table.redraw === 'function') {
+        table.redraw(true)
+      }
+    })
 
     console.log('Tabulator initialized successfully')
   } catch (error) {
@@ -217,26 +196,17 @@ function createTxTable() {
   return { addRow, removeRow, table }
 }
 
-/**
- * Update table theme based on dark theme setting
- */
+// THE FIX: Trigger a Sort Event to force rows to reappear after theme change
 function updateTxTableTheme() {
   const tableElement = document.getElementById('tx-table')
-  if (!tableElement) {
-    return
-  }
+  if (!tableElement) return
 
-  const currentTheme = store.get('general.darkTheme')
-    ? 'tabulator-midnight'
-    : 'tabulator-bootstrap5'
-  setTheme(tableElement, currentTheme)
+  syncTableTheme(tableElement)
 
-  console.log('Updated Tabulator theme to:', currentTheme)
-
-  /** @type {TabulatorInstance | undefined} */
   const table = tableElement.__tabulator
-  if (table && typeof table.redraw === 'function') {
-    table.redraw(true)
+  if (table) {
+    // Forcing a sort on the hidden ID column rebuilds the row DOM
+    table.setSort('id', 'asc')
   }
 }
 

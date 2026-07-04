@@ -116,3 +116,54 @@ tabulator-row tabulator-row-even {
 #path-input {
   margin: 15px 0px;
 }
+
+/* LIGHT MODE OVERRIDE - Forces Midnight to look like Bootstrap/Light */
+.tabulator.light-mode-override {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+/* Force Table Body & Holder to be white */
+.tabulator.light-mode-override .tabulator-tableHolder,
+.tabulator.light-mode-override .tabulator-table {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}
+
+/* Rows: White background, Dark text */
+.tabulator.light-mode-override .tabulator-row {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+  border-bottom: 1px solid #dee2e6 !important;
+}
+
+/* Cells: Ensure text is dark */
+.tabulator.light-mode-override .tabulator-cell {
+  color: #333333 !important;
+}
+
+/* Even Rows (Zebra Striping) */
+.tabulator.light-mode-override .tabulator-row.tabulator-row-even {
+  background-color: #f8f9fa !important;
+}
+
+/* Header: Light Gray */
+.tabulator.light-mode-override .tabulator-header {
+  background-color: #f8f9fa !important;
+  color: #333333 !important;
+  border-bottom: 2px solid #dee2e6 !important;
+}
+
+/* Footer */
+.tabulator.light-mode-override .tabulator-footer {
+  background-color: #f8f9fa !important;
+  color: #333333 !important;
+}
+
+/* Buttons inside the table (Send/Delete) */
+.tabulator.light-mode-override button.custom-tx-btn {
+  color: #333333 !important; /* Ensure icons are visible */
+}
+.tabulator.light-mode-override button.custom-tx-btn.red {
+  color: #f44336 !important; /* Keep delete button red */
+}
