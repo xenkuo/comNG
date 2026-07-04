@@ -9,4 +9,4 @@
 @import url('./styles/chart.css');
 @import url('./styles/transmit.css');
 @import url('./styles/highlights.css');
-@import url('../node_modules/tabulator-tables/dist/css/tabulator_bootstrap3.min.css');
+@import url('../node_modules/tabulator-tables/dist/css/tabulator_midnight.min.css');

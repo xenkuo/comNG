@@ -4,6 +4,19 @@ const store = require('./store.js').init()
 
 console.log('Tabulator loaded:', typeof Tabulator)
 
+/**
+ * @typedef {{
+ *   redraw: (force?: boolean) => void,
+ *   setTheme: (theme: string) => void,
+ *   getData: () => Array<Record<string, any>>,
+ *   addRow: (data: Record<string, any>, addAtBottom?: boolean | number) => void,
+ *   clearFilter: () => void,
+ *   setFilter: (field: string, type: string, value: string) => void,
+ *   getRow: (id: string | number) => any
+ * }} TabulatorInstance
+ */
+
+/** @param {HTMLElement | null} tableElement @param {string} themeClass */
 function setTheme(tableElement, themeClass) {
   if (!tableElement) {
     return
@@ -13,6 +26,8 @@ function setTheme(tableElement, themeClass) {
   tableElement.classList.add(themeClass)
 }
 
+/* eslint-disable no-unused-vars */
+/** @param {TabulatorInstance | null} table @param {HTMLElement | null} tableElement */
 function refreshTabulatorTheme(table, tableElement) {
   if (!table || !tableElement) {
     return
@@ -24,6 +39,7 @@ function refreshTabulatorTheme(table, tableElement) {
     table.redraw(true)
   }, 0)
 }
+/* eslint-enable no-unused-vars */
 
 /**
  * Creates and manages the serial transmission table using Tabulator
@@ -51,12 +67,6 @@ function createTxTable() {
 
   const tableElement = document.getElementById('tx-table')
   console.log('Table element found:', !!tableElement)
-  if (!tableElement) {
-    console.error('tx-table element not found! Retrying in 500ms...')
-    // Retry after a delay if element not found
-    // setTimeout(() => createTxTable(), 500)
-    // return { addRow: () => {}, removeRow: () => {} }
-  }
 
   // Clear any existing content
   tableElement.innerHTML = ''
@@ -66,7 +76,8 @@ function createTxTable() {
 
   // Create Tabulator instance
   console.log('Initializing Tabulator...')
-  let table
+  /** @type {TabulatorInstance | null} */
+  let table = null
   try {
     table = new Tabulator('#tx-table', {
       data: tableData,
@@ -80,7 +91,7 @@ function createTxTable() {
       progressiveRenderSize: 50,
       clipboard: false,
       placeholder: 'No messages yet',
-      theme: 'midnight',
+      theme: 'midnight', // Use midnight theme for dark mode
       headerSortTristate: false,
       columns: [
         {
@@ -149,10 +160,9 @@ function createTxTable() {
       ],
     })
 
-    refreshTabulatorTheme(table, tableElement)
+    // refreshTabulatorTheme(table, tableElement)
 
     console.log('Tabulator initialized successfully')
-    console.log('Table element after init:', tableElement.innerHTML.substring(0, 100))
   } catch (error) {
     console.error('Failed to initialize Tabulator:', error)
     return { addRow: () => {}, removeRow: () => {} }
@@ -216,9 +226,14 @@ function updateTxTableTheme() {
     return
   }
 
-  const currentTheme = store.get('general.darkTheme') ? 'tabulator-midnight' : 'tabulator'
+  const currentTheme = store.get('general.darkTheme')
+    ? 'tabulator-midnight'
+    : 'tabulator-bootstrap5'
   setTheme(tableElement, currentTheme)
 
+  console.log('Updated Tabulator theme to:', currentTheme)
+
+  /** @type {TabulatorInstance | undefined} */
   const table = tableElement.__tabulator
   if (table && typeof table.redraw === 'function') {
     table.redraw(true)
