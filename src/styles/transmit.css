@@ -88,8 +88,20 @@
   font-weight: bold !important;
 }
 
+/* Header: Light Gray */
+.tabulator .tabulator-header,
+.tabulator .tabulator-header .tabulator-col,
+.tabulator .tabulator-header .tabulator-col.tabulator-moving,
+.tabulator .tabulator-header .tabulator-col .tabulator-col-content {
+  background-color: var(--bg-secondary) !important;
+}
+
 .tabulator .tabulator-header .tabulator-col {
-  border-right: none !important;
+  border: none !important;
+}
+
+.tabulator .tabulator-header .tabulator-col.tabulator-moving {
+  background-color: var(--bg-secondary) !important;
 }
 
 .tabulator .tabulator-row .tabulator-cell {
@@ -100,7 +112,7 @@
 }
 
 .tabulator .tabulator-row {
-  border-bottom: 1px solid var(--text-secondary) !important;
+  border-bottom: 1px solid var(--bg-primary) !important;
 }
 .tx-table-center #tx-table {
   border-radius: 10px;
@@ -129,7 +141,7 @@
   background-color: var(--bg-secondary) !important;
   color: #333333 !important;
   /* border-bottom: none !important; */
-  border-bottom: 1px solid var(--text-secondary) !important;
+  border-bottom: 1px solid var(--bg-primary) !important;
 }
 
 /* Cells: Ensure text is dark */
@@ -139,7 +151,7 @@
 
 /* Even Rows (Zebra Striping) */
 .tabulator.light-mode-override .tabulator-row.tabulator-row-even {
-  background-color: #f8f9fa !important;
+  background-color: var(--bg-secondary) !important;
 }
 
 /* Header: Light Gray */
@@ -147,7 +159,7 @@
 .tabulator.light-mode-override .tabulator-header .tabulator-col,
 .tabulator.light-mode-override .tabulator-header .tabulator-col.tabulator-moving,
 .tabulator.light-mode-override .tabulator-header .tabulator-col .tabulator-col-content {
-  background-color: #f8f9fa !important;
+  background-color: var(--bg-secondary) !important;
   color: #333333 !important;
 }
 
@@ -156,7 +168,7 @@
 }
 
 .tabulator.light-mode-override .tabulator-header .tabulator-col.tabulator-moving {
-  background-color: #f8f9fa !important;
+  background-color: var(--bg-secondary) !important;
 }
 
 .tabulator.light-mode-override .tabulator-header .tabulator-col .tabulator-col-content {
