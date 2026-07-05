@@ -7,6 +7,5 @@
 @import url('./styles/editor.css');
 @import url('./styles/bar.css');
 @import url('./styles/chart.css');
-@import url('../node_modules/tabulator-tables/dist/css/tabulator_midnight.min.css');
 @import url('./styles/transmit.css');
 @import url('./styles/highlights.css');

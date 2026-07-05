@@ -3,6 +3,7 @@
 @import url('../../node_modules/chrome-tabs/css/chrome-tabs.css');
 @import url('../../node_modules/chrome-tabs/css/chrome-tabs-dark-theme.css');
 @import url('../../node_modules/gridjs/dist/theme/mermaid.css');
+@import url('../../node_modules/tabulator-tables/dist/css/tabulator_midnight.min.css');
 
 :root {
   --nav-height: 36px;

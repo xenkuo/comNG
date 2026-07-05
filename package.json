@@ -145,7 +145,8 @@
     "materialize-css": "1.0.0",
     "monaco-editor": "0.20.0",
     "plotly.js-basic-dist-min": "1.58.5",
-    "serialport": "^8.0.7"
+    "serialport": "^8.0.7",
+    "tabulator-tables": "5.5.0"
   },
   "devDependencies": {
     "@electron-forge/cli": "6.4.2",
@@ -160,7 +161,6 @@
     "esbuild": "0.14.0",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "6.15.0",
-    "prettier": "^3.2.5",
-    "tabulator-tables": "5.5.0"
+    "prettier": "^3.2.5"
   }
 }
