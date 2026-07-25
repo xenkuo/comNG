@@ -24,8 +24,12 @@ function _portUpdate() {
     .list()
     .then((ports) => {
       ports.forEach((item, index) => {
-        // if item.productId is undefined, set its manufacturer to ''
-        // if (item.productId === undefined) item.manufacturer = ''
+        // On Windows, the COM1 is a special port and its manufacturer is encoded in GBK
+        // However, the serialport library does not decode it, so we need to handle it manually here.
+        // The condition is if the port's pnpId starts with 'ACPI'
+        if (process.platform === 'win32' && item.pnpId && item.pnpId.startsWith('ACPI')) {
+          item.manufacturer = 'Microsoft'
+        }
         pSelect.options.add(new Option(item.path + ' ' + item.manufacturer, index))
         if (index === store.get('pathIndex')) pSelect.selectedIndex = index
       })
