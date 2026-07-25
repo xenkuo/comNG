@@ -1,11 +1,13 @@
 #chart-tab {
   background-color: var(--bg-secondary);
-  height: inherit;
+  margin: 0px;
+  /* the 26px is height of menu-tabs-row */
+  height: calc(100% - 26px);
 }
 
 #chart-figure {
   align-content: center;
-  height: inherit;
+  height: 100%;
   padding: 0px;
   background-color: var(--bg-secondary);
 }
