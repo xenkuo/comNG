@@ -162,5 +162,8 @@
     "eslint": "^6.8.0",
     "eslint-config-prettier": "6.15.0",
     "prettier": "^3.2.5"
+  },
+  "resolutions": {
+    "minimist": "1.2.6"
   }
 }
