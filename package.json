@@ -33,7 +33,7 @@
         "prune": true,
         "derefSymlinks": false,
         "compression": "maximum",
-        "executableName": "comNG",
+        "executableName": "comng",
         "ignore": [
           "node_modules/monaco-editor/(dev|esm|min-maps|monaco.d.ts|website|samples)",
           "node_modules/materialize-css/(extras|js|sass|templates)",
@@ -65,8 +65,8 @@
           "CompanyName": "comNG",
           "FileDescription": "comNG Serial Tool",
           "ProductName": "comNG",
-          "InternalName": "comNG.exe",
-          "OriginalFilename": "comNG.exe",
+          "InternalName": "comng.exe",
+          "OriginalFilename": "comng.exe",
           "LegalCopyright": "Copyright © 2024 Xen"
         },
         "icon": "image/logo"
@@ -77,7 +77,7 @@
           "config": {
             "name": "comNG",
             "authors": "Xen",
-            "exe": "comNG.exe",
+            "exe": "comng.exe",
             "setupIcon": "image/logo.ico",
             "iconUrl": "https://raw.githubusercontent.com/xenkuo/image-host/master/logo.ico",
             "loadingGif": "image/install-loading.gif",

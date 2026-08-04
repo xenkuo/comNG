@@ -25,6 +25,12 @@ jobs:
           node-version: 16
           cache: yarn
 
+      # node-gyp 9.x 依赖 distutils，Python 3.14 已移除该模块；
+      # 固定 Python 3.12 保证原生模块（serialport）在 install/rebuild 阶段可编译
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
       - name: Install Linux build dependencies
         if: runner.os == 'Linux'
         run: |
