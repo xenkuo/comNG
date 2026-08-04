@@ -85,9 +85,16 @@ jobs:
         with:
           path: artifacts
 
+      - name: Inspect downloaded artifacts
+        run: ls -laR artifacts
+
       - name: Publish draft release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/comng-*/*
+          files: |
+            artifacts/comng-Linux/**/*
+            artifacts/comng-macOS/**/*
+            artifacts/comng-Windows/**/*
+          fail_on_unmatched_files: true
           draft: true
           generate_release_notes: true
