@@ -163,4 +163,7 @@
     "eslint-config-prettier": "6.15.0",
     "prettier": "^3.2.5"
   }
+  ,"resolutions": {
+    "electron-rebuild/node-gyp": "9.1.0"
+  }
 }

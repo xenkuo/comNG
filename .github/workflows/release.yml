@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     name: Build (${{ matrix.os }})
+    env:
+      # gyp-next 9 移除了 openssl_fips 变量，electron 7 headers 仍引用它；
+      # 注入空值让 node-gyp 9 能编译 electron 7 的原生模块
+      npm_config_openssl_fips: ''
     strategy:
       fail-fast: false
       matrix:
