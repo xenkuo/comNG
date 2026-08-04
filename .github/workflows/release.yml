@@ -1,0 +1,83 @@
+name: Build & Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-22.04
+          - os: macos-15-intel
+          - os: windows-2022
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+          cache: yarn
+
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential \
+            python3 \
+            libnss3 \
+            libatk-bridge2.0-0 \
+            libgtk-3-0 \
+            libxss1 \
+            libasound2
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Rebuild native modules for Electron
+        run: yarn rebuild
+
+      - name: Build frontend bundle
+        run: yarn build:dev
+
+      # 直接调 electron-forge 而非 yarn make，绕开 premake 钩子里的
+      # `rm -f`（npm script 在 Windows runner 的 cmd.exe 下不可用）
+      - name: Package installers (electron-forge make)
+        run: npx electron-forge make
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: comng-${{ runner.os }}
+          path: |
+            out/make/**/*.deb
+            out/make/**/*.dmg
+            out/make/**/*.exe
+            out/make/**/*.nupkg
+          if-no-files-found: error
+
+  release:
+    name: Create GitHub Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Publish draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/comng-*/*
+          draft: true
+          generate_release_notes: true
